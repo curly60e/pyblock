@@ -2,7 +2,7 @@ import os
 import time as t
 
 def getblock(): #get access to bitcoin-cli with the command getblockchaininfo
-    bitcoincli = "/home/pi/Documents/bitcoin-0.19.1/bin/./bitcoin-cli -datadir=/mnt/royal/Bitcoin getblockchaininfo"
+    bitcoincli = "PUT YOUR BITCOIN-CLI PATH WITH THE ARGUMENT 'getblockchaininfo'"
     os.system(bitcoincli)
     
 def clear(): #clear the screen
