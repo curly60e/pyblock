@@ -1,12 +1,12 @@
-<img src="./resources/images/start.png" width="100%" />
+<img src="./resources/images/start.PNG" width="100%" />
 
 <br />
 
-<img src="./resources/images/design1.png" width="100%" />
+<img src="./resources/images/design1.PNG" width="100%" />
 
 <br />
 
-<img src="./resources/images/design2.png" width="100%" />
+<img src="./resources/images/design2.PNG" width="100%" />
 
 <br />
 
