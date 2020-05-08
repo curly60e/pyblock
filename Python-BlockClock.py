@@ -20,8 +20,8 @@ tprint("BlockClock", font="rnd-large")
 print("Welcome to Python BlockClock\n\n")
 path = input("Insert the Path to Bitcoin-Cli: ") # path to the bitcoin-cli
 
-a = input("Do you want to see just Block height? 'Yes', for just Block Height. 'No', for full blockchain data. Y/n: ") # select if block height or just ful\
-lblockchain information
+a = input("Do you want to see just Block height? 'Yes', for just Block Height. 'No', for full blockchain data. Y/n: ") # select if block height or just full blockchain information
+
 custom = input("Do you want random designs? Y/n: ")
 
 
