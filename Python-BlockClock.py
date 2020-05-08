@@ -1,4 +1,3 @@
-
 import os
 import time as t
 from art import *
@@ -39,6 +38,6 @@ while True: # Loop
     else:
         getblock()
 
-    t.sleep(3) # pause the loop for 3 seconds
+    t.sleep(20) # pause the loop 
 
 
