@@ -2,11 +2,11 @@
 
 <br />
 
-<img src="./resources/images/design1.PNG" width="100%" />
+<img src="./resources/images/design1.PNG" width="50%" />
 
 <br />
 
-<img src="./resources/images/design2.PNG" width="100%" />
+<img src="./resources/images/design2.PNG" width="50%" />
 
 <br />
 
