@@ -25,15 +25,15 @@ A simple Python Block Clock to check the Blockcain information.
    - First log in on A as user a and generate a pair of authentication keys. Do not enter a passphrase:
    
     1. a@A:~> ssh-keygen -t rsa
-    Generating public/private rsa key pair.
-    Enter file in which to save the key (/home/a/.ssh/id_rsa): 
-    Created directory '/home/a/.ssh'.
-    Enter passphrase (empty for no passphrase): 
-    Enter same passphrase again: 
-    Your identification has been saved in /home/a/.ssh/id_rsa.
-    Your public key has been saved in /home/a/.ssh/id_rsa.pub.
-    The key fingerprint is:
-    3e:4f:05:79:3a:9f:96:7c:3b:ad:e9:58:37:bc:37:e4 a@A
+      Generating public/private rsa key pair.
+      Enter file in which to save the key (/home/a/.ssh/id_rsa): 
+      Created directory '/home/a/.ssh'.
+      Enter passphrase (empty for no passphrase): 
+      Enter same passphrase again: 
+      Your identification has been saved in /home/a/.ssh/id_rsa.
+      Your public key has been saved in /home/a/.ssh/id_rsa.pub.
+      The key fingerprint is:
+      3e:4f:05:79:3a:9f:96:7c:3b:ad:e9:58:37:bc:37:e4 a@A
     
    - Now use ssh to create a directory ~/.ssh as user b on B. (The directory may already exist, which is fine):
    
