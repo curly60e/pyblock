@@ -11,7 +11,7 @@
 <br />
 
 # python-blockclock
-Bitcoin Blockclock 
+Bitcoin Blockclock 0.0.2
 
 A simple Python Block Clock to check the Blockcain information.
 
