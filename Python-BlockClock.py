@@ -3,6 +3,7 @@ import time as t
 from art import *
 
 
+#/home/pi/Documents/bitcoin-0.19.1/bin/./bitcoin-cli -datadir=/mnt/royal/Bitcoin 
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
@@ -44,7 +45,6 @@ def connected(info): # here we complete the connection to the external node
                 while True: # connection via ssh 
                     clear()
                     sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockcount"
-                    os.system(sshb)
                     sshc = os.popen(str(sshb)).read()
                     sshd = sshc
                     tprint(sshd, font="rnd-large")
@@ -68,13 +68,13 @@ def nodeinfo():
     
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
-    bitcoinclient = path + " getblockcount"
     custom = input("Do you want random designs? Y/n: ")
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block # copy the result in the variable 'b'
     if custom == "Y" or custom == "y":
         while True:
             clear()
+            bitcoinclient = path + " getblockcount"
+            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+            b = block
             tprint(b, font="rnd-large")
             tmp()
     else:
@@ -85,7 +85,7 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             
 
 def tmp():
-    t.sleep(20)
+    t.sleep(15)
 
 
 while True: # Loop
@@ -94,4 +94,3 @@ while True: # Loop
     print("Welcome to Python BlockClock\n\n")
     path = input("Insert the Path to Bitcoin-Cli: ") # path to the bitcoin-cli
     connection(input("Are you going to connect to an external node? Y/n: ")) # access to 'connection' function
-
