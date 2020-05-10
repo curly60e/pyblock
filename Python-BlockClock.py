@@ -3,8 +3,6 @@ import time as t
 from art import *
 
 
-#/home/pi/Documents/bitcoin-0.19.1/bin/./bitcoin-cli -datadir=/mnt/royal/Bitcoin 
-
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
     os.system(path + bitcoincli)
