@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #Python BlockClock its a clock of the Bitcoin blockchain.
-#Version: 0.0.2.2
+#Version: 0.0.3
 
 import os
 import time as t
@@ -20,34 +20,18 @@ def clear(): # clear the screen
 
 #-------------------From this line the program starts----------------------
 
-def connection(conn): # here we initiate the connection function 
-    if conn == "Y" or conn == "y":
-        nodeinfo() # call 'nodeinfo' function that makes the connection to an external node
-    else:
-        clear()
-        a = input("Do you want to see just Block height? 'Yes', for just Block Height. 'No', for full blockchain data. Y/n: ")
-        if a == "y" or a == "Y":
-            while True:
-                clear()
-                artist()
-                getblockcount()
-                tmp()
-        else:
-            while True:
-                clear()
-                getblock()
-                tmp()
-
 def connected(info): # here we complete the connection to the external node
     if info == "Y" or info == "y":
+        clear()
+        prt()
+        print("\nAdd your node information\n")
         userconn()
     else:
-        connection(input("Are you going to connect to an external node? Y/n: "))
+        menu()
     
 def nodeinfo(): 
-    print("\nAdd your node information\n")
     connected(input("Are you sure you want to connect to a node? Y/n: ")) # call 'connected' function to make the connection with the node information
-
+    
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     custom = input("Do you want random designs? Y/n: ")
     if custom == "Y" or custom == "y":
@@ -81,21 +65,56 @@ def userconn():
                 sshd = sshc
                 tprint(sshd, font="rnd-large")
                 tmp()
-                    
         else:
-            while True: # connection via ssh
-                clear()
-                sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockchaininfo"
-                os.system(sshb)
-                tmp()
+            menu()
+                    
+    else:
+        while True: # connection via ssh
+            clear()
+            sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockchaininfo"
+            os.system(sshb)
+            tmp()
 
+        
 def tmp():
     t.sleep(15)
 
 
+def menu():
+    clear()
+    prt()
+    print("""\t\t
+    Python BlockClock Menu
+    Version 0.0.3
+    
+    A. Connect to an external node through SSH
+    B. Show Blockchain information in your own node
+    C. Run BlockClock in your own node
+    \n\n""")
+    menuA(input("Select option: "))
+    
+    
+def menuA(menu):
+    if menu == "A" or menu == "a":
+        nodeinfo()
+    elif menu == "B" or menu == "b":
+        while True:
+            clear()
+            getblock()
+            tmp()
+    elif menu == "C" or menu == "c":
+        artist()
+    
+    
+def prt():
+    tprint("BlockClock", font="rnd-large") # random title design
+    
+    
 while True: # Loop
     clear() # call clear function that clears the screen
-    tprint("BlockClock", font="rnd-large") # random title design
+    prt()
     print("Welcome to Python BlockClock\n\n")
     path = input("Insert the Path to Bitcoin-Cli: ") # path to the bitcoin-cli
-    connection(input("Are you going to connect to an external node? Y/n: ")) # access to 'connection' function
+    clear()
+    menu()
+
