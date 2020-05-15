@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #Python BlockClock its a clock of the Bitcoin blockchain.
-#Version: 0.0.3
+#Version: 0.0.4
 
 import os
 import time as t
