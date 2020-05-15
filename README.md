@@ -10,6 +10,8 @@
 
 <br />
 
+<img src="./resources/images/EYDhHM1X0AAd8UP.png" width="50%" />
+
 # python-blockclock v0.0.4
 Bitcoin Blockclock
 
