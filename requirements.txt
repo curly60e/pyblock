@@ -1,0 +1,21 @@
+#
+####### example-requirements.txt #######
+#
+###### Requirements without Version Specifiers ######
+hexyl
+#
+###### Requirements with Version Specifiers ######
+#   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
+art == 4.6             # art 4.6
+
+#
+###### Refer to other requirements files ######
+
+#
+#
+###### A particular file ######
+#
+###### Additional Requirements without Version Specifiers ######
+#   Same as 1st section, just here to show that you can put things in any order.
+
+#
