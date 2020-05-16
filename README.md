@@ -24,7 +24,10 @@ A simple Python Block Clock to check the Blockcain information.
 ## How to execute
   - python3 Python-BlockClock.py
 
-   ### Connect to an external node first steps
+   ## Connect to an external node first steps
+   
+   #### WARNING! THIS IS NOT A SECURE METHOD OF CONNECTION. DO IT BY YOUR OWN RISK. THE BEST WAY IS DOING IT LOCALLY.
+   
    - First log in on A as user a and generate a pair of authentication keys. Do not enter a passphrase:
    
     1. a@A:~> ssh-keygen -t rsa
