@@ -18,8 +18,10 @@ Bitcoin Blockclock
 A simple Python Block Clock to check the Blockcain information.
 
 ## Dependences
-  - Install the [Art](https://github.com/sepandhaghighi/art/blob/master/INSTALL.md) collection 
-  - Install the [Hexyl](https://github.com/sharkdp/hexyl) collection
+
+    a@A:~> pip3 install -r requirements.txt
+    
+  - Install the [Hexyl](https://github.com/sharkdp/hexyl)
   
 ## How to execute
   - python3 Python-BlockClock.py
