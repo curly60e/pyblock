@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #Python BlockClock its a clock of the Bitcoin blockchain.
-#Version: 0.0.5
+#Version: 0.0.6
 
 import os
 import os.path
@@ -45,15 +45,27 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
     custom = input("Do you want random designs? Y/n: ")
     if custom == "Y" or custom == "y":
         while True:
-            clear()
-            design()
-            tmp()
+            try:
+                clear()
+                close()
+                design()
+                tmp()
+            except (KeyboardInterrupt, SystemExit):
+                menu()
+                raise
     else:
         while True:
-            clear()
-            getblockcount()
-            tmp()
-            
+            try:
+                clear()
+                close()
+                getblockcount()
+                tmp()
+            except (KeyboardInterrupt, SystemExit):
+                menu()
+                raise
+
+def close():
+    print("To go back to the Main Menu Press Control + C.\n\n")
 
 def design():
     bitcoinclient = path + " getblockcount"
@@ -72,21 +84,31 @@ def userconn(): # All the connection to a remote node
             clear()
             c = input("Do you want to see custom design? Y/n: ")
             if c == "Y" or c == "y": 
-                while True: # connection via ssh 
-                    clear()
-                    sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockcount"
-                    sshc = os.popen(str(sshb)).read()
-                    sshd = sshc
-                    tprint(sshd, font="rnd-large")
-                    tmp()
+                while True: # connection via ssh
+                    try:
+                        clear()
+                        close()
+                        sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockcount"
+                        sshc = os.popen(str(sshb)).read()
+                        sshd = sshc
+                        tprint(sshd, font="rnd-large")
+                        tmp()
+                    except (KeyboardInterrupt, SystemExit):
+                        menuUserConn()
+                        raise
                 else:
                     menu()        
             else:
                 while True: # connection via ssh
-                    clear()
-                    sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockchaininfo"
-                    os.system(sshb)
-                    tmp()
+                    try:
+                        clear()
+                        close()
+                        sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockchaininfo"
+                        os.system(sshb)
+                        tmp()
+                    except (KeyboardInterrupt, SystemExit):
+                        menuUserConn()
+                        raise
         else:
             menu()      
     elif option == "B" or option == "b": # Decode Block 0 on HEX for external node
@@ -115,8 +137,16 @@ def userconn(): # All the connection to a remote node
             else:
                 menuUserConn()  
     elif option == "D" or option == "d":
+        readHexTXSsh()
+        while True:
+            m = input("Do you want to continue decoding? Y/n: ")
+            if m == "Y" or m == "y":
+                readHexTXSsh()
+            else:
+                menuUserConn()
+    elif option == "E" or option == "e":
         menu()
-    
+        
 #------------------------------------------- End SSH connection external node --------------------------------------------
 
 
@@ -138,6 +168,21 @@ def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
     clear()
     prt()
     os.system(decodeBlock)
+    
+def readHexTx(): # Hex Decoder using Hexyl on an external node
+    hexa = input("Add the Transaction ID. you want to decode: ")
+    decodeTX = path + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
+    os.system(decodeTX)
+    
+def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
+    user = input("USER@NODE: ")
+    clear()
+    prt()
+    hexa = input("Add the Transaction ID. you want to decode: ")
+    decodeTX = "ssh " + user + " '" + "{}".format(path) + "'" +  " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
+    clear()
+    prt()
+    os.system(decodeTX)
   
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
  
@@ -148,14 +193,15 @@ def menu(): #Main Menu
     prt()
     print("""\t\t
     Python BlockClock Menu
-    Version 0.0.5
+    Version 0.0.6
     
-    A. Connect to an external node through SSH
+    A. Run BlockClock in your own node
     B. Show Blockchain information in your own node
-    C. Run BlockClock in your own node
-    D. Show the Genesis Block
-    E. Decode in HEX any block 
-    F. Exit
+    C. Show the Genesis Block
+    D. Decode in HEX any block
+    E. Decode in HEX any transaction
+    F. Connect to an external node through SSH
+    G. Exit
     \n\n""")
     menuA(input("Select option: "))
     
@@ -164,28 +210,34 @@ def menuUserConn(): #Menu before connection over ssh
     prt()
     print("""\t\t
     Python BlockClock Menu
-    Version 0.0.5
+    Version 0.0.6
     
     A. Run BlockClock in this external node 
     B. Show the Genesis Block
     C. Decode in HEX any block
-    D. Return Main Menu
+    D. Decode in HEX any transaction
+    E. Return Main Menu
     \n\n""")
     userconn()
 
 #--------------------------------- End Menu section -----------------------------------
-    
+ 
+#--------------------------------- Main Menu execution --------------------------------
+
 def menuA(menuS): #Execution of the Main Menu options
     if menuS == "A" or menuS == "a":
-        nodeinfo()
+        artist()
     elif menuS == "B" or menuS == "b":
         while True:
-            clear()
-            getblock()
-            tmp()
+            try:
+                clear()
+                close()
+                getblock()
+                tmp()
+            except (KeyboardInterrupt, SystemExit):
+                menu()
+                raise
     elif menuS == "C" or menuS == "c":
-        artist()
-    elif menuS == "D" or menuS == "d":
         clear()
         prt()
         getgenesis()
@@ -198,7 +250,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 exit()
             else:
                 menu()
-    elif menuS == "E" or menuS == "e":
+    elif menuS == "D" or menuS == "d":
         clear()
         prt()
         readHexBlock()
@@ -209,10 +261,25 @@ def menuA(menuS): #Execution of the Main Menu options
                 prt()
                 readHexBlock()
             else:
-                menu()        
+                menu()   
+    elif menuS == "E" or menuS == "e":
+        clear()
+        prt()
+        readHexTx()
+        while True:
+            r = input("Do you want to continue decoding? Y/n: ")
+            if r == "Y" or r == "y":
+                clear()
+                prt()
+                readHexTx()
+            else:
+                menu()       
     elif menuS == "F" or menuS == "f":
+        nodeinfo()
+    elif menuS == "G" or menuS == "g":
         exit()
             
+#--------------------------------- End Main Menu execution --------------------------------
     
 def prt():
     tprint("BlockClock", font="rnd-large") # random title design
