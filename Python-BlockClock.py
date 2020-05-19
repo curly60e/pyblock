@@ -209,7 +209,7 @@ def menu(): #Main Menu
     D. Decode in HEX any block
     E. Decode in HEX any transaction
     F. Connect to an external node through SSH
-    G. Advance
+    G. Advanced
     Q. Exit
     \n\n""")
     menuA(input("Select option: "))
