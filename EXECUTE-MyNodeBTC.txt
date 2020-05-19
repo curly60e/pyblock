@@ -1,0 +1,21 @@
+## How to execute Python-BlockClock on MyNodeBTC for the first time.
+
+### Downloading from GitHub and installing dependences.
+
+1. Login via SSH to your node
+2. Type: git clone https://github.com/curly60e/python-blockclock.git
+3. Type: cd python-blockclock
+4. Type: pip3 install -r requirements.txt
+5. Type: sudo apt install hexyl
+--- Dependences Installed ---
+
+### Executing Python-BlockClock.py
+
+1. Type: python3 Python-BlockClock.py
+
+ - As this is the first time you execute it, it will ask you for the path of Bitcoin-cli.
+ - Because your node is MyNodeBTC it's so easy.
+
+2. Type: bitcoin-cli
+
+Enjoy 
