@@ -1,12 +1,13 @@
 #Developer: Curly60e
 #Python BlockClock its a clock of the Bitcoin blockchain.
-#Version: 0.0.6
+#Version: 0.0.7
 
 import os
 import os.path
 import time as t
 import pickle
 from art import *
+from logos import *
 
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
@@ -23,6 +24,13 @@ def clear(): # clear the screen
 def getgenesis(): # get and decode Genesis block 
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path + bitcoincli)
+
+def console(): # get into the console from bitcoin-cli
+    print("\tThis is Bitcoin-cli's console. Type your respective commands you want to display.\n\n")
+    while True:
+        cle = input("console $>: ")
+        lsd = os.popen(str(path + " " + cle)).read()
+        print(lsd)
 
 #-------------------From this line the program starts----------------------
 
@@ -65,7 +73,7 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
                 raise
 
 def close():
-    print("To go back to the Main Menu Press Control + C.\n\n")
+    print("<<< Back to the Main Menu Press Control + C.\n\n")
 
 def design():
     bitcoinclient = path + " getblockcount"
@@ -144,7 +152,7 @@ def userconn(): # All the connection to a remote node
                 readHexTXSsh()
             else:
                 menuUserConn()
-    elif option == "E" or option == "e":
+    elif option == "R" or option == "r":
         menu()
         
 #------------------------------------------- End SSH connection external node --------------------------------------------
@@ -193,7 +201,7 @@ def menu(): #Main Menu
     prt()
     print("""\t\t
     Python BlockClock Menu
-    Version 0.0.6
+    Version 0.0.7
     
     A. Run BlockClock in your own node
     B. Show Blockchain information in your own node
@@ -201,7 +209,8 @@ def menu(): #Main Menu
     D. Decode in HEX any block
     E. Decode in HEX any transaction
     F. Connect to an external node through SSH
-    G. Exit
+    G. Advance
+    Q. Exit
     \n\n""")
     menuA(input("Select option: "))
     
@@ -209,16 +218,29 @@ def menuUserConn(): #Menu before connection over ssh
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Menu
-    Version 0.0.6
+    Python BlockClock External Node Menu
+    Version 0.0.7
     
     A. Run BlockClock in this external node 
     B. Show the Genesis Block
     C. Decode in HEX any block
     D. Decode in HEX any transaction
-    E. Return Main Menu
+    R. Return Main Menu
     \n\n""")
     userconn()
+    
+def advanceMenu():
+    clear()
+    prt()
+    print("""\t\t
+    Python BlockClock Advance Menu
+    Version 0.0.7
+    
+    A. Bitconi-cli Console
+    B. FunB
+    R. Return Main Menu
+    \n\n""")
+    menuB(input("Select option: "))
 
 #--------------------------------- End Menu section -----------------------------------
  
@@ -276,9 +298,48 @@ def menuA(menuS): #Execution of the Main Menu options
                 menu()       
     elif menuS == "F" or menuS == "f":
         nodeinfo()
-    elif menuS == "G" or menuS == "g":
+    elif menuS == "Q" or menuS == "q":
         exit()
+    elif menuS == "G" or menuS == "g":
+        advanceMenu()        
+
             
+def menuB(menuR):
+    if menuR == "A" or menuR == "a":
+        while True:
+            try:
+                clear()
+                prt()
+                close()
+                console()
+                t.sleep(5)
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise
+    elif menuR == "B" or menuR == "b":
+        while True:
+            try:
+                clear()
+                prt()
+                close()
+                logoA()
+                tmp()
+                clear()
+                prt()
+                close()
+                logoB()
+                tmp()
+                clear()
+                prt()
+                close()
+                logoC()
+                tmp()
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise
+    elif menuR == "R" or menuR == "r":
+        menu()
+                
 #--------------------------------- End Main Menu execution --------------------------------
     
 def prt():
