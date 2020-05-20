@@ -12,7 +12,7 @@
 
 <img src="./resources/images/EYDhHM1X0AAd8UP.png" width="50%" />
 
-# python-blockclock v0.0.7
+# python-blockclock v0.0.8
 Bitcoin Blockclock
 
 A simple Python Block Clock to check the Blockcain information.
@@ -69,3 +69,7 @@ A simple Python Block Clock to check the Blockcain information.
 
 @Curly60e
 @SamouraiDev
+
+### Testers
+
+[@__B__T__C__](https://twitter.com/__B__T__C__)
