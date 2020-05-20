@@ -1,11 +1,12 @@
 #Developer: Curly60e
 #Python BlockClock its a clock of the Bitcoin blockchain.
-#Version: 0.0.7
+#Version: 0.0.8
 
 import os
 import os.path
 import time as t
 import pickle
+from donation import *
 from art import *
 from logos import *
 
@@ -201,7 +202,7 @@ def menu(): #Main Menu
     prt()
     print("""\t\t
     Python BlockClock Menu
-    Version 0.0.7
+    Version 0.0.8
     
     A. Run BlockClock in your own node
     B. Show Blockchain information in your own node
@@ -210,6 +211,7 @@ def menu(): #Main Menu
     E. Decode in HEX any transaction
     F. Connect to an external node through SSH
     G. Advanced
+    X. Donate
     Q. Exit
     \n\n""")
     menuA(input("Select option: "))
@@ -219,7 +221,7 @@ def menuUserConn(): #Menu before connection over ssh
     prt()
     print("""\t\t
     Python BlockClock External Node Menu
-    Version 0.0.7
+    Version 0.0.8
     
     A. Run BlockClock in this external node 
     B. Show the Genesis Block
@@ -234,13 +236,28 @@ def advanceMenu():
     prt()
     print("""\t\t
     Python BlockClock Advance Menu
-    Version 0.0.7
+    Version 0.0.8
     
     A. Bitconi-cli Console
     B. FunB
+    C. Show QR from a Bitcoin Address
     R. Return Main Menu
     \n\n""")
     menuB(input("Select option: "))
+
+def dnt():
+    clear()
+    prt()
+    print("""\t\t
+    Python BlockClock Advance Menu
+    Version 0.0.8
+    
+    A. PayNym
+    B. Bitcoin Address
+    C. Lightning Network
+    D. Return Main Menu
+    \n\n""")
+    menuC(input("Select option: "))
 
 #--------------------------------- End Menu section -----------------------------------
  
@@ -301,9 +318,10 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS == "Q" or menuS == "q":
         exit()
     elif menuS == "G" or menuS == "g":
-        advanceMenu()        
-
-            
+        advanceMenu()
+    elif menuS == "X" or menuS == "x":
+        dnt()
+        
 def menuB(menuR):
     if menuR == "A" or menuR == "a":
         while True:
@@ -337,9 +355,53 @@ def menuB(menuR):
             except (KeyboardInterrupt, SystemExit):
                 advanceMenu()
                 raise
+    elif menuR == "C" or menuR == "c":
+        while True:
+            try:
+                clear()
+                prt()
+                close()
+                decodeQR()
+                t.sleep(50)
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise         
     elif menuR == "R" or menuR == "r":
         menu()
-                
+        
+def menuC(menuO):
+    if menuO == "A" or menuO == "a":                
+        try:
+            clear()
+            prt()
+            close()
+            donationPN()
+            t.sleep(50)
+        except (KeyboardInterrupt, SystemExit):
+            menu()
+            raise
+    elif menuO == "B" or menuO == "b":
+        try:
+            clear()
+            prt()
+            close()
+            donationAddr()
+            t.sleep(50)
+        except (KeyboardInterrupt, SystemExit):
+            menu()
+            raise
+    elif menuO == "C" or menuO == "c":
+        try:
+            clear()
+            prt()
+            close()
+            donationLN()
+            t.sleep(50)
+        except (KeyboardInterrupt, SystemExit):
+            menu()
+            raise
+    elif menuO == "D" or menuO == "d":
+        menu()
 #--------------------------------- End Main Menu execution --------------------------------
     
 def prt():
