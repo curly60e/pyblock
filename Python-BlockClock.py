@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #Python BlockClock its a clock of the Bitcoin blockchain.
-#Version: 0.0.8
+#Version: 0.0.8.1
 
 import os
 import os.path
@@ -202,7 +202,7 @@ def menu(): #Main Menu
     prt()
     print("""\t\t
     Python BlockClock Menu
-    Version 0.0.8
+    Version 0.0.8.1
     
     A. Run BlockClock in your own node
     B. Show Blockchain information in your own node
@@ -221,7 +221,7 @@ def menuUserConn(): #Menu before connection over ssh
     prt()
     print("""\t\t
     Python BlockClock External Node Menu
-    Version 0.0.8
+    Version 0.0.8.1
     
     A. Run BlockClock in this external node 
     B. Show the Genesis Block
@@ -236,7 +236,7 @@ def advanceMenu():
     prt()
     print("""\t\t
     Python BlockClock Advance Menu
-    Version 0.0.8
+    Version 0.0.8.1
     
     A. Bitconi-cli Console
     B. FunB
@@ -250,7 +250,7 @@ def dnt():
     prt()
     print("""\t\t
     Python BlockClock Advance Menu
-    Version 0.0.8
+    Version 0.0.8.1
     
     A. PayNym
     B. Bitcoin Address
@@ -377,6 +377,7 @@ def menuC(menuO):
             close()
             donationPN()
             t.sleep(50)
+            menu()
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
@@ -387,6 +388,7 @@ def menuC(menuO):
             close()
             donationAddr()
             t.sleep(50)
+            menu()
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
@@ -397,6 +399,7 @@ def menuC(menuO):
             close()
             donationLN()
             t.sleep(50)
+            menu()
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
