@@ -84,8 +84,7 @@ pathtools
 pexpect             
 pgzero              
 phatbeat            
-pianohat            
-picamera            
+pianohat                        
 pickleshare         
 picraft             
 piglow              
