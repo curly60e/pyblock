@@ -1,12 +1,14 @@
 #Developer: Curly60e
 #Python BlockClock its a clock of the Bitcoin blockchain.
-#Version: 0.0.8.2
+#Version: 0.1.0
 
 import os
 import os.path
 import time as t
 import pickle
+from clone import *
 from donation import *
+from feed import *
 from art import *
 from logos import *
 
@@ -202,7 +204,7 @@ def menu(): #Main Menu
     prt()
     print("""\t\t
     Python BlockClock Menu
-    Version 0.0.8.2
+    Version 0.1.0
     
     A. Run BlockClock in your own node
     B. Show Blockchain information in your own node
@@ -221,7 +223,7 @@ def menuUserConn(): #Menu before connection over ssh
     prt()
     print("""\t\t
     Python BlockClock External Node Menu
-    Version 0.0.8.2
+    Version 0.1.0
     
     A. Run BlockClock in this external node 
     B. Show the Genesis Block
@@ -236,11 +238,12 @@ def advanceMenu():
     prt()
     print("""\t\t
     Python BlockClock Advance Menu
-    Version 0.0.8.2
+    Version 0.1.0
     
     A. Bitconi-cli Console
     B. FunB
     C. Show QR from a Bitcoin Address
+    S. Satnode
     R. Return Main Menu
     \n\n""")
     menuB(input("Select option: "))
@@ -249,15 +252,55 @@ def dnt():
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Advance Menu
-    Version 0.0.8.2
+    Python BlockClock Donation Menu
+    Version 0.1.0
+    
+    A. Developers Donation
+    B. Testers Donation
+    D. Return Main Menu
+    \n\n""")
+    menuC(input("Select option: "))
+    
+def dntDev():
+    clear()
+    prt()
+    print("""\t\t
+    Python BlockClock Developers Donation Menu
+    Version 0.1.0
     
     A. PayNym
     B. Bitcoin Address
     C. Lightning Network
     D. Return Main Menu
     \n\n""")
-    menuC(input("Select option: "))
+    menuE(input("Select option: "))
+    
+def dntTst():
+    clear()
+    prt()
+    print("""\t\t
+    Python BlockClock Testers Donation Menu
+    Version 0.1.0
+    
+    A. Bitcoin Address
+    B. Lightning Network
+    D. Return Main Menu
+    \n\n""")
+    menuF(input("Select option: "))
+    
+def satnodeMenu():
+    clear()
+    prt()
+    print("""\t\t
+    Python BlockClock Satnode Menu
+    Version 0.1.0
+    
+    A. Start SatNode
+    B. Feed
+    C. Setup
+    D. Return Main Menu
+    \n\n""")
+    menuD(input("Select option: "))
 
 #--------------------------------- End Menu section -----------------------------------
  
@@ -321,6 +364,10 @@ def menuA(menuS): #Execution of the Main Menu options
         advanceMenu()
     elif menuS == "X" or menuS == "x":
         dnt()
+    elif menuS == "T" or menuS == "t":
+        gitclone()
+    elif menuS == "N" or menuS == "n":
+        satnode()
         
 def menuB(menuR):
     if menuR == "A" or menuR == "a":
@@ -365,12 +412,38 @@ def menuB(menuR):
                 t.sleep(50)
             except (KeyboardInterrupt, SystemExit):
                 advanceMenu()
-                raise         
+                raise
+        
+    elif menuR == "S" or menuR == "s":
+        clear()
+        prt()
+        satnodeMenu()
     elif menuR == "R" or menuR == "r":
         menu()
         
 def menuC(menuO):
     if menuO == "A" or menuO == "a":                
+        dntDev()
+    elif menuO == "B" or menuO == "b":
+        dntTst()
+    elif menuO == "D" or menuO == "d":
+        menu()
+        
+def menuD(menuN):
+    if menuN == "A" or menuN == "a":
+        satnode()
+    elif menuN == "B" or menuN == "b":
+        readFile()
+    elif menuN == "C" or menuN == "c":
+        print("\n\t This only will work on Linux or Unix systems.\n")
+        a = input("Do we continue? Y/n: ")
+        if a == "Y" or a == "y":
+            gitclone()
+        else:
+            advanceMenu()
+            
+def menuE(menuQ):
+    if menuQ == "A" or menuQ == "a":                
         try:
             clear()
             prt()
@@ -381,7 +454,7 @@ def menuC(menuO):
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
-    elif menuO == "B" or menuO == "b":
+    elif menuQ == "B" or menuQ == "b":
         try:
             clear()
             prt()
@@ -392,7 +465,7 @@ def menuC(menuO):
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
-    elif menuO == "C" or menuO == "c":
+    elif menuQ == "C" or menuQ == "c":
         try:
             clear()
             prt()
@@ -403,8 +476,35 @@ def menuC(menuO):
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
-    elif menuO == "D" or menuO == "d":
+    elif menuQ == "D" or menuQ == "d":
         menu()
+    
+def menuF(menuV):
+    if menuV == "A" or menuV == "a":
+        try:
+            clear()
+            prt()
+            close()
+            donationAddrTst()
+            t.sleep(50)
+            menu()
+        except (KeyboardInterrupt, SystemExit):
+            menu()
+            raise
+    elif menuV == "B" or menuV == "b":
+        try:
+            clear()
+            prt()
+            close()
+            donationLNTst()
+            t.sleep(50)
+            menu()
+        except (KeyboardInterrupt, SystemExit):
+            menu()
+            raise
+    elif menuV == "D" or menuV == "d":
+        menu()
+
 #--------------------------------- End Main Menu execution --------------------------------
     
 def prt():
