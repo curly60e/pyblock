@@ -95,8 +95,7 @@ pip
 pkginfo             
 portend             
 prompt-toolkit      
-psutil              
-pycairo             
+psutil                         
 pycodestyle         
 pycrypto            
 pycurl              
@@ -106,8 +105,7 @@ Pygments
 PyGObject           
 pyinotify           
 PyJWT               
-pylint              
-pyOpenSSL           
+pylint                       
 pyparsing           
 pyserial            
 PySocks             
@@ -120,15 +118,13 @@ pyzmq
 qr                  
 qrcode              
 qtconsole           
-rainbowhat          
-readme-renderer     
+rainbowhat              
 requests            
 requests-oauthlib   
 requests-toolbelt   
 responses           
 roman               
-RPi.GPIO            
-RTIMULib            
+RPi.GPIO                      
 scrollphat          
 scrollphathd        
 SecretStorage       
