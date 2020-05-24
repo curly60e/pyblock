@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLØCK its a clock of the Bitcoin blockchain.
-#Version: 0.1.0
+#Version: 0.1.0.1
 
 import os
 import os.path
@@ -204,7 +204,7 @@ def menu(): #Main Menu
     prt()
     print("""\t\t
     PyBLØCK Menu
-    Version 0.1.0
+    Version 0.1.0.1
 
     A. Run PyBLØCK in your own node
     B. Show Blockchain information in your own node
@@ -223,7 +223,7 @@ def menuUserConn(): #Menu before connection over ssh
     prt()
     print("""\t\t
     PyBLØCK External Node Menu
-    Version 0.1.0
+    Version 0.1.0.1
 
     A. Run PyBLØCK in this external node
     B. Show the Genesis Block
@@ -238,7 +238,7 @@ def advanceMenu():
     prt()
     print("""\t\t
     PyBLØCK Advance Menu
-    Version 0.1.0
+    Version 0.1.0.1
 
     A. Bitconi-cli Console
     B. FunB
@@ -253,7 +253,7 @@ def dnt():
     prt()
     print("""\t\t
     PyBLØCK Donation Menu
-    Version 0.1.0
+    Version 0.1.0.1
 
     A. Developers Donation
     B. Testers Donation
@@ -266,7 +266,7 @@ def dntDev():
     prt()
     print("""\t\t
     PyBLØCK Developers Donation Menu
-    Version 0.1.0
+    Version 0.1.0.1
 
     A. PayNym
     B. Bitcoin Address
@@ -280,7 +280,7 @@ def dntTst():
     prt()
     print("""\t\t
     PyBLØCK Testers Donation Menu
-    Version 0.1.0
+    Version 0.1.0.1
 
     A. Bitcoin Address
     B. Lightning Network
@@ -293,7 +293,7 @@ def satnodeMenu():
     prt()
     print("""\t\t
     PyBLØCK Satnode Menu
-    Version 0.1.0
+    Version 0.1.0.1
 
     A. Start SatNode
     B. Feed
