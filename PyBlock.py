@@ -508,7 +508,7 @@ def menuF(menuV):
 #--------------------------------- End Main Menu execution --------------------------------
 
 def prt():
-    tprint("PyBLØCK", font="rnd-large") # random title design
+    tprint("PyBLOCK", font="rnd-large") # random title design
 
 def tmp():
     t.sleep(15)
