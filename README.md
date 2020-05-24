@@ -24,7 +24,7 @@ A simple Python Block Clock to check the Blockcain information.
   - Install the [Hexyl](https://github.com/sharkdp/hexyl)
   
 ## How to execute
-  - python3 Python-BlockClock.py
+  - python3 PyBlock.py
 
    ## Connect to an external node first steps
    
