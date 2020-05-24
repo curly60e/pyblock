@@ -1,5 +1,5 @@
 #Developer: Curly60e
-#Python BlockClock its a clock of the Bitcoin blockchain.
+#PyBLØCK its a clock of the Bitcoin blockchain.
 #Version: 0.1.0
 
 import os
@@ -24,7 +24,7 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
-def getgenesis(): # get and decode Genesis block 
+def getgenesis(): # get and decode Genesis block
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path + bitcoincli)
 
@@ -45,13 +45,13 @@ def connected(info): # here we complete the connection to the external node
         menuUserConn()
     else:
         menu()
-        
-    
+
+
 def nodeinfo():
     print("\nWARNING! This is not a safe method of connection. The best method is doing this locally.\n")
     connected(input("WARNING! Are you sure you want to connect to a node? Y/n: ")) # call 'connected' function to make the connection with the node information
-    
-    
+
+
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     custom = input("Do you want random designs? Y/n: ")
     if custom == "Y" or custom == "y":
@@ -81,7 +81,7 @@ def close():
 def design():
     bitcoinclient = path + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block 
+    b = block
     tprint(b, font="rnd-large")
 
 #------------------------------------------- SSH connection external node --------------------------------------------
@@ -94,7 +94,7 @@ def userconn(): # All the connection to a remote node
         if s == "Y" or s == "y":
             clear()
             c = input("Do you want to see custom design? Y/n: ")
-            if c == "Y" or c == "y": 
+            if c == "Y" or c == "y":
                 while True: # connection via ssh
                     try:
                         clear()
@@ -108,7 +108,7 @@ def userconn(): # All the connection to a remote node
                         menuUserConn()
                         raise
                 else:
-                    menu()        
+                    menu()
             else:
                 while True: # connection via ssh
                     try:
@@ -121,7 +121,7 @@ def userconn(): # All the connection to a remote node
                         menuUserConn()
                         raise
         else:
-            menu()      
+            menu()
     elif option == "B" or option == "b": # Decode Block 0 on HEX for external node
         user = input("USER@NODE: ")
         while True:
@@ -137,7 +137,7 @@ def userconn(): # All the connection to a remote node
                 if b == "Y" or b == "y":
                     exit()
                 else:
-                    menuUserConn()  
+                    menuUserConn()
             tmp()
     elif option == "C" or option == "c": # Block decoder to HEX for external node
         readHexBlockSsh()
@@ -146,7 +146,7 @@ def userconn(): # All the connection to a remote node
             if m == "Y" or m == "y":
                 readHexBlockSsh()
             else:
-                menuUserConn()  
+                menuUserConn()
     elif option == "D" or option == "d":
         readHexTXSsh()
         while True:
@@ -157,7 +157,7 @@ def userconn(): # All the connection to a remote node
                 menuUserConn()
     elif option == "R" or option == "r":
         menu()
-        
+
 #------------------------------------------- End SSH connection external node --------------------------------------------
 
 
@@ -168,7 +168,7 @@ def readHexBlock(): # Hex Decoder using Hexyl on local node
     blocknumber = input("Add the Block number: ")
     decodeBlock = path + " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeBlock)
- 
+
 def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
     user = input("USER@NODE: ")
     clear()
@@ -179,12 +179,12 @@ def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
     clear()
     prt()
     os.system(decodeBlock)
-    
+
 def readHexTx(): # Hex Decoder using Hexyl on an external node
     hexa = input("Add the Transaction ID. you want to decode: ")
     decodeTX = path + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeTX)
-    
+
 def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
     user = input("USER@NODE: ")
     clear()
@@ -194,19 +194,19 @@ def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
     clear()
     prt()
     os.system(decodeTX)
-  
+
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
- 
+
 #--------------------------------- Menu section -----------------------------------
 
 def menu(): #Main Menu
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Menu
+    PyBLØCK Menu
     Version 0.1.0
-    
-    A. Run BlockClock in your own node
+
+    A. Run PyBLØCK in your own node
     B. Show Blockchain information in your own node
     C. Show the Genesis Block
     D. Decode in HEX any block
@@ -217,29 +217,29 @@ def menu(): #Main Menu
     Q. Exit
     \n\n""")
     menuA(input("Select option: "))
-    
+
 def menuUserConn(): #Menu before connection over ssh
     clear()
     prt()
     print("""\t\t
-    Python BlockClock External Node Menu
+    PyBLØCK External Node Menu
     Version 0.1.0
-    
-    A. Run BlockClock in this external node 
+
+    A. Run PyBLØCK in this external node
     B. Show the Genesis Block
     C. Decode in HEX any block
     D. Decode in HEX any transaction
     R. Return Main Menu
     \n\n""")
     userconn()
-    
+
 def advanceMenu():
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Advance Menu
+    PyBLØCK Advance Menu
     Version 0.1.0
-    
+
     A. Bitconi-cli Console
     B. FunB
     C. Show QR from a Bitcoin Address
@@ -252,49 +252,49 @@ def dnt():
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Donation Menu
+    PyBLØCK Donation Menu
     Version 0.1.0
-    
+
     A. Developers Donation
     B. Testers Donation
     D. Return Main Menu
     \n\n""")
     menuC(input("Select option: "))
-    
+
 def dntDev():
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Developers Donation Menu
+    PyBLØCK Developers Donation Menu
     Version 0.1.0
-    
+
     A. PayNym
     B. Bitcoin Address
     C. Lightning Network
     D. Return Main Menu
     \n\n""")
     menuE(input("Select option: "))
-    
+
 def dntTst():
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Testers Donation Menu
+    PyBLØCK Testers Donation Menu
     Version 0.1.0
-    
+
     A. Bitcoin Address
     B. Lightning Network
     D. Return Main Menu
     \n\n""")
     menuF(input("Select option: "))
-    
+
 def satnodeMenu():
     clear()
     prt()
     print("""\t\t
-    Python BlockClock Satnode Menu
+    PyBLØCK Satnode Menu
     Version 0.1.0
-    
+
     A. Start SatNode
     B. Feed
     C. Setup
@@ -303,7 +303,7 @@ def satnodeMenu():
     menuD(input("Select option: "))
 
 #--------------------------------- End Menu section -----------------------------------
- 
+
 #--------------------------------- Main Menu execution --------------------------------
 
 def menuA(menuS): #Execution of the Main Menu options
@@ -343,7 +343,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 prt()
                 readHexBlock()
             else:
-                menu()   
+                menu()
     elif menuS == "E" or menuS == "e":
         clear()
         prt()
@@ -355,7 +355,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 prt()
                 readHexTx()
             else:
-                menu()       
+                menu()
     elif menuS == "F" or menuS == "f":
         nodeinfo()
     elif menuS == "Q" or menuS == "q":
@@ -368,7 +368,7 @@ def menuA(menuS): #Execution of the Main Menu options
         gitclone()
     elif menuS == "N" or menuS == "n":
         satnode()
-        
+
 def menuB(menuR):
     if menuR == "A" or menuR == "a":
         while True:
@@ -413,22 +413,22 @@ def menuB(menuR):
             except (KeyboardInterrupt, SystemExit):
                 advanceMenu()
                 raise
-        
+
     elif menuR == "S" or menuR == "s":
         clear()
         prt()
         satnodeMenu()
     elif menuR == "R" or menuR == "r":
         menu()
-        
+
 def menuC(menuO):
-    if menuO == "A" or menuO == "a":                
+    if menuO == "A" or menuO == "a":
         dntDev()
     elif menuO == "B" or menuO == "b":
         dntTst()
     elif menuO == "D" or menuO == "d":
         menu()
-        
+
 def menuD(menuN):
     if menuN == "A" or menuN == "a":
         satnode()
@@ -441,9 +441,9 @@ def menuD(menuN):
             gitclone()
         else:
             advanceMenu()
-            
+
 def menuE(menuQ):
-    if menuQ == "A" or menuQ == "a":                
+    if menuQ == "A" or menuQ == "a":
         try:
             clear()
             prt()
@@ -478,7 +478,7 @@ def menuE(menuQ):
             raise
     elif menuQ == "D" or menuQ == "d":
         menu()
-    
+
 def menuF(menuV):
     if menuV == "A" or menuV == "a":
         try:
@@ -506,14 +506,14 @@ def menuF(menuV):
         menu()
 
 #--------------------------------- End Main Menu execution --------------------------------
-    
+
 def prt():
-    tprint("BlockClock", font="rnd-large") # random title design
-    
-def tmp(): 
+    tprint("PyBLØCK", font="rnd-large") # random title design
+
+def tmp():
     t.sleep(15)
-    
-                
+
+
 while True: # Loop
     clear() # call clear function that clears the screen
     path = ""
@@ -524,9 +524,8 @@ while True: # Loop
         menu()
     else:
         prt()
-        print("Welcome to Python BlockClock\n\n")
+        print("Welcome to PyBLØCK\n\n")
         path = input("Insert the Path to Bitcoin-Cli: ") # path to the bitcoin-cli
         pickle.dump(path, open("bclock.conf", "wb")) # Save the file 'bclock.conf'
         clear()
         menu()
-
