@@ -10,7 +10,7 @@
 
 <br />
 
-<img src="./resources/images/EYDhHM1X0AAd8UP.png" width="50%" />
+<img src="./resources/images/EYDhHM1X0AAd8UP.PNG" width="50%" />
 
 # PyBlock v0.1.0.1
 Bitcoin Blockchain information program
