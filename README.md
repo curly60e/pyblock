@@ -13,9 +13,9 @@
 <img src="./resources/images/EYDhHM1X0AAd8UP.png" width="50%" />
 
 # PyBlock v0.1.0.1
-Bitcoin Blockclock
+Bitcoin Blockchain information program
 
-A simple Python Block Clock to check the Blockcain information.
+A simple Python program to check the Blockcain information.
 
 ## Dependences
 
