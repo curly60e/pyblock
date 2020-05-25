@@ -1,4 +1,4 @@
-<img src="./resources/images/start.PNG" width="100%" />
+<img src="./resources/images/start.png" width="100%" />
 
 <br />
 
@@ -10,10 +10,10 @@
 
 <br />
 
-<img src="./resources/images/EYDhHM1X0AAd8UP.png" width="50%" />
+<img src="./resources/images/EYDhHM1X0AAd8UP.PNG" width="50%" />
 
-# python-blockclock v0.1.0
-Bitcoin Blockclock
+# PyBlock v0.1.0.1
+Bitcoin Blockchain information program
 
 A simple Python Block Clock to check the Blockchain information.
 
@@ -24,7 +24,7 @@ A simple Python Block Clock to check the Blockchain information.
   - Install the [Hexyl](https://github.com/sharkdp/hexyl)
   
 ## How to execute
-  - python3 Python-BlockClock.py
+  - python3 PyBlock.py
 
    ## Connect to an external node first steps
    
