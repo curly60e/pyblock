@@ -1,17 +1,28 @@
 #Developer: Curly60e
-#PyBLØCK its a clock of the Bitcoin blockchain.
-#Version: 0.1.0.1
+#PyBLOCK its a clock of the Bitcoin blockchain.
+#Version: 0.2.0
 
 import os
 import os.path
 import time as t
 import pickle
+import psutil
 from clone import *
 from donation import *
 from feed import *
 from art import *
 from logos import *
+from sysinf import *
+from pblogo import *
+from apisnd import *
 
+
+
+def sysinfo():  #Cpu and memory usage
+    print("   \033[0;37;40m----------------------")
+    print("   |\033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m    |")
+    print("   |\033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m  |".format(int(psutil.virtual_memory().percent)))
+    print("   \033[0;37;40m----------------------")
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
@@ -24,14 +35,14 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
-def getgenesis(): # get and decode Genesis block
+def getgenesis(): # get and decode Genesis block    
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path + bitcoincli)
-
+    
 def console(): # get into the console from bitcoin-cli
-    print("\tThis is Bitcoin-cli's console. Type your respective commands you want to display.\n\n")
+    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
-        cle = input("console $>: ")
+        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
         lsd = os.popen(str(path + " " + cle)).read()
         print(lsd)
 
@@ -48,8 +59,8 @@ def connected(info): # here we complete the connection to the external node
 
 
 def nodeinfo():
-    print("\nWARNING! This is not a safe method of connection. The best method is doing this locally.\n")
-    connected(input("WARNING! Are you sure you want to connect to a node? Y/n: ")) # call 'connected' function to make the connection with the node information
+    print("\n\033[1;31;40mWARNING! This is not a safe method of connection. The best method is doing this locally.\n")
+    connected(input("WARNING! Are you sure you want to connect to a node? Y/n: \033[0;37;40m")) # call 'connected' function to make the connection with the node information
 
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
@@ -82,14 +93,15 @@ def design():
     bitcoinclient = path + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
+    print("\033[1;32;40m")
     tprint(b, font="rnd-large")
-
+    print("\033[0;37;40m")
 #------------------------------------------- SSH connection external node --------------------------------------------
 
 def userconn(): # All the connection to a remote node
-    option = input("Select option: ")
+    option = input("\033[1;32;40mSelect option: \033[0;37;40m")
     if option == "A" or option == "a": # Execution of the secondary Menu menuUserConn
-        user = input("USER@NODE: ")
+        user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
         s = input("Do you want to continue Y/n: ")
         if s == "Y" or s == "y":
             clear()
@@ -102,7 +114,9 @@ def userconn(): # All the connection to a remote node
                         sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockcount"
                         sshc = os.popen(str(sshb)).read()
                         sshd = sshc
+                        print("\033[1;32;40m")
                         tprint(sshd, font="rnd-large")
+                        print("\033[0;37;40m")
                         tmp()
                     except (KeyboardInterrupt, SystemExit):
                         menuUserConn()
@@ -123,7 +137,7 @@ def userconn(): # All the connection to a remote node
         else:
             menu()
     elif option == "B" or option == "b": # Decode Block 0 on HEX for external node
-        user = input("USER@NODE: ")
+        user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
         while True:
             clear()
             prt()
@@ -170,7 +184,7 @@ def readHexBlock(): # Hex Decoder using Hexyl on local node
     os.system(decodeBlock)
 
 def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
-    user = input("USER@NODE: ")
+    user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
     clear()
     prt()
     hexa = input("Add the Block Hash you want to decode: ")
@@ -179,14 +193,14 @@ def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
     clear()
     prt()
     os.system(decodeBlock)
-
+    
 def readHexTx(): # Hex Decoder using Hexyl on an external node
     hexa = input("Add the Transaction ID. you want to decode: ")
     decodeTX = path + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeTX)
 
 def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
-    user = input("USER@NODE: ")
+    user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
     clear()
     prt()
     hexa = input("Add the Transaction ID. you want to decode: ")
@@ -194,7 +208,23 @@ def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
     clear()
     prt()
     os.system(decodeTX)
-
+        
+def getrawtx(): # show confirmatins from transactions
+    tx = input("Insert your TxID: ")
+    while True:
+        try:
+            clear()
+            prt()
+            close()
+            bitcoincli = " getrawtransaction "
+            lsd = os.popen(str(path + bitcoincli + tx + " 1")).read()
+            lsda = lsd.split(',')
+            lsdb = lsda[-3]
+            lsdc = str(lsdb)
+            print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))
+            tmp()
+        except (KeyboardInterrupt, SystemExit):
+            menu()
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 #--------------------------------- Menu section -----------------------------------
@@ -202,105 +232,115 @@ def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
 def menu(): #Main Menu
     clear()
     prt()
+    sysinfo()
     print("""\t\t
-    PyBLØCK Menu
-    Version 0.1.0.1
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
 
-    A. Run PyBLØCK in your own node
-    B. Show Blockchain information in your own node
-    C. Show the Genesis Block
-    D. Decode in HEX any block
-    E. Decode in HEX any transaction
-    F. Connect to an external node through SSH
-    G. Advanced
-    X. Donate
-    Q. Exit
+    \033[1;32;40mA.\033[0;37;40m Run PyBLOCK in your own node
+    \033[1;32;40mB.\033[0;37;40m Show Blockchain information in your own node
+    \033[1;32;40mC.\033[0;37;40m Show the Genesis Block
+    \033[1;32;40mD.\033[0;37;40m Decode in HEX any block
+    \033[1;32;40mE.\033[0;37;40m Decode in HEX any transaction
+    \033[1;32;40mF.\033[0;37;40m Show confirmations from a transaction
+    \033[1;32;40mG.\033[0;37;40m Connect to an external node through SSH
+    \033[1;32;40mH.\033[0;37;40m Advanced
+    \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;35;40mX.\033[0;37;40m Donate
+    \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""")
-    menuA(input("Select option: "))
+    menuA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuUserConn(): #Menu before connection over ssh
     clear()
     prt()
+    sysinfo()
     print("""\t\t
-    PyBLØCK External Node Menu
-    Version 0.1.0.1
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
 
-    A. Run PyBLØCK in this external node
-    B. Show the Genesis Block
-    C. Decode in HEX any block
-    D. Decode in HEX any transaction
-    R. Return Main Menu
+    \033[1;32;40mA.\033[0;37;40m Run PyBLOCK in this external node
+    \033[1;32;40mB.\033[0;37;40m Show the Genesis Block
+    \033[1;32;40mC.\033[0;37;40m Decode in HEX any block
+    \033[1;32;40mD.\033[0;37;40m Decode in HEX any transaction
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     userconn()
 
-def advanceMenu():
+def advanceMenu(): # Advanced Menu
     clear()
     prt()
+    sysinfo()
     print("""\t\t
-    PyBLØCK Advance Menu
-    Version 0.1.0.1
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
 
-    A. Bitconi-cli Console
-    B. FunB
-    C. Show QR from a Bitcoin Address
-    S. Satnode
-    R. Return Main Menu
+    \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
+    \033[1;32;40mB.\033[0;37;40m FunB
+    \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
+    \033[1;32;40mS.\033[0;37;40m Sysinfo
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
-    menuB(input("Select option: "))
+    menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def dnt():
+def dnt(): # Donation selection menu
     clear()
     prt()
+    sysinfo()
     print("""\t\t
-    PyBLØCK Donation Menu
-    Version 0.1.0.1
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
 
-    A. Developers Donation
-    B. Testers Donation
-    D. Return Main Menu
+    \033[1;32;40mA.\033[0;37;40m Developers Donation
+    \033[1;32;40mB.\033[0;37;40m Testers Donation
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
-    menuC(input("Select option: "))
+    menuC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def dntDev():
+def dntDev(): # Dev Donation Menu
     clear()
     prt()
+    sysinfo()
     print("""\t\t
-    PyBLØCK Developers Donation Menu
-    Version 0.1.0.1
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
 
-    A. PayNym
-    B. Bitcoin Address
-    C. Lightning Network
-    D. Return Main Menu
+    \033[1;32;40mA.\033[0;37;40m PayNym
+    \033[1;32;40mB.\033[0;37;40m Bitcoin Address
+    \033[1;32;40mC.\033[0;37;40m Lightning Network
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
-    menuE(input("Select option: "))
+    menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def dntTst():
+def dntTst(): # Tester Donation Menu
     clear()
     prt()
+    sysinfo()
     print("""\t\t
-    PyBLØCK Testers Donation Menu
-    Version 0.1.0.1
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
 
-    A. Bitcoin Address
-    B. Lightning Network
-    D. Return Main Menu
+    \033[1;32;40mA.\033[0;37;40m Bitcoin Address
+    \033[1;32;40mB.\033[0;37;40m Lightning Network
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
-    menuF(input("Select option: "))
+    menuF(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def satnodeMenu():
+def satnodeMenu(): # Satnode Menu
     clear()
     prt()
+    sysinfo()
     print("""\t\t
-    PyBLØCK Satnode Menu
-    Version 0.1.0.1
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
 
-    A. Start SatNode
-    B. Feed
-    C. Setup
-    D. Return Main Menu
+    \033[1;32;40mA.\033[0;37;40m Start SatNode
+    \033[1;32;40mB.\033[0;37;40m Feed
+    \033[1;32;40mC.\033[0;37;40m Setup
+    \033[1;34;40mS.\033[0;37;40m Send a Message to Space
+    \033[1;36;40mD.\033[0;37;40m Return Main Menu
     \n\n""")
-    menuD(input("Select option: "))
+    menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 #--------------------------------- End Menu section -----------------------------------
 
@@ -353,28 +393,35 @@ def menuA(menuS): #Execution of the Main Menu options
             if r == "Y" or r == "y":
                 clear()
                 prt()
+                sysinfo()
                 readHexTx()
             else:
                 menu()
     elif menuS == "F" or menuS == "f":
-        nodeinfo()
+        getrawtx()
+    elif menuS == "H" or menuS == "h":
+        advanceMenu()
     elif menuS == "Q" or menuS == "q":
         exit()
+    elif menuS == "S" or menuS == "s":
+        clear()
+        prt()
+        satnodeMenu()
     elif menuS == "G" or menuS == "g":
-        advanceMenu()
+        nodeinfo()
     elif menuS == "X" or menuS == "x":
         dnt()
-    elif menuS == "T" or menuS == "t":
-        gitclone()
-    elif menuS == "N" or menuS == "n":
-        satnode()
+    elif menuS == "T" or menuS == "t": #Test feature fast access
+        getrawtx()
 
-def menuB(menuR):
+
+def menuB(menuR): # Advanced access Menu
     if menuR == "A" or menuR == "a":
         while True:
             try:
                 clear()
                 prt()
+                sysinfo()
                 close()
                 console()
                 t.sleep(5)
@@ -407,42 +454,60 @@ def menuB(menuR):
             try:
                 clear()
                 prt()
+                sysinfo()
                 close()
                 decodeQR()
                 t.sleep(50)
             except (KeyboardInterrupt, SystemExit):
                 advanceMenu()
                 raise
-
     elif menuR == "S" or menuR == "s":
-        clear()
-        prt()
-        satnodeMenu()
+        while True:
+            try:
+                clear()
+                prt()
+                close()
+                sysinfoDetail()
+                t.sleep(1)
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise  
     elif menuR == "R" or menuR == "r":
         menu()
 
-def menuC(menuO):
+def menuC(menuO): # Donation access Menu
     if menuO == "A" or menuO == "a":
         dntDev()
     elif menuO == "B" or menuO == "b":
         dntTst()
-    elif menuO == "D" or menuO == "d":
+    elif menuO == "R" or menuO == "r":
         menu()
 
-def menuD(menuN):
+def menuD(menuN): # Satnode access Menu
     if menuN == "A" or menuN == "a":
         satnode()
     elif menuN == "B" or menuN == "b":
         readFile()
+    elif menuN == "S" or menuN == "s":
+        try:
+            clear()
+            prt()
+            close()
+            apisender()
+            t.sleep(50)
+            menu()
+        except (KeyboardInterrupt, SystemExit):
+            menu()
+            raise  
     elif menuN == "C" or menuN == "c":
         print("\n\t This only will work on Linux or Unix systems.\n")
         a = input("Do we continue? Y/n: ")
         if a == "Y" or a == "y":
             gitclone()
         else:
-            advanceMenu()
+            menu()
 
-def menuE(menuQ):
+def menuE(menuQ): # Dev Donation access Menu
     if menuQ == "A" or menuQ == "a":
         try:
             clear()
@@ -476,10 +541,10 @@ def menuE(menuQ):
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
-    elif menuQ == "D" or menuQ == "d":
+    elif menuQ == "R" or menuQ == "r":
         menu()
 
-def menuF(menuV):
+def menuF(menuV): # Tester Donation access Menu
     if menuV == "A" or menuV == "a":
         try:
             clear()
@@ -502,13 +567,16 @@ def menuF(menuV):
         except (KeyboardInterrupt, SystemExit):
             menu()
             raise
-    elif menuV == "D" or menuV == "d":
+    elif menuV == "R" or menuV == "r":
         menu()
 
 #--------------------------------- End Main Menu execution --------------------------------
 
 def prt():
-    tprint("PyBLOCK", font="rnd-large") # random title design
+    print("\033[1;32;40m")
+    blogo()
+    #tprint("PyBLOCK", font="rnd-large") # random title design
+    print("\033[0;37;40m")
 
 def tmp():
     t.sleep(15)
@@ -524,7 +592,7 @@ while True: # Loop
         menu()
     else:
         prt()
-        print("Welcome to PyBLØCK\n\n")
+        print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
         path = input("Insert the Path to Bitcoin-Cli: ") # path to the bitcoin-cli
         pickle.dump(path, open("bclock.conf", "wb")) # Save the file 'bclock.conf'
         clear()
