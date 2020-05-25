@@ -15,7 +15,7 @@
 # PyBlock v0.1.0.1
 Bitcoin Blockchain information program
 
-A simple Python program to check the Blockcain information.
+A simple Python Block Clock to check the Blockchain information.
 
 ## Dependences
 
