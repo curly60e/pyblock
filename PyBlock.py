@@ -45,7 +45,7 @@ def console(): # get into the console from bitcoin-cli
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
         lsd = os.popen(str(path + " " + cle)).read()
         print(lsd)
-
+        
 #-------------------From this line the program starts----------------------
 
 def connected(info): # here we complete the connection to the external node
@@ -237,7 +237,7 @@ def menu(): #Main Menu
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Version 0.2.0
 
-    \033[1;32;40mA.\033[0;37;40m Run PyBLOCK in your own node
+    \033[1;31;40mA.\033[0;37;40m Run PyBLOCK in your own node
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information in your own node
     \033[1;32;40mC.\033[0;37;40m Show the Genesis Block
     \033[1;32;40mD.\033[0;37;40m Decode in HEX any block
@@ -412,8 +412,7 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS == "X" or menuS == "x":
         dnt()
     elif menuS == "T" or menuS == "t": #Test feature fast access
-        getrawtx()
-
+        print("This is a test access. \n")
 
 def menuB(menuR): # Advanced access Menu
     if menuR == "A" or menuR == "a":
@@ -490,15 +489,33 @@ def menuD(menuN): # Satnode access Menu
         readFile()
     elif menuN == "S" or menuN == "s":
         try:
-            clear()
-            prt()
             close()
-            apisender()
-            t.sleep(50)
-            menu()
+            message = input("\n\033[0;37;40mYour message it's a \033[1;34;40mF\033[0;37;40mile or a plain \033[1;32;40mT\033[0;37;40mext? \033[1;34;40mF\033[0;37;40m/\033[1;32;40mT\033[0;37;40m: ")
+            if message == "F" or message == "f":
+                try:
+                    clear()
+                    prt()
+                    close()
+                    apisenderFile()
+                    t.sleep(50)
+                    menu()
+                except (KeyboardInterrupt, SystemExit):
+                    menu()
+                    raise
+            elif message == "T" or message == "t": 
+                try:
+                    clear()
+                    prt()
+                    close()
+                    apisender()
+                    t.sleep(50)
+                    menu()
+                except (KeyboardInterrupt, SystemExit):
+                    menu()
+                    raise
         except (KeyboardInterrupt, SystemExit):
             menu()
-            raise  
+            raise
     elif menuN == "C" or menuN == "c":
         print("\n\t This only will work on Linux or Unix systems.\n")
         a = input("Do we continue? Y/n: ")
@@ -597,3 +614,4 @@ while True: # Loop
         pickle.dump(path, open("bclock.conf", "wb")) # Save the file 'bclock.conf'
         clear()
         menu()
+
