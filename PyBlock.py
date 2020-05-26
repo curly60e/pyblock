@@ -497,7 +497,7 @@ def menuD(menuN): # Satnode access Menu
                     prt()
                     close()
                     apisenderFile()
-                    t.sleep(50)
+                    t.sleep(30)
                     menu()
                 except (KeyboardInterrupt, SystemExit):
                     menu()
@@ -508,7 +508,7 @@ def menuD(menuN): # Satnode access Menu
                     prt()
                     close()
                     apisender()
-                    t.sleep(50)
+                    t.sleep(30)
                     menu()
                 except (KeyboardInterrupt, SystemExit):
                     menu()
