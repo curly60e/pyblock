@@ -1,6 +1,5 @@
 import os
 import qrcode
-import time as t
 
 def apisender():
     qr = qrcode.QRCode(
@@ -11,7 +10,7 @@ def apisender():
     )
     url = 'https://api.blockstream.space/order'
     message = input("\nInsert your Message: ")
-    sentby = ". Message sent from PyBlock."
+    sentby = "... Message sent from PyBlock."
     
     curl = 'curl -F "bid=10000" -F ' + ' "message=' + message + sentby + '" ' + url
     sh = os.popen(str(curl)).read()
@@ -42,12 +41,12 @@ def apisender():
     cln = ln2.strip('"')
     print("\n\033[0;37;40mYour Token Authorization: \033[1;31;40m" + token + "\033[0;37;40m")
     print("\033[0;37;40mYour Order Number: \033[1;31;40m" + order + "\033[0;37;40m")
-    print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m")
+    print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m\n")
     print("\033[1;30;47m")
     qr.add_data(cln)
     qr.print_ascii()
     print("\033[0;37;40m")
-    print("\nLND Invoice: " + cln)
+    print("\nLND Invoice: " + cln + "\n")
     print(cln)
 
 def apisenderFile():
@@ -60,7 +59,7 @@ def apisenderFile():
     url = 'https://api.blockstream.space/order'
     message = input("\nInsert the path to the File: ")
     
-    curl = 'curl -F "bid=10000" -F ' + ' "file=@' + message + '" ' + url
+    curl = 'curl -F "bid=50000" -F ' + ' "file=@' + message + '" ' + url
     sh = os.popen(str(curl)).read()
     shh = sh.split(',')
     invoice = str(shh[6])
@@ -95,4 +94,6 @@ def apisenderFile():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("\nLND Invoice: " + cln)
-    print(cln)
+    print(cln) 
+    
+
