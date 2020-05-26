@@ -51,7 +51,7 @@ def apisender():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("\nLND Invoice: " + cln + "\n")
-    t.sleep(50)
+    t.sleep(30)
     devAddr()
 
 
@@ -101,7 +101,7 @@ def apisenderFile():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("\nLND Invoice: " + cln)
-    t.sleep(50)
+    t.sleep(30)
     devAddr()
     
 def devAddr():
