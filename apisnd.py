@@ -11,8 +11,9 @@ def apisender():
     )
     url = 'https://api.blockstream.space/order'
     message = input("\nInsert your Message: ")
+    sentby = ". Message sent from PyBlock."
     
-    curl = 'curl -F "bid=10000" -F ' + ' "message=' + message + '" ' + url
+    curl = 'curl -F "bid=10000" -F ' + ' "message=' + message + sentby + '" ' + url
     sh = os.popen(str(curl)).read()
     shh = sh.split(',')
     invoice = str(shh[6])
