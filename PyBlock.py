@@ -43,8 +43,11 @@ def console(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
-        lsd = os.popen(str(path + " " + cle)).read()
-        print(lsd)
+        lsd = os.popen(path + " " + cle)
+        lsd0 = lsd.read()
+        lsd1 = str(lsd0)
+        print(lsd1)
+        lsd.close()
         
 #-------------------From this line the program starts----------------------
 
@@ -112,12 +115,15 @@ def userconn(): # All the connection to a remote node
                         clear()
                         close()
                         sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockcount"
-                        sshc = os.popen(str(sshb)).read()
-                        sshd = sshc
+                        sshc = os.popen(sshb)
+                        lsd0 = sshc.read()
+                        lsd1 = str(lsd0)
+                        sshd = lsd1
                         print("\033[1;32;40m")
                         tprint(sshd, font="rnd-large")
                         print("\033[0;37;40m")
                         tmp()
+                        sshc.close()
                     except (KeyboardInterrupt, SystemExit):
                         menuUserConn()
                         raise
@@ -217,12 +223,15 @@ def getrawtx(): # show confirmatins from transactions
             prt()
             close()
             bitcoincli = " getrawtransaction "
-            lsd = os.popen(str(path + bitcoincli + tx + " 1")).read()
-            lsda = lsd.split(',')
+            lsd = os.popen(path + bitcoincli + tx + " 1")
+            lsd0 = lsd.read()
+            lsd1 = str(lsd0)
+            lsda = lsd1.split(',')
             lsdb = lsda[-3]
             lsdc = str(lsdb)
-            print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))
+            print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))          
             tmp()
+            lsd.close()
         except (KeyboardInterrupt, SystemExit):
             menu()
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
@@ -369,6 +378,12 @@ def menuA(menuS): #Execution of the Main Menu options
         else:
             b = input("Do you want to exit? Y/n: ")
             if b == "Y" or b == "y":
+                os._exit(0)
+                apisnd.close()
+                donation.close()
+                clone.close()
+                logos.close()
+                feed.close()
                 exit()
             else:
                 menu()
@@ -402,6 +417,12 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS == "H" or menuS == "h":
         advanceMenu()
     elif menuS == "Q" or menuS == "q":
+        os._exit(0)
+        apisnd.close()
+        donation.close()
+        clone.close()
+        logos.close()
+        feed.close()
         exit()
     elif menuS == "S" or menuS == "s":
         clear()
