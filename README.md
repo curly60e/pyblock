@@ -1,4 +1,4 @@
-<img src="./resources/images/start.png" width="100%" />
+<img src="./resources/images/start.png" width="80%" />
 
 <br />
 
@@ -10,9 +10,21 @@
 
 <br />
 
-<img src="./resources/images/EYDhHM1X0AAd8UP.PNG" width="50%" />
+<img src="./resources/images/image.png" width="50%" />
 
-# PyBlock v0.1.0.1
+<br />
+
+<img src="./resources/images/sysinfo.PNG" width="50%" />
+
+<br />
+
+<img src="./resources/images/funb.PNG" width="50%" />
+
+<br />
+
+<img src="./resources/images/satnode.PNG" width="50%" />
+
+# PyBlock v0.2.0
 Bitcoin Blockchain information program
 
 A simple Python Block Clock to check the Blockchain information.
