@@ -15,8 +15,11 @@ def gitclone():
         os.system("gpg --full-generate-key --homedir $HOME/pyblock/examples/.gnupg")
         
 def satnode():
-    os.system("python3 $HOME/pyblock/examples/demo-rx.py &")
-    t.sleep(5)
-    os.system("python3 $HOME/pyblock/examples/api_data_reader.py --demo  --plaintext ")
+    try:
+        os.system("python3 $HOME/pyblock/examples/demo-rx.py &")
+        t.sleep(5)
+        os.system("python3 $HOME/pyblock/examples/api_data_reader.py --demo  --plaintext ")
+    except (KeyboardInterrupt, SystemExit):
+        os.system("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9")
     
 

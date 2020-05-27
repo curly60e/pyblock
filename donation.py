@@ -10,8 +10,10 @@ def donationPN():
     border=4,
     )
     url = 'PM8TJbSH9iCPZ2bz9D7MTHpaCnT35Pm4kfJ6gRccoKmMjz5qsQ6rBWpBRCnJHMpTo8kc5K2SF4MADA9f4uKwc5iC8A3FtKJc7eb5wFDF3vcuSfneaC15'
+    print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
+    print("\033[0;37;40m")
     print("PayNym: " + url)
     
 def donationAddr():
@@ -22,8 +24,10 @@ def donationAddr():
     border=4,
     )
     url = 'bc1qf5c88chttajazrlwudt7x9xx5u0qf8y2lguj62'
+    print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
+    print("\033[0;37;40m")
     print("Bitcoin Address Bech32: " + url)
     
 def donationLN():
@@ -44,8 +48,10 @@ def donationLN():
     lnbc1W = lnbc1R[1]
     ln = str(lnbc1W)
     ln1 = ln.strip('"')
+    print("\033[1;30;47m")
     qr.add_data(ln1)
     qr.print_ascii()
+    print("\033[0;37;40m")
     print("LND Invoice: " + ln1)
 
     
@@ -57,8 +63,10 @@ def donationAddrTst():
     border=4,
     )
     url = 'bc1qwtzwu2evtchkvnf3ey6520yprsyv7vrjvhula5'
+    print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
+    print("\033[0;37;40m")
     print("Bitcoin Address Bech32: " + url)
     
 def donationLNTst():
@@ -79,8 +87,10 @@ def donationLNTst():
     lnbc1W = lnbc1R[1]
     ln = str(lnbc1W)
     ln1 = ln.strip('"')
+    print("\033[1;30;47m")
     qr.add_data(ln1)
     qr.print_ascii()
+    print("\033[0;37;40m")
     print("LND Invoice: " + ln1)
 
 def decodeQR():
@@ -91,7 +101,8 @@ def decodeQR():
     border=4,
     )
     url = input("Insert your Bitcoin Address to show the QRCode: ")
+    print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
+    print("\033[0;37;40m")
     print("Bitcoin Address: " + url)
-
