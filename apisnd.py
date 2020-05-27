@@ -1,6 +1,8 @@
 import os
 import qrcode
 import requests
+import time as t
+
 
 def apisender():
     qr = qrcode.QRCode(
@@ -55,7 +57,9 @@ def apisender():
     sh.close()
     continue1 = input("Continue? Y: ")
     if continue1 == "Y" or continue1 == "y":
-        devAddr()
+        donate()
+    else:
+        t.sleep(2)
 
 def apisenderFile():
     qr = qrcode.QRCode(
@@ -109,7 +113,9 @@ def apisenderFile():
     sh.close()
     continue1 = input("Continue? Y: ")
     if continue1 == "Y" or continue1 == "y":
-        devAddr()
+        donate()
+    else:
+        t.sleep(2)
 
 def devAddr():
     qr = qrcode.QRCode(
@@ -136,3 +142,17 @@ def devAddr():
     print("\033[0;37;40m")
     print("LND Invoice: " + ln1)
     response.close()
+
+def donate():
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.2.0
+
+    \033[1;32;40mA.\033[0;37;40m Make PyBLOCK Great Again
+    \033[1;32;40mB.\033[0;37;40m <<< Back Press Control + C
+    \n\n""")
+    menuB = (input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    if menuB == "A" or menuB == "a":
+        devAddr()
+
+        
