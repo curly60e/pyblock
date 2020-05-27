@@ -1,3 +1,4 @@
+#v0.2.0
 import requests
 import qrcode
 
