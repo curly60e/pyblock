@@ -1,7 +1,6 @@
 import os
 import qrcode
 import requests
-import time as t
 
 def apisender():
     qr = qrcode.QRCode(
@@ -17,8 +16,10 @@ def apisender():
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
     
-    sh = os.popen(str(curl)).read()
-    shh = sh.split(',')
+    sh = os.popen(curl)
+    sh0 = sh.read()
+    sh1 = str(sh0)
+    shh = sh1.split(',')
     invoice = str(shh[6])
     
     #---------------Token-----------
@@ -51,9 +52,10 @@ def apisender():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("\nLND Invoice: " + cln + "\n")
-    t.sleep(30)
-    devAddr()
-
+    sh.close()
+    continue1 = input("Continue? Y: ")
+    if continue1 == "Y" or continue1 == "y":
+        devAddr()
 
 def apisenderFile():
     qr = qrcode.QRCode(
@@ -67,8 +69,11 @@ def apisenderFile():
     print("ATENTION: Minimum amount for sending a File is 50000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
-    sh = os.popen(str(curl)).read()
-    shh = sh.split(',')
+    
+    sh = os.popen(curl)
+    sh0 = sh.read()
+    sh1 = str(sh0)
+    shh = sh1.split(',')
     invoice = str(shh[6])
     
     #---------------Token-----------
@@ -101,9 +106,11 @@ def apisenderFile():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("\nLND Invoice: " + cln)
-    t.sleep(30)
-    devAddr()
-    
+    sh.close()
+    continue1 = input("Continue? Y: ")
+    if continue1 == "Y" or continue1 == "y":
+        devAddr()
+
 def devAddr():
     qr = qrcode.QRCode(
     version=1,
@@ -128,5 +135,4 @@ def devAddr():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("LND Invoice: " + ln1)
-
-
+    response.close()
