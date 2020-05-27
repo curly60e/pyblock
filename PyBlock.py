@@ -495,8 +495,18 @@ def menuB(menuR): # Advanced access Menu
                 advanceMenu()
                 raise  
     elif menuR == "R" or menuR == "r":
-        menu()
-
+        try:
+            menu()
+        except (KeyboardInterrupt, SystemExit):
+            os._exit(0)
+            apisnd.close()
+            donation.close()
+            clone.close()
+            logos.close()
+            feed.close()
+            sysinf.close()
+            exit()
+            
 def menuC(menuO): # Donation access Menu
     if menuO == "A" or menuO == "a":
         dntDev()
