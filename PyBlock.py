@@ -223,15 +223,20 @@ def getrawtx(): # show confirmatins from transactions
             prt()
             close()
             bitcoincli = " getrawtransaction "
-            lsd = os.popen(path + bitcoincli + tx + " 1")
-            lsd0 = lsd.read()
-            lsd1 = str(lsd0)
-            lsda = lsd1.split(',')
-            lsdb = lsda[-3]
-            lsdc = str(lsdb)
-            print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))          
-            tmp()
-            lsd.close()
+            if tx == "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b":
+                print("""\t\t\n\033[1;35;40mThis transaction it's the first one of the Bitcoin Blockchain on Block 0 by Satoshi Nakamoto.
+You can decode that block in HEX and see what's inside.\033[0;37;40m""")
+                t.sleep(10)
+            else:
+                lsd = os.popen(path + bitcoincli + tx + " 1")
+                lsd0 = lsd.read()
+                lsd1 = str(lsd0)
+                lsda = lsd1.split(',')
+                lsdb = lsda[-3]
+                lsdc = str(lsdb)         
+                print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))          
+                tmp()
+                lsd.close()
         except (KeyboardInterrupt, SystemExit):
             menu()
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
