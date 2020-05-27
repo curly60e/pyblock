@@ -384,6 +384,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 clone.close()
                 logos.close()
                 feed.close()
+                sysinf.close()
                 exit()
             else:
                 menu()
@@ -423,6 +424,7 @@ def menuA(menuS): #Execution of the Main Menu options
         clone.close()
         logos.close()
         feed.close()
+        sysinf.close()
         exit()
     elif menuS == "S" or menuS == "s":
         clear()
