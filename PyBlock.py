@@ -7,6 +7,7 @@ import os.path
 import time as t
 import pickle
 import psutil
+import qrcode
 from clone import *
 from donation import *
 from feed import *
@@ -15,29 +16,10 @@ from logos import *
 from sysinf import *
 from pblogo import *
 from apisnd import *
+from fxmain import *
+from terminal_matrix.matrix import *
 
 
-
-def sysinfo():  #Cpu and memory usage
-    print("   \033[0;37;40m----------------------")
-    print("   |\033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m    |")
-    print("   |\033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m  |".format(int(psutil.virtual_memory().percent)))
-    print("   \033[0;37;40m----------------------")
-
-def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
-    bitcoincli = " getblockchaininfo"
-    os.system(path + bitcoincli)
-
-def getblockcount(): # get access to bitcoin-cli with the command getblockcount
-    bitcoincli = " getblockcount"
-    os.system(path + bitcoincli)
-
-def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
-
-def getgenesis(): # get and decode Genesis block    
-    bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
-    os.system(path + bitcoincli)
     
 def console(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
@@ -48,7 +30,61 @@ def console(): # get into the console from bitcoin-cli
         lsd1 = str(lsd0)
         print(lsd1)
         lsd.close()
-        
+
+def screensv():
+    try:
+        doit()
+    except (KeyboardInterrupt, SystemExit):
+        matrix.close()
+        clear()
+        ptr()
+        menu()
+    
+#-------------------Lighitning network-------------------------------------    
+    
+def LNInvoice():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    lncli = " addinvoice "
+    print("\nLeave the Amount blank if you want to receive a random amount.\n")
+    amt =  input("Amount: ")
+    sh = os.popen(pathLN + lncli + amt)
+    shh = sh.read()
+    shh0 = str(shh)
+    shh1 = shh0.split(',')
+    shh2 = shh1[1]
+    lnbc1R = shh2.split(':')
+    lnbc1W = lnbc1R[1]
+    ln = str(lnbc1W)
+    ln1 = ln.strip('"')
+    ln2 = ln1.split('"')
+    ln3 = ln2[1]
+    print("\033[1;30;47m")
+    qr.add_data(ln3)
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    print("Lightning Invoice: " + ln3)
+    tmp()
+    
+def connectpeer():
+    lncli = " connect "
+    print("\nConnect to a Peer.\n")
+    peer =  input("\033[0;37;40mPeer id@\033[1;33;40mIP\033[0;37;40m or id@\033[1;35;40mONION: \033[0;37;40m")
+    os.system(pathLN + lncli + peer)
+    tmp()
+    
+def channelopen():
+    lncli = " openchannel "
+    print("\nOpen a channel.\n")
+    chnl = input("Id from peer: ")
+    amt = input("Amount for the channel: ")
+    os.system(pathLN + chnl + " " + amt)
+    tmp()
+    
 #-------------------From this line the program starts----------------------
 
 def connected(info): # here we complete the connection to the external node
@@ -88,9 +124,6 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             except (KeyboardInterrupt, SystemExit):
                 menu()
                 raise
-
-def close():
-    print("<<< Back to the Main Menu Press Control + C.\n\n")
 
 def design():
     bitcoinclient = path + " getblockcount"
@@ -183,12 +216,6 @@ def userconn(): # All the connection to a remote node
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
-def readHexBlock(): # Hex Decoder using Hexyl on local node
-    hexa = input("Add the Block Hash you want to decode: ")
-    blocknumber = input("Add the Block number: ")
-    decodeBlock = path + " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
-    os.system(decodeBlock)
-
 def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
     user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
     clear()
@@ -199,11 +226,6 @@ def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
     clear()
     prt()
     os.system(decodeBlock)
-    
-def readHexTx(): # Hex Decoder using Hexyl on an external node
-    hexa = input("Add the Transaction ID. you want to decode: ")
-    decodeTX = path + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
-    os.system(decodeTX)
 
 def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
     user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
@@ -259,6 +281,7 @@ def menu(): #Main Menu
     \033[1;32;40mF.\033[0;37;40m Show confirmations from a transaction
     \033[1;32;40mG.\033[0;37;40m Connect to an external node through SSH
     \033[1;32;40mH.\033[0;37;40m Advanced
+    \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
@@ -356,7 +379,25 @@ def satnodeMenu(): # Satnode Menu
     \n\n""")
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def menuLND():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Lightnin Network Menu
+    Version 0.2.0
+
+    \033[1;32;40mA.\033[0;37;40m New Invoice
+    \033[1;32;40mB.\033[0;37;40m Connect Peer
+    \033[1;32;40mC.\033[0;37;40m Open Channel
+    \033[1;34;40mD.\033[0;37;40m Close Channel
+    \033[1;31;40mP.\033[0;37;40m Pay Invoice
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    
 #--------------------------------- End Menu section -----------------------------------
+    
 
 #--------------------------------- Main Menu execution --------------------------------
 
@@ -390,6 +431,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 logos.close()
                 feed.close()
                 sysinf.close()
+                fxmain.close()
                 exit()
             else:
                 menu()
@@ -422,6 +464,10 @@ def menuA(menuS): #Execution of the Main Menu options
         getrawtx()
     elif menuS == "H" or menuS == "h":
         advanceMenu()
+    elif menuS == "L" or menuS == "l":
+        clear()
+        prt()
+        menuLND()
     elif menuS == "Q" or menuS == "q":
         os._exit(0)
         apisnd.close()
@@ -430,6 +476,7 @@ def menuA(menuS): #Execution of the Main Menu options
         logos.close()
         feed.close()
         sysinf.close()
+        fxmain.close()
         exit()
     elif menuS == "S" or menuS == "s":
         clear()
@@ -441,7 +488,21 @@ def menuA(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS == "T" or menuS == "t": #Test feature fast access
         print("This is a test access. \n")
-
+        screensv()
+#------------------------------------------
+def menuLN(menuLL):
+    if menuLL == "A" or menuLL == "a":
+        clear()
+        prt()
+        LNInvoice()
+    elif menuLL == "B" or menuLL == "b":
+        clear()
+        prt()
+        connectpeer()
+    elif menuLL == "R" or menuLL == "r":
+        menu()
+        
+#------------------------------------------
 def menuB(menuR): # Advanced access Menu
     if menuR == "A" or menuR == "a":
         while True:
@@ -627,29 +688,23 @@ def menuF(menuV): # Tester Donation access Menu
 
 #--------------------------------- End Main Menu execution --------------------------------
 
-def prt():
-    print("\033[1;32;40m")
-    blogo()
-    #tprint("PyBLOCK", font="rnd-large") # random title design
-    print("\033[0;37;40m")
-
-def tmp():
-    t.sleep(15)
-
 
 while True: # Loop
-    clear() # call clear function that clears the screen
+    clear()
     path = ""
-    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+    pathLN = ""
+    #matrixsc()
+    if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
-        clear()
+        pathLNv = pickle.load(open("blnclock.conf", "rb"))
+        pathLN = pathLNv
         menu()
     else:
         prt()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-        path = input("Insert the Path to Bitcoin-Cli: ") # path to the bitcoin-cli
-        pickle.dump(path, open("bclock.conf", "wb")) # Save the file 'bclock.conf'
-        clear()
+        path = input("Insert the Path to Bitcoin-Cli: ")
+        pickle.dump(path, open("bclock.conf", "wb")) 
+        pathLN = input("Insert the Path to Lncli: ")
+        pickle.dump(pathLN, open("blnclock.conf", "wb"))
         menu()
-

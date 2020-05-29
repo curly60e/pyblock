@@ -1,4 +1,3 @@
-#v0.2.0
 import requests
 import qrcode
 
@@ -54,6 +53,7 @@ def donationLN():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("LND Invoice: " + ln1)
+    response.close()
 
     
 def donationAddrTst():
@@ -93,6 +93,7 @@ def donationLNTst():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("LND Invoice: " + ln1)
+    response.close()
 
 def decodeQR():
     qr = qrcode.QRCode(

@@ -1,4 +1,3 @@
-#v0.2.0
 import os
 import os.path
 import time as t
