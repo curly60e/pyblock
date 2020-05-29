@@ -69,22 +69,34 @@ def LNInvoice():
     print("\033[0;37;40m")
     print("Lightning Invoice: " + ln3)
     tmp()
+
+def payinvoice():
+    lncli = " payinvoice "
+    invoice = input("Pay Invoice: ")
+    #----------decode invoice-----
+    lnclideq = " decodepayreq "
+    sh = os.popen(pathLN + lnclideq + invoice)
+    shh = sh.read()
+    shh0 = str(shh)
+    shh1 = shh0.split(',')
+    shh2 = shh1[2]
+    #----amount----
+    lnbc1R = shh2.split(':')
+    lnbc1W = lnbc1R[1]
+    ln = str(lnbc1W)
+    ln1 = ln.split('"')
+    ln3 = ln1[1]
     
-def connectpeer():
-    lncli = " connect "
-    print("\nConnect to a Peer.\n")
-    peer =  input("\033[0;37;40mPeer id@\033[1;33;40mIP\033[0;37;40m or id@\033[1;35;40mONION: \033[0;37;40m")
-    os.system(pathLN + lncli + peer)
+    if ln3 == "0":
+        amt = " --amt "
+        amount =  input("Amount in satoshis: ")
+        os.system(pathLN + lncli + invoice + amt + amount)
+        
+    else:
+        os.system(pathLN + lncli + invoice)
+
     tmp()
-    
-def channelopen():
-    lncli = " openchannel "
-    print("\nOpen a channel.\n")
-    chnl = input("Id from peer: ")
-    amt = input("Amount for the channel: ")
-    os.system(pathLN + chnl + " " + amt)
-    tmp()
-    
+
 #-------------------From this line the program starts----------------------
 
 def connected(info): # here we complete the connection to the external node
@@ -384,13 +396,10 @@ def menuLND():
     prt()
     sysinfo()
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m Lightnin Network Menu
+    \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Version 0.2.0
 
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Connect Peer
-    \033[1;32;40mC.\033[0;37;40m Open Channel
-    \033[1;34;40mD.\033[0;37;40m Close Channel
+    \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
@@ -491,14 +500,14 @@ def menuA(menuS): #Execution of the Main Menu options
         screensv()
 #------------------------------------------
 def menuLN(menuLL):
-    if menuLL == "A" or menuLL == "a":
+    if menuLL == "I" or menuLL == "i":
         clear()
         prt()
         LNInvoice()
-    elif menuLL == "B" or menuLL == "b":
+    elif menuLL == "P" or menuLL == "p":
         clear()
         prt()
-        connectpeer()
+        payinvoice()
     elif menuLL == "R" or menuLL == "r":
         menu()
         
@@ -708,3 +717,4 @@ while True: # Loop
         pathLN = input("Insert the Path to Lncli: ")
         pickle.dump(pathLN, open("blnclock.conf", "wb"))
         menu()
+
