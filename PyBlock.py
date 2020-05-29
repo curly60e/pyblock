@@ -68,7 +68,37 @@ def LNInvoice():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("Lightning Invoice: " + ln3)
-    tmp()
+    while True:
+        sha = os.popen(pathLN + " decodepayreq " + ln3)
+        sha1 = sha.read()
+        sha2 = str(sha1)
+        sha3 = sha2.split(',')
+        sha4 = sha3[5]
+        sha5= sha4.split(':')
+        sha6 = sha5[1]
+        lna = str(sha6)
+        lna1 = lna.split('"')
+        lna2 = lna1[1]
+        hshid = sha3[1]
+        hshid0 = hshid.split(':')
+        hshid1 = hshid0[1]
+        hshid2 = str(hshid1)
+        hshid3 = hshid2.split('"')
+        hashid = hshid3[1]
+        sh1 = os.popen(pathLN + " lookupinvoice " + hashid)
+        sh2 = sh1.read()
+        sh3 = str(sh2)
+        sh4 = sh3.split(',')
+        sh5 = sh4[20]
+        if 'SETTLED' in sh5:
+            clear()
+            prt()
+            print("\033[1;32;40m")
+            tick()
+            print("\033[0;37;40m")
+            t.sleep(2)
+            break
+
 
 def payinvoice():
     lncli = " payinvoice "
