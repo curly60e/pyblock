@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.2.0
+#Version: 0.3.0
 
 import os
 import os.path
@@ -16,9 +16,56 @@ from logos import *
 from sysinf import *
 from pblogo import *
 from apisnd import *
-from fxmain import *
+from nodeconnection import *
 from terminal_matrix.matrix import *
 
+
+
+def sysinfo():  #Cpu and memory usage
+    print("   \033[0;37;40m----------------------")
+    print("   \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
+    print("   \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
+    print("   \033[0;37;40m----------------------")
+
+def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
+    bitcoincli = " getblockchaininfo"
+    os.system(path + bitcoincli)
+
+def getblockcount(): # get access to bitcoin-cli with the command getblockcount
+    bitcoincli = " getblockcount"
+    os.system(path + bitcoincli)
+
+def clear(): # clear the screen
+    os.system('cls' if os.name=='nt' else 'clear')
+
+def getgenesis(): # get and decode Genesis block    
+    bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
+    os.system(path + bitcoincli)
+       
+def close():
+    print("<<< Back to the Main Menu Press Control + C.\n\n")
+    
+def readHexBlock(): # Hex Decoder using Hexyl on local node
+    hexa = input("Add the Block Hash you want to decode: ")
+    blocknumber = input("Add the Block number: ")
+    decodeBlock = path + " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
+    os.system(decodeBlock)
+    
+def readHexTx(): # Hex Decoder using Hexyl on an external node
+    hexa = input("Add the Transaction ID. you want to decode: ")
+    decodeTX = path + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
+    os.system(decodeTX)
+    
+def prt():
+    print("\033[1;32;40m")
+    blogo()
+    #tprint("PyBLOCK", font="rnd-large") # random title design
+    print("\033[0;37;40m")
+
+def tmp():
+    t.sleep(15)
+
+#-----
 
     
 def console(): # get into the console from bitcoin-cli
@@ -43,63 +90,10 @@ def screensv():
 #-------------------Lighitning network-------------------------------------    
     
 def LNInvoice():
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    lncli = " addinvoice "
-    print("\nLeave the Amount blank if you want to receive a random amount.\n")
-    amt =  input("Amount: ")
-    sh = os.popen(pathLN + lncli + amt)
-    shh = sh.read()
-    shh0 = str(shh)
-    shh1 = shh0.split(',')
-    shh2 = shh1[1]
-    lnbc1R = shh2.split(':')
-    lnbc1W = lnbc1R[1]
-    ln = str(lnbc1W)
-    ln1 = ln.strip('"')
-    ln2 = ln1.split('"')
-    ln3 = ln2[1]
-    print("\033[1;30;47m")
-    qr.add_data(ln3)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("Lightning Invoice: " + ln3)
-    while True:
-        sha = os.popen(pathLN + " decodepayreq " + ln3)
-        sha1 = sha.read()
-        sha2 = str(sha1)
-        sha3 = sha2.split(',')
-        sha4 = sha3[5]
-        sha5= sha4.split(':')
-        sha6 = sha5[1]
-        lna = str(sha6)
-        lna1 = lna.split('"')
-        lna2 = lna1[1]
-        hshid = sha3[1]
-        hshid0 = hshid.split(':')
-        hshid1 = hshid0[1]
-        hshid2 = str(hshid1)
-        hshid3 = hshid2.split('"')
-        hashid = hshid3[1]
-        sh1 = os.popen(pathLN + " lookupinvoice " + hashid)
-        sh2 = sh1.read()
-        sh3 = str(sh2)
-        sh4 = sh3.split(',')
-        sh5 = sh4[20]
-        if 'SETTLED' in sh5:
-            clear()
-            prt()
-            print("\033[1;32;40m")
-            tick()
-            print("\033[0;37;40m")
-            t.sleep(2)
-            break
-
-
+    clear()
+    prt()
+    getnewinvoice()
+    
 def payinvoice():
     lncli = " payinvoice "
     invoice = input("Pay Invoice: ")
@@ -313,7 +307,7 @@ def menu(): #Main Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK in your own node
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information in your own node
@@ -336,7 +330,7 @@ def menuUserConn(): #Menu before connection over ssh
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;32;40mA.\033[0;37;40m Run PyBLOCK in this external node
     \033[1;32;40mB.\033[0;37;40m Show the Genesis Block
@@ -352,7 +346,7 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -368,7 +362,7 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
@@ -382,7 +376,7 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
@@ -397,7 +391,7 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
@@ -411,7 +405,7 @@ def satnodeMenu(): # Satnode Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;32;40mA.\033[0;37;40m Start SatNode
     \033[1;32;40mB.\033[0;37;40m Feed
@@ -427,7 +421,7 @@ def menuLND():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
-    Version 0.2.0
+    Version 0.3.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -727,24 +721,22 @@ def menuF(menuV): # Tester Donation access Menu
 
 #--------------------------------- End Main Menu execution --------------------------------
 
-
-while True: # Loop
-    clear()
-    path = ""
-    pathLN = ""
-    #matrixsc()
+def conf():
     if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
-        pathLNv = pickle.load(open("blnclock.conf", "rb"))
-        pathLN = pathLNv
         menu()
     else:
         prt()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
         path = input("Insert the Path to Bitcoin-Cli: ")
         pickle.dump(path, open("bclock.conf", "wb")) 
-        pathLN = input("Insert the Path to Lncli: ")
-        pickle.dump(pathLN, open("blnclock.conf", "wb"))
         menu()
+
+
+while True: # Loop
+    clear()
+    path = ""
+    conf()
+
 
