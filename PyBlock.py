@@ -93,8 +93,7 @@ def LNInvoice():
     clear()
     prt()
     getnewinvoice()
-
-
+    
 def payinvoice():
     lncli = " payinvoice "
     invoice = input("Pay Invoice: ")
