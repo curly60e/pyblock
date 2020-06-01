@@ -8,13 +8,14 @@ from pblogo import *
 
 lndconnectload = ''
 
-if os.path.isfile('blndconnect.conf'):
-    lndconnectData = pickle.load(open("blndconnect.conf", "rb"))
-    lndconnectload = str(lndconnectData)
+if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
+    lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+
 else:
-    ipport1 = input("Insert IP:PORT to your node: ")
-    pickle.dump(ipport1, open("blndconnect.conf", "wb"))
-    
+    lndconnectload = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
+    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+
 
 cert_path = 'tls.cert'
 macaroon = codecs.encode(open('admin.macaroon', 'rb').read(), 'hex')
@@ -100,6 +101,7 @@ def getnewaddress():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("Bitcoin Address: " + b)
+    t.sleep(20)
 
 def listchaintxns():
     url = 'https://{}/v1/transactions'.format(lndconnectload)
