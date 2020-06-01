@@ -93,7 +93,8 @@ def LNInvoice():
     clear()
     prt()
     getnewinvoice()
-    
+
+
 def payinvoice():
     lncli = " payinvoice "
     invoice = input("Pay Invoice: ")
@@ -464,7 +465,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 logos.close()
                 feed.close()
                 sysinf.close()
-                fxmain.close()
+                nodeconnection.close()
                 exit()
             else:
                 menu()
@@ -509,7 +510,7 @@ def menuA(menuS): #Execution of the Main Menu options
         logos.close()
         feed.close()
         sysinf.close()
-        fxmain.close()
+        nodeconnection.close()
         exit()
     elif menuS == "S" or menuS == "s":
         clear()
