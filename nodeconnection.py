@@ -1,3 +1,7 @@
+#Developer: Curly60e
+#PyBLOCK its a clock of the Bitcoin blockchain.
+#Version: 0.3.0
+
 import base64, codecs, json, requests
 import pickle
 import os
@@ -74,7 +78,17 @@ def getnewinvoice():
             print("\033[0;37;40m")
             t.sleep(2)
             break
-
+        elif 'CANCELED' in o:
+            print("\033[1;31;40m")
+            clear()
+            blogo()
+            canceled()
+            print("\033[0;37;40m")
+            t.sleep(2)
+            break
+    cnt = input("Continue? Y: ")
+    if cnt == "Y" or cnt == "y":
+        t.sleep(1)
     
 def getnewaddress():
     qr = qrcode.QRCode(
@@ -101,8 +115,10 @@ def getnewaddress():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("Bitcoin Address: " + b)
-    t.sleep(20)
-
+    cnt = input("Continue? Y: ")
+    if cnt == "Y" or cnt == "y":
+        t.sleep(1)
+        
 def listchaintxns():
     url = 'https://{}/v1/transactions'.format(lndconnectload)
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -112,6 +128,9 @@ def listchaintxns():
     d = c
     for d in c:
         print(d)
+    cnt = input("Continue? Y: ")
+    if cnt == "Y" or cnt == "y":
+        t.sleep(1)
     
 def listinvoice():
     url = 'https://{}/v1/invoices'.format(lndconnectload)
@@ -122,7 +141,9 @@ def listinvoice():
     d = c
     for d in c:
         print(d)
-
+    cnt = input("Continue? Y: ")
+    if cnt == "Y" or cnt == "y":
+        t.sleep(1)
 def invoicesettle():
     invoice = input("Insert the invoice: ")
     while True:
@@ -151,9 +172,42 @@ def invoicesettle():
             print("\033[0;37;40m")
             t.sleep(2)
             break
+        elif 'CANCELED' in o:
+            print("\033[1;31;40m")
+            clear()
+            blogo()
+            canceled()
+            print("\033[0;37;40m")
+            t.sleep(2)
+            break
+
+def getinfo():
+    url = 'https://{}/v1/getinfo'.format(lndconnectload)
+    r = requests.get(url, headers=headers, verify=cert_path)
+    a = r.json()
+    b = str(a)
+    c = b.split(',')
+    d = c
+    for d in c:
+        print(d)
+    cnt = input("Continue? Y: ")
+    if cnt == "Y" or cnt == "y":
+        t.sleep(1)
         
+def channels():
+    url = 'https://{}/v1/channels'.format(lndconnectload)    
+    r = requests.get(url, headers=headers, verify=cert_path)
+    a = r.json()
+    b = str(a)
+    c = b.split(',')
+    d = c
+    for d in c:
+        print(d)
+    cnt = input("Continue? Y: ")
+    if cnt == "Y" or cnt == "y":
+        t.sleep(1)
+
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
-
 
 
