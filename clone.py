@@ -1,3 +1,7 @@
+#Developer: Curly60e
+#PyBLOCK its a clock of the Bitcoin blockchain.
+#Version: 0.3.0
+
 import os
 import os.path
 import time as t
