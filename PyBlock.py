@@ -770,5 +770,3 @@ while True: # Loop
     clear()
     path = ""
     conf()
-
-
