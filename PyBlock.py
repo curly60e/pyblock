@@ -96,11 +96,11 @@ def LNInvoice():
 
 
 def payinvoice():
-    lncli = " payinvoice "
+    lncli = "lncli payinvoice "
     invoice = input("Pay Invoice: ")
     #----------decode invoice-----
-    lnclideq = " decodepayreq "
-    sh = os.popen(pathLN + lnclideq + invoice)
+    lnclideq = "lncli decodepayreq "
+    sh = os.popen(lnclideq + invoice)
     shh = sh.read()
     shh0 = str(shh)
     shh1 = shh0.split(',')
@@ -115,10 +115,10 @@ def payinvoice():
     if ln3 == "0":
         amt = " --amt "
         amount =  input("Amount in satoshis: ")
-        os.system(pathLN + lncli + invoice + amt + amount)
+        os.system(lncli + invoice + amt + amount)
         
     else:
-        os.system(pathLN + lncli + invoice)
+        os.system(lncli + invoice)
 
     tmp()
 
@@ -422,10 +422,17 @@ def menuLND():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
+    Remote node connection
     Version 0.3.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
+    \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
+    \033[1;32;40mL.\033[0;37;40m List Invoices
+    \033[1;32;40mT.\033[0;37;40m List Onchain TXS
+    \033[1;32;40mS.\033[0;37;40m Check if invoice was paid
+    \033[1;31;40mN.\033[0;37;40m Get Node Info
+    \033[1;31;40mC.\033[0;37;40m Channels
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -533,6 +540,30 @@ def menuLN(menuLL):
         clear()
         prt()
         payinvoice()
+    elif menuLL == "B" or menuLL == "b":
+        clear()
+        prt()
+        getnewaddress()
+    elif menuLL == "L" or menuLL == "l":
+        clear()
+        prt()
+        listinvoice()
+    elif menuLL == "T" or menuLL == "t":
+        clear()
+        prt()
+        listchaintxns()
+    elif menuLL == "S" or menuLL == "s":
+        clear()
+        prt()
+        invoicesettle()
+    elif menuLL == "N" or menuLL == "n":
+        clear()
+        prt()
+        getinfo()
+    elif menuLL == "C" or menuLL == "c":
+        clear()
+        prt()
+        channels()
     elif menuLL == "R" or menuLL == "r":
         menu()
         
