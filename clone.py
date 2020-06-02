@@ -1,4 +1,3 @@
-#v0.2.0
 import os
 import os.path
 import time as t
@@ -23,4 +22,12 @@ def satnode():
     except (KeyboardInterrupt, SystemExit):
         os.system("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9")
     
+
+def matrixsc():
+    if os.path.isdir('$HOME/pyblock/terminal_matrix'):
+        print("OK Pass")
+        
+    else:
+        url = "https://github.com/curly60e/terminal_matrix.git"
+        os.system("git clone " + url)
 
