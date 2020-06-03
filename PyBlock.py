@@ -753,7 +753,11 @@ def menuF(menuV): # Tester Donation access Menu
 
 #--------------------------------- End Main Menu execution --------------------------------
 
-def conf():
+
+
+while True: # Loop
+    clear()
+    path = ""
     if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
@@ -766,7 +770,3 @@ def conf():
         menu()
 
 
-while True: # Loop
-    clear()
-    path = ""
-    conf()
