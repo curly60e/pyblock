@@ -39,38 +39,20 @@ def getnewinvoice():
         }
     r = requests.post(url, headers=headers, verify=cert_path, data=json.dumps(data))
     a = r.json()
-    b = str(a)
-    c = b.split(':')
-    d = c[2]
-    e = d.strip(" '")
-    f = str(e)
-    g = f.split(',')
-    h = g[0]
-    hh = h.strip("' ")
     print("\033[1;30;47m")
-    qr.add_data(hh)
+    qr.add_data(a['payment_request'])
     qr.print_ascii()
     print("\033[0;37;40m")
-    print("Lightning Invoice: " + hh)
+    print("Lightning Invoice: " + a['payment_request'])
+    b = str(a['payment_request'])
     while True:
-        url = 'https://{}/v1/payreq/{}'.format(lndconnectload,hh)
+        url = 'https://{}/v1/payreq/{}'.format(lndconnectload, b)
         r = requests.get(url, headers=headers, verify=cert_path)
         a = r.json()
-        b = str(a)
-        c = b.split(',')
-        d = c[1]
-        e = str(d)
-        f = e.split(':')
-        g = f[1]
-        h = g.strip(" '")
-        i = str(h)
-        url = 'https://{}/v1/invoice/{}'.format(lndconnectload,i)
+        url = 'https://{}/v1/invoice/{}'.format(lndconnectload,a['payment_hash'])
         rr = requests.get(url, headers=headers, verify=cert_path)
         m = rr.json()
-        n = str(m)
-        p = n.split(',')
-        o = p[20]
-        if 'SETTLED' in o:
+        if m['state'] == 'SETTLED':
             print("\033[1;32;40m")
             clear()
             blogo()
@@ -78,13 +60,14 @@ def getnewinvoice():
             print("\033[0;37;40m")
             t.sleep(2)
             break
-        elif 'CANCELED' in o:
+        elif m['state'] == 'CANCELED':
             print("\033[1;31;40m")
             clear()
             blogo()
             canceled()
             print("\033[0;37;40m")
             t.sleep(2)
+            break
 
     
 def getnewaddress():
@@ -97,21 +80,11 @@ def getnewaddress():
     url = 'https://{}/v1/newaddress'.format(lndconnectload)
     r = requests.get(url, headers=headers, verify=cert_path)
     addr = r.json()
-    addre = str(addr)
-    addres = addre.split(':')
-    address = addres[1]
-    addressb = str(address)
-    addressbc = addressb.split('}')
-    addressbc1 = addressbc[0]
-    addressrm = str(addressbc1)
-    addressrm1 = addressrm.split(',')
-    a = addressrm1[0]
-    b = a.replace("'", "")
     print("\033[1;30;47m")
-    qr.add_data(b)
+    qr.add_data(addr['address'])
     qr.print_ascii()
     print("\033[0;37;40m")
-    print("Bitcoin Address: " + b)
+    print("Bitcoin Address: " + addr['address'])
     cnt = input("Continue? Y: ")
     if cnt == "Y" or cnt == "y":
         t.sleep(1)
@@ -141,27 +114,17 @@ def listinvoice():
     cnt = input("Continue? Y: ")
     if cnt == "Y" or cnt == "y":
         t.sleep(1)
+        
 def invoicesettle():
     invoice = input("Insert the invoice: ")
     while True:
-        url = 'https://{}/v1/payreq/{}'.format(lndconnectload,invoice)
+        url = 'https://{}/v1/payreq/{}'.format(lndconnectload, invoice)
         r = requests.get(url, headers=headers, verify=cert_path)
         a = r.json()
-        b = str(a)
-        c = b.split(',')
-        d = c[1]
-        e = str(d)
-        f = e.split(':')
-        g = f[1]
-        h = g.strip(" '")
-        i = str(h)
-        url = 'https://{}/v1/invoice/{}'.format(lndconnectload,i)
+        url = 'https://{}/v1/invoice/{}'.format(lndconnectload,a['payment_hash'])
         rr = requests.get(url, headers=headers, verify=cert_path)
         m = rr.json()
-        n = str(m)
-        p = n.split(',')
-        o = p[20]
-        if 'SETTLED' in o:
+        if m['state'] == 'SETTLED':
             print("\033[1;32;40m")
             clear()
             blogo()
@@ -169,7 +132,7 @@ def invoicesettle():
             print("\033[0;37;40m")
             t.sleep(2)
             break
-        elif 'CANCELED' in o:
+        elif m['state'] == 'CANCELED':
             print("\033[1;31;40m")
             clear()
             blogo()
@@ -177,6 +140,7 @@ def invoicesettle():
             print("\033[0;37;40m")
             t.sleep(2)
             break
+
 
 def getinfo():
     url = 'https://{}/v1/getinfo'.format(lndconnectload)
@@ -203,8 +167,18 @@ def channels():
     cnt = input("Continue? Y: ")
     if cnt == "Y" or cnt == "y":
         t.sleep(1)
+        
+def balanceOC():
+    url = 'https://{}/v1/balance/blockchain'.format(lndconnectload)
+    r = requests.get(url, headers=headers, verify=cert_path)
+    a = r.json()
+    print("Total Balance: " + a['total_balance'] + " sats")
+    print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
+    print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
+    cnt = input("Continue? Y: ")
+    if cnt == "Y" or cnt == "y":
+        t.sleep(1)
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
-
 
