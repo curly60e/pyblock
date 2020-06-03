@@ -85,10 +85,7 @@ def getnewinvoice():
             canceled()
             print("\033[0;37;40m")
             t.sleep(2)
-            break
-    cnt = input("Continue? Y: ")
-    if cnt == "Y" or cnt == "y":
-        t.sleep(1)
+
     
 def getnewaddress():
     qr = qrcode.QRCode(
@@ -209,3 +206,5 @@ def channels():
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
+
+
