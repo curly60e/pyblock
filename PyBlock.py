@@ -433,6 +433,7 @@ def menuLND():
     \033[1;32;40mS.\033[0;37;40m Check if invoice was paid
     \033[1;31;40mN.\033[0;37;40m Get Node Info
     \033[1;31;40mC.\033[0;37;40m Channels
+    \033[1;31;40mO.\033[0;37;40m Onchain Balance
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -564,8 +565,13 @@ def menuLN(menuLL):
         clear()
         prt()
         channels()
+    elif menuLL == "O" or menuLL == "o":
+        clear()
+        prt()
+        balanceOC()
     elif menuLL == "R" or menuLL == "r":
         menu()
+        
         
 #------------------------------------------
 def menuB(menuR): # Advanced access Menu
@@ -768,5 +774,4 @@ while True: # Loop
         path = input("Insert the Path to Bitcoin-Cli: ")
         pickle.dump(path, open("bclock.conf", "wb")) 
         menu()
-
 

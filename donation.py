@@ -1,7 +1,3 @@
-#Developer: Curly60e
-#PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.3.0
-
 import requests
 import qrcode
 
