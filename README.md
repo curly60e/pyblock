@@ -24,18 +24,149 @@
 
 <img src="./resources/images/satnode.PNG" width="50%" />
 
-# PyBlock v0.2.0
+# PyBlock v0.3.0
 Bitcoin Blockchain information program
 
 A simple Python Block Clock to check the Blockchain information.
 
-## Dependences
+- This will fully work on a node that has Bitcoin Core and LND installed
+- We fully tested and worked perfect on [MyNodeBTC](https://mynodebtc.com/)
 
-    a@A:~> pip3 install -r requirements.txt
+## First Start
+
+- You will need to find the path of the files tls.cert and admin.macaroon to do the REST connection to have access to LND.
+
+    ### From local node
     
-  - Install the [Hexyl](https://github.com/sharkdp/hexyl)
+    Open the Terminal
+    
+    - Type these commands:
+    
+    * a@A:~> git clone https://github.com/curly60e/pyblock.git
+    * a@A:~> cd pyblock
+    * a@A:~> pip3 install -r requirements.txt
+    * a@A:~> python3 PyBlock.py
+    
+    <br />
+    
+    - This is how we continue.
+    
+    <br />
+    
+    <img src="./resources/images/REST1.PNG" width="30%" />
+    
+    <br />
+    
+    - It will ask you for the IP:PORT (REST PORT) in this case use: localhost instead of the IP.
+    
+    <br />
+    
+    <img src="./resources/images/REST2.PNG" width="30%" />
+    
+    <br />
+    
+    - Then it will ask you for the path to the tls.cert.
+    
+    <br />
+    
+    <img src="./resources/images/REST3.PNG" width="30%" />
+    
+    <br />
+        
+    - Then it will ask you for the path to the admin.macaroon.
+    
+    <br />
+    
+    <img src="./resources/images/REST4.PNG" width="30%" />
+    
+    <br />  
+    
+    - Then it will ask you for the path to bitcoin-cli or if you have already installed just put: bitcoin-cli.
+    
+    <br />
+    
+    <img src="./resources/images/bitcoin-cli.PNG" width="30%" />
+    
+    <br />
+    
+    - And you are in.
+
+    <br />
+    
+    <img src="./resources/images/main.PNG" width="30%" />
+    
+    <br />
+
+    ### From remote computer with Bitcoin Core installed
+    
+    * You will need to have tls.cert and admin.macaroon already downloaded from your LND node.
+     
+     - Open the Terminal.
+        
+     - Type these commands:
+
+        * a@A:~> git clone https://github.com/curly60e/pyblock.git
+        * a@A:~> cd pyblock
+        * a@A:~> pip3 install -r requirements.txt
+        * a@A:~> python3 PyBlock.py
+
+        <br />
+
+        - This is how we continue.
+
+        <br />
+
+        <img src="./resources/images/REST1.PNG" width="30%" />
+
+        <br />
+
+        - It will ask you for the IP:PORT (REST PORT).
+
+        <br />
+
+        <img src="./resources/images/REST1REMOTE.PNG" width="30%" />
+
+        <br />
+
+        - Then it will ask you for the path to the tls.cert.
+
+        <br />
+
+        <img src="./resources/images/REST2REMOTE.PNG" width="30%" />
+
+        <br />
+
+        - Then it will ask you for the path to the admin.macaroon.
+
+        <br />
+
+        <img src="./resources/images/REST3REMOTE.PNG" width="30%" />
+
+        <br />  
+
+        - Then it will ask you for the path to bitcoin-cli or if you have already installed just put: bitcoin-cli.
+
+        <br />
+
+        <img src="./resources/images/bitcoin-cli.PNG" width="30%" />
+
+        <br />
+
+        - And you are in.
+
+        <br />
+
+        <img src="./resources/images/main.PNG" width="30%" />
+
+        <br />
+
+
+## Dependencies
+
+  - Install [Hexyl](https://github.com/sharkdp/hexyl)
   
 ## How to execute
+
   - python3 PyBlock.py
 
    ## Connect to an external node first steps
