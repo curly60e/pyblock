@@ -10,19 +10,28 @@ import qrcode
 import time as t
 from pblogo import *
 
-lndconnectload = ''
+lndconnectload = {"ip_port":"", "tls":"", "macaroon":"" }
+
+def clear(): # clear the screen
+    os.system('cls' if os.name=='nt' else 'clear')
+
 
 if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-    lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-
+    
 else:
-    lndconnectload = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
+    clear()
+    blogo()
+    lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
+    lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
+    lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
+    t.sleep(4)
     pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
 
 
-cert_path = 'tls.cert'
-macaroon = codecs.encode(open('admin.macaroon', 'rb').read(), 'hex')
+cert_path = lndconnectload["tls"]
+macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
 headers = {'Grpc-Metadata-macaroon': macaroon}
 
 
@@ -33,7 +42,7 @@ def getnewinvoice():
     box_size=10,
     border=4,
     )
-    url = 'https://{}/v1/invoices'.format(lndconnectload)
+    url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
     data = { 
 
         }
@@ -46,10 +55,10 @@ def getnewinvoice():
     print("Lightning Invoice: " + a['payment_request'])
     b = str(a['payment_request'])
     while True:
-        url = 'https://{}/v1/payreq/{}'.format(lndconnectload, b)
+        url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], b)
         r = requests.get(url, headers=headers, verify=cert_path)
         a = r.json()
-        url = 'https://{}/v1/invoice/{}'.format(lndconnectload,a['payment_hash'])
+        url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
         rr = requests.get(url, headers=headers, verify=cert_path)
         m = rr.json()
         if m['state'] == 'SETTLED':
@@ -77,7 +86,7 @@ def getnewaddress():
     box_size=10,
     border=4,
     )
-    url = 'https://{}/v1/newaddress'.format(lndconnectload)
+    url = 'https://{}/v1/newaddress'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     addr = r.json()
     print("\033[1;30;47m")
@@ -90,7 +99,7 @@ def getnewaddress():
         t.sleep(1)
         
 def listchaintxns():
-    url = 'https://{}/v1/transactions'.format(lndconnectload)
+    url = 'https://{}/v1/transactions'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     b = str(a)
@@ -103,7 +112,7 @@ def listchaintxns():
         t.sleep(1)
     
 def listinvoice():
-    url = 'https://{}/v1/invoices'.format(lndconnectload)
+    url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     b = str(a)
@@ -118,10 +127,10 @@ def listinvoice():
 def invoicesettle():
     invoice = input("Insert the invoice: ")
     while True:
-        url = 'https://{}/v1/payreq/{}'.format(lndconnectload, invoice)
+        url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], invoice)
         r = requests.get(url, headers=headers, verify=cert_path)
         a = r.json()
-        url = 'https://{}/v1/invoice/{}'.format(lndconnectload,a['payment_hash'])
+        url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
         rr = requests.get(url, headers=headers, verify=cert_path)
         m = rr.json()
         if m['state'] == 'SETTLED':
@@ -143,20 +152,28 @@ def invoicesettle():
 
 
 def getinfo():
-    url = 'https://{}/v1/getinfo'.format(lndconnectload)
+    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
-    b = str(a)
-    c = b.split(',')
-    d = c
-    for d in c:
-        print(d)
+    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("""
+    Version: {}
+    Node ID: {}
+    Alias: {}
+    Color: {}
+    Pending Channels: {}
+    Active Channels: {}
+    Inactive Channels: {}
+    Peers: {}
+    URLS: {}
+    """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
+    print("----------------------------------------------------------------------------------------------------------------\n")
     cnt = input("Continue? Y: ")
     if cnt == "Y" or cnt == "y":
         t.sleep(1)
         
 def channels():
-    url = 'https://{}/v1/channels'.format(lndconnectload)    
+    url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])    
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     b = str(a)
@@ -169,16 +186,16 @@ def channels():
         t.sleep(1)
         
 def balanceOC():
-    url = 'https://{}/v1/balance/blockchain'.format(lndconnectload)
+    url = 'https://{}/v1/balance/blockchain'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
+    print("\n------------------------------------------------------------------------------------")
     print("Total Balance: " + a['total_balance'] + " sats")
     print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
     print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
+    print("------------------------------------------------------------------------------------\n")
     cnt = input("Continue? Y: ")
     if cnt == "Y" or cnt == "y":
         t.sleep(1)
 
-def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
 
