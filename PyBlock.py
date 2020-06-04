@@ -86,43 +86,7 @@ def screensv():
         clear()
         ptr()
         menu()
-    
-#-------------------Lighitning network-------------------------------------    
-    
-def LNInvoice():
-    clear()
-    prt()
-    getnewinvoice()
-
-
-def payinvoice():
-    lncli = "lncli payinvoice "
-    invoice = input("Pay Invoice: ")
-    #----------decode invoice-----
-    lnclideq = "lncli decodepayreq "
-    sh = os.popen(lnclideq + invoice)
-    shh = sh.read()
-    shh0 = str(shh)
-    shh1 = shh0.split(',')
-    shh2 = shh1[2]
-    #----amount----
-    lnbc1R = shh2.split(':')
-    lnbc1W = lnbc1R[1]
-    ln = str(lnbc1W)
-    ln1 = ln.split('"')
-    ln3 = ln1[1]
-    
-    if ln3 == "0":
-        amt = " --amt "
-        amount =  input("Amount in satoshis: ")
-        os.system(lncli + invoice + amt + amount)
-        
-    else:
-        os.system(lncli + invoice)
-
-    tmp()
-
-#-------------------From this line the program starts----------------------
+#------------------------------------------------------
 
 def connected(info): # here we complete the connection to the external node
     if info == "Y" or info == "y":
@@ -427,13 +391,11 @@ def menuLND():
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
+    \033[1;32;40mQ.\033[0;37;40m Channel Balance
     \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
-    \033[1;32;40mL.\033[0;37;40m List Invoices
-    \033[1;32;40mT.\033[0;37;40m List Onchain TXS
     \033[1;32;40mS.\033[0;37;40m Check if invoice was paid
-    \033[1;31;40mN.\033[0;37;40m Get Node Info
-    \033[1;31;40mC.\033[0;37;40m Channels
-    \033[1;31;40mO.\033[0;37;40m Onchain Balance
+    \033[1;32;40mN.\033[0;37;40m Get Node Info
+    \033[1;32;40mO.\033[0;37;40m Onchain Balance
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -536,39 +498,31 @@ def menuLN(menuLL):
     if menuLL == "I" or menuLL == "i":
         clear()
         prt()
-        LNInvoice()
+        getnewinvoice()       
     elif menuLL == "P" or menuLL == "p":
         clear()
         prt()
         payinvoice()
+    elif menuLL == "Q" or menuLL == "q":
+        clear()
+        prt()
+        channelbalance()
     elif menuLL == "B" or menuLL == "b":
         clear()
         prt()
         getnewaddress()
-    elif menuLL == "L" or menuLL == "l":
-        clear()
-        prt()
-        listinvoice()
-    elif menuLL == "T" or menuLL == "t":
-        clear()
-        prt()
-        listchaintxns()
     elif menuLL == "S" or menuLL == "s":
         clear()
         prt()
-        invoicesettle()
+        invoicesettle()        
     elif menuLL == "N" or menuLL == "n":
         clear()
         prt()
-        getinfo()
-    elif menuLL == "C" or menuLL == "c":
-        clear()
-        prt()
-        channels()
+        getinfo()     
     elif menuLL == "O" or menuLL == "o":
         clear()
         prt()
-        balanceOC()
+        balanceOC()        
     elif menuLL == "R" or menuLL == "r":
         menu()
         

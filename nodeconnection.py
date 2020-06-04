@@ -42,11 +42,25 @@ def getnewinvoice():
     box_size=10,
     border=4,
     )
+    amount = input("Amount in sats: ")
+    memo = input("Memo: ")
     url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
-    data = { 
+    data = {
 
         }
-    r = requests.post(url, headers=headers, verify=cert_path, data=json.dumps(data))
+    if amount == "":
+        r = requests.post(
+                url,
+                headers=headers, verify=cert_path,
+                json={"memo": memo + " -PyBLOCK"},
+            )
+    else:
+        r = requests.post(
+                url,
+                headers=headers, verify=cert_path,
+                json={"value": amount, "memo": memo + " -PyBLOCK"},
+            )
+        
     a = r.json()
     print("\033[1;30;47m")
     qr.add_data(a['payment_request'])
@@ -77,7 +91,44 @@ def getnewinvoice():
             print("\033[0;37;40m")
             t.sleep(2)
             break
-
+        
+def payinvoice():
+    while True:
+        bolt11 = input("Insert the invoice to pay: ")
+        r = requests.post(
+            url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
+        )
+        try:
+            r.json()['error']
+            print("\nThe Invoice don't have an amount. Please insert an Invoice with amount. \n")
+            continue
+        except:
+            break
+    ok, checking_id, fee_msat, error_message = r.ok, None, 0, None
+    r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path,)
+    t.sleep(5)
+    if r.ok:
+        checking_id = r.json()["payment_hash"]
+        print("\033[1;32;40m")
+        clear()
+        blogo()
+        tick()
+        print("\033[0;37;40m")
+        t.sleep(2)
+    else:
+        error_message = r.json()["error"]
+        print("\033[1;31;40m")
+        clear()
+        blogo()
+        canceled()
+        print("\033[0;37;40m")
+        t.sleep(2)
+        
+def decodepayment():
+    dcd = input("Invoice: ")
+    url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], dcd)
+    r = requests.get(url, headers=headers, verify=cert_path)
+    print(r.json())
     
 def getnewaddress():
     qr = qrcode.QRCode(
@@ -94,9 +145,7 @@ def getnewaddress():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("Bitcoin Address: " + addr['address'])
-    cnt = input("Continue? Y: ")
-    if cnt == "Y" or cnt == "y":
-        t.sleep(1)
+    input("\nContinue... ")
         
 def listchaintxns():
     url = 'https://{}/v1/transactions'.format(lndconnectload["ip_port"])
@@ -107,9 +156,7 @@ def listchaintxns():
     d = c
     for d in c:
         print(d)
-    cnt = input("Continue? Y: ")
-    if cnt == "Y" or cnt == "y":
-        t.sleep(1)
+    t.sleep(10)
     
 def listinvoice():
     url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
@@ -120,9 +167,7 @@ def listinvoice():
     d = c
     for d in c:
         print(d)
-    cnt = input("Continue? Y: ")
-    if cnt == "Y" or cnt == "y":
-        t.sleep(1)
+    input("\nContinue... ")
         
 def invoicesettle():
     invoice = input("Insert the invoice: ")
@@ -150,7 +195,6 @@ def invoicesettle():
             t.sleep(2)
             break
 
-
 def getinfo():
     url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -168,9 +212,7 @@ def getinfo():
     URLS: {}
     """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
     print("----------------------------------------------------------------------------------------------------------------\n")
-    cnt = input("Continue? Y: ")
-    if cnt == "Y" or cnt == "y":
-        t.sleep(1)
+    input("\nContinue... ")
         
 def channels():
     url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])    
@@ -181,9 +223,19 @@ def channels():
     d = c
     for d in c:
         print(d)
-    cnt = input("Continue? Y: ")
-    if cnt == "Y" or cnt == "y":
-        t.sleep(1)
+    input("\nContinue... ")
+    
+def channelbalance():
+    url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"]) 
+    r = requests.get(url, headers=headers, verify=cert_path)
+    a = r.json()
+    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("""
+    Balance: {} sats
+    Pending Channels: {} sats
+    """.format(a['balance'], a['pending_open_balance']))
+    print("----------------------------------------------------------------------------------------------------------------\n")
+    input("\nContinue... ")
         
 def balanceOC():
     url = 'https://{}/v1/balance/blockchain'.format(lndconnectload["ip_port"])
@@ -194,8 +246,4 @@ def balanceOC():
     print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
     print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
     print("------------------------------------------------------------------------------------\n")
-    cnt = input("Continue? Y: ")
-    if cnt == "Y" or cnt == "y":
-        t.sleep(1)
-
-
+    input("\nContinue... ")

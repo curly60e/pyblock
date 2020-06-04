@@ -1,3 +1,7 @@
+#Developer: Curly60e
+#PyBLOCK its a clock of the Bitcoin blockchain.
+#Version: 0.3.0
+
 import os
 import os.path
 import time as t
@@ -7,7 +11,6 @@ def gitclone():
     url = "https://github.com/curly60e/satellite"
     os.system("git clone " + url)
     os.system("mkdir satellite/api/examples/.gnupg")
-    #os.system("cp -r $HOME/pyblock/satellite/api/examples $HOME/pyblock/")
     os.system("gpg --full-generate-key --homedir satellite/api/examples/.gnupg")
         
 def satnode():
