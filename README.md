@@ -1,4 +1,4 @@
-<img src="./resources/images/start.png" width="80%" />
+<img src="./resources/images/main.PNG" width="80%" />
 
 <br />
 
