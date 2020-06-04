@@ -1,3 +1,7 @@
+#Developer: Curly60e
+#PyBLOCK its a clock of the Bitcoin blockchain.
+#Version: 0.3.0
+
 def logoA():
     print("""\n\n\033[1;33;40m
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*****@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
