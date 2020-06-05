@@ -17,7 +17,7 @@ def apisender():
     )
     url = 'https://api.blockstream.space/order'
     message = input("\nInsert your Message: ")
-    sentby = "- PyBLOCK."
+    sentby = " - PyBLOCK."
     print("ATENTION: Minimum amount for sending a text is 5000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
