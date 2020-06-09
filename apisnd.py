@@ -17,26 +17,13 @@ def apisender():
     )
     url = 'https://api.blockstream.space/order'
     message = input("\nInsert your Message: ")
-    sentby = " - PyBLOCK."
+    sentby = "- PyBLOCK."
     print("ATENTION: Minimum amount for sending a text is 5000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
     
     sh = os.popen(curl)
     sh0 = sh.read()
-    while True:
-        if 'Bid too low' in sh0:
-            print("ATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\n")
-            url = 'https://api.blockstream.space/order'
-            message = input("\nInsert your Message: ")
-            print("ATENTION: Minimum amount for sending a text is 5000 MSats")
-            amountmsat = input("\nInsert the amount in MSats: ")
-            curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
-            sh = os.popen(curl)
-            sh0 = sh.read()
-        elif 'lightning_invoice' in sh0:       
-            break
-    
     sh1 = str(sh0)
     shh = sh1.split(',')
     invoice = str(shh[6])
@@ -89,22 +76,10 @@ def apisenderFile():
     message = input("\nInsert the path to the File: ")
     print("ATENTION: Minimum amount for sending a File is 50000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
-    curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url 
+    curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
+    
     sh = os.popen(curl)
     sh0 = sh.read()
-    while True:
-        if 'Bid too low' in sh0:
-            print("ATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\n")
-            url = 'https://api.blockstream.space/order'
-            message = input("\nInsert the path to the File: ")
-            print("ATENTION: Minimum amount for sending a File is 50000 MSats")
-            amountmsat = input("\nInsert the amount in MSats: ")
-            curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url 
-            sh = os.popen(curl)
-            sh0 = sh.read()
-        elif 'lightning_invoice' in sh0:       
-            break
-    
     sh1 = str(sh0)
     shh = sh1.split(',')
     invoice = str(shh[6])
@@ -175,7 +150,7 @@ def devAddr():
 def donate():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.2.0
 
     \033[1;32;40mA.\033[0;37;40m Make PyBLOCK Great Again
     \033[1;32;40mB.\033[0;37;40m <<< Back Press Control + C
@@ -183,3 +158,5 @@ def donate():
     menuB = (input("\033[1;32;40mSelect option: \033[0;37;40m"))
     if menuB == "A" or menuB == "a":
         devAddr()
+
+        
