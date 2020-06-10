@@ -174,6 +174,18 @@ def localnewaddress():
     print("Bitcoin Address: " + d['address'])
     input("\nContinue... ")
 
+def localbalanceOC():
+    lncli = " walletbalance"
+    lsd = os.popen(lndconnectload['lncli'] + lncli).read()
+    lsd0 = str(lsd)
+    d = json.loads(lsd0)
+    print("\n------------------------------------------------------------------------------------")
+    print("Total Balance: " + a['total_balance'] + " sats")
+    print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
+    print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
+    print("------------------------------------------------------------------------------------\n")
+    input("\nContinue... ")
+
 # Remote connection with rest -------------------------------------
 
 def getnewinvoice():
