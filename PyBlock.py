@@ -272,7 +272,7 @@ def menu(): #Main Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK in your own node
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information in your own node
@@ -295,7 +295,7 @@ def menuUserConn(): #Menu before connection over ssh
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Run PyBLOCK in this external node
     \033[1;32;40mB.\033[0;37;40m Show the Genesis Block
@@ -311,7 +311,7 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -327,7 +327,7 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
@@ -341,7 +341,7 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
@@ -356,7 +356,7 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
@@ -370,7 +370,7 @@ def satnodeMenu(): # Satnode Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Start SatNode
     \033[1;32;40mB.\033[0;37;40m Feed
@@ -387,7 +387,7 @@ def menuLND():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Remote node connection
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -407,17 +407,19 @@ def menuLNDLOCAL():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Local node connection
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
-    \033[1;32;40mQ.\033[0;37;40m Channel Balance
-    \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
-    \033[1;32;40mS.\033[0;37;40m Check if invoice was paid
-    \033[1;32;40mN.\033[0;37;40m Get Node Info
-    \033[1;32;40mO.\033[0;37;40m Onchain Balance
-    \033[1;32;40mW.\033[0;37;40m Get Network Information
     \033[1;32;40mK.\033[0;37;40m Make a KeySend Payment
+    \033[1;31;40mL.\033[0;37;40m List Invoices
+    \033[1;32;40mQ.\033[0;37;40m Channel Balance
+    \033[1;32;40mC.\033[0;37;40m Show Channels
+    \033[1;32;40mN.\033[0;37;40m Get Node Info
+    \033[1;32;40mW.\033[0;37;40m Get Network Information
+    \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
+    \033[1;33;40mX.\033[0;37;40m List Onchain Transactions
+    \033[1;32;40mO.\033[0;37;40m Onchain Balance
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuLNlocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -572,14 +574,22 @@ def menuLNlocal(menuLL):
         clear()
         prt()
         localchannelbalance()
+    elif menuLL == "L" or menuLL == "l":
+        clear()
+        prt()
+        locallistinvoices()
+    elif menuLL == "X" or menuLL == "x":
+        clear()
+        prt()
+        locallistchaintxns()
+    elif menuLL == "C" or menuLL == "c":
+        clear()
+        prt()
+        locallistchannels()
     elif menuLL == "B" or menuLL == "b":
         clear()
         prt()
         localnewaddress()
-    elif menuLL == "S" or menuLL == "s":
-        clear()
-        prt()
-        invoicesettle()
     elif menuLL == "N" or menuLL == "n":
         clear()
         prt()
