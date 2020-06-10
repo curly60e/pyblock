@@ -587,7 +587,7 @@ def menuLNlocal(menuLL):
     elif menuLL == "O" or menuLL == "o":
         clear()
         prt()
-        balanceOC()
+        localbalanceOC()
     elif menuLL == "W" or menuLL == "w":
         clear()
         prt()
