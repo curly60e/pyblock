@@ -96,8 +96,7 @@ portend
 prompt-toolkit      
 psutil                         
 pycodestyle         
-pycrypto            
-pycurl              
+pycrypto                        
 pyflakes            
 pygame              
 Pygments            
