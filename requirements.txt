@@ -97,8 +97,7 @@ prompt-toolkit
 psutil                         
 pycodestyle         
 pycrypto                        
-pyflakes            
-pygame              
+pyflakes                          
 Pygments            
 PyGObject           
 pyinotify           
@@ -121,8 +120,7 @@ requests
 requests-oauthlib   
 requests-toolbelt   
 responses           
-roman               
-RPi.GPIO                      
+roman                                
 scrollphat          
 scrollphathd        
 SecretStorage       
