@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.3.0
+#Version: 0.4.0
 
 import os
 import os.path
@@ -38,24 +38,24 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
-def getgenesis(): # get and decode Genesis block    
+def getgenesis(): # get and decode Genesis block
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path + bitcoincli)
-       
+
 def close():
     print("<<< Back to the Main Menu Press Control + C.\n\n")
-    
+
 def readHexBlock(): # Hex Decoder using Hexyl on local node
     hexa = input("Add the Block Hash you want to decode: ")
     blocknumber = input("Add the Block number: ")
     decodeBlock = path + " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeBlock)
-    
+
 def readHexTx(): # Hex Decoder using Hexyl on an external node
     hexa = input("Add the Transaction ID. you want to decode: ")
     decodeTX = path + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeTX)
-    
+
 def prt():
     print("\033[1;32;40m")
     blogo()
@@ -67,7 +67,7 @@ def tmp():
 
 #-----
 
-    
+
 def console(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
@@ -237,7 +237,7 @@ def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
     clear()
     prt()
     os.system(decodeTX)
-        
+
 def getrawtx(): # show confirmatins from transactions
     tx = input("Insert your TxID: ")
     while True:
@@ -256,8 +256,8 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
                 lsd1 = str(lsd0)
                 lsda = lsd1.split(',')
                 lsdb = lsda[-3]
-                lsdc = str(lsdb)         
-                print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))          
+                lsdc = str(lsdb)
+                print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))
                 tmp()
                 lsd.close()
         except (KeyboardInterrupt, SystemExit):
@@ -272,7 +272,7 @@ def menu(): #Main Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK in your own node
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information in your own node
@@ -295,7 +295,7 @@ def menuUserConn(): #Menu before connection over ssh
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Run PyBLOCK in this external node
     \033[1;32;40mB.\033[0;37;40m Show the Genesis Block
@@ -311,7 +311,7 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -327,7 +327,7 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
@@ -341,7 +341,7 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
@@ -356,7 +356,7 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
@@ -370,7 +370,7 @@ def satnodeMenu(): # Satnode Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Start SatNode
     \033[1;32;40mB.\033[0;37;40m Feed
@@ -387,7 +387,7 @@ def menuLND():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Remote node connection
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -399,10 +399,41 @@ def menuLND():
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
-#--------------------------------- End Menu section -----------------------------------
-    
 
+def menuLNDLOCAL():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
+    Local node connection
+    Version 0.4.0
+
+    \033[1;32;40mI.\033[0;37;40m New Invoice
+    \033[1;31;40mP.\033[0;37;40m Pay Invoice
+    \033[1;32;40mK.\033[0;37;40m Make a KeySend Payment
+    \033[1;31;40mL.\033[0;37;40m List Invoices
+    \033[1;32;40mQ.\033[0;37;40m Channel Balance
+    \033[1;32;40mC.\033[0;37;40m Show Channels
+    \033[1;32;40mN.\033[0;37;40m Get Node Info
+    \033[1;32;40mW.\033[0;37;40m Get Network Information
+    \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
+    \033[1;33;40mX.\033[0;37;40m List Onchain Transactions
+    \033[1;32;40mO.\033[0;37;40m Onchain Balance
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuLNlocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def menuSelection():
+    lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
+
+    lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    if lndconnectload['lncli']:
+        menuLNDLOCAL()
+    else:
+        menuLND()
+#--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
 
 def menuA(menuS): #Execution of the Main Menu options
@@ -471,7 +502,7 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS == "L" or menuS == "l":
         clear()
         prt()
-        menuLND()
+        menuSelection()
     elif menuS == "Q" or menuS == "q":
         os._exit(0)
         apisnd.close()
@@ -493,12 +524,12 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS == "T" or menuS == "t": #Test feature fast access
         print("This is a test access. \n")
         screensv()
-#------------------------------------------
+#------------------------------------------REMOTE
 def menuLN(menuLL):
     if menuLL == "I" or menuLL == "i":
         clear()
         prt()
-        getnewinvoice()       
+        getnewinvoice()
     elif menuLL == "P" or menuLL == "p":
         clear()
         prt()
@@ -514,20 +545,73 @@ def menuLN(menuLL):
     elif menuLL == "S" or menuLL == "s":
         clear()
         prt()
-        invoicesettle()        
+        invoicesettle()
     elif menuLL == "N" or menuLL == "n":
         clear()
         prt()
-        getinfo()     
+        getinfo()
     elif menuLL == "O" or menuLL == "o":
         clear()
         prt()
-        balanceOC()        
+        balanceOC()
     elif menuLL == "R" or menuLL == "r":
         menu()
-        
-        
-#------------------------------------------
+
+
+#------------------------------------------END REMOTE
+
+#------------------------------------------LOCAL
+def menuLNlocal(menuLL):
+    if menuLL == "I" or menuLL == "i":
+        clear()
+        prt()
+        localaddinvoice()
+    elif menuLL == "P" or menuLL == "p":
+        clear()
+        prt()
+        localpayinvoice()
+    elif menuLL == "Q" or menuLL == "q":
+        clear()
+        prt()
+        localchannelbalance()
+    elif menuLL == "L" or menuLL == "l":
+        clear()
+        prt()
+        locallistinvoices()
+    elif menuLL == "X" or menuLL == "x":
+        clear()
+        prt()
+        locallistchaintxns()
+    elif menuLL == "C" or menuLL == "c":
+        clear()
+        prt()
+        locallistchannels()
+    elif menuLL == "B" or menuLL == "b":
+        clear()
+        prt()
+        localnewaddress()
+    elif menuLL == "N" or menuLL == "n":
+        clear()
+        prt()
+        localgetinfo()
+    elif menuLL == "O" or menuLL == "o":
+        clear()
+        prt()
+        localbalanceOC()
+    elif menuLL == "W" or menuLL == "w":
+        clear()
+        prt()
+        localgetnetworkinfo()
+    elif menuLL == "K" or menuLL == "k":
+        clear()
+        prt()
+        localkeysend()
+    elif menuLL == "R" or menuLL == "r":
+        menu()
+
+
+#------------------------------------------END LOCAL
+
 def menuB(menuR): # Advanced access Menu
     if menuR == "A" or menuR == "a":
         while True:
@@ -584,7 +668,7 @@ def menuB(menuR): # Advanced access Menu
                 t.sleep(1)
             except (KeyboardInterrupt, SystemExit):
                 advanceMenu()
-                raise  
+                raise
     elif menuR == "R" or menuR == "r":
         try:
             menu()
@@ -597,7 +681,7 @@ def menuB(menuR): # Advanced access Menu
             feed.close()
             sysinf.close()
             exit()
-            
+
 def menuC(menuO): # Donation access Menu
     if menuO == "A" or menuO == "a":
         dntDev()
@@ -626,7 +710,7 @@ def menuD(menuN): # Satnode access Menu
                 except (KeyboardInterrupt, SystemExit):
                     menu()
                     raise
-            elif message == "T" or message == "t": 
+            elif message == "T" or message == "t":
                 try:
                     clear()
                     prt()
@@ -726,6 +810,5 @@ while True: # Loop
         prt()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
         path = input("Insert the Path to Bitcoin-Cli: ")
-        pickle.dump(path, open("bclock.conf", "wb")) 
+        pickle.dump(path, open("bclock.conf", "wb"))
         menu()
-

@@ -29,6 +29,100 @@ else:
     lndconnectload["lncli"] = input("Insert the path to lncli: ")
     pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
 
+def locallistchaintxns():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    lncli = " listchaintxns"
+    lsd = os.popen(lndconnectload['lncli'] + lncli).read()
+    lsd0 = str(lsd)
+    d = json.loads(lsd0)
+    n = d['transactions']
+    while True:
+        clear()
+        print("\033[1;32;40m")
+        blogo()
+        print("\033[0;37;40m")
+        print("<<< Back to the Main Menu Press Control + C.\n\n")
+        print("\t\nTransactions\n")
+        try:
+            for r in range(len(n)):
+                s = n[r]
+                print("Transaction Hash: " + s['tx_hash'])
+            nd = input("\nSelect RHash: ")
+
+            for r in range(len(n)):
+                s = n[r]
+                nn = s['tx_hash']
+                trx = s['dest_addresses']
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("""
+                    Amount: {} sats
+                    Tx Hash: {}
+                    Block Hash: {}
+                    Block Height: {}
+                    Confirmations: {}
+                    Destination: {}
+                    """.format(s['amount'], s['tx_hash'], s['block_hash'], s['block_height'], s['num_confirmations'], trx))
+                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("\nTransaction Hash")
+                    print("\033[1;30;47m")
+                    qr.add_data(s['tx_hash'])
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+            input("\nContinue... ")
+        except (KeyboardInterrupt, SystemExit):
+            break
+
+def locallistinvoices():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    lncli = " listinvoices"
+    lsd = os.popen(lndconnectload['lncli'] + lncli).read()
+    lsd0 = str(lsd)
+    d = json.loads(lsd0)
+    n = d['invoices']
+    while True:
+        clear()
+        print("\033[1;32;40m")
+        blogo()
+        print("\033[0;37;40m")
+        print("<<< Back to the Main Menu Press Control + C.\n\n")
+        print("\tInvoices\n")
+        try:
+            for r in range(len(n)):
+                s = n[r]
+                print("Invoice: " + s['r_hash'] + " " + s['state'])
+
+            nd = input("\nSelect RHash: ")
+
+            for r in range(len(n)):
+                s = n[r]
+                nn = s['r_hash']
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("""
+                    Memo: {}
+                    Invoice: {}
+                    Amount: {} sats
+                    State: {}
+                    """.format(s['memo'], s['payment_request'], s['amt_paid_sat'], s['state']))
+                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("\033[1;30;47m")
+                    qr.add_data(s['payment_request'])
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+            input("\nContinue... ")
+        except (KeyboardInterrupt, SystemExit):
+            break
 
 def locallistchannels():
     lncli = " listchannels"
@@ -38,33 +132,38 @@ def locallistchannels():
     n = d['channels']
     while True:
         clear()
+        print("\033[1;32;40m")
+        blogo()
+        print("\033[0;37;40m")
+        print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\t\nChannels\n")
-        for r in range(len(n)):
-            s = n[r]
-            print("Node ID: " + s['remote_pubkey'])
-        
-        nd = input("\nSelect a Node ID: ")
-         
-        for r in range(len(n)):
-            s = n[r]
-            nn = s['remote_pubkey']
-            if nd == nn:
-                print("\n----------------------------------------------------------------------------------------------------------------")
-                print("""
-                Active: {}
-                Node ID: {}
-                Channel Point: {}
-                Channel Capacity: {} sats
-                Local Balance: {} sats
-                Remote Balance: {} sats
-                Total Sent: {} sats
-                Total Received: {} sats
-                """.format(s['active'], s['remote_pubkey'], s['channel_point'], s['capacity'], s['local_balance'], s['remote_balance'], s['total_satoshis_sent'], s['total_satoshis_received']))
-                print("----------------------------------------------------------------------------------------------------------------\n")
-        input("\nContinue... ")
- 
-        
-locallistchannels()
+        try:
+            for r in range(len(n)):
+                s = n[r]
+                print("Node ID: " + s['remote_pubkey'])
+
+            nd = input("\nSelect a Node ID: ")
+
+            for r in range(len(n)):
+                s = n[r]
+                nn = s['remote_pubkey']
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("""
+                    Active: {}
+                    Node ID: {}
+                    Channel Point: {}
+                    Channel Capacity: {} sats
+                    Local Balance: {} sats
+                    Remote Balance: {} sats
+                    Total Sent: {} sats
+                    Total Received: {} sats
+                    """.format(s['active'], s['remote_pubkey'], s['channel_point'], s['capacity'], s['local_balance'], s['remote_balance'], s['total_satoshis_sent'], s['total_satoshis_received']))
+                    print("----------------------------------------------------------------------------------------------------------------\n")
+
+            input("\nContinue... ")
+        except (KeyboardInterrupt, SystemExit):
+            break
 
 def localgetinfo():
     lncli = " getinfo"
@@ -473,4 +572,3 @@ def balanceOC():
 
 
 # END Remote connection with rest -------------------------------------
-
