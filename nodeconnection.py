@@ -10,6 +10,7 @@ import qrcode
 import time as t
 from pblogo import *
 
+
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
 
 def clear(): # clear the screen
@@ -17,7 +18,7 @@ def clear(): # clear the screen
 
 if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
     lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'   
 else:
     clear()
     blogo()
@@ -27,9 +28,9 @@ else:
     lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
     print("\n\tLocal Lightning Node connection.\n")
     lndconnectload["lncli"] = input("Insert the path to lncli: ")
-    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'  
 
-
+            
 def localgetinfo():
     lncli = " getinfo"
     lsd = os.popen(lndconnectload['lncli'] + lncli).read()
@@ -49,12 +50,12 @@ def localgetinfo():
     """.format(d['version'], d['identity_pubkey'], d['alias'], d['color'], d['num_pending_channels'], d['num_active_channels'], d['num_inactive_channels'], d['num_peers'], d['uris']))
     print("----------------------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
-
+    
 def localaddinvoice():
     lncli = " addinvoice"
     lsd = os.popen(lndconnectload['lncli'] + lncli).read()
     lsd0 = str(lsd)
-    d = json.loads(lsd0)
+    d = json.loads(lsd0) 
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -96,7 +97,7 @@ def localaddinvoice():
             print("\033[0;37;40m")
             t.sleep(2)
             break
-
+        
 def localpayinvoice():
     invoice = input("Insert Invoice: ")
     lncli = " payinvoice "
@@ -111,7 +112,7 @@ def localpayinvoice():
     else:
         os.system(lndconnectload['lncli'] + lncli + invoice )
         t.sleep(2)
-
+        
 def localgetnetworkinfo():
     lncli = " getnetworkinfo"
     lsd = os.popen(lndconnectload['lncli'] + lncli).read()
@@ -130,7 +131,7 @@ def localgetnetworkinfo():
     """.format(d['num_nodes'], d['num_channels'], d['total_network_capacity'], d['avg_channel_size'], d['min_channel_size'], d['max_channel_size'], d['median_channel_size_sat'], d['num_zombie_chans']))
     print("----------------------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
-
+    
 def localkeysend():
     print("\n\tYou ar going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.")
     lncli = " sendpayment "
@@ -142,7 +143,7 @@ def localkeysend():
         else:
             break
     os.system(lndconnectload['lncli'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --final_cltv_delta=40")
-
+    
 def localchannelbalance():
     lncli = " channelbalance"
     lsd = os.popen(lndconnectload['lncli'] + lncli).read()
@@ -155,7 +156,7 @@ def localchannelbalance():
     """.format(d['balance'], d['pending_open_balance']))
     print("----------------------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
-
+    
 def localnewaddress():
     lncli = " newaddress p2wkh"
     lsd = os.popen(lndconnectload['lncli'] + lncli).read()
@@ -174,17 +175,6 @@ def localnewaddress():
     print("Bitcoin Address: " + d['address'])
     input("\nContinue... ")
 
-def localbalanceOC():
-    lncli = " walletbalance"
-    lsd = os.popen(lndconnectload['lncli'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    print("\n------------------------------------------------------------------------------------")
-    print("Total Balance: " + a['total_balance'] + " sats")
-    print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
-    print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
-    print("------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
 
 # Remote connection with rest -------------------------------------
 
@@ -216,7 +206,7 @@ def getnewinvoice():
                 headers=headers, verify=cert_path,
                 json={"value": amount, "memo": memo + " -PyBLOCK"},
             )
-
+        
     a = r.json()
     print("\033[1;30;47m")
     qr.add_data(a['payment_request'])
@@ -247,7 +237,7 @@ def getnewinvoice():
             print("\033[0;37;40m")
             t.sleep(2)
             break
-
+        
 def payinvoice():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -282,7 +272,7 @@ def payinvoice():
         canceled()
         print("\033[0;37;40m")
         t.sleep(2)
-
+        
 def decodepayment():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -291,7 +281,7 @@ def decodepayment():
     url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], dcd)
     r = requests.get(url, headers=headers, verify=cert_path)
     print(r.json())
-
+    
 def getnewaddress():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -311,7 +301,7 @@ def getnewaddress():
     print("\033[0;37;40m")
     print("Bitcoin Address: " + addr['address'])
     input("\nContinue... ")
-
+        
 def listchaintxns():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -325,7 +315,7 @@ def listchaintxns():
     for d in c:
         print(d)
     t.sleep(10)
-
+    
 def listinvoice():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -339,7 +329,7 @@ def listinvoice():
     for d in c:
         print(d)
     input("\nContinue... ")
-
+        
 def invoicesettle():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -390,12 +380,12 @@ def getinfo():
     """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
     print("----------------------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
-
+        
 def channels():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
+    url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])    
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     b = str(a)
@@ -404,12 +394,12 @@ def channels():
     for d in c:
         print(d)
     input("\nContinue... ")
-
+    
 def channelbalance():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"])
+    url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"]) 
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -419,8 +409,8 @@ def channelbalance():
     """.format(a['balance'], a['pending_open_balance']))
     print("----------------------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
-
-
+    
+        
 def balanceOC():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -434,6 +424,6 @@ def balanceOC():
     print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
     print("------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
-
-
+    
+    
 # END Remote connection with rest -------------------------------------
