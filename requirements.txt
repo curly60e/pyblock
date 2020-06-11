@@ -48,8 +48,7 @@ PyGObject
 PyJWT
 pymacaroons
 PyNaCl
-pyRFC3339
-python-apt       
+pyRFC3339      
 python-bitcoinrpc
 python-dateutil
 python-debian
