@@ -148,7 +148,7 @@ def design():
     print("\033[1;32;40m")
     tprint(b, font="rnd-large")
     print("\033[0;37;40m")
- 
+
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
@@ -359,20 +359,20 @@ def menuLNDLOCAL():
     \n\n""")
     menuLNlocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def menuSelection():    
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}     
+def menuSelection():
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
     if path['bitcoincli']:
         menu()
     else:
         menuUserConn()
-        
+
 def menuSelectionLN():
     lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
     lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-    if lndconnectload['lncli']:
+    if lndconnectload['ln']:
         menuLNDLOCAL()
     else:
         menuLND()
@@ -467,7 +467,7 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS == "T" or menuS == "t": #Test feature fast access
         print("This is a test access. \n")
         screensv()
-        
+
 def menuRemote(menuS): #Execution of the Main Menu options
     if menuS == "A" or menuS == "a":
         while True:
@@ -679,7 +679,7 @@ def menuB(menuR): # Advanced access Menu
             feed.close()
             sysinf.close()
             exit()
-            
+
 def menuBA(menuR): # Advanced access Menu
     if menuR == "A" or menuR == "a":
         while True:
@@ -871,7 +871,7 @@ def menuF(menuV): # Tester Donation access Menu
 
 while True: # Loop
     clear()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}  
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
     if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -888,4 +888,3 @@ while True: # Loop
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
         pickle.dump(path, open("bclock.conf", "wb"))
         menuSelection()
-
