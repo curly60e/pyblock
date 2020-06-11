@@ -175,10 +175,10 @@ def devAddr():
 def donate():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.3.0
+    Version 0.4.0
 
     \033[1;32;40mA.\033[0;37;40m Make PyBLOCK Great Again
-    \033[1;32;40mB.\033[0;37;40m <<< Back Press Control + C
+    <<< Back Main Menu Press Control + C
     \n\n""")
     menuB = (input("\033[1;32;40mSelect option: \033[0;37;40m"))
     if menuB == "A" or menuB == "a":

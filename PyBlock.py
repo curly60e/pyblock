@@ -29,18 +29,37 @@ def sysinfo():  #Cpu and memory usage
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
-    os.system(path + bitcoincli)
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+    print(d)
+    clear()
+    print("\033[1;32;40m")
+    blogo()
+    print("\033[0;37;40m")
+    print("<<< Back to the Main Menu Press Control + C.\n\n")
+    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("""
+    Chain: {}
+    Blocks: {}
+    Best BlockHash: {}
+    Difficulty: {}
+    Verification Progress: {}
+    Size on Disk: {}
+    Pruned: {}
+    """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
+    print("----------------------------------------------------------------------------------------------------------------\n")
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
-    os.system(path + bitcoincli)
+    os.system(path['bitcoincli'] + bitcoincli)
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
 def getgenesis(): # get and decode Genesis block
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
-    os.system(path + bitcoincli)
+    os.system(path['bitcoincli'] + bitcoincli)
 
 def close():
     print("<<< Back to the Main Menu Press Control + C.\n\n")
@@ -48,31 +67,27 @@ def close():
 def readHexBlock(): # Hex Decoder using Hexyl on local node
     hexa = input("Add the Block Hash you want to decode: ")
     blocknumber = input("Add the Block number: ")
-    decodeBlock = path + " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
+    decodeBlock = path['bitcoincli'] + " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeBlock)
 
 def readHexTx(): # Hex Decoder using Hexyl on an external node
     hexa = input("Add the Transaction ID. you want to decode: ")
-    decodeTX = path + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
+    decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeTX)
 
 def prt():
     print("\033[1;32;40m")
     blogo()
-    #tprint("PyBLOCK", font="rnd-large") # random title design
     print("\033[0;37;40m")
 
 def tmp():
     t.sleep(15)
 
-#-----
-
-
 def console(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
-        lsd = os.popen(path + " " + cle)
+        lsd = os.popen(path['bitcoincli'] + " " + cle)
         lsd0 = lsd.read()
         lsd1 = str(lsd0)
         print(lsd1)
@@ -127,116 +142,15 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
                 raise
 
 def design():
-    bitcoinclient = path + " getblockcount"
+    bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     print("\033[1;32;40m")
     tprint(b, font="rnd-large")
     print("\033[0;37;40m")
-#------------------------------------------- SSH connection external node --------------------------------------------
-
-def userconn(): # All the connection to a remote node
-    option = input("\033[1;32;40mSelect option: \033[0;37;40m")
-    if option == "A" or option == "a": # Execution of the secondary Menu menuUserConn
-        user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
-        s = input("Do you want to continue Y/n: ")
-        if s == "Y" or s == "y":
-            clear()
-            c = input("Do you want to see custom design? Y/n: ")
-            if c == "Y" or c == "y":
-                while True: # connection via ssh
-                    try:
-                        clear()
-                        close()
-                        sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockcount"
-                        sshc = os.popen(sshb)
-                        lsd0 = sshc.read()
-                        lsd1 = str(lsd0)
-                        sshd = lsd1
-                        print("\033[1;32;40m")
-                        tprint(sshd, font="rnd-large")
-                        print("\033[0;37;40m")
-                        tmp()
-                        sshc.close()
-                    except (KeyboardInterrupt, SystemExit):
-                        menuUserConn()
-                        raise
-                else:
-                    menu()
-            else:
-                while True: # connection via ssh
-                    try:
-                        clear()
-                        close()
-                        sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblockchaininfo"
-                        os.system(sshb)
-                        tmp()
-                    except (KeyboardInterrupt, SystemExit):
-                        menuUserConn()
-                        raise
-        else:
-            menu()
-    elif option == "B" or option == "b": # Decode Block 0 on HEX for external node
-        user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
-        while True:
-            clear()
-            prt()
-            sshb = "ssh " + user + " '" + "{}".format(path) + "'" + " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
-            os.system(sshb)
-            a = input("Do you want to return to the Node Connection Menu? Y/n: ")
-            if a == "Y" or a == "y":
-                menuUserConn()
-            else:
-                b = input("Do you want to exit? Y/n: ")
-                if b == "Y" or b == "y":
-                    exit()
-                else:
-                    menuUserConn()
-            tmp()
-    elif option == "C" or option == "c": # Block decoder to HEX for external node
-        readHexBlockSsh()
-        while True:
-            m = input("Do you want to continue decoding? Y/n: ")
-            if m == "Y" or m == "y":
-                readHexBlockSsh()
-            else:
-                menuUserConn()
-    elif option == "D" or option == "d":
-        readHexTXSsh()
-        while True:
-            m = input("Do you want to continue decoding? Y/n: ")
-            if m == "Y" or m == "y":
-                readHexTXSsh()
-            else:
-                menuUserConn()
-    elif option == "R" or option == "r":
-        menu()
-
-#------------------------------------------- End SSH connection external node --------------------------------------------
-
+ 
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
-
-def readHexBlockSsh(): # Hex Decoder using Hexyl on an external node
-    user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
-    clear()
-    prt()
-    hexa = input("Add the Block Hash you want to decode: ")
-    blocknumber = input("Add the Block number: ")
-    decodeBlock = "ssh " + user + " '" + "{}".format(path) + "'" +  " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
-    clear()
-    prt()
-    os.system(decodeBlock)
-
-def readHexTXSsh(): # Hex Decoder using Hexyl on an external node
-    user = input("\033[1;36;40mUSER\033[0;37;40m@\033[1;33;40mNODE: \033[0;37;40m")
-    clear()
-    prt()
-    hexa = input("Add the Transaction ID. you want to decode: ")
-    decodeTX = "ssh " + user + " '" + "{}".format(path) + "'" +  " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
-    clear()
-    prt()
-    os.system(decodeTX)
 
 def getrawtx(): # show confirmatins from transactions
     tx = input("Insert your TxID: ")
@@ -251,7 +165,7 @@ def getrawtx(): # show confirmatins from transactions
 You can decode that block in HEX and see what's inside.\033[0;37;40m""")
                 t.sleep(10)
             else:
-                lsd = os.popen(path + bitcoincli + tx + " 1")
+                lsd = os.popen(path['bitcoincli'] + bitcoincli + tx + " 1")
                 lsd0 = lsd.read()
                 lsd1 = str(lsd0)
                 lsda = lsd1.split(',')
@@ -272,15 +186,15 @@ def menu(): #Main Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Local Node
     Version 0.4.0
 
-    \033[1;31;40mA.\033[0;37;40m Run PyBLOCK in your own node
-    \033[1;32;40mB.\033[0;37;40m Show Blockchain information in your own node
+    \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
+    \033[1;32;40mB.\033[0;37;40m Show Blockchain information
     \033[1;32;40mC.\033[0;37;40m Show the Genesis Block
     \033[1;32;40mD.\033[0;37;40m Decode in HEX any block
     \033[1;32;40mE.\033[0;37;40m Decode in HEX any transaction
     \033[1;32;40mF.\033[0;37;40m Show confirmations from a transaction
-    \033[1;32;40mG.\033[0;37;40m Connect to an external node through SSH
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
@@ -295,15 +209,18 @@ def menuUserConn(): #Menu before connection over ssh
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Remote Node RPC
     Version 0.4.0
 
-    \033[1;32;40mA.\033[0;37;40m Run PyBLOCK in this external node
-    \033[1;32;40mB.\033[0;37;40m Show the Genesis Block
-    \033[1;32;40mC.\033[0;37;40m Decode in HEX any block
-    \033[1;32;40mD.\033[0;37;40m Decode in HEX any transaction
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
+    \033[1;32;40mB.\033[0;37;40m Show Blockchain information
+    \033[1;33;40mL.\033[0;37;40m Lightning Network
+    \033[1;32;40mH.\033[0;37;40m Advanced
+    \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;35;40mX.\033[0;37;40m Donate
+    \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""")
-    userconn()
+    menuRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def advanceMenu(): # Advanced Menu
     clear()
@@ -392,7 +309,10 @@ def menuLND():
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
     \033[1;32;40mQ.\033[0;37;40m Channel Balance
+    \033[1;31;40mL.\033[0;37;40m List Invoices
+    \033[1;32;40mC.\033[0;37;40m Show Channels
     \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
+    \033[1;33;40mX.\033[0;37;40m List Onchain Transactions
     \033[1;32;40mS.\033[0;37;40m Check if invoice was paid
     \033[1;32;40mN.\033[0;37;40m Get Node Info
     \033[1;32;40mO.\033[0;37;40m Onchain Balance
@@ -424,9 +344,17 @@ def menuLNDLOCAL():
     \n\n""")
     menuLNlocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def menuSelection():
+def menuSelection():    
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}     
+    pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
+    if path['bitcoincli']:
+        menu()
+    else:
+        menuUserConn()
+        
+def menuSelectionLN():
     lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
-
     lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     if lndconnectload['lncli']:
@@ -447,7 +375,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 getblock()
                 tmp()
             except (KeyboardInterrupt, SystemExit):
-                menu()
+                menuSelection()
                 raise
     elif menuS == "C" or menuS == "c":
         clear()
@@ -455,7 +383,7 @@ def menuA(menuS): #Execution of the Main Menu options
         getgenesis()
         a = input("Do you want to return to the Main Menu? Y/n: ")
         if a == "Y" or a == "y":
-            menu()
+            menuSelection()
         else:
             b = input("Do you want to exit? Y/n: ")
             if b == "Y" or b == "y":
@@ -469,7 +397,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 nodeconnection.close()
                 exit()
             else:
-                menu()
+                menuSelection()
     elif menuS == "D" or menuS == "d":
         clear()
         prt()
@@ -481,7 +409,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 prt()
                 readHexBlock()
             else:
-                menu()
+                menuSelection()
     elif menuS == "E" or menuS == "e":
         clear()
         prt()
@@ -494,7 +422,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 sysinfo()
                 readHexTx()
             else:
-                menu()
+                menuSelection()
     elif menuS == "F" or menuS == "f":
         getrawtx()
     elif menuS == "H" or menuS == "h":
@@ -502,7 +430,54 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS == "L" or menuS == "l":
         clear()
         prt()
-        menuSelection()
+        menuSelectionLN()
+    elif menuS == "Q" or menuS == "q":
+        os._exit(0)
+        apisnd.close()
+        donation.close()
+        clone.close()
+        logos.close()
+        feed.close()
+        sysinf.close()
+        nodeconnection.close()
+        exit()
+    elif menuS == "S" or menuS == "s":
+        clear()
+        prt()
+        satnodeMenu()
+    elif menuS == "G" or menuS == "g":
+        nodeinfo()
+    elif menuS == "X" or menuS == "x":
+        dnt()
+    elif menuS == "T" or menuS == "t": #Test feature fast access
+        print("This is a test access. \n")
+        screensv()
+        
+def menuRemote(menuS): #Execution of the Main Menu options
+    if menuS == "A" or menuS == "a":
+        while True:
+            try:
+                clear()
+                close()
+                remotegetblock()
+                tmp()
+            except (KeyboardInterrupt, SystemExit):
+                menuUserConn()
+    elif menuS == "B" or menuS == "b":
+        while True:
+            try:
+                clear()
+                close()
+                remotegetblockcount()
+                tmp()
+            except (KeyboardInterrupt, SystemExit):
+                menuUserConn()
+    elif menuS == "H" or menuS == "h":
+        advanceMenu()
+    elif menuS == "L" or menuS == "l":
+        clear()
+        prt()
+        menuSelectionLN()
     elif menuS == "Q" or menuS == "q":
         os._exit(0)
         apisnd.close()
@@ -538,6 +513,18 @@ def menuLN(menuLL):
         clear()
         prt()
         channelbalance()
+    elif menuLL == "L" or menuLL == "l":
+        clear()
+        prt()
+        listinvoice()
+    elif menuLL == "X" or menuLL == "x":
+        clear()
+        prt()
+        listonchaintxs()
+    elif menuLL == "C" or menuLL == "c":
+        clear()
+        prt()
+        channels()
     elif menuLL == "B" or menuLL == "b":
         clear()
         prt()
@@ -555,7 +542,7 @@ def menuLN(menuLL):
         prt()
         balanceOC()
     elif menuLL == "R" or menuLL == "r":
-        menu()
+        menuUserConn()
 
 
 #------------------------------------------END REMOTE
@@ -607,7 +594,7 @@ def menuLNlocal(menuLL):
         prt()
         localkeysend()
     elif menuLL == "R" or menuLL == "r":
-        menu()
+        menuSelection()
 
 
 #------------------------------------------END LOCAL
@@ -671,7 +658,7 @@ def menuB(menuR): # Advanced access Menu
                 raise
     elif menuR == "R" or menuR == "r":
         try:
-            menu()
+            menuSelection()
         except (KeyboardInterrupt, SystemExit):
             os._exit(0)
             apisnd.close()
@@ -688,7 +675,7 @@ def menuC(menuO): # Donation access Menu
     elif menuO == "B" or menuO == "b":
         dntTst()
     elif menuO == "R" or menuO == "r":
-        menu()
+        menuSelection()
 
 def menuD(menuN): # Satnode access Menu
     if menuN == "A" or menuN == "a":
@@ -706,9 +693,9 @@ def menuD(menuN): # Satnode access Menu
                     close()
                     apisenderFile()
                     t.sleep(30)
-                    menu()
+                    menuSelection()
                 except (KeyboardInterrupt, SystemExit):
-                    menu()
+                    menuSelection()
                     raise
             elif message == "T" or message == "t":
                 try:
@@ -717,12 +704,12 @@ def menuD(menuN): # Satnode access Menu
                     close()
                     apisender()
                     t.sleep(30)
-                    menu()
+                    menuSelection()
                 except (KeyboardInterrupt, SystemExit):
-                    menu()
+                    menuSelection()
                     raise
         except (KeyboardInterrupt, SystemExit):
-            menu()
+            menuSelection()
             raise
     elif menuN == "C" or menuN == "c":
         print("\n\t This only will work on Linux or Unix systems.\n")
@@ -730,7 +717,9 @@ def menuD(menuN): # Satnode access Menu
         if a == "Y" or a == "y":
             gitclone()
         else:
-            menu()
+            menuSelection()
+    elif menuN == "D" or menuN == "d":
+        menuSelection()
 
 def menuE(menuQ): # Dev Donation access Menu
     if menuQ == "A" or menuQ == "a":
@@ -740,9 +729,9 @@ def menuE(menuQ): # Dev Donation access Menu
             close()
             donationPN()
             t.sleep(50)
-            menu()
+            menuSelection()
         except (KeyboardInterrupt, SystemExit):
-            menu()
+            menuSelection()
             raise
     elif menuQ == "B" or menuQ == "b":
         try:
@@ -751,9 +740,9 @@ def menuE(menuQ): # Dev Donation access Menu
             close()
             donationAddr()
             t.sleep(50)
-            menu()
+            menuSelection()
         except (KeyboardInterrupt, SystemExit):
-            menu()
+            menuSelection()
             raise
     elif menuQ == "C" or menuQ == "c":
         try:
@@ -762,12 +751,12 @@ def menuE(menuQ): # Dev Donation access Menu
             close()
             donationLN()
             t.sleep(50)
-            menu()
+            menuSelection()
         except (KeyboardInterrupt, SystemExit):
-            menu()
+            menuSelection()
             raise
     elif menuQ == "R" or menuQ == "r":
-        menu()
+        menuSelection()
 
 def menuF(menuV): # Tester Donation access Menu
     if menuV == "A" or menuV == "a":
@@ -777,9 +766,9 @@ def menuF(menuV): # Tester Donation access Menu
             close()
             donationAddrTst()
             t.sleep(50)
-            menu()
+            menuSelection()
         except (KeyboardInterrupt, SystemExit):
-            menu()
+            menuSelection()
             raise
     elif menuV == "B" or menuV == "b":
         try:
@@ -788,12 +777,12 @@ def menuF(menuV): # Tester Donation access Menu
             close()
             donationLNTst()
             t.sleep(50)
-            menu()
+            menuSelection()
         except (KeyboardInterrupt, SystemExit):
-            menu()
+            menuSelection()
             raise
     elif menuV == "R" or menuV == "r":
-        menu()
+        menuSelection()
 
 #--------------------------------- End Main Menu execution --------------------------------
 
@@ -801,14 +790,20 @@ def menuF(menuV): # Tester Donation access Menu
 
 while True: # Loop
     clear()
-    path = ""
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}  
+
     if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
-        menu()
+        menuSelection()
     else:
         prt()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-        path = input("Insert the Path to Bitcoin-Cli: ")
+        print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
+        path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
+        path['rpcuser'] = input("RPC User: ")
+        path['rpcpass'] = input("RPC Password: ")
+        print("\n\tLocal Bitcoin Core Node connection.\n")
+        path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
         pickle.dump(path, open("bclock.conf", "wb"))
-        menu()
+        menuSelection()

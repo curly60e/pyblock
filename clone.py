@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.3.0
+#Version: 0.4.0
 
 import os
 import os.path
@@ -21,7 +21,6 @@ def satnode():
     except (KeyboardInterrupt, SystemExit):
         os.system("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9")
     
-
 def matrixsc():
     if os.path.isdir('$HOME/pyblock/terminal_matrix'):
         print("OK Pass")
