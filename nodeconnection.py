@@ -74,6 +74,14 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
     """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
     print("----------------------------------------------------------------------------------------------------------------\n")
     
+def remoteconsole(): # get into the console from bitcoin-cli
+    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
+    while True:
+        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
+        a = rpc(cle)
+        print(a)
+        
+    
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def locallistchaintxns():
@@ -370,6 +378,7 @@ def localbalanceOC():
 
 # Remote connection with rest -------------------------------------
 
+
 def getnewinvoice():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -536,35 +545,6 @@ def listinvoice():
             break
     input("\nContinue... ")
 
-def invoicesettle():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    invoice = input("Insert the invoice: ")
-    while True:
-        url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], invoice)
-        r = requests.get(url, headers=headers, verify=cert_path)
-        a = r.json()
-        url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
-        rr = requests.get(url, headers=headers, verify=cert_path)
-        m = rr.json()
-        if m['state'] == 'SETTLED':
-            print("\033[1;32;40m")
-            clear()
-            blogo()
-            tick()
-            print("\033[0;37;40m")
-            t.sleep(2)
-            break
-        elif m['state'] == 'CANCELED':
-            print("\033[1;31;40m")
-            clear()
-            blogo()
-            canceled()
-            print("\033[0;37;40m")
-            t.sleep(2)
-            break
-
 def getinfo():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -712,3 +692,4 @@ def balanceOC():
 
 
 # END Remote connection with rest -------------------------------------
+
