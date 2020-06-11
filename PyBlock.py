@@ -238,6 +238,22 @@ def advanceMenu(): # Advanced Menu
     \n\n""")
     menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def remoteadvanceMenu(): # Advanced Menu
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version 0.4.0
+
+    \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
+    \033[1;32;40mB.\033[0;37;40m FunB
+    \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
+    \033[1;32;40mS.\033[0;37;40m Sysinfo
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuBA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def dnt(): # Donation selection menu
     clear()
     prt()
@@ -313,7 +329,6 @@ def menuLND():
     \033[1;32;40mC.\033[0;37;40m Show Channels
     \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
     \033[1;33;40mX.\033[0;37;40m List Onchain Transactions
-    \033[1;32;40mS.\033[0;37;40m Check if invoice was paid
     \033[1;32;40mN.\033[0;37;40m Get Node Info
     \033[1;32;40mO.\033[0;37;40m Onchain Balance
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
@@ -473,7 +488,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
             except (KeyboardInterrupt, SystemExit):
                 menuUserConn()
     elif menuS == "H" or menuS == "h":
-        advanceMenu()
+        remoteadvanceMenu()
     elif menuS == "L" or menuS == "l":
         clear()
         prt()
@@ -529,10 +544,6 @@ def menuLN(menuLL):
         clear()
         prt()
         getnewaddress()
-    elif menuLL == "S" or menuLL == "s":
-        clear()
-        prt()
-        invoicesettle()
     elif menuLL == "N" or menuLL == "n":
         clear()
         prt()
@@ -608,6 +619,76 @@ def menuB(menuR): # Advanced access Menu
                 sysinfo()
                 close()
                 console()
+                t.sleep(5)
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise
+    elif menuR == "B" or menuR == "b":
+        while True:
+            try:
+                clear()
+                prt()
+                close()
+                logoA()
+                tmp()
+                clear()
+                prt()
+                close()
+                logoB()
+                tmp()
+                clear()
+                prt()
+                close()
+                logoC()
+                tmp()
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise
+    elif menuR == "C" or menuR == "c":
+        while True:
+            try:
+                clear()
+                prt()
+                sysinfo()
+                close()
+                decodeQR()
+                t.sleep(50)
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise
+    elif menuR == "S" or menuR == "s":
+        while True:
+            try:
+                clear()
+                prt()
+                close()
+                sysinfoDetail()
+                t.sleep(1)
+            except (KeyboardInterrupt, SystemExit):
+                advanceMenu()
+                raise
+    elif menuR == "R" or menuR == "r":
+        try:
+            menuSelection()
+        except (KeyboardInterrupt, SystemExit):
+            os._exit(0)
+            apisnd.close()
+            donation.close()
+            clone.close()
+            logos.close()
+            feed.close()
+            sysinf.close()
+            exit()
+            
+def menuBA(menuR): # Advanced access Menu
+    if menuR == "A" or menuR == "a":
+        while True:
+            try:
+                clear()
+                prt()
+                sysinfo()
+                close()
+                remoteconsole()
                 t.sleep(5)
             except (KeyboardInterrupt, SystemExit):
                 advanceMenu()
@@ -807,3 +888,4 @@ while True: # Loop
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
         pickle.dump(path, open("bclock.conf", "wb"))
         menuSelection()
+
