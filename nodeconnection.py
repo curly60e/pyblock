@@ -288,7 +288,8 @@ def localaddinvoice():
             break
 
 def localpayinvoice():
-    invoice = input("Insert Invoice: ")
+    invoiceN = input("Insert the invoice to pay: ")
+    invoice = invoiceN.lower()
     lncli = " payinvoice "
     lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
     lsd0 = str(lsd)
@@ -444,7 +445,8 @@ def payinvoice():
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     while True:
-        bolt11 = input("Insert the invoice to pay: ")
+        bolt11N = input("Insert the invoice to pay: ")
+        bolt11 = bolt11N.lower()
         r = requests.post(
             url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
         )
