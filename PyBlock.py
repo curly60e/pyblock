@@ -27,6 +27,8 @@ def sysinfo():  #Cpu and memory usage
     print("   \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
     print("   \033[0;37;40m----------------------")
 
+
+
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()

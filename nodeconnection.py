@@ -30,7 +30,7 @@ else:
     print("\n\tLocal Lightning Node connection.\n")
     lndconnectload["ln"] = input("Insert the path to lncli: ")
     pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
-   
+
 #-------------------------RPC BITCOIN NODE CONNECTION
 
 def rpc(method, params=[]):
@@ -41,47 +41,52 @@ def rpc(method, params=[]):
         "params": params
     })
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 def remotegetblock():
-    b = rpc('getblockcount')
-    c = str(b)
-    print("\033[1;32;40m")
-    tprint(c, font="rnd-large")
-    print("\033[0;37;40m")
-    
+    try:
+        b = rpc('getblockcount')
+        c = str(b)
+        print("\033[1;32;40m")
+        tprint(c, font="rnd-large")
+        print("\033[0;37;40m")
+    except:
+        pass
+
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
-    a = rpc('getblockchaininfo')
-    d = a
-    print(d)
-    clear()
-    print("\033[1;32;40m")
-    blogo()
-    print("\033[0;37;40m")
-    print("<<< Back to the Main Menu Press Control + C.\n\n")
-    print("\n----------------------------------------------------------------------------------------------------------------")
-    print("""
-    Chain: {}
-    Blocks: {}
-    Best BlockHash: {}
-    Difficulty: {}
-    Verification Progress: {}
-    Size on Disk: {}
-    Pruned: {}
-    """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
-    
+    try:
+        a = rpc('getblockchaininfo')
+        d = a
+        print(d)
+        clear()
+        print("\033[1;32;40m")
+        blogo()
+        print("\033[0;37;40m")
+        print("<<< Back to the Main Menu Press Control + C.\n\n")
+        print("\n----------------------------------------------------------------------------------------------------------------")
+        print("""
+        Chain: {}
+        Blocks: {}
+        Best BlockHash: {}
+        Difficulty: {}
+        Verification Progress: {}
+        Size on Disk: {}
+        Pruned: {}
+        """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
+        print("----------------------------------------------------------------------------------------------------------------\n")
+    except:
+        pass
+
 def remoteconsole(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
         a = rpc(cle)
         print(a)
-        
-    
+
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def locallistchaintxns():
@@ -130,7 +135,7 @@ def locallistchaintxns():
                     qr.print_ascii()
                     print("\033[0;37;40m")
             input("\nContinue... ")
-        except (KeyboardInterrupt, SystemExit):
+        except:
             break
 
 def locallistinvoices():
@@ -176,7 +181,7 @@ def locallistinvoices():
                     qr.print_ascii()
                     print("\033[0;37;40m")
             input("\nContinue... ")
-        except (KeyboardInterrupt, SystemExit):
+        except:
             break
 
 def locallistchannels():
@@ -217,7 +222,7 @@ def locallistchannels():
                     print("----------------------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
-        except (KeyboardInterrupt, SystemExit):
+        except:
             break
 
 def localgetinfo():
@@ -390,92 +395,97 @@ def getnewinvoice():
     box_size=10,
     border=4,
     )
-    amount = input("Amount in sats: ")
-    memo = input("Memo: ")
-    url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
-    data = {
+    try:
+        amount = input("Amount in sats: ")
+        memo = input("Memo: ")
+        url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
+        data = {
 
-        }
-    if amount == "":
-        r = requests.post(
-                url,
-                headers=headers, verify=cert_path,
-                json={"memo": memo + " -PyBLOCK"},
-            )
-    else:
-        r = requests.post(
-                url,
-                headers=headers, verify=cert_path,
-                json={"value": amount, "memo": memo + " -PyBLOCK"},
-            )
+            }
+        if amount == "":
+            r = requests.post(
+                    url,
+                    headers=headers, verify=cert_path,
+                    json={"memo": memo + " -PyBLOCK"},
+                )
+        else:
+            r = requests.post(
+                    url,
+                    headers=headers, verify=cert_path,
+                    json={"value": amount, "memo": memo + " -PyBLOCK"},
+                )
 
-    a = r.json()
-    print("\033[1;30;47m")
-    qr.add_data(a['payment_request'])
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("Lightning Invoice: " + a['payment_request'])
-    b = str(a['payment_request'])
-    while True:
-        url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], b)
-        r = requests.get(url, headers=headers, verify=cert_path)
         a = r.json()
-        url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
-        rr = requests.get(url, headers=headers, verify=cert_path)
-        m = rr.json()
-        if m['state'] == 'SETTLED':
+        print("\033[1;30;47m")
+        qr.add_data(a['payment_request'])
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("Lightning Invoice: " + a['payment_request'])
+        b = str(a['payment_request'])
+        while True:
+            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], b)
+            r = requests.get(url, headers=headers, verify=cert_path)
+            a = r.json()
+            url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
+            rr = requests.get(url, headers=headers, verify=cert_path)
+            m = rr.json()
+            if m['state'] == 'SETTLED':
+                print("\033[1;32;40m")
+                clear()
+                blogo()
+                tick()
+                print("\033[0;37;40m")
+                t.sleep(2)
+                break
+            elif m['state'] == 'CANCELED':
+                print("\033[1;31;40m")
+                clear()
+                blogo()
+                canceled()
+                print("\033[0;37;40m")
+                t.sleep(2)
+                break
+    except:
+        pass
+
+def payinvoice():
+    cert_path = lndconnectload["tls"]
+    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    headers = {'Grpc-Metadata-macaroon': macaroon}
+    try:
+        while True:
+            bolt11N = input("Insert the invoice to pay: ")
+            bolt11 = bolt11N.lower()
+            r = requests.post(
+                url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
+            )
+            try:
+                r.json()['error']
+                print("\nThe Invoice don't have an amount. Please insert an Invoice with amount. \n")
+                continue
+            except:
+                break
+        ok, checking_id, fee_msat, error_message = r.ok, None, 0, None
+        r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path,)
+        t.sleep(5)
+        if r.ok:
+            checking_id = r.json()["payment_hash"]
             print("\033[1;32;40m")
             clear()
             blogo()
             tick()
             print("\033[0;37;40m")
             t.sleep(2)
-            break
-        elif m['state'] == 'CANCELED':
+        else:
+            error_message = r.json()["error"]
             print("\033[1;31;40m")
             clear()
             blogo()
             canceled()
             print("\033[0;37;40m")
             t.sleep(2)
-            break
-
-def payinvoice():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    while True:
-        bolt11N = input("Insert the invoice to pay: ")
-        bolt11 = bolt11N.lower()
-        r = requests.post(
-            url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
-        )
-        try:
-            r.json()['error']
-            print("\nThe Invoice don't have an amount. Please insert an Invoice with amount. \n")
-            continue
-        except:
-            break
-    ok, checking_id, fee_msat, error_message = r.ok, None, 0, None
-    r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path,)
-    t.sleep(5)
-    if r.ok:
-        checking_id = r.json()["payment_hash"]
-        print("\033[1;32;40m")
-        clear()
-        blogo()
-        tick()
-        print("\033[0;37;40m")
-        t.sleep(2)
-    else:
-        error_message = r.json()["error"]
-        print("\033[1;31;40m")
-        clear()
-        blogo()
-        canceled()
-        print("\033[0;37;40m")
-        t.sleep(2)
-
+    except:
+        pass
 
 def getnewaddress():
     cert_path = lndconnectload["tls"]
@@ -487,16 +497,18 @@ def getnewaddress():
     box_size=10,
     border=4,
     )
-    url = 'https://{}/v1/newaddress'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    addr = r.json()
-    print("\033[1;30;47m")
-    qr.add_data(addr['address'])
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("Bitcoin Address: " + addr['address'])
-    input("\nContinue... ")
-
+    try:
+        url = 'https://{}/v1/newaddress'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        addr = r.json()
+        print("\033[1;30;47m")
+        qr.add_data(addr['address'])
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("Bitcoin Address: " + addr['address'])
+        input("\nContinue... ")
+    except:
+        pass
 
 def listinvoice():
     qr = qrcode.QRCode(
@@ -543,31 +555,34 @@ def listinvoice():
                     qr.print_ascii()
                     print("\033[0;37;40m")
             input("\nContinue... ")
-        except (KeyboardInterrupt, SystemExit):
+        except:
             break
     input("\nContinue... ")
 
 def getinfo():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    a = r.json()
-    print("\n----------------------------------------------------------------------------------------------------------------")
-    print("""
-    Version: {}
-    Node ID: {}
-    Alias: {}
-    Color: {}
-    Pending Channels: {}
-    Active Channels: {}
-    Inactive Channels: {}
-    Peers: {}
-    URLS: {}
-    """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
+    try:
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        a = r.json()
+        print("\n----------------------------------------------------------------------------------------------------------------")
+        print("""
+        Version: {}
+        Node ID: {}
+        Alias: {}
+        Color: {}
+        Pending Channels: {}
+        Active Channels: {}
+        Inactive Channels: {}
+        Peers: {}
+        URLS: {}
+        """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
+        print("----------------------------------------------------------------------------------------------------------------\n")
+        input("\nContinue... ")
+    except:
+        pass
 
 def channels():
     cert_path = lndconnectload["tls"]
@@ -609,9 +624,9 @@ def channels():
                     print("----------------------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
-        except (KeyboardInterrupt, SystemExit):
+        except:
             break
-        
+
 def channelbalance():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -675,7 +690,7 @@ def listonchaintxs():
                     qr.print_ascii()
                     print("\033[0;37;40m")
             input("\nContinue... ")
-        except (KeyboardInterrupt, SystemExit):
+        except:
             break
 
 def balanceOC():
@@ -694,4 +709,3 @@ def balanceOC():
 
 
 # END Remote connection with rest -------------------------------------
-
