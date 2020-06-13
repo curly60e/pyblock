@@ -391,9 +391,9 @@ def menuA(menuS): #Execution of the Main Menu options
                 close()
                 getblock()
                 tmp()
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 menuSelection()
-                raise
     elif menuS == "C" or menuS == "c":
         clear()
         prt()
@@ -426,6 +426,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 prt()
                 readHexBlock()
             else:
+                break
                 menuSelection()
     elif menuS == "E" or menuS == "e":
         clear()
@@ -439,6 +440,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 sysinfo()
                 readHexTx()
             else:
+                break
                 menuSelection()
     elif menuS == "F" or menuS == "f":
         getrawtx()
@@ -478,7 +480,8 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 close()
                 remotegetblock()
                 tmp()
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 menuUserConn()
     elif menuS == "B" or menuS == "b":
         while True:
@@ -487,7 +490,8 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 close()
                 remotegetblockcount()
                 tmp()
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 menuUserConn()
     elif menuS == "H" or menuS == "h":
         remoteadvanceMenu()
@@ -557,7 +561,6 @@ def menuLN(menuLL):
     elif menuLL == "R" or menuLL == "r":
         menuUserConn()
 
-
 #------------------------------------------END REMOTE
 
 #------------------------------------------LOCAL
@@ -609,7 +612,6 @@ def menuLNlocal(menuLL):
     elif menuLL == "R" or menuLL == "r":
         menuSelection()
 
-
 #------------------------------------------END LOCAL
 
 def menuB(menuR): # Advanced access Menu
@@ -622,9 +624,9 @@ def menuB(menuR): # Advanced access Menu
                 close()
                 console()
                 t.sleep(5)
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "B" or menuR == "b":
         while True:
             try:
@@ -643,9 +645,9 @@ def menuB(menuR): # Advanced access Menu
                 close()
                 logoC()
                 tmp()
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "C" or menuR == "c":
         while True:
             try:
@@ -655,9 +657,9 @@ def menuB(menuR): # Advanced access Menu
                 close()
                 decodeQR()
                 t.sleep(50)
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "S" or menuR == "s":
         while True:
             try:
@@ -666,13 +668,13 @@ def menuB(menuR): # Advanced access Menu
                 close()
                 sysinfoDetail()
                 t.sleep(1)
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "R" or menuR == "r":
         try:
             menuSelection()
-        except (KeyboardInterrupt, SystemExit):
+        except:
             os._exit(0)
             apisnd.close()
             donation.close()
@@ -692,9 +694,9 @@ def menuBA(menuR): # Advanced access Menu
                 close()
                 remoteconsole()
                 t.sleep(5)
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "B" or menuR == "b":
         while True:
             try:
@@ -713,9 +715,9 @@ def menuBA(menuR): # Advanced access Menu
                 close()
                 logoC()
                 tmp()
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "C" or menuR == "c":
         while True:
             try:
@@ -725,9 +727,9 @@ def menuBA(menuR): # Advanced access Menu
                 close()
                 decodeQR()
                 t.sleep(50)
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "S" or menuR == "s":
         while True:
             try:
@@ -736,13 +738,13 @@ def menuBA(menuR): # Advanced access Menu
                 close()
                 sysinfoDetail()
                 t.sleep(1)
-            except (KeyboardInterrupt, SystemExit):
+            except:
+                break
                 advanceMenu()
-                raise
     elif menuR == "R" or menuR == "r":
         try:
             menuSelection()
-        except (KeyboardInterrupt, SystemExit):
+        except:
             os._exit(0)
             apisnd.close()
             donation.close()
@@ -777,9 +779,8 @@ def menuD(menuN): # Satnode access Menu
                     apisenderFile()
                     t.sleep(30)
                     menuSelection()
-                except (KeyboardInterrupt, SystemExit):
+                except:
                     menuSelection()
-                    raise
             elif message == "T" or message == "t":
                 try:
                     clear()
@@ -788,12 +789,10 @@ def menuD(menuN): # Satnode access Menu
                     apisender()
                     t.sleep(30)
                     menuSelection()
-                except (KeyboardInterrupt, SystemExit):
+                except:
                     menuSelection()
-                    raise
-        except (KeyboardInterrupt, SystemExit):
+        except:
             menuSelection()
-            raise
     elif menuN == "C" or menuN == "c":
         print("\n\t This only will work on Linux or Unix systems.\n")
         a = input("Do we continue? Y/n: ")
@@ -813,9 +812,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationPN()
             t.sleep(50)
             menuSelection()
-        except (KeyboardInterrupt, SystemExit):
+        except:
             menuSelection()
-            raise
     elif menuQ == "B" or menuQ == "b":
         try:
             clear()
@@ -824,9 +822,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except (KeyboardInterrupt, SystemExit):
+        except:
             menuSelection()
-            raise
     elif menuQ == "C" or menuQ == "c":
         try:
             clear()
@@ -835,9 +832,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except (KeyboardInterrupt, SystemExit):
+        except:
             menuSelection()
-            raise
     elif menuQ == "R" or menuQ == "r":
         menuSelection()
 
@@ -850,9 +846,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except (KeyboardInterrupt, SystemExit):
+        except:
             menuSelection()
-            raise
     elif menuV == "B" or menuV == "b":
         try:
             clear()
@@ -861,9 +856,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except (KeyboardInterrupt, SystemExit):
+        except:
             menuSelection()
-            raise
     elif menuV == "R" or menuV == "r":
         menuSelection()
 
