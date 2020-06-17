@@ -455,6 +455,19 @@ def payinvoice():
     try:
         while True:
             bolt11N = input("Insert the invoice to pay: ")
+            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
+            r = requests.get(url, headers=headers, verify=cert_path)
+            s = r.json()
+            print("\n----------------------------------------------------------------------------------------------------")
+            print("""
+            Destination: {}
+            Payment Hash: {}
+            Amount: {} sats
+            Description: {}
+            """.format(s['destination'], s['payment_hash'], s['num_satoshis'], s['description']))
+            print("----------------------------------------------------------------------------------------------------\n")
+            print("<<< Cancel Control + C")
+            input("\nEnter to Continue... ")
             bolt11 = bolt11N.lower()
             r = requests.post(
                 url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
