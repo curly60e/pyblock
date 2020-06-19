@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.4.0
+#Version: 0.5.0
 
 import os
 import os.path
@@ -8,6 +8,7 @@ import time as t
 import pickle
 import psutil
 import qrcode
+import random
 from clone import *
 from donation import *
 from feed import *
@@ -16,6 +17,7 @@ from logos import *
 from sysinf import *
 from pblogo import *
 from apisnd import *
+from ppi import *
 from nodeconnection import *
 from terminal_matrix.matrix import *
 
@@ -189,7 +191,7 @@ def menu(): #Main Menu
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Local Node
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -200,6 +202,7 @@ def menu(): #Main Menu
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[3;33;40mP.\033[0;37;40m Premium
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""")
@@ -212,13 +215,14 @@ def menuUserConn(): #Menu before connection over ssh
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Remote Node RPC
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[3;33;40mP.\033[0;37;40m Premium
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""")
@@ -230,7 +234,7 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -246,7 +250,7 @@ def remoteadvanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -262,7 +266,7 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
@@ -276,7 +280,7 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
@@ -291,7 +295,7 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
@@ -322,7 +326,7 @@ def menuLND():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Remote node connection
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -344,7 +348,7 @@ def menuLNDLOCAL():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Local node connection
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -354,12 +358,45 @@ def menuLNDLOCAL():
     \033[1;32;40mC.\033[0;37;40m Show Channels
     \033[1;32;40mN.\033[0;37;40m Get Node Info
     \033[1;32;40mW.\033[0;37;40m Get Network Information
+    \033[1;32;40mJ.\033[0;37;40m Lncli Console
     \033[1;33;40mB.\033[0;37;40m New Bitcoin Address
     \033[1;33;40mX.\033[0;37;40m List Onchain Transactions
     \033[1;32;40mO.\033[0;37;40m Onchain Balance
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuLNlocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APIMenu():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
+    Version 0.5.0
+
+    \033[1;32;40mA.\033[0;37;40m LNBits
+    \033[1;32;40mB.\033[0;37;40m LNPay
+    \033[1;32;40mC.\033[0;37;40m OpenNode
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APILnbit():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m LNBits Menu
+    Version 0.5.0
+
+    \033[1;32;40mA.\033[0;37;40m New Invoice
+    \033[1;32;40mB.\033[0;37;40m Pay Invoice
+    \033[1;32;40mC.\033[0;37;40m New PayWall
+    \033[1;32;40mD.\033[0;37;40m Delete PayWall
+    \033[1;32;40mE.\033[0;37;40m List PayWalls
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
@@ -378,8 +415,82 @@ def menuSelectionLN():
         menuLNDLOCAL()
     else:
         menuLND()
+
+def aaccPPiLNBits():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
+        APILnbit()
+    else:
+        qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+        )
+        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 20000, "memo": "LNBits on PyBLOCK" """ + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+        sh = os.popen(curl).read()
+        n = str(sh)
+        d = json.loads(n)
+        q = d['payment_request']
+        c = q.lower()
+        print("\033[1;30;47m")
+        qr.add_data(c)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("Lightning Invoice: " + c)
+        dn = str(d['checking_id'])
+        t.sleep(20)
+        while True:
+            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+            rsh = os.popen(checkcurl).read()
+            clear()
+            blogo()
+            nn = str(rsh)
+            dd = json.loads(nn)
+            db = dd['paid']
+            if db == True:
+                clear()
+                blogo()
+                tick()
+                bitLN['NN'] = randrange(10000000)
+                bitLN['pd'] = "PAID"
+                pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
+                createFileConnLNBits()
+                break
+            else:
+                continue
+
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
+
+def menuPI(menuWN):
+    if menuWN == "A" or menuWN == "a":
+        aaccPPiLNBits()
+def menuLNBPI(menuLNQ):
+    if menuLNQ == "A" or menuLNQ == "a":
+        clear()
+        prt()
+        lnbitCreateNewInvoice()
+    if menuLNQ == "B" or menuLNQ == "b":
+        clear()
+        prt()
+        lnbitPayInvoice()
+    if menuLNQ == "C" or menuLNQ == "c":
+        clear()
+        prt()
+        lnbitCreatePayWall()
+    if menuLNQ == "D" or menuLNQ == "d":
+        clear()
+        prt()
+        lnbitDeletePayWall()
+    if menuLNQ == "E" or menuLNQ == "e":
+        clear()
+        prt()
+        lnbitListPawWall()
+    if menuLNQ == "R" or menuLNQ == "r":
+        APIMenu()
 
 def menuA(menuS): #Execution of the Main Menu options
     if menuS == "A" or menuS == "a":
@@ -466,6 +577,8 @@ def menuA(menuS): #Execution of the Main Menu options
         satnodeMenu()
     elif menuS == "G" or menuS == "g":
         nodeinfo()
+    elif menuS == "P" or menuS == "p":
+        APIMenu()
     elif menuS == "X" or menuS == "x":
         dnt()
     elif menuS == "T" or menuS == "t": #Test feature fast access
@@ -513,6 +626,8 @@ def menuRemote(menuS): #Execution of the Main Menu options
         clear()
         prt()
         satnodeMenu()
+    elif menuS == "P" or menuS == "p":
+        APIMenu()
     elif menuS == "G" or menuS == "g":
         nodeinfo()
     elif menuS == "X" or menuS == "x":
@@ -605,6 +720,18 @@ def menuLNlocal(menuLL):
         clear()
         prt()
         localgetnetworkinfo()
+    elif menuLL == "J" or menuLL == "j":
+        while True:
+            try:
+                clear()
+                prt()
+                sysinfo()
+                close()
+                consoleLN()
+                t.sleep(5)
+            except:
+                break
+                menu()
     elif menuLL == "K" or menuLL == "k":
         clear()
         prt()
@@ -862,8 +989,6 @@ def menuF(menuV): # Tester Donation access Menu
         menuSelection()
 
 #--------------------------------- End Main Menu execution --------------------------------
-
-
 
 while True: # Loop
     clear()

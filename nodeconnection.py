@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.4.0
+#Version: 0.5.0
 
 import base64, codecs, json, requests
 import pickle
@@ -88,6 +88,16 @@ def remoteconsole(): # get into the console from bitcoin-cli
         print(a)
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
+
+def consoleLN(): # get into the console from bitcoin-cli
+    print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
+    while True:
+        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
+        lsd = os.popen(lndconnectload['ln'] + " " + cle)
+        lsd0 = lsd.read()
+        lsd1 = str(lsd0)
+        print(lsd1)
+        lsd.close()
 
 def locallistchaintxns():
     qr = qrcode.QRCode(

@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.4.0
+#Version: 0.5.0
 
 import requests
 import qrcode
@@ -19,7 +19,7 @@ def donationPN():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("PayNym: " + url)
-    
+
 def donationAddr():
     qr = qrcode.QRCode(
     version=1,
@@ -33,7 +33,7 @@ def donationAddr():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("Bitcoin Address Bech32: " + url)
-    
+
 def donationLN():
     qr = qrcode.QRCode(
     version=1,
@@ -59,7 +59,7 @@ def donationLN():
     print("LND Invoice: " + ln1)
     response.close()
 
-    
+
 def donationAddrTst():
     qr = qrcode.QRCode(
     version=1,
@@ -73,7 +73,7 @@ def donationAddrTst():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("Bitcoin Address Bech32: " + url)
-    
+
 def donationLNTst():
     qr = qrcode.QRCode(
     version=1,
