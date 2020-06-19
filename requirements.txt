@@ -14,6 +14,7 @@ python-gnupg
 requests
 sseclient-py
 urllib3
+lnpay-py
 
 #
 ###### Requirements with Version Specifiers ######
