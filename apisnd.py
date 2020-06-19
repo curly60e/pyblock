@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.4.0
+#Version: 0.5.0
 
 import os
 import qrcode
@@ -21,7 +21,7 @@ def apisender():
     print("ATENTION: Minimum amount for sending a text is 5000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
-    
+
     sh = os.popen(curl)
     sh0 = sh.read()
     while True:
@@ -34,31 +34,31 @@ def apisender():
             curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
             sh = os.popen(curl)
             sh0 = sh.read()
-        elif 'lightning_invoice' in sh0:       
+        elif 'lightning_invoice' in sh0:
             break
-    
+
     sh1 = str(sh0)
     shh = sh1.split(',')
     invoice = str(shh[6])
-    
+
     #---------------Token-----------
     authtoken = str(shh[0])
     authtoken1 = authtoken.split(':')
     token = authtoken1[1]
     #---------------End Token-------
-    
+
     #---------------Order-----------
     uuid = str(shh[1])
     uuid1 = uuid.split(':')
     order = uuid1[1]
     #---------------End Order-------
-    
+
     #---------------Amount----------
     msat = str(shh[3])
     msat1 = msat.split(':')
     amount = msat1[1]
     #---------------End Amount------
-    
+
     orderid = str(shh[1])
     ln1 = invoice.split(':')
     ln2 = str(ln1[1])
@@ -89,7 +89,7 @@ def apisenderFile():
     message = input("\nInsert the path to the File: ")
     print("ATENTION: Minimum amount for sending a File is 50000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
-    curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url 
+    curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
     sh = os.popen(curl)
     sh0 = sh.read()
     while True:
@@ -99,34 +99,34 @@ def apisenderFile():
             message = input("\nInsert the path to the File: ")
             print("ATENTION: Minimum amount for sending a File is 50000 MSats")
             amountmsat = input("\nInsert the amount in MSats: ")
-            curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url 
+            curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
             sh = os.popen(curl)
             sh0 = sh.read()
-        elif 'lightning_invoice' in sh0:       
+        elif 'lightning_invoice' in sh0:
             break
-    
+
     sh1 = str(sh0)
     shh = sh1.split(',')
     invoice = str(shh[6])
-    
+
     #---------------Token-----------
     authtoken = str(shh[0])
     authtoken1 = authtoken.split(':')
     token = authtoken1[1]
     #---------------End Token-------
-    
+
     #---------------Order-----------
     uuid = str(shh[1])
     uuid1 = uuid.split(':')
     order = uuid1[1]
     #---------------End Order-------
-    
+
     #---------------Amount----------
     msat = str(shh[3])
     msat1 = msat.split(':')
     amount = msat1[1]
     #---------------End Amount------
-    
+
     orderid = str(shh[1])
     ln1 = invoice.split(':')
     ln2 = str(ln1[1])
@@ -153,7 +153,7 @@ def devAddr():
     box_size=10,
     border=4,
     )
-    print("\n\t\t\033[1;33;44mGive us some love and \033[1;31;44mDONATE\033[1;33;44m us! We will appreciate it. This will be a boost to continue this beautiful project! \033[0;37;40m") 
+    print("\n\t\t\033[1;33;44mGive us some love and \033[1;31;44mDONATE\033[1;33;44m us! We will appreciate it. This will be a boost to continue this beautiful project! \033[0;37;40m")
     url = 'https://api.tippin.me/v1/public/addinvoice/royalfield370'
     response = requests.get(url)
     responseB = str(response.text)
@@ -175,7 +175,7 @@ def devAddr():
 def donate():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.4.0
+    Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m Make PyBLOCK Great Again
     <<< Back Main Menu Press Control + C
