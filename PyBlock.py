@@ -374,19 +374,24 @@ def APIMenu():
     \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
     Version 0.5.0
 
-    \033[1;32;40mA.\033[0;37;40m LNBits
-    \033[1;32;40mB.\033[0;37;40m LNPay
-    \033[1;32;40mC.\033[0;37;40m OpenNode
+    \033[1;32;40mA.\033[0;37;40m TippinMe FREE
+    \033[1;32;40mB.\033[0;37;40m LNBits   \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mC.\033[0;37;40m LNPay    \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mD.\033[0;37;40m OpenNode \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnbit():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     prt()
     sysinfo()
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m LNBits \033[1;34;40mPremium\033[0;37;40m Menu
+    \033[1;31;40mPyBLOCK\033[0;37;40m LNBits SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
     Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
@@ -395,15 +400,19 @@ def APILnbit():
     \033[1;32;40mD.\033[0;37;40m Delete PayWall
     \033[1;32;40mE.\033[0;37;40m List PayWalls
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(bitLN['NN']))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnPay():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     prt()
     sysinfo()
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m LNPay \033[1;34;40mPremium\033[0;37;40m Menu
+    \033[1;31;40mPyBLOCK\033[0;37;40m LNPay SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
     Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
@@ -412,15 +421,19 @@ def APILnPay():
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(bitLN['NN']))
     menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNode():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     prt()
     sysinfo()
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m OpenNode \033[1;34;40mPremium\033[0;37;40m Menu
+    \033[1;31;40mPyBLOCK\033[0;37;40m OpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
     Version 0.5.0
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
@@ -428,8 +441,21 @@ def APIOpenNode():
     \033[1;32;40mC.\033[0;37;40m Wallet Balance
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(bitLN['NN']))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APITippinMe():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m TippinMe \033[1;34;40mFree\033[0;37;40m Menu
+    Version 0.5.0
+
+    \033[1;32;40mA.\033[0;37;40m New Invoice
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
@@ -451,9 +477,9 @@ def menuSelectionLN():
 
 def aaccPPiLNBits():
     bitLN = {"NN":"","pd":""}
-    if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
-        bitLN = bitData # Copy the variable pathv to 'path'
+    if os.path.isfile('lnbitSN.conf'):
+        bitData= pickle.load(open("lnbitSN.conf", "rb"))
+        bitLN = bitData
         APILnbit()
     else:
         qr = qrcode.QRCode(
@@ -589,16 +615,33 @@ def aaccPPiOpenNode():
                 break
             else:
                 continue
+
+def aaccPPiTippinMe():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("tippinme.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
+        APITippinMe()
+    else:
+        loadFileTippinMe()
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
 
 def menuPI(menuWN):
     if menuWN == "A" or menuWN == "a":
-        aaccPPiLNBits()
+        aaccPPiTippinMe()
     if menuWN == "B" or menuWN == "b":
-        aaccPPiLNPay()
+        aaccPPiLNBits()
     if menuWN == "C" or menuWN == "c":
+        aaccPPiLNPay()
+    if menuWN == "D" or menuWN == "d":
         aaccPPiOpenNode()
+
+def menuTippinMe(menuTM):
+    if menuTM == "A" or menuTM == "a":
+        tippinmeGetInvoice()
+    if menuTM == "R" or menuTM == "r":
+        APIMenu()
 
 def menuOpenNode(menuOP):
     if menuOP == "A" or menuOP == "a":
