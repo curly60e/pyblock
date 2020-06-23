@@ -636,6 +636,8 @@ def OpenNodecreatecharge():
         dd = d['data']
         qq = dd['lightning_invoice']
         pp = dd['chain_invoice']
+        nn = qq['payreq']
+        mm = nn.lower()
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -648,18 +650,17 @@ def OpenNodecreatecharge():
                 Invoice: {}
                 Onchain Address: {}
                 Amount: {} sats
-                """.format(amt, selection.upper(), dd['id'], dd['status'], qq['payreq'], pp['address'], dd['amount']))
+                """.format(amt, selection.upper(), dd['id'], dd['status'], mm, pp['address'], dd['amount']))
                 print("----------------------------------------------------------------------------------------------------\n")
-                q = qq['payreq']
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay =="I" or pay == "i":
                     print("\033[1;30;47m")
-                    qr.add_data(q)
+                    qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nLightning Invoice: " + q)
+                    print("\nLightning Invoice: " + mm)
                 elif pay =="O" or pay == "o":
                     print("\033[1;30;47m")
                     qr.add_data(p)
@@ -684,6 +685,8 @@ def OpenNodecreatecharge():
         dd = d['data']
         qq = dd['lightning_invoice']
         pp = dd['chain_invoice']
+        nn = qq['payreq']
+        mm = nn.lower()
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -696,18 +699,17 @@ def OpenNodecreatecharge():
                 Invoice: {}
                 Onchain Address: {}
                 Amount: {} sats
-                """.format(amt, dd['id'], dd['status'], qq['payreq'], pp['address'], dd['amount']))
+                """.format(amt, dd['id'], dd['status'], mm, pp['address'], dd['amount']))
                 print("----------------------------------------------------------------------------------------------------\n")
-                q = qq['payreq']
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay =="I" or pay == "i":
                     print("\033[1;30;47m")
-                    qr.add_data(q)
+                    qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nLightning Invoice: " + q)
+                    print("\nLightning Invoice: " + mm)
                 elif pay =="O" or pay == "o":
                     print("\033[1;30;47m")
                     qr.add_data(p)
@@ -943,3 +945,107 @@ def tippinmeGetInvoice():
 
 
 #-----------------------------END TIPPINME--------------------------------
+
+
+#-----------------------------LNTXBOT--------------------------------
+
+def loadFileLNTXBOT(lntxbotLoad):
+    lntxbotLoad = {"key":"", "log":""}
+
+    if os.path.isfile('lntxbot.conf'): # Check if the file 'bclock.conf' is in the same folder
+        lntxbotData= pickle.load(open("lntxbot.conf", "rb")) # Load the file 'bclock.conf'
+        lntxbotLoad = lntxbotData # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
+                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                           SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+        """)
+        lntxbotLoad["key"] = input("Full Access API: ")
+        lntxbotLoad["log"] = input("Telegram @USER: ")
+        pickle.dump(lntxbotLoad, open("lntxbot.conf", "wb"))
+    clear()
+    blogo()
+    return lntxbotLoad
+
+def createFileTippinMe():
+    lntxbotLoad = {"key":"", "log":""}
+    clear()
+    blogo()
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
+               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                       SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    """)
+    lntxbotLoad["key"] = input("Full Access API: ")
+    lntxbotLoad["log"] = input("Telegram @USER: ")
+    pickle.dump(lntxbotLoad, open("lntxbot.conf", "wb"))
+
+def lntxbotGetInvoice():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    a = loadFileLNTXBOT(['key'])
+    b = str(a['key'])
+    c = loadFileLNTXBOT(['log'])
+    d = str(c['log'])
+    curl = 'curl -X GET https://lntxbot.bigsun.xyz/@{} -H'.format(d) + '"X-Api-Key: {}"'.format(b) + '-H "Content-type: application/json"'
+    sh = os.popen(curl).read()
+    n = str(sh)
+    print(n)
+    d = json.loads(n)
+    print(d)
+    print("\033[1;30;47m")
+    qr.add_data(ln1)
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    print("LND Invoice: " + ln1)
+    response.close()
+    input("Continue...")
+
+#-----------------------------END LNTXBOT--------------------------------
+
+#-----------------------------BITNODES--------------------------------
+
+def bitnodesListSnapshots():
+
+    curl = 'curl -H "Accept: application/json; indent=4" https://bitnodes.io/api/v1/snapshots/'
+    sh = os.popen(curl).read()
+    clear()
+    blogo()
+    print("\n\tBITNODES SNAPSHOTS LIST\n")
+    n = str(sh)
+    d = json.loads(n)
+    da = d['results']
+    while True:
+        try:
+            for r in range(len(da)):
+                s = da[r]
+                print("Timestamp: " + str(s['timestamp']))
+            nd = input("\nSelect ID: ")
+            for r in range(len(da)):
+                s = da[r]
+                nn = str(s['timestamp'])
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------")
+                    print("""
+                    \tBITNODES DECODED
+                    URL: {}
+                    Timestamp: {}
+                    Total Nodes: {}
+                    Latest Block Height: {}
+                    """.format(s['url'], s['timestamp'], s['total_nodes'], s['latest_height']))
+                    print("----------------------------------------------------------------------------------------------------\n")
+            input("Continue...")
+            clear()
+            blogo()
+        except:
+            pass
+
+
+#-----------------------------END BITNODES--------------------------------
