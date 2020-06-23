@@ -623,7 +623,7 @@ def aaccPPiTippinMe():
         bitLN = bitData # Copy the variable pathv to 'path'
         APITippinMe()
     else:
-        loadFileTippinMe()
+        createFileTippinMe()
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
 

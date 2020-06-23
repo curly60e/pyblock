@@ -894,6 +894,17 @@ def loadFileTippinMe(tippinmeLoad):
     blogo()
     return tippinmeLoad
 
+def createFileTippinMe():
+    tippinmeLoad = {"key":""}
+    clear()
+    blogo()
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
+               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                       SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    """)
+    tippinmeLoad["key"] = input("Twitter @user: ")
+    pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
 
 def tippinmeGetInvoice():
     qr = qrcode.QRCode(
@@ -904,24 +915,31 @@ def tippinmeGetInvoice():
     )
     a = loadFileTippinMe(['key'])
     b = str(a['key'])
-    url = 'https://api.tippin.me/v1/public/addinvoice/{}'.format(b)
-    response = requests.get(url)
-    responseB = str(response.text)
-    responseC = responseB
-    lnreq = responseC.split(',')
-    lnbc1 = lnreq[1]
-    lnbc1S = str(lnbc1)
-    lnbc1R = lnbc1S.split(':')
-    lnbc1W = lnbc1R[1]
-    ln = str(lnbc1W)
-    ln1 = ln.strip('"')
-    print("\033[1;30;47m")
-    qr.add_data(ln1)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("LND Invoice: " + ln1)
-    response.close()
-    input("Continue...")
+    try:
+        print("\n\tTIPPINME GENERATE INVOICE\n")
+        q = input("Amount in Sats: ")
+        clear()
+        blogo()
+        url = 'https://api.tippin.me/v1/public/addinvoice/{}/{}'.format(b,q)
+        response = requests.get(url)
+        responseB = str(response.text)
+        responseC = responseB
+        lnreq = responseC.split(',')
+        lnbc1 = lnreq[1]
+        lnbc1S = str(lnbc1)
+        lnbc1R = lnbc1S.split(':')
+        lnbc1W = lnbc1R[1]
+        ln = str(lnbc1W)
+        ln1 = ln.strip('"')
+        print("\033[1;30;47m")
+        qr.add_data(ln1)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("LND Invoice: " + ln1)
+        response.close()
+        input("Continue...")
+    except:
+        pass
 
 
 #-----------------------------END TIPPINME--------------------------------
