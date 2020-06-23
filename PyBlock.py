@@ -488,7 +488,8 @@ def aaccPPiLNBits():
         box_size=10,
         border=4,
         )
-        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNBits on PyBLOCK" """ + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+        bitLN['NN'] = randrange(10000000)
+        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
         sh = os.popen(curl).read()
         n = str(sh)
         d = json.loads(n)
@@ -514,7 +515,6 @@ def aaccPPiLNBits():
                 clear()
                 blogo()
                 tick()
-                bitLN['NN'] = randrange(10000000)
                 bitLN['pd'] = "PAID"
                 pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
                 createFileConnLNBits()
@@ -535,7 +535,8 @@ def aaccPPiLNPay():
         box_size=10,
         border=4,
         )
-        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNPay on PyBLOCK" """ + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+        bitLN['NN'] = randrange(10000000)
+        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
         sh = os.popen(curl).read()
         n = str(sh)
         d = json.loads(n)
@@ -561,7 +562,6 @@ def aaccPPiLNPay():
                 clear()
                 blogo()
                 tick()
-                bitLN['NN'] = randrange(10000000)
                 bitLN['pd'] = "PAID"
                 pickle.dump(bitLN, open("lnpaySN.conf", "wb"))
                 createFileConnLNPay()
@@ -582,7 +582,8 @@ def aaccPPiOpenNode():
         box_size=10,
         border=4,
         )
-        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "OpenNode on PyBLOCK" """ + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+        bitLN['NN'] = randrange(10000000)
+        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
         sh = os.popen(curl).read()
         n = str(sh)
         d = json.loads(n)
@@ -608,7 +609,6 @@ def aaccPPiOpenNode():
                 clear()
                 blogo()
                 tick()
-                bitLN['NN'] = randrange(10000000)
                 bitLN['pd'] = "PAID"
                 pickle.dump(bitLN, open("opennodeSN.conf", "wb"))
                 createFileConnOpenNode()
