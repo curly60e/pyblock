@@ -476,145 +476,169 @@ def menuSelectionLN():
         menuLND()
 
 def aaccPPiLNBits():
-    bitLN = {"NN":"","pd":""}
-    if os.path.isfile('lnbitSN.conf'):
-        bitData= pickle.load(open("lnbitSN.conf", "rb"))
-        bitLN = bitData
-        APILnbit()
-    else:
-        qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-        )
-        bitLN['NN'] = randrange(10000000)
-        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-        sh = os.popen(curl).read()
-        n = str(sh)
-        d = json.loads(n)
-        q = d['payment_request']
-        c = q.lower()
-        while True:
-            print("\033[1;30;47m")
-            qr.add_data(c)
-            qr.print_ascii()
-            print("\033[0;37;40m")
-            qr.clear()
-            print("Lightning Invoice: " + c)
-            dn = str(d['checking_id'])
-            t.sleep(10)
-            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-            rsh = os.popen(checkcurl).read()
-            clear()
-            blogo()
-            nn = str(rsh)
-            dd = json.loads(nn)
-            db = dd['paid']
-            if db == True:
+    try:
+        bitLN = {"NN":"","pd":""}
+        if os.path.isfile('lnbitSN.conf'):
+            bitData= pickle.load(open("lnbitSN.conf", "rb"))
+            bitLN = bitData
+            APILnbit()
+        else:
+            qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+            )
+            bitLN['NN'] = randrange(10000000)
+            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            sh = os.popen(curl).read()
+            n = str(sh)
+            d = json.loads(n)
+            q = d['payment_request']
+            c = q.lower()
+            while True:
+                print("\033[1;30;47m")
+                qr.add_data(c)
+                qr.print_ascii()
+                print("\033[0;37;40m")
+                qr.clear()
+                print("Lightning Invoice: " + c)
+                dn = str(d['checking_id'])
+                t.sleep(10)
+                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
-                createFileConnLNBits()
-                break
-            else:
-                continue
+                nn = str(rsh)
+                dd = json.loads(nn)
+                db = dd['paid']
+                if db == True:
+                    clear()
+                    blogo()
+                    tick()
+                    bitLN['pd'] = "PAID"
+                    pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
+                    createFileConnLNBits()
+                    break
+                else:
+                    continue
+
+    except:
+        clear()
+        blogo()
+        print("\n\tSERIAL NUMBER NOT FOUND\n")
+        input("Continue...")
+        pass
 
 def aaccPPiLNPay():
-    bitLN = {"NN":"","pd":""}
-    if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
-        bitLN = bitData # Copy the variable pathv to 'path'
-        APILnPay()
-    else:
-        qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-        )
-        bitLN['NN'] = randrange(10000000)
-        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-        sh = os.popen(curl).read()
-        n = str(sh)
-        d = json.loads(n)
-        q = d['payment_request']
-        c = q.lower()
-        while True:
-            print("\033[1;30;47m")
-            qr.add_data(c)
-            qr.print_ascii()
-            print("\033[0;37;40m")
-            qr.clear()
-            print("Lightning Invoice: " + c)
-            dn = str(d['checking_id'])
-            t.sleep(10)
-            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-            rsh = os.popen(checkcurl).read()
-            clear()
-            blogo()
-            nn = str(rsh)
-            dd = json.loads(nn)
-            db = dd['paid']
-            if db == True:
+    try:
+        bitLN = {"NN":"","pd":""}
+        if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
+            bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+            bitLN = bitData # Copy the variable pathv to 'path'
+            APILnPay()
+        else:
+            qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+            )
+            bitLN['NN'] = randrange(10000000)
+            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            sh = os.popen(curl).read()
+            n = str(sh)
+            d = json.loads(n)
+            q = d['payment_request']
+            c = q.lower()
+            while True:
+                print("\033[1;30;47m")
+                qr.add_data(c)
+                qr.print_ascii()
+                print("\033[0;37;40m")
+                qr.clear()
+                print("Lightning Invoice: " + c)
+                dn = str(d['checking_id'])
+                t.sleep(10)
+                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("lnpaySN.conf", "wb"))
-                createFileConnLNPay()
-                break
-            else:
-                continue
+                nn = str(rsh)
+                dd = json.loads(nn)
+                db = dd['paid']
+                if db == True:
+                    clear()
+                    blogo()
+                    tick()
+                    bitLN['pd'] = "PAID"
+                    pickle.dump(bitLN, open("lnpaySN.conf", "wb"))
+                    createFileConnLNPay()
+                    break
+                else:
+                    continue
+
+    except:
+        clear()
+        blogo()
+        print("\n\tSERIAL NUMBER NOT FOUND\n")
+        input("Continue...")
+        pass
 
 def aaccPPiOpenNode():
-    bitLN = {"NN":"","pd":""}
-    if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
-        bitLN = bitData # Copy the variable pathv to 'path'
-        APIOpenNode()
-    else:
-        qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-        )
-        bitLN['NN'] = randrange(10000000)
-        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-        sh = os.popen(curl).read()
-        n = str(sh)
-        d = json.loads(n)
-        q = d['payment_request']
-        c = q.lower()
-        while True:
-            print("\033[1;30;47m")
-            qr.add_data(c)
-            qr.print_ascii()
-            print("\033[0;37;40m")
-            qr.clear()
-            print("Lightning Invoice: " + c)
-            dn = str(d['checking_id'])
-            t.sleep(10)
-            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-            rsh = os.popen(checkcurl).read()
-            clear()
-            blogo()
-            nn = str(rsh)
-            dd = json.loads(nn)
-            db = dd['paid']
-            if db == True:
+    try:
+        bitLN = {"NN":"","pd":""}
+        if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+            bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+            bitLN = bitData # Copy the variable pathv to 'path'
+            APIOpenNode()
+        else:
+            qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+            )
+            bitLN['NN'] = randrange(10000000)
+            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            sh = os.popen(curl).read()
+            n = str(sh)
+            d = json.loads(n)
+            q = d['payment_request']
+            c = q.lower()
+            while True:
+                print("\033[1;30;47m")
+                qr.add_data(c)
+                qr.print_ascii()
+                print("\033[0;37;40m")
+                qr.clear()
+                print("Lightning Invoice: " + c)
+                dn = str(d['checking_id'])
+                t.sleep(10)
+                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("opennodeSN.conf", "wb"))
-                createFileConnOpenNode()
-                break
-            else:
-                continue
+                nn = str(rsh)
+                dd = json.loads(nn)
+                db = dd['paid']
+                if db == True:
+                    clear()
+                    blogo()
+                    tick()
+                    bitLN['pd'] = "PAID"
+                    pickle.dump(bitLN, open("opennodeSN.conf", "wb"))
+                    createFileConnOpenNode()
+                    break
+                else:
+                    continue
+
+    except:
+        clear()
+        blogo()
+        print("\n\tSERIAL NUMBER NOT FOUND\n")
+        input("Continue...")
+        pass
 
 def aaccPPiTippinMe():
     bitLN = {"NN":"","pd":""}
