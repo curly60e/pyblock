@@ -116,12 +116,6 @@ def connected(info): # here we complete the connection to the external node
     else:
         menu()
 
-
-def nodeinfo():
-    print("\n\033[1;31;40mWARNING! This is not a safe method of connection. The best method is doing this locally.\n")
-    connected(input("WARNING! Are you sure you want to connect to a node? Y/n: \033[0;37;40m")) # call 'connected' function to make the connection with the node information
-
-
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     custom = input("Do you want random designs? Y/n: ")
     if custom == "Y" or custom == "y":
@@ -818,8 +812,6 @@ def menuA(menuS): #Execution of the Main Menu options
         clear()
         prt()
         satnodeMenu()
-    elif menuS == "G" or menuS == "g":
-        nodeinfo()
     elif menuS == "P" or menuS == "p":
         APIMenu()
     elif menuS == "X" or menuS == "x":
@@ -871,8 +863,6 @@ def menuRemote(menuS): #Execution of the Main Menu options
         satnodeMenu()
     elif menuS == "P" or menuS == "p":
         APIMenu()
-    elif menuS == "G" or menuS == "g":
-        nodeinfo()
     elif menuS == "X" or menuS == "x":
         dnt()
     elif menuS == "T" or menuS == "t": #Test feature fast access
