@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.4.0
+#Version: 0.5.0
 
 import base64, codecs, json, requests
 import pickle
@@ -68,6 +68,8 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
         print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\n----------------------------------------------------------------------------------------------------------------")
         print("""
+        \tGET BLOCKCHAIN INFORMATION
+
         Chain: {}
         Blocks: {}
         Best BlockHash: {}
@@ -89,6 +91,16 @@ def remoteconsole(): # get into the console from bitcoin-cli
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
+def consoleLN(): # get into the console from bitcoin-cli
+    print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
+    while True:
+        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
+        lsd = os.popen(lndconnectload['ln'] + " " + cle)
+        lsd0 = lsd.read()
+        lsd1 = str(lsd0)
+        print(lsd1)
+        lsd.close()
+
 def locallistchaintxns():
     qr = qrcode.QRCode(
     version=1,
@@ -109,8 +121,10 @@ def locallistchaintxns():
         print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\t\nTransactions\n")
         try:
+            print("\n\tLIST ONCHAIN TRANSACTIONS\n")
             for r in range(len(n)):
                 s = n[r]
+
                 print("Transaction Hash: " + s['tx_hash'])
             nd = input("\nSelect RHash: ")
 
@@ -121,6 +135,8 @@ def locallistchaintxns():
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
+                    \nONCHAIN TRANSACTION DECODED
+
                     Amount: {} sats
                     Tx Hash: {}
                     Block Hash: {}
@@ -134,6 +150,7 @@ def locallistchaintxns():
                     qr.add_data(s['tx_hash'])
                     qr.print_ascii()
                     print("\033[0;37;40m")
+                    qr.clear()
             input("\nContinue... ")
         except:
             break
@@ -158,8 +175,10 @@ def locallistinvoices():
         print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\tInvoices\n")
         try:
+            print("\n\tLIST INVOICES\n")
             for r in range(len(n)):
                 s = n[r]
+
                 print("Invoice: " + s['r_hash'] + " " + s['state'])
 
             nd = input("\nSelect RHash: ")
@@ -170,6 +189,8 @@ def locallistinvoices():
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
+                    \nINVOICE DECODED
+
                     Memo: {}
                     Invoice: {}
                     Amount: {} sats
@@ -180,6 +201,7 @@ def locallistinvoices():
                     qr.add_data(s['payment_request'])
                     qr.print_ascii()
                     print("\033[0;37;40m")
+                    qr.clear()
             input("\nContinue... ")
         except:
             break
@@ -198,8 +220,10 @@ def locallistchannels():
         print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\t\nChannels\n")
         try:
+            print("\n\tLIST CHANNELS\n")
             for r in range(len(n)):
                 s = n[r]
+
                 print("Node ID: " + s['remote_pubkey'])
 
             nd = input("\nSelect a Node ID: ")
@@ -210,6 +234,8 @@ def locallistchannels():
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
+                    \tCHANNEL DECODED
+
                     Active: {}
                     Node ID: {}
                     Channel Point: {}
@@ -232,6 +258,8 @@ def localgetinfo():
     d = json.loads(lsd0)
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
+    \tNODE INFORMATION
+
     Version: {}
     Node ID: {}
     Alias: {}
@@ -265,6 +293,7 @@ def localaddinvoice():
     qr.add_data(d['payment_request'])
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.clear()
     print("Lightning Invoice: " + d['payment_request'])
     b = str(d['payment_request'])
     while True:
@@ -315,6 +344,8 @@ def localgetnetworkinfo():
     d = json.loads(lsd0)
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
+    \tLIGHTNING NETWORK INFORMATION
+
     Numbers of Nodes: {}
     Numbers of Channels: {}
     Total Network Capacity: {} sats
@@ -346,6 +377,8 @@ def localchannelbalance():
     d = json.loads(lsd0)
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
+    \tLOCAL CHANNEL BALANCE
+
     Balance: {} sats
     Pending Channels: {} sats
     """.format(d['balance'], d['pending_open_balance']))
@@ -367,6 +400,7 @@ def localnewaddress():
     qr.add_data(d['address'])
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.clear()
     print("Bitcoin Address: " + d['address'])
     input("\nContinue... ")
 
@@ -376,6 +410,7 @@ def localbalanceOC():
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     print("\n------------------------------------------------------------------------------------")
+    print("\n\tLOCAL ONCHAIN BALANCE\n")
     print("Total Balance: " + d['total_balance'] + " sats")
     print("Confirmed Balance: " + d['confirmed_balance'] + " sats")
     print("Unconfirmed Balance: " + d['unconfirmed_balance'] + " sats")
@@ -420,6 +455,7 @@ def getnewinvoice():
         qr.add_data(a['payment_request'])
         qr.print_ascii()
         print("\033[0;37;40m")
+        qr.clear()
         print("Lightning Invoice: " + a['payment_request'])
         b = str(a['payment_request'])
         while True:
@@ -460,6 +496,8 @@ def payinvoice():
             s = r.json()
             print("\n----------------------------------------------------------------------------------------------------")
             print("""
+            \tINVOICE DECODED
+
             Destination: {}
             Payment Hash: {}
             Amount: {} sats
@@ -519,6 +557,7 @@ def getnewaddress():
         qr.print_ascii()
         print("\033[0;37;40m")
         print("Bitcoin Address: " + addr['address'])
+        qr.clear()
         input("\nContinue... ")
     except:
         pass
@@ -545,8 +584,10 @@ def listinvoice():
         print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\tInvoices\n")
         try:
+            print("\n\tLIST INVOICES\n")
             for r in range(len(n)):
                 s = n[r]
+
                 print("Invoice: " + s['r_hash'] + " " + s['state'])
 
             nd = input("\nSelect RHash: ")
@@ -557,6 +598,8 @@ def listinvoice():
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
+                    \tINVOICE DECODED
+
                     Memo: {}
                     Invoice: {}
                     Amount: {} sats
@@ -567,6 +610,7 @@ def listinvoice():
                     qr.add_data(s['payment_request'])
                     qr.print_ascii()
                     print("\033[0;37;40m")
+                    qr.clear()
             input("\nContinue... ")
         except:
             break
@@ -582,6 +626,8 @@ def getinfo():
         a = r.json()
         print("\n----------------------------------------------------------------------------------------------------------------")
         print("""
+        \t NODE INFORMATION
+
         Version: {}
         Node ID: {}
         Alias: {}
@@ -613,8 +659,10 @@ def channels():
         print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\t\nChannels\n")
         try:
+            print("\n\tLIST CHANNELS\n")
             for r in range(len(n)):
                 s = n[r]
+
                 print("Node ID: " + s['remote_pubkey'])
 
             nd = input("\nSelect a Node ID: ")
@@ -625,6 +673,7 @@ def channels():
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
+                    \tCHANNEL DECODED
                     Active: {}
                     Node ID: {}
                     Channel Point: {}
@@ -649,6 +698,8 @@ def channelbalance():
     a = r.json()
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
+    \tLOCAL CHANNEL BALANCE
+
     Balance: {} sats
     Pending Channels: {} sats
     """.format(a['balance'], a['pending_open_balance']))
@@ -679,6 +730,7 @@ def listonchaintxs():
         try:
             for r in range(len(n)):
                 s = n[r]
+                print("\n\tLIST ONCHAIN TRANSACTIONS\n")
                 print("Transaction Hash: " + s['tx_hash'])
             nd = input("\nSelect RHash: ")
 
@@ -689,6 +741,8 @@ def listonchaintxs():
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
+                    \tONCHAIN TRANSACTION DECODED
+
                     Amount: {} sats
                     Tx Hash: {}
                     Block Hash: {}
@@ -702,6 +756,7 @@ def listonchaintxs():
                     qr.add_data(s['tx_hash'])
                     qr.print_ascii()
                     print("\033[0;37;40m")
+                    qr.clear()
             input("\nContinue... ")
         except:
             break
@@ -714,6 +769,7 @@ def balanceOC():
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     print("\n------------------------------------------------------------------------------------")
+    print("\n\tLOCAL ONCHAIN BALANCE\n")
     print("Total Balance: " + a['total_balance'] + " sats")
     print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
     print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
