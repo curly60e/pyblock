@@ -970,7 +970,7 @@ def loadFileLNTXBOT(lntxbotLoad):
     blogo()
     return lntxbotLoad
 
-def createFileTippinMe():
+def createFileLNTXBOT():
     lntxbotLoad = {"key":"", "log":""}
     clear()
     blogo()
@@ -980,7 +980,6 @@ def createFileTippinMe():
                                        SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
     """)
     lntxbotLoad["key"] = input("Full Access API: ")
-    lntxbotLoad["log"] = input("Telegram @USER: ")
     pickle.dump(lntxbotLoad, open("lntxbot.conf", "wb"))
 
 def lntxbotGetInvoice():
