@@ -885,10 +885,8 @@ def loadFileTippinMe(tippinmeLoad):
     else:
         clear()
         blogo()
-        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
-                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
-                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
-                                           SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOUR CONFIGURATION INFORMATION WILL BE SAVE IN '\033[1;33;40mtippinme.conf\033[0;37;40m'
+                                                                IF YOU NEED TO START AGAIN, DELETE IT.\n
         """)
         tippinmeLoad["key"] = input("Twitter @user: ")
         pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
@@ -900,10 +898,8 @@ def createFileTippinMe():
     tippinmeLoad = {"key":""}
     clear()
     blogo()
-    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
-               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
-                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
-                                       SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOUR CONFIGURATION INFORMATION WILL BE SAVE IN '\033[1;33;40mtippinme.conf\033[0;37;40m'
+                                                                IF YOU NEED TO START AGAIN, DELETE IT.\n
     """)
     tippinmeLoad["key"] = input("Twitter @user: ")
     pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
