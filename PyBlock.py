@@ -9,6 +9,7 @@ import pickle
 import psutil
 import qrcode
 import random
+import sys
 from clone import *
 from donation import *
 from feed import *
@@ -105,6 +106,12 @@ def screensv():
         clear()
         ptr()
         menu()
+
+def delay_print(s):
+    for c in s:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.25)
 #------------------------------------------------------
 
 def connected(info): # here we complete the connection to the external node
@@ -486,6 +493,8 @@ def aaccPPiLNBits():
             bitLN['NN'] = randrange(10000000)
             curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
+            clear()
+            prt()
             n = str(sh)
             d = json.loads(n)
             q = d['payment_request']
@@ -541,6 +550,8 @@ def aaccPPiLNPay():
             bitLN['NN'] = randrange(10000000)
             curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
+            clear()
+            prt()
             n = str(sh)
             d = json.loads(n)
             q = d['payment_request']
@@ -596,6 +607,8 @@ def aaccPPiOpenNode():
             bitLN['NN'] = randrange(10000000)
             curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
+            clear()
+            prt()
             n = str(sh)
             d = json.loads(n)
             q = d['payment_request']
@@ -816,8 +829,14 @@ def menuA(menuS): #Execution of the Main Menu options
         APIMenu()
     elif menuS == "X" or menuS == "x":
         dnt()
-    elif menuS == "T" or menuS == "t": #Test feature fast access
-        print("This is a test access. \n")
+    elif menuS == "T" or menuS == "t":
+        clear()
+        delay_print("Wake up, Neo...")
+        print("\n")
+        t.sleep(2)
+        delay_print("Follow the white rabbit...")
+        print("\n")
+        t.sleep(2)
         screensv()
 
 def menuRemote(menuS): #Execution of the Main Menu options
@@ -866,7 +885,13 @@ def menuRemote(menuS): #Execution of the Main Menu options
     elif menuS == "X" or menuS == "x":
         dnt()
     elif menuS == "T" or menuS == "t": #Test feature fast access
-        print("This is a test access. \n")
+        clear()
+        delay_print("Wake up, Neo...")
+        print("\n")
+        t.sleep(2)
+        delay_print("Follow the white rabbit...")
+        print("\n")
+        t.sleep(2)
         screensv()
 #------------------------------------------REMOTE
 def menuLN(menuLL):
