@@ -164,6 +164,8 @@ A simple Python Block Clock to check the Blockchain information.
 ## Dependencies
 
   - Install [Hexyl](https://github.com/sharkdp/hexyl)
+  - Install Curl on Debian based type:
+    - sudo apt install curl
   
 ## How to execute
 
