@@ -453,7 +453,6 @@ def lnpayGetTransactions():
             input("Continue...")
             clear()
             blogo()
-            print("\n\tLNPAY LIST PAYMENTS\n")
         except:
             break
     clear()
