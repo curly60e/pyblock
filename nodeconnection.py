@@ -717,9 +717,9 @@ def listonchaintxs():
         print("<<< Back to the Main Menu Press Control + C.\n\n")
         print("\t\nTransactions\n")
         try:
+            print("\n\tLIST ONCHAIN TRANSACTIONS\n")
             for r in range(len(n)):
                 s = n[r]
-                print("\n\tLIST ONCHAIN TRANSACTIONS\n")
                 print("Transaction Hash: " + s['tx_hash'])
             nd = input("\nSelect RHash: ")
 
