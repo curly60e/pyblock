@@ -147,9 +147,9 @@ def lnbitCreatePayWall():
             remb = input("Remembers Y/n: ")
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            if remb == "Y" or remb == "y":
+            if remb in ["Y", "y"]:
                 remember = "true"
-            elif remb == "N" or remb == "n":
+            elif remb in ["N", "n"]:
                 remember = "false"
             curl = 'curl -X POST https://lnbits.com/paywall/api/v1/paywalls -d ' + "'{" + """"url": "{}", "memo": "{}", "description": "{}", "amount": {}, "remembers": {} """.format(url,memo,desc,amt,remember) + "}'" + """ -H  "Content-type: application/json" -H "X-Api-Key: {}" """.format(b)
             sh = os.popen(curl).read()
@@ -170,12 +170,12 @@ def lnbitCreatePayWall():
             d = json.loads(n)
             while True:
                 print("\n\tLNBITS PAYWALL LIST\n")
-                for r in range(len(d)):
-                    s = d[r]
+                for item_ in d:
+                    s = item_
                     print("ID: " + s['id'])
                 nd = input("\nSelect ID: ")
-                for r in range(len(d)):
-                    s = d[r]
+                for item in d:
+                    s = item
                     nn = s['id']
                     if nd == nn:
                         print("\n----------------------------------------------------------------------------------------------------------------")
@@ -210,12 +210,12 @@ def lnbitListPawWall():
     while True:
         print("\n\tLNBITS PAYWALL LIST\n")
         try:
-            for r in range(len(d)):
-                s = d[r]
+            for item_ in d:
+                s = item_
                 print("ID: " + s['id'])
             nd = input("\nSelect ID: ")
-            for r in range(len(d)):
-                s = d[r]
+            for item in d:
+                s = item
                 nn = s['id']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -253,12 +253,12 @@ def lnbitDeletePayWall():
             while True:
                 print("\n\tLNBITS PAYWALL LIST\n")
                 try:
-                    for r in range(len(d)):
-                        s = d[r]
+                    for item_ in d:
+                        s = item_
                         print("ID: " + s['id'])
                     nd = input("\nSelect ID: ")
-                    for r in range(len(d)):
-                        s = d[r]
+                    for item in d:
+                        s = item
                         nn = s['id']
                         if nd == nn:
                             print("\n----------------------------------------------------------------------------------------------------------------")
@@ -423,14 +423,14 @@ def lnpayGetTransactions():
     while True:
         try:
             print("\n\tLNPAY LIST PAYMENTS\n")
-            for r in range(len(transactions)):
-                s = transactions[r]
+            for transaction_ in transactions:
+                s = transaction_
                 q = s['lnTx']
 
                 print("ID: " + s['id'])
             nd = input("\nSelect ID: ")
-            for r in range(len(transactions)):
-                s = transactions[r]
+            for transaction in transactions:
+                s = transaction
                 nn = s['id']
                 nnn = s['lnTx']
                 if nd == nn:
@@ -610,7 +610,7 @@ def OpenNodecreatecharge():
     a = loadFileConnOpenNode(['key'])
     b = str(a['key'])
     fiat = input("Are you going to pay in FIAT? Y/n:")
-    if fiat == "Y" or fiat == "y":
+    if fiat in ["Y", "y"]:
         print("\n----------------------------------------------------------------------------------------------------")
         print("""
         \tFIAT supported on OpenNode:
@@ -654,14 +654,14 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
-                if pay =="I" or pay == "i":
+                if pay in ["I", "i"]:
                     print("\033[1;30;47m")
                     qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nLightning Invoice: " + mm)
-                elif pay =="O" or pay == "o":
+                elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
                     qr.add_data(p)
                     qr.print_ascii()
@@ -674,7 +674,7 @@ def OpenNodecreatecharge():
                 blogo()
             except:
                 break
-    elif fiat == "N" or fiat == "n":
+    elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
         curl = 'curl https://api.opennode.co/v1/charges -X POST -H' + '"Authorization: {}"'.format(b) + ' -H "Content-Type: application/json" -d ' + "'{" + '"amount": "{}", "currency": "BTC"'.format(amt) +  "}'"
         sh = os.popen(curl).read()
@@ -703,14 +703,14 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
-                if pay =="I" or pay == "i":
+                if pay in ["I", "i"]:
                     print("\033[1;30;47m")
                     qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nLightning Invoice: " + mm)
-                elif pay =="O" or pay == "o":
+                elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
                     qr.add_data(p)
                     qr.print_ascii()
@@ -733,7 +733,7 @@ def OpenNodeiniciatewithdrawal():
     lnchain = input("Are you going to pay with Lightning or Onchain? L/O: ")
     clear()
     blogo()
-    if lnchain == "L" or lnchain == "l":
+    if lnchain in ["L", "l"]:
         try:
             while True:
                 invoice = input("\nInvoice: ")
@@ -779,7 +779,7 @@ def OpenNodeiniciatewithdrawal():
         except:
             pass
 
-    elif lnchain == "O" or lnchain == "o":
+    elif lnchain in ["O", "o"]:
         try:
             while True:
                 print("\n\tOPENNODE TRANSFER REQUEST\n")
@@ -841,14 +841,14 @@ def OpenNodeListPayments():
     da = d['data']
     while True:
         try:
-            for r in range(len(da)):
-                s = da[r]
+            for item_ in da:
+                s = item_
                 n = s['status']
                 q = str(n)
                 print("ID: " + s['id'] + " " + q)
             nd = input("\nSelect ID: ")
-            for r in range(len(da)):
-                s = da[r]
+            for item in da:
+                s = item
                 nn = s['id']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------")
@@ -1019,12 +1019,12 @@ def bitnodesListSnapshots():
     da = d['results']
     while True:
         try:
-            for r in range(len(da)):
-                s = da[r]
+            for item_ in da:
+                s = item_
                 print("Timestamp: " + str(s['timestamp']))
             nd = input("\nSelect ID: ")
-            for r in range(len(da)):
-                s = da[r]
+            for item in da:
+                s = item
                 nn = str(s['timestamp'])
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------")

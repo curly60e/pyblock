@@ -122,14 +122,14 @@ def locallistchaintxns():
         print("\t\nTransactions\n")
         try:
             print("\n\tLIST ONCHAIN TRANSACTIONS\n")
-            for r in range(len(n)):
-                s = n[r]
+            for item_ in n:
+                s = item_
 
                 print("Transaction Hash: " + s['tx_hash'])
             nd = input("\nSelect RHash: ")
 
-            for r in range(len(n)):
-                s = n[r]
+            for item in n:
+                s = item
                 nn = s['tx_hash']
                 trx = s['dest_addresses']
                 if nd == nn:
@@ -176,15 +176,15 @@ def locallistinvoices():
         print("\tInvoices\n")
         try:
             print("\n\tLIST INVOICES\n")
-            for r in range(len(n)):
-                s = n[r]
+            for item_ in n:
+                s = item_
 
                 print("Invoice: " + s['r_hash'] + " " + s['state'])
 
             nd = input("\nSelect RHash: ")
 
-            for r in range(len(n)):
-                s = n[r]
+            for item in n:
+                s = item
                 nn = s['r_hash']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -221,15 +221,15 @@ def locallistchannels():
         print("\t\nChannels\n")
         try:
             print("\n\tLIST CHANNELS\n")
-            for r in range(len(n)):
-                s = n[r]
+            for item_ in n:
+                s = item_
 
                 print("Node ID: " + s['remote_pubkey'])
 
             nd = input("\nSelect a Node ID: ")
 
-            for r in range(len(n)):
-                s = n[r]
+            for item in n:
+                s = item
                 nn = s['remote_pubkey']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -332,10 +332,10 @@ def localpayinvoice():
         amt = " --amt "
         amount =  input("Amount in satoshis: ")
         os.system(lndconnectload['ln'] + lncli + invoice + amt + amount)
-        t.sleep(2)
     else:
         os.system(lndconnectload['ln'] + lncli + invoice )
-        t.sleep(2)
+
+    t.sleep(2)
 
 def localgetnetworkinfo():
     lncli = " getnetworkinfo"
@@ -364,7 +364,7 @@ def localkeysend():
     node = input("Send to NodeID: ")
     amount = input("Amount in sats: ")
     while True:
-        if amount == "" or amount == "0":
+        if amount in ["", "0"]:
             amount = input("\nAmount in sats: ")
         else:
             break
@@ -525,16 +525,14 @@ def payinvoice():
             clear()
             blogo()
             tick()
-            print("\033[0;37;40m")
-            t.sleep(2)
         else:
             error_message = r.json()["error"]
             print("\033[1;31;40m")
             clear()
             blogo()
             canceled()
-            print("\033[0;37;40m")
-            t.sleep(2)
+        print("\033[0;37;40m")
+        t.sleep(2)
     except:
         pass
 
@@ -592,8 +590,8 @@ def listinvoice():
 
             nd = input("\nSelect RHash: ")
 
-            for r in range(len(n)):
-                s = n[r]
+            for item in n:
+                s = item
                 nn = s['r_hash']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -667,8 +665,8 @@ def channels():
 
             nd = input("\nSelect a Node ID: ")
 
-            for r in range(len(n)):
-                s = n[r]
+            for item in n:
+                s = item
                 nn = s['remote_pubkey']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -734,8 +732,8 @@ def listonchaintxs():
                 print("Transaction Hash: " + s['tx_hash'])
             nd = input("\nSelect RHash: ")
 
-            for r in range(len(n)):
-                s = n[r]
+            for item in n:
+                s = item
                 nn = s['tx_hash']
                 trx = s['dest_addresses']
                 if nd == nn:
