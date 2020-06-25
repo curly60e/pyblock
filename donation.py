@@ -18,6 +18,7 @@ def donationPN():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("PayNym: " + url)
 
 def donationAddr():
@@ -32,6 +33,7 @@ def donationAddr():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("Bitcoin Address Bech32: " + url)
 
 def donationLN():
@@ -56,6 +58,7 @@ def donationLN():
     qr.add_data(ln1)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("LND Invoice: " + ln1)
     response.close()
 
@@ -72,6 +75,7 @@ def donationAddrTst():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("Bitcoin Address Bech32: " + url)
 
 def donationLNTst():
@@ -96,6 +100,7 @@ def donationLNTst():
     qr.add_data(ln1)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("LND Invoice: " + ln1)
     response.close()
 
@@ -111,4 +116,5 @@ def decodeQR():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("Bitcoin Address: " + url)
