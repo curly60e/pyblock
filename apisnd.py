@@ -181,5 +181,5 @@ def donate():
     <<< Back Main Menu Press Control + C
     \n\n""")
     menuB = (input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    if menuB == "A" or menuB == "a":
+    if menuB in ["A", "a"]:
         devAddr()

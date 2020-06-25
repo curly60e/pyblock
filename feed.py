@@ -10,8 +10,8 @@ import time as t
 def readFile():
     try:
         print ("\n\033[1;34;40mWaiting for new data...\n")
+        downloadsFolder = 'downloads/'
         while True:
-            downloadsFolder = 'downloads/'
             if not os.listdir(downloadsFolder):
                 continue
             else:

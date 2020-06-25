@@ -80,13 +80,13 @@ def cascade(col):
         yield None
         oldline = line
         if eline >= limit:
-            print_at(" ",col, line, black)
+            print_at(" ", col, oldline, black)
             break
 
 def main():
     cascading = set()
+    added_new = True
     while True:
-        added_new = True
         while add_new(cascading): pass
         stopped = iterate(cascading)
         sys.stdout.flush()
