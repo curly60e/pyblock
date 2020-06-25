@@ -665,6 +665,8 @@ def menuPI(menuWN):
         aaccPPiLNPay()
     elif menuWN in ["D", "d"]:
         aaccPPiOpenNode()
+    elif menuWN in ["R", "r"]:
+        menu()
 
 def menuTippinMe(menuTM):
     if menuTM in ["A", "a"]:
