@@ -659,17 +659,17 @@ def aaccPPiTippinMe():
 def menuPI(menuWN):
     if menuWN in ["A", "a"]:
         aaccPPiTippinMe()
-    if menuWN in ["B", "b"]:
+    elif menuWN in ["B", "b"]:
         aaccPPiLNBits()
-    if menuWN in ["C", "c"]:
+    elif menuWN in ["C", "c"]:
         aaccPPiLNPay()
-    if menuWN in ["D", "d"]:
+    elif menuWN in ["D", "d"]:
         aaccPPiOpenNode()
 
 def menuTippinMe(menuTM):
     if menuTM in ["A", "a"]:
         tippinmeGetInvoice()
-    if menuTM in ["R", "r"]:
+    elif menuTM in ["R", "r"]:
         APIMenu()
 
 def menuOpenNode(menuOP):
@@ -677,19 +677,19 @@ def menuOpenNode(menuOP):
         clear()
         prt()
         OpenNodecreatecharge()
-    if menuOP in ["B", "b"]:
+    elif menuOP in ["B", "b"]:
         clear()
         prt()
         OpenNodeiniciatewithdrawal()
-    if menuOP in ["C", "c"]:
+    elif menuOP in ["C", "c"]:
         clear()
         prt()
         OpenNodelistfunds()
-    if menuOP in ["D", "d"]:
+    elif menuOP in ["D", "d"]:
         clear()
         prt()
         OpenNodeListPayments()
-    if menuOP in ["R", "r"]:
+    elif menuOP in ["R", "r"]:
         APIMenu()
 
 def menuLNPAY(menuNW):
@@ -697,23 +697,23 @@ def menuLNPAY(menuNW):
         clear()
         prt()
         lnpayCreateInvoice()
-    if menuNW in ["B", "b"]:
+    elif menuNW in ["B", "b"]:
         clear()
         prt()
         lnpayPayInvoice()
-    if menuNW in ["C", "c"]:
+    elif menuNW in ["C", "c"]:
         clear()
         prt()
         lnpayGetBalance()
-    if menuNW in ["D", "d"]:
+    elif menuNW in ["D", "d"]:
         clear()
         prt()
         lnpayGetTransactions()
-    if menuNW in ["E", "e"]:
+    elif menuNW in ["E", "e"]:
         clear()
         prt()
         lnpayTransBWallets()
-    if menuNW in ["R", "r"]:
+    elif menuNW in ["R", "r"]:
         APIMenu()
 
 def menuLNBPI(menuLNQ):
@@ -721,23 +721,23 @@ def menuLNBPI(menuLNQ):
         clear()
         prt()
         lnbitCreateNewInvoice()
-    if menuLNQ in ["B", "b"]:
+    elif menuLNQ in ["B", "b"]:
         clear()
         prt()
         lnbitPayInvoice()
-    if menuLNQ in ["C", "c"]:
+    elif menuLNQ in ["C", "c"]:
         clear()
         prt()
         lnbitCreatePayWall()
-    if menuLNQ in ["D", "d"]:
+    elif menuLNQ in ["D", "d"]:
         clear()
         prt()
         lnbitDeletePayWall()
-    if menuLNQ in ["E", "e"]:
+    elif menuLNQ in ["E", "e"]:
         clear()
         prt()
         lnbitListPawWall()
-    if menuLNQ in ["R", "r"]:
+    elif menuLNQ in ["R", "r"]:
         APIMenu()
 
 def menuA(menuS): #Execution of the Main Menu options
