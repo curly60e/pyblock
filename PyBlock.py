@@ -116,7 +116,7 @@ def delay_print(s):
 #------------------------------------------------------
 
 def connected(info): # here we complete the connection to the external node
-    if info == "Y" or info == "y":
+    if info in ["Y", "y"]:
         clear()
         prt()
         print("\nAdd your node information\n")
@@ -126,7 +126,7 @@ def connected(info): # here we complete the connection to the external node
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     custom = input("Do you want random designs? Y/n: ")
-    if custom == "Y" or custom == "y":
+    if custom in ["Y", "y"]:
         while True:
             try:
                 clear()
@@ -165,12 +165,12 @@ def getrawtx(): # show confirmatins from transactions
             clear()
             prt()
             close()
-            bitcoincli = " getrawtransaction "
             if tx == "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b":
                 print("""\t\t\n\033[1;35;40mThis transaction it's the first one of the Bitcoin Blockchain on Block 0 by Satoshi Nakamoto.
 You can decode that block in HEX and see what's inside.\033[0;37;40m""")
                 t.sleep(10)
             else:
+                bitcoincli = " getrawtransaction "
                 lsd = os.popen(path['bitcoincli'] + bitcoincli + tx + " 1")
                 lsd0 = lsd.read()
                 lsd1 = str(lsd0)
@@ -532,7 +532,6 @@ def aaccPPiLNBits():
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
         input("Continue...")
-        pass
 
 def aaccPPiLNPay():
     try:
@@ -589,7 +588,6 @@ def aaccPPiLNPay():
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
         input("Continue...")
-        pass
 
 def aaccPPiOpenNode():
     try:
@@ -646,7 +644,6 @@ def aaccPPiOpenNode():
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
         input("Continue...")
-        pass
 
 def aaccPPiTippinMe():
     bitLN = {"NN":"","pd":""}
@@ -660,93 +657,93 @@ def aaccPPiTippinMe():
 #--------------------------------- Main Menu execution --------------------------------
 
 def menuPI(menuWN):
-    if menuWN == "A" or menuWN == "a":
+    if menuWN in ["A", "a"]:
         aaccPPiTippinMe()
-    if menuWN == "B" or menuWN == "b":
+    if menuWN in ["B", "b"]:
         aaccPPiLNBits()
-    if menuWN == "C" or menuWN == "c":
+    if menuWN in ["C", "c"]:
         aaccPPiLNPay()
-    if menuWN == "D" or menuWN == "d":
+    if menuWN in ["D", "d"]:
         aaccPPiOpenNode()
 
 def menuTippinMe(menuTM):
-    if menuTM == "A" or menuTM == "a":
+    if menuTM in ["A", "a"]:
         tippinmeGetInvoice()
-    if menuTM == "R" or menuTM == "r":
+    if menuTM in ["R", "r"]:
         APIMenu()
 
 def menuOpenNode(menuOP):
-    if menuOP == "A" or menuOP == "a":
+    if menuOP in ["A", "a"]:
         clear()
         prt()
         OpenNodecreatecharge()
-    if menuOP == "B" or menuOP == "b":
+    if menuOP in ["B", "b"]:
         clear()
         prt()
         OpenNodeiniciatewithdrawal()
-    if menuOP == "C" or menuOP == "c":
+    if menuOP in ["C", "c"]:
         clear()
         prt()
         OpenNodelistfunds()
-    if menuOP == "D" or menuOP == "d":
+    if menuOP in ["D", "d"]:
         clear()
         prt()
         OpenNodeListPayments()
-    if menuOP == "R" or menuOP == "r":
+    if menuOP in ["R", "r"]:
         APIMenu()
 
 def menuLNPAY(menuNW):
-    if menuNW == "A" or menuNW == "a":
+    if menuNW in ["A", "a"]:
         clear()
         prt()
         lnpayCreateInvoice()
-    if menuNW == "B" or menuNW == "b":
+    if menuNW in ["B", "b"]:
         clear()
         prt()
         lnpayPayInvoice()
-    if menuNW == "C" or menuNW == "c":
+    if menuNW in ["C", "c"]:
         clear()
         prt()
         lnpayGetBalance()
-    if menuNW == "D" or menuNW == "d":
+    if menuNW in ["D", "d"]:
         clear()
         prt()
         lnpayGetTransactions()
-    if menuNW == "E" or menuNW == "e":
+    if menuNW in ["E", "e"]:
         clear()
         prt()
         lnpayTransBWallets()
-    if menuNW == "R" or menuNW == "r":
+    if menuNW in ["R", "r"]:
         APIMenu()
 
 def menuLNBPI(menuLNQ):
-    if menuLNQ == "A" or menuLNQ == "a":
+    if menuLNQ in ["A", "a"]:
         clear()
         prt()
         lnbitCreateNewInvoice()
-    if menuLNQ == "B" or menuLNQ == "b":
+    if menuLNQ in ["B", "b"]:
         clear()
         prt()
         lnbitPayInvoice()
-    if menuLNQ == "C" or menuLNQ == "c":
+    if menuLNQ in ["C", "c"]:
         clear()
         prt()
         lnbitCreatePayWall()
-    if menuLNQ == "D" or menuLNQ == "d":
+    if menuLNQ in ["D", "d"]:
         clear()
         prt()
         lnbitDeletePayWall()
-    if menuLNQ == "E" or menuLNQ == "e":
+    if menuLNQ in ["E", "e"]:
         clear()
         prt()
         lnbitListPawWall()
-    if menuLNQ == "R" or menuLNQ == "r":
+    if menuLNQ in ["R", "r"]:
         APIMenu()
 
 def menuA(menuS): #Execution of the Main Menu options
-    if menuS == "A" or menuS == "a":
+    if menuS in ["A", "a"]:
         artist()
-    elif menuS == "B" or menuS == "b":
+    elif menuS in ["B", "b"]:
         while True:
             try:
                 clear()
@@ -755,17 +752,16 @@ def menuA(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menuSelection()
-    elif menuS == "C" or menuS == "c":
+    elif menuS in ["C", "c"]:
         clear()
         prt()
         getgenesis()
         a = input("Do you want to return to the Main Menu? Y/n: ")
-        if a == "Y" or a == "y":
+        if a in ["Y", "y"]:
             menuSelection()
         else:
             b = input("Do you want to exit? Y/n: ")
-            if b == "Y" or b == "y":
+            if b in ["Y", "y"]:
                 os._exit(0)
                 apisnd.close()
                 donation.close()
@@ -777,42 +773,40 @@ def menuA(menuS): #Execution of the Main Menu options
                 exit()
             else:
                 menuSelection()
-    elif menuS == "D" or menuS == "d":
+    elif menuS in ["D", "d"]:
         clear()
         prt()
         readHexBlock()
         while True:
             r = input("Do you want to continue decoding? Y/n: ")
-            if r == "Y" or r == "y":
+            if r in ["Y", "y"]:
                 clear()
                 prt()
                 readHexBlock()
             else:
                 break
-                menuSelection()
-    elif menuS == "E" or menuS == "e":
+    elif menuS in ["E", "e"]:
         clear()
         prt()
         readHexTx()
         while True:
             r = input("Do you want to continue decoding? Y/n: ")
-            if r == "Y" or r == "y":
+            if r in ["Y", "y"]:
                 clear()
                 prt()
                 sysinfo()
                 readHexTx()
             else:
                 break
-                menuSelection()
-    elif menuS == "F" or menuS == "f":
+    elif menuS in ["F", "f"]:
         getrawtx()
-    elif menuS == "H" or menuS == "h":
+    elif menuS in ["H", "h"]:
         advanceMenu()
-    elif menuS == "L" or menuS == "l":
+    elif menuS in ["L", "l"]:
         clear()
         prt()
         menuSelectionLN()
-    elif menuS == "Q" or menuS == "q":
+    elif menuS in ["Q", "q"]:
         os._exit(0)
         apisnd.close()
         donation.close()
@@ -822,15 +816,15 @@ def menuA(menuS): #Execution of the Main Menu options
         sysinf.close()
         nodeconnection.close()
         exit()
-    elif menuS == "S" or menuS == "s":
+    elif menuS in ["S", "s"]:
         clear()
         prt()
         satnodeMenu()
-    elif menuS == "P" or menuS == "p":
+    elif menuS in ["P", "p"]:
         APIMenu()
-    elif menuS == "X" or menuS == "x":
+    elif menuS in ["X", "x"]:
         dnt()
-    elif menuS == "T" or menuS == "t":
+    elif menuS in ["T", "t"]:
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
         t.sleep(2)
@@ -848,7 +842,7 @@ def menuA(menuS): #Execution of the Main Menu options
         screensv()
 
 def menuRemote(menuS): #Execution of the Main Menu options
-    if menuS == "A" or menuS == "a":
+    if menuS in ["A", "a"]:
         while True:
             try:
                 clear()
@@ -857,8 +851,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menuUserConn()
-    elif menuS == "B" or menuS == "b":
+    elif menuS in ["B", "b"]:
         while True:
             try:
                 clear()
@@ -867,14 +860,13 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menuUserConn()
-    elif menuS == "H" or menuS == "h":
+    elif menuS in ["H", "h"]:
         remoteadvanceMenu()
-    elif menuS == "L" or menuS == "l":
+    elif menuS in ["L", "l"]:
         clear()
         prt()
         menuSelectionLN()
-    elif menuS == "Q" or menuS == "q":
+    elif menuS in ["Q", "q"]:
         os._exit(0)
         apisnd.close()
         donation.close()
@@ -884,15 +876,15 @@ def menuRemote(menuS): #Execution of the Main Menu options
         sysinf.close()
         nodeconnection.close()
         exit()
-    elif menuS == "S" or menuS == "s":
+    elif menuS in ["S", "s"]:
         clear()
         prt()
         satnodeMenu()
-    elif menuS == "P" or menuS == "p":
+    elif menuS in ["P", "p"]:
         APIMenu()
-    elif menuS == "X" or menuS == "x":
+    elif menuS in ["X", "x"]:
         dnt()
-    elif menuS == "T" or menuS == "t": #Test feature fast access
+    elif menuS in ["T", "t"]: #Test feature fast access
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
         t.sleep(2)
@@ -910,90 +902,90 @@ def menuRemote(menuS): #Execution of the Main Menu options
         screensv()
 #------------------------------------------REMOTE
 def menuLN(menuLL):
-    if menuLL == "I" or menuLL == "i":
+    if menuLL in ["I", "i"]:
         clear()
         prt()
         getnewinvoice()
-    elif menuLL == "P" or menuLL == "p":
+    elif menuLL in ["P", "p"]:
         clear()
         prt()
         payinvoice()
-    elif menuLL == "Q" or menuLL == "q":
+    elif menuLL in ["Q", "q"]:
         clear()
         prt()
         channelbalance()
-    elif menuLL == "L" or menuLL == "l":
+    elif menuLL in ["L", "l"]:
         clear()
         prt()
         listinvoice()
-    elif menuLL == "X" or menuLL == "x":
+    elif menuLL in ["X", "x"]:
         clear()
         prt()
         listonchaintxs()
-    elif menuLL == "C" or menuLL == "c":
+    elif menuLL in ["C", "c"]:
         clear()
         prt()
         channels()
-    elif menuLL == "B" or menuLL == "b":
+    elif menuLL in ["B", "b"]:
         clear()
         prt()
         getnewaddress()
-    elif menuLL == "N" or menuLL == "n":
+    elif menuLL in ["N", "n"]:
         clear()
         prt()
         getinfo()
-    elif menuLL == "O" or menuLL == "o":
+    elif menuLL in ["O", "o"]:
         clear()
         prt()
         balanceOC()
-    elif menuLL == "R" or menuLL == "r":
+    elif menuLL in ["R", "r"]:
         menuUserConn()
 
 #------------------------------------------END REMOTE
 
 #------------------------------------------LOCAL
 def menuLNlocal(menuLL):
-    if menuLL == "I" or menuLL == "i":
+    if menuLL in ["I", "i"]:
         clear()
         prt()
         localaddinvoice()
-    elif menuLL == "P" or menuLL == "p":
+    elif menuLL in ["P", "p"]:
         clear()
         prt()
         localpayinvoice()
-    elif menuLL == "Q" or menuLL == "q":
+    elif menuLL in ["Q", "q"]:
         clear()
         prt()
         localchannelbalance()
-    elif menuLL == "L" or menuLL == "l":
+    elif menuLL in ["L", "l"]:
         clear()
         prt()
         locallistinvoices()
-    elif menuLL == "X" or menuLL == "x":
+    elif menuLL in ["X", "x"]:
         clear()
         prt()
         locallistchaintxns()
-    elif menuLL == "C" or menuLL == "c":
+    elif menuLL in ["C", "c"]:
         clear()
         prt()
         locallistchannels()
-    elif menuLL == "B" or menuLL == "b":
+    elif menuLL in ["B", "b"]:
         clear()
         prt()
         localnewaddress()
-    elif menuLL == "N" or menuLL == "n":
+    elif menuLL in ["N", "n"]:
         clear()
         prt()
         localgetinfo()
-    elif menuLL == "O" or menuLL == "o":
+    elif menuLL in ["O", "o"]:
         clear()
         prt()
         localbalanceOC()
-    elif menuLL == "W" or menuLL == "w":
+    elif menuLL in ["W", "w"]:
         clear()
         prt()
         localgetnetworkinfo()
-    elif menuLL == "J" or menuLL == "j":
+    elif menuLL in ["J", "j"]:
         while True:
             try:
                 clear()
@@ -1004,18 +996,17 @@ def menuLNlocal(menuLL):
                 t.sleep(5)
             except:
                 break
-                menu()
-    elif menuLL == "K" or menuLL == "k":
+    elif menuLL in ["K", "k"]:
         clear()
         prt()
         localkeysend()
-    elif menuLL == "R" or menuLL == "r":
+    elif menuLL in ["R", "r"]:
         menuSelection()
 
 #------------------------------------------END LOCAL
 
 def menuB(menuR): # Advanced access Menu
-    if menuR == "A" or menuR == "a":
+    if menuR in ["A", "a"]:
         while True:
             try:
                 clear()
@@ -1026,8 +1017,7 @@ def menuB(menuR): # Advanced access Menu
                 t.sleep(5)
             except:
                 break
-                advanceMenu()
-    elif menuR == "B" or menuR == "b":
+    elif menuR in ["B", "b"]:
         while True:
             try:
                 clear()
@@ -1047,8 +1037,7 @@ def menuB(menuR): # Advanced access Menu
                 tmp()
             except:
                 break
-                advanceMenu()
-    elif menuR == "C" or menuR == "c":
+    elif menuR in ["C", "c"]:
         while True:
             try:
                 clear()
@@ -1059,8 +1048,7 @@ def menuB(menuR): # Advanced access Menu
                 t.sleep(50)
             except:
                 break
-                advanceMenu()
-    elif menuR == "S" or menuR == "s":
+    elif menuR in ["S", "s"]:
         while True:
             try:
                 clear()
@@ -1070,8 +1058,7 @@ def menuB(menuR): # Advanced access Menu
                 t.sleep(1)
             except:
                 break
-                advanceMenu()
-    elif menuR == "R" or menuR == "r":
+    elif menuR in ["R", "r"]:
         try:
             menuSelection()
         except:
@@ -1085,7 +1072,7 @@ def menuB(menuR): # Advanced access Menu
             exit()
 
 def menuBA(menuR): # Advanced access Menu
-    if menuR == "A" or menuR == "a":
+    if menuR in ["A", "a"]:
         while True:
             try:
                 clear()
@@ -1096,8 +1083,7 @@ def menuBA(menuR): # Advanced access Menu
                 t.sleep(5)
             except:
                 break
-                advanceMenu()
-    elif menuR == "B" or menuR == "b":
+    elif menuR in ["B", "b"]:
         while True:
             try:
                 clear()
@@ -1117,8 +1103,7 @@ def menuBA(menuR): # Advanced access Menu
                 tmp()
             except:
                 break
-                advanceMenu()
-    elif menuR == "C" or menuR == "c":
+    elif menuR in ["C", "c"]:
         while True:
             try:
                 clear()
@@ -1129,8 +1114,7 @@ def menuBA(menuR): # Advanced access Menu
                 t.sleep(50)
             except:
                 break
-                advanceMenu()
-    elif menuR == "S" or menuR == "s":
+    elif menuR in ["S", "s"]:
         while True:
             try:
                 clear()
@@ -1140,8 +1124,7 @@ def menuBA(menuR): # Advanced access Menu
                 t.sleep(1)
             except:
                 break
-                advanceMenu()
-    elif menuR == "R" or menuR == "r":
+    elif menuR in ["R", "r"]:
         try:
             menuSelection()
         except:
@@ -1155,23 +1138,23 @@ def menuBA(menuR): # Advanced access Menu
             exit()
 
 def menuC(menuO): # Donation access Menu
-    if menuO == "A" or menuO == "a":
+    if menuO in ["A", "a"]:
         dntDev()
-    elif menuO == "B" or menuO == "b":
+    elif menuO in ["B", "b"]:
         dntTst()
-    elif menuO == "R" or menuO == "r":
+    elif menuO in ["R", "r"]:
         menuSelection()
 
 def menuD(menuN): # Satnode access Menu
-    if menuN == "A" or menuN == "a":
+    if menuN in ["A", "a"]:
         satnode()
-    elif menuN == "B" or menuN == "b":
+    elif menuN in ["B", "b"]:
         readFile()
-    elif menuN == "S" or menuN == "s":
+    elif menuN in ["S", "s"]:
         try:
             close()
             message = input("\n\033[0;37;40mYour message it's a \033[1;34;40mF\033[0;37;40mile or a plain \033[1;32;40mT\033[0;37;40mext? \033[1;34;40mF\033[0;37;40m/\033[1;32;40mT\033[0;37;40m: ")
-            if message == "F" or message == "f":
+            if message in ["F", "f"]:
                 try:
                     clear()
                     prt()
@@ -1181,7 +1164,7 @@ def menuD(menuN): # Satnode access Menu
                     menuSelection()
                 except:
                     menuSelection()
-            elif message == "T" or message == "t":
+            elif message in ["T", "t"]:
                 try:
                     clear()
                     prt()
@@ -1193,18 +1176,18 @@ def menuD(menuN): # Satnode access Menu
                     menuSelection()
         except:
             menuSelection()
-    elif menuN == "C" or menuN == "c":
+    elif menuN in ["C", "c"]:
         print("\n\t This only will work on Linux or Unix systems.\n")
         a = input("Do we continue? Y/n: ")
-        if a == "Y" or a == "y":
+        if a in ["Y", "y"]:
             gitclone()
         else:
             menuSelection()
-    elif menuN == "D" or menuN == "d":
+    elif menuN in ["D", "d"]:
         menuSelection()
 
 def menuE(menuQ): # Dev Donation access Menu
-    if menuQ == "A" or menuQ == "a":
+    if menuQ in ["A", "a"]:
         try:
             clear()
             prt()
@@ -1214,7 +1197,7 @@ def menuE(menuQ): # Dev Donation access Menu
             menuSelection()
         except:
             menuSelection()
-    elif menuQ == "B" or menuQ == "b":
+    elif menuQ in ["B", "b"]:
         try:
             clear()
             prt()
@@ -1224,7 +1207,7 @@ def menuE(menuQ): # Dev Donation access Menu
             menuSelection()
         except:
             menuSelection()
-    elif menuQ == "C" or menuQ == "c":
+    elif menuQ in ["C", "c"]:
         try:
             clear()
             prt()
@@ -1234,11 +1217,11 @@ def menuE(menuQ): # Dev Donation access Menu
             menuSelection()
         except:
             menuSelection()
-    elif menuQ == "R" or menuQ == "r":
+    elif menuQ in ["R", "r"]:
         menuSelection()
 
 def menuF(menuV): # Tester Donation access Menu
-    if menuV == "A" or menuV == "a":
+    if menuV in ["A", "a"]:
         try:
             clear()
             prt()
@@ -1248,7 +1231,7 @@ def menuF(menuV): # Tester Donation access Menu
             menuSelection()
         except:
             menuSelection()
-    elif menuV == "B" or menuV == "b":
+    elif menuV in ["B", "b"]:
         try:
             clear()
             prt()
@@ -1258,7 +1241,7 @@ def menuF(menuV): # Tester Donation access Menu
             menuSelection()
         except:
             menuSelection()
-    elif menuV == "R" or menuV == "r":
+    elif menuV in ["R", "r"]:
         menuSelection()
 
 #--------------------------------- End Main Menu execution --------------------------------
@@ -1270,7 +1253,6 @@ while True: # Loop
     if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
-        menuSelection()
     else:
         prt()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
@@ -1281,4 +1263,5 @@ while True: # Loop
         print("\n\tLocal Bitcoin Core Node connection.\n")
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
         pickle.dump(path, open("bclock.conf", "wb"))
-        menuSelection()
+
+    menuSelection()
