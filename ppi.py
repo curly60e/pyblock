@@ -169,12 +169,12 @@ def lnbitCreatePayWall():
             d = json.loads(n)
             while True:
                 print("\n\tLNBITS PAYWALL LIST\n")
-                for item_ in d:
-                    s = item_
+                for r in range(len(d)):
+                    s = d[r]
                     print("ID: " + s['id'])
                 nd = input("\nSelect ID: ")
-                for item in d:
-                    s = item
+                for r in range(len(d)):
+                    s = d[r]
                     nn = s['id']
                     if nd == nn:
                         print("\n----------------------------------------------------------------------------------------------------------------")
@@ -647,14 +647,14 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
-                if pay in ["I", "i"]:
+                if pay =="I" or pay == "i":
                     print("\033[1;30;47m")
                     qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nLightning Invoice: " + mm)
-                elif pay in ["O", "o"]:
+                elif pay =="O" or pay == "o":
                     print("\033[1;30;47m")
                     qr.add_data(p)
                     qr.print_ascii()
@@ -667,7 +667,7 @@ def OpenNodecreatecharge():
                 blogo()
             except:
                 break
-    elif fiat in ["N", "n"]:
+    elif fiat == "N" or fiat == "n":
         amt = input("Amount in sats: ")
         curl = 'curl https://api.opennode.co/v1/charges -X POST -H' + '"Authorization: {}"'.format(b) + ' -H "Content-Type: application/json" -d ' + "'{" + '"amount": "{}", "currency": "BTC"'.format(amt) +  "}'"
         sh = os.popen(curl).read()
@@ -696,14 +696,14 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
-                if pay in ["I", "i"]:
+                if pay =="I" or pay == "i":
                     print("\033[1;30;47m")
                     qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nLightning Invoice: " + mm)
-                elif pay in ["O", "o"]:
+                elif pay =="O" or pay == "o":
                     print("\033[1;30;47m")
                     qr.add_data(p)
                     qr.print_ascii()
@@ -771,7 +771,7 @@ def OpenNodeiniciatewithdrawal():
         except:
             pass
 
-    elif lnchain in ["O", "o"]:
+    elif lnchain == "O" or lnchain == "o":
         try:
             while True:
                 print("\n\tOPENNODE TRANSFER REQUEST\n")
@@ -1033,40 +1033,5 @@ def bitnodesListSnapshots():
 #-----------------------------END BITNODES------------------------------
 #-----------------------------TALLYCOIN------------------------------
 
-def TallyCoingetnewinvoice():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    try:
-        amount = input("Amount in sats: ")
-        memo = input("Memo: ")
-        url = 'https://{}/v1/payment/request/'.format(lndconnectload["ip_port"])
-        data = {
 
-            }
-        if amount == "":
-            r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"memo": memo + " -PyBLOCK"},
-                )
-        else:
-            r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"value": amount, "memo": memo + " -PyBLOCK"},
-                )
-
-        a = r.json()
-
-    except:
-        pass
-
-TallyCoingetnewinvoice()
 #-----------------------------TALLYCOIN------------------------------
