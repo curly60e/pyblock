@@ -1033,40 +1033,5 @@ def bitnodesListSnapshots():
 #-----------------------------END BITNODES------------------------------
 #-----------------------------TALLYCOIN------------------------------
 
-def TallyCoingetnewinvoice():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    try:
-        amount = input("Amount in sats: ")
-        memo = input("Memo: ")
-        url = 'https://{}/v1/payment/request/'.format(lndconnectload["ip_port"])
-        data = {
 
-            }
-        if amount == "":
-            r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"memo": memo + " -PyBLOCK"},
-                )
-        else:
-            r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"value": amount, "memo": memo + " -PyBLOCK"},
-                )
-
-        a = r.json()
-
-    except:
-        pass
-
-TallyCoingetnewinvoice()
 #-----------------------------TALLYCOIN------------------------------
