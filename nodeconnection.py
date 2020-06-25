@@ -66,7 +66,7 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
         blogo()
         print("\033[0;37;40m")
         print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\n----------------------------------------------------------------------------------------------------------------")
+        print("\n----------------------------------------------------------------------------------------------------")
         print("""
         \tGET BLOCKCHAIN INFORMATION
         Chain: {}
@@ -77,7 +77,7 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
         Size on Disk: {}
         Pruned: {}
         """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-        print("----------------------------------------------------------------------------------------------------------------\n")
+        print("----------------------------------------------------------------------------------------------------\n")
     except:
         pass
 
@@ -132,7 +132,7 @@ def locallistchaintxns():
                 nn = s['tx_hash']
                 trx = s['dest_addresses']
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \nONCHAIN TRANSACTION DECODED
                     Amount: {} sats
@@ -142,7 +142,7 @@ def locallistchaintxns():
                     Confirmations: {}
                     Destination: {}
                     """.format(s['amount'], s['tx_hash'], s['block_hash'], s['block_height'], s['num_confirmations'], trx))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("-----------------------------------------------------------------------------------------------------\n")
                     print("\nTransaction Hash")
                     print("\033[1;30;47m")
                     qr.add_data(s['tx_hash'])
@@ -185,7 +185,7 @@ def locallistinvoices():
                 s = item
                 nn = s['r_hash']
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \nINVOICE DECODED
                     Memo: {}
@@ -193,7 +193,7 @@ def locallistinvoices():
                     Amount: {} sats
                     State: {}
                     """.format(s['memo'], s['payment_request'], s['amt_paid_sat'], s['state']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("----------------------------------------------------------------------------------------------------\n")
                     print("\033[1;30;47m")
                     qr.add_data(s['payment_request'])
                     qr.print_ascii()
@@ -227,7 +227,7 @@ def locallistchannels():
                 s = item
                 nn = s['remote_pubkey']
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \tCHANNEL DECODED
                     Active: {}
@@ -239,7 +239,7 @@ def locallistchannels():
                     Total Sent: {} sats
                     Total Received: {} sats
                     """.format(s['active'], s['remote_pubkey'], s['channel_point'], s['capacity'], s['local_balance'], s['remote_balance'], s['total_satoshis_sent'], s['total_satoshis_received']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("----------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
         except:
@@ -250,7 +250,7 @@ def localgetinfo():
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     d = json.loads(lsd0)
-    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \tNODE INFORMATION
     Version: {}
@@ -263,7 +263,7 @@ def localgetinfo():
     Peers: {}
     URLS: {}
     """.format(d['version'], d['identity_pubkey'], d['alias'], d['color'], d['num_pending_channels'], d['num_active_channels'], d['num_inactive_channels'], d['num_peers'], d['uris']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
+    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 def localaddinvoice():
@@ -341,7 +341,7 @@ def localgetnetworkinfo():
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     d = json.loads(lsd0)
-    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \tLIGHTNING NETWORK INFORMATION
     Numbers of Nodes: {}
@@ -353,7 +353,7 @@ def localgetnetworkinfo():
     Median Channel Size: {} sats
     Zombie channels: {}
     """.format(d['num_nodes'], d['num_channels'], d['total_network_capacity'], d['avg_channel_size'], d['min_channel_size'], d['max_channel_size'], d['median_channel_size_sat'], d['num_zombie_chans']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
+    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 def localkeysend():
@@ -376,13 +376,13 @@ def localchannelbalance():
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     d = json.loads(lsd0)
-    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \tLOCAL CHANNEL BALANCE
     Balance: {} sats
     Pending Channels: {} sats
     """.format(d['balance'], d['pending_open_balance']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
+    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 def localnewaddress():
@@ -409,12 +409,12 @@ def localbalanceOC():
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     d = json.loads(lsd0)
-    print("\n------------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------------")
     print("\n\tLOCAL ONCHAIN BALANCE\n")
     print("Total Balance: " + d['total_balance'] + " sats")
     print("Confirmed Balance: " + d['confirmed_balance'] + " sats")
     print("Unconfirmed Balance: " + d['unconfirmed_balance'] + " sats")
-    print("------------------------------------------------------------------------------------\n")
+    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 # Remote connection with rest -------------------------------------
@@ -590,7 +590,7 @@ def listinvoice():
                 s = item
                 nn = s['r_hash']
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \tINVOICE DECODED
                     Memo: {}
@@ -598,7 +598,7 @@ def listinvoice():
                     Amount: {} sats
                     State: {}
                     """.format(s['memo'], s['payment_request'], s['amt_paid_sat'], s['state']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("----------------------------------------------------------------------------------------------------\n")
                     print("\033[1;30;47m")
                     qr.add_data(s['payment_request'])
                     qr.print_ascii()
@@ -617,7 +617,7 @@ def getinfo():
         url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
         r = requests.get(url, headers=headers, verify=cert_path)
         a = r.json()
-        print("\n----------------------------------------------------------------------------------------------------------------")
+        print("\n----------------------------------------------------------------------------------------------------")
         print("""
         \t NODE INFORMATION
         Version: {}
@@ -630,7 +630,7 @@ def getinfo():
         Peers: {}
         URLS: {}
         """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
-        print("----------------------------------------------------------------------------------------------------------------\n")
+        print("----------------------------------------------------------------------------------------------------\n")
         input("\nContinue... ")
     except:
         pass
@@ -661,7 +661,7 @@ def channels():
                 s = item
                 nn = s['remote_pubkey']
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \tCHANNEL DECODED
                     Active: {}
@@ -673,7 +673,7 @@ def channels():
                     Total Sent: {} sats
                     Total Received: {} sats
                     """.format(s['active'], s['remote_pubkey'], s['channel_point'], s['capacity'], s['local_balance'], s['remote_balance'], s['total_satoshis_sent'], s['total_satoshis_received']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("----------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
         except:
@@ -686,13 +686,13 @@ def channelbalance():
     url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
-    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \tLOCAL CHANNEL BALANCE
     Balance: {} sats
     Pending Channels: {} sats
     """.format(a['balance'], a['pending_open_balance']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
+    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 def listonchaintxs():
@@ -728,7 +728,7 @@ def listonchaintxs():
                 nn = s['tx_hash']
                 trx = s['dest_addresses']
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \tONCHAIN TRANSACTION DECODED
                     Amount: {} sats
@@ -738,7 +738,7 @@ def listonchaintxs():
                     Confirmations: {}
                     Destination: {}
                     """.format(s['amount'], s['tx_hash'], s['block_hash'], s['block_height'], s['num_confirmations'], trx))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    print("----------------------------------------------------------------------------------------------------\n")
                     print("\nTransaction Hash")
                     print("\033[1;30;47m")
                     qr.add_data(s['tx_hash'])
@@ -756,12 +756,12 @@ def balanceOC():
     url = 'https://{}/v1/balance/blockchain'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
-    print("\n------------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------------")
     print("\n\tLOCAL ONCHAIN BALANCE\n")
     print("Total Balance: " + a['total_balance'] + " sats")
     print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
     print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
-    print("------------------------------------------------------------------------------------\n")
+    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 # END Remote connection with rest -------------------------------------
