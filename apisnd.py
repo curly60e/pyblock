@@ -21,7 +21,6 @@ def apisender():
     print("ATENTION: Minimum amount for sending a text is 5000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
-
     sh = os.popen(curl)
     sh0 = sh.read()
     while True:
