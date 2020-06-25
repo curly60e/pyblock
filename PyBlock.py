@@ -44,7 +44,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     blogo()
     print("\033[0;37;40m")
     print("<<< Back to the Main Menu Press Control + C.\n\n")
-    print("\n----------------------------------------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------------")
     print("""
     Chain: {}
     Blocks: {}
@@ -54,7 +54,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     Size on Disk: {}
     Pruned: {}
     """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
+    print("----------------------------------------------------------------------------------------------------\n")
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
