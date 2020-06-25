@@ -35,7 +35,7 @@ def sysinfo():  #Cpu and memory usage
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
-    a = subprocess.call((path['bitcoincli'] + bitcoincli), shell=False).read()
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
     b = json.loads(a)
     d = b
     print(d)
