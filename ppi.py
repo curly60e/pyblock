@@ -7,766 +7,1039 @@ import pickle
 import os
 import os.path
 import qrcode
+import lnpay_py
+import requests
 import simplejson as json
 import time as t
 from art import *
 from pblogo import *
-
-lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+from logos import *
+from lnpay_py.wallet import LNPayWallet
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
-if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-    lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-else:
+#-----------------------------LNBITS--------------------------------
+
+def loadFileConnLNBits(lnbitLoad):
+    lnbitLoad = {"wallet_name":"", "wallet_id":"", "admin_key":"", "invoice_read_key":""}
+
+    if os.path.isfile('lnbit.conf'): # Check if the file 'bclock.conf' is in the same folder
+        lnbitData= pickle.load(open("lnbit.conf", "rb")) # Load the file 'bclock.conf'
+        lnbitLoad = lnbitData # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO LNBITS.COM.
+                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                           SAVE THE FILE '\033[1;33;40mlnbitSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+        """)
+        lnbitLoad["wallet_name"] = input("Wallet name: ") # path to the bitcoin-cli
+        lnbitLoad["wallet_id"] = input("Wallet ID: ")
+        lnbitLoad["admin_key"] = input("Admin key: ")
+        lnbitLoad["invoice_read_key"] = input("Invoice/read key: ")
+        pickle.dump(lnbitLoad, open("lnbit.conf", "wb"))
+    return lnbitLoad
+
+def createFileConnLNBits():
+    lnbitLoad = {"wallet_name":"", "wallet_id":"", "admin_key":"", "invoice_read_key":""}
+
     clear()
     blogo()
-    print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
-    lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
-    lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
-    lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
-    print("\n\tLocal Lightning Node connection.\n")
-    lndconnectload["ln"] = input("Insert the path to lncli: ")
-    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO LNBITS.COM.
+               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                       SAVE THE FILE '\033[1;33;40mlnbitSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    """)
+    lnbitLoad["wallet_name"] = input("Wallet name: ") # path to the bitcoin-cli
+    lnbitLoad["wallet_id"] = input("Wallet ID: ")
+    lnbitLoad["admin_key"] = input("Admin key: ")
+    lnbitLoad["invoice_read_key"] = input("Invoice/read key: ")
 
-#-------------------------RPC BITCOIN NODE CONNECTION
+    pickle.dump(lnbitLoad, open("lnbit.conf", "wb"))
 
-def rpc(method, params=[]):
-    payload = json.dumps({
-        "jsonrpc": "2.0",
-        "id": "minebet",
-        "method": method,
-        "params": params
-    })
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
-    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
-
-def remotegetblock():
-    try:
-        b = rpc('getblockcount')
-        c = str(b)
-        print("\033[1;32;40m")
-        tprint(c, font="rnd-large")
-        print("\033[0;37;40m")
-    except:
-        pass
-
-def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
-    try:
-        a = rpc('getblockchaininfo')
-        d = a
-        print(d)
-        clear()
-        print("\033[1;32;40m")
-        blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\n----------------------------------------------------------------------------------------------------------------")
-        print("""
-        \tGET BLOCKCHAIN INFORMATION
-        Chain: {}
-        Blocks: {}
-        Best BlockHash: {}
-        Difficulty: {}
-        Verification Progress: {}
-        Size on Disk: {}
-        Pruned: {}
-        """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-        print("----------------------------------------------------------------------------------------------------------------\n")
-    except:
-        pass
-
-def remoteconsole(): # get into the console from bitcoin-cli
-    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
-    while True:
-        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
-        a = rpc(cle)
-        print(a)
-
-#-------------------------END RPC BITCOIN NODE CONNECTION
-
-def consoleLN(): # get into the console from bitcoin-cli
-    print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
-    while True:
-        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
-        lsd = os.popen(lndconnectload['ln'] + " " + cle)
-        lsd0 = lsd.read()
-        lsd1 = str(lsd0)
-        print(lsd1)
-        lsd.close()
-
-def locallistchaintxns():
+def lnbitCreateNewInvoice():
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
     box_size=10,
     border=4,
     )
-    lncli = " listchaintxns"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    n = d['transactions']
-    while True:
+    try:
+        print("\n\tLNBITS CREATE INVOICE\n")
+        amt = input("Amount: ")
+        memo = input("Memo: ")
+        a = loadFileConnLNBits(['invoice_read_key'])
+        b = str(a['invoice_read_key'])
+        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": {}, "memo": "{} -PyBLOCK" """.format(amt,memo) + "}'" + """ -H "X-Api-Key: {} " -H "Content-type: application/json" """.format(b)
+        sh = os.popen(curl).read()
         clear()
-        print("\033[1;32;40m")
         blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\t\nTransactions\n")
+        n = str(sh)
+        d = json.loads(n)
+        q = d['payment_request']
+        c = q.lower()
+        while True:
+            print("\033[1;30;47m")
+            qr.add_data(c)
+            qr.print_ascii()
+            print("\033[0;37;40m")
+            qr.clear()
+            print("Lightning Invoice: " + c)
+            t.sleep(10)
+            dn = str(d['checking_id'])
+            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
+            rsh = os.popen(checkcurl).read()
+            clear()
+            blogo()
+            nn = str(rsh)
+            dd = json.loads(nn)
+            db = dd['paid']
+            if db == True:
+                clear()
+                blogo()
+                tick()
+                t.sleep(2)
+                break
+            else:
+                continue
+    except:
+        pass
+
+
+def lnbitPayInvoice():
+    bolt = input("Invoice: ")
+    a = loadFileConnLNBits(['admin_key'])
+    b = str(a['admin_key'])
+    curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": true, "bolt11": "{}" """.format(bolt) + "}'" + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
+    try:
+        sh = os.popen(curl).read()
+        n = str(sh)
+        d = json.loads(n)
+        dn = str(d['checking_id'])
+        a = loadFileConnLNBits(['invoice_read_key'])
+        b = str(a['invoice_read_key'])
+        while True:
+            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
+            rsh = os.popen(checkcurl).read()
+            clear()
+            blogo()
+            nn = str(rsh)
+            dd = json.loads(nn)
+            db = dd['paid']
+            if db == True:
+                tick()
+                t.sleep(2)
+                break
+            else:
+                continue
+    except:
+        pass
+
+def lnbitCreatePayWall():
+    while True:
         try:
-            print("\n\tLIST ONCHAIN TRANSACTIONS\n")
-            for r in range(len(n)):
-                s = n[r]
+            url = input("Url: ")
+            memo = input("Memo: ")
+            desc = input("Description: ")
+            amt = input("Amount in sats: ")
+            remb = input("Remembers Y/n: ")
+            a = loadFileConnLNBits(['admin_key'])
+            b = str(a['admin_key'])
+            if remb in ["Y", "y"]:
+                remember = "true"
+            elif remb in ["N", "n"]:
+                remember = "false"
+            curl = 'curl -X POST https://lnbits.com/paywall/api/v1/paywalls -d ' + "'{" + """"url": "{}", "memo": "{}", "description": "{}", "amount": {}, "remembers": {} """.format(url,memo,desc,amt,remember) + "}'" + """ -H  "Content-type: application/json" -H "X-Api-Key: {}" """.format(b)
+            sh = os.popen(curl).read()
+            clear()
+            blogo()
+            n = str(sh)
+            d = json.loads(n)
+            print("\n\tPAYWALL CREATED SUCCESSFULLY\n")
+            t.sleep(2)
+            clear()
+            aa = loadFileConnLNBits(['invoice_read_key'])
+            bb = str(a['invoice_read_key'])
+            checkcurl = 'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H' + """ "X-Api-Key: {}" """.format(bb)
+            sh = os.popen(checkcurl).read()
+            clear()
+            blogo()
+            n = str(sh)
+            d = json.loads(n)
+            while True:
+                print("\n\tLNBITS PAYWALL LIST\n")
+                for r in range(len(d)):
+                    s = d[r]
+                    print("ID: " + s['id'])
+                nd = input("\nSelect ID: ")
+                for r in range(len(d)):
+                    s = d[r]
+                    nn = s['id']
+                    if nd == nn:
+                        print("\n----------------------------------------------------------------------------------------------------------------")
+                        print("""
+                        \tLNBITS PAYWALL DECODED
 
-                print("Transaction Hash: " + s['tx_hash'])
-            nd = input("\nSelect RHash: ")
-
-            for r in range(len(n)):
-                s = n[r]
-                nn = s['tx_hash']
-                trx = s['dest_addresses']
-                if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
-                    print("""
-                    \nONCHAIN TRANSACTION DECODED
-                    Amount: {} sats
-                    Tx Hash: {}
-                    Block Hash: {}
-                    Block Height: {}
-                    Confirmations: {}
-                    Destination: {}
-                    """.format(s['amount'], s['tx_hash'], s['block_hash'], s['block_height'], s['num_confirmations'], trx))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
-                    print("\nTransaction Hash")
-                    print("\033[1;30;47m")
-                    qr.add_data(s['tx_hash'])
-                    qr.print_ascii()
-                    print("\033[0;37;40m")
-                    qr.clear()
-            input("\nContinue... ")
+                        ID: {}
+                        Amount: {} sats
+                        Description: {}
+                        Memo: {}
+                        Extras: {}
+                        Remembers: {}
+                        URL: {}
+                        Wallet: {}
+                        """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
+                        print("----------------------------------------------------------------------------------------------------------------\n")
+                input("Continue...")
+            clear()
+            blogo()
         except:
             break
 
-def locallistinvoices():
+def lnbitListPawWall():
+    a = loadFileConnLNBits(['invoice_read_key'])
+    b = str(a['invoice_read_key'])
+    checkcurl = 'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H' + """ "X-Api-Key: {}" """.format(b)
+    sh = os.popen(checkcurl).read()
+    clear()
+    blogo()
+    n = str(sh)
+    d = json.loads(n)
+    while True:
+        print("\n\tLNBITS PAYWALL LIST\n")
+        try:
+            for item_ in d:
+                s = item_
+                print("ID: " + s['id'])
+            nd = input("\nSelect ID: ")
+            for item in d:
+                s = item
+                nn = s['id']
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("""
+                    \tLNBITS PAYWALL DECODED
+
+                    ID: {}
+                    Amount: {} sats
+                    Description: {}
+                    Memo: {}
+                    Extras: {}
+                    Remembers: {}
+                    URL: {}
+                    Wallet: {}
+                    """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
+                    print("----------------------------------------------------------------------------------------------------------------\n")
+        except:
+            break
+        input("Continue...")
+        clear()
+        blogo()
+
+
+def lnbitDeletePayWall():
+    while True:
+        try:
+            a = loadFileConnLNBits(['invoice_read_key'])
+            b = str(a['invoice_read_key'])
+            checkcurl = 'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H' + """ "X-Api-Key: {}" """.format(b)
+            sh = os.popen(checkcurl).read()
+            clear()
+            blogo()
+            n = str(sh)
+            d = json.loads(n)
+            while True:
+                print("\n\tLNBITS PAYWALL LIST\n")
+                try:
+                    for item_ in d:
+                        s = item_
+                        print("ID: " + s['id'])
+                    nd = input("\nSelect ID: ")
+                    for item in d:
+                        s = item
+                        nn = s['id']
+                        if nd == nn:
+                            print("\n----------------------------------------------------------------------------------------------------------------")
+                            print("""
+                            \tLNBITS PAYWALL DECODED
+
+                            ID: {}
+                            Amount: {} sats
+                            Description: {}
+                            Memo: {}
+                            Extras: {}
+                            Remembers: {}
+                            URL: {}
+                            Wallet: {}
+                            """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
+                            print("----------------------------------------------------------------------------------------------------------------\n")
+                except:
+                    break
+                input("Continue...")
+                break
+            print("\n\tDELETE PAYWALL\n")
+            a = loadFileConnLNBits(['admin_key'])
+            b = str(a['admin_key'])
+            id = input("Insert PayWall ID: ")
+            curl = "curl -X DELETE https://lnbits.com/paywall/api/v1/paywalls/{}".format(id) + """ -H "X-Api-Key: {}" """.format(b)
+            sh = os.popen(curl).read()
+            clear()
+            blogo()
+            print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
+            t.sleep(2)
+            clear()
+        except:
+            break
+
+#-----------------------------END LNBITS--------------------------------
+
+#-----------------------------LNPAY--------------------------------
+def loadFileConnLNPay(lnpayLoad):
+    lnpayLoad = {"key":""}
+
+    if os.path.isfile('lnpay.conf'): # Check if the file 'bclock.conf' is in the same folder
+        lnpayData= pickle.load(open("lnpay.conf", "rb")) # Load the file 'bclock.conf'
+        lnpayLoad = lnpayData # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO LNPAY.CO.
+                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                           SAVE THE FILE '\033[1;33;40mlnpaySN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+        """)
+        lnpayLoad["key"] = input("API Key: ")
+        print("\n\tWALLET ACCESS KEYS\n")
+        lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
+        pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
+    clear()
+    blogo()
+    return lnpayLoad
+
+def createFileConnLNPay():
+    clear()
+    blogo()
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO LNPAY.CO.
+               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                       SAVE THE FILE '\033[1;33;40mlnpaySN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    """)
+    lnpayLoad["key"] = input("API Key: ")
+    print("\n\tWALLET ACCESS KEYS\n")
+    lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
+    pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
+
+
+def lnpayGetBalance():
+    a = loadFileConnLNPay(['key'])
+    b = str(a['key'])
+    n = loadFileConnLNPay(['wallet_key_id'])
+    q = str(n['wallet_key_id'])
+    lnpay_py.initialize(b)
+    clear()
+    blogo()
+    my_wallet = LNPayWallet(q)
+    info = my_wallet.get_info()
+    print("\n---------------------------------------------------------------------------------------------------")
+    print("""
+    \tLNPAY WALLET BALANCE
+
+    Wallet ID: {}
+    Wallet Name: {}
+    Balance: {} sats
+    """.format(info['id'], info['user_label'], info['balance']))
+    print("---------------------------------------------------------------------------------------------------\n")
+    input("\nContinue... ")
+
+def lnpayCreateInvoice():
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
     box_size=10,
     border=4,
     )
-    lncli = " listinvoices"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    n = d['invoices']
+    a = loadFileConnLNPay(['key'])
+    b = str(a['key'])
+    n = loadFileConnLNPay(['wallet_key_id'])
+    q = str(n['wallet_key_id'])
+    lnpay_py.initialize(b)
+    clear()
+    blogo()
+    my_wallet = LNPayWallet(q)
+    amt = input("\nAmount in Sats: ")
+    memo = input("Memo: ")
+    invoice_params = {
+        'num_satoshis': amt,
+        'memo': memo + ' -PyBLOCK'
+    }
+    try:
+        invoice = my_wallet.create_invoice(invoice_params)
+        while True:
+            print("\033[1;30;47m")
+            qr.add_data(invoice['payment_request'])
+            qr.print_ascii()
+            print("\033[0;37;40m")
+            qr.clear()
+            print("Lightning Invoice: " + invoice['payment_request'])
+            t.sleep(10)
+            curl = 'curl -u ' + b + ': https://lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
+            rsh = os.popen(curl).read()
+            clear()
+            blogo()
+            nn = str(rsh)
+            dd = json.loads(nn)
+            db = dd['settled']
+            if db == 1:
+                clear()
+                blogo()
+                tick()
+                t.sleep(2)
+                break
+            else:
+                continue
+    except:
+        pass
+
+
+def lnpayGetTransactions():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    a = loadFileConnLNPay(['key'])
+    b = str(a['key'])
+    n = loadFileConnLNPay(['wallet_key_id'])
+    q = str(n['wallet_key_id'])
+    lnpay_py.initialize(b)
+    clear()
+    blogo()
+    my_wallet = LNPayWallet(q)
+
+    transactions = my_wallet.get_transactions()
     while True:
-        clear()
-        print("\033[1;32;40m")
-        blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\tInvoices\n")
         try:
-            print("\n\tLIST INVOICES\n")
-            for r in range(len(n)):
-                s = n[r]
+            print("\n\tLNPAY LIST PAYMENTS\n")
+            for transaction_ in transactions:
+                s = transaction_
+                q = s['lnTx']
 
-                print("Invoice: " + s['r_hash'] + " " + s['state'])
-
-            nd = input("\nSelect RHash: ")
-
-            for r in range(len(n)):
-                s = n[r]
-                nn = s['r_hash']
+                print("ID: " + s['id'])
+            nd = input("\nSelect ID: ")
+            for transaction in transactions:
+                s = transaction
+                nn = s['id']
+                nnn = s['lnTx']
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
-                    \nINVOICE DECODED
+                    \tLNPAY LIST PAYMENT DECODED
+
+                    ID: {}
+                    Amount: {} sats
                     Memo: {}
                     Invoice: {}
-                    Amount: {} sats
-                    State: {}
-                    """.format(s['memo'], s['payment_request'], s['amt_paid_sat'], s['state']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
+                    RHash: {}
+                    """.format(nnn['id'], nnn['num_satoshis'], nnn['memo'], nnn['payment_request'], nnn['r_hash_decoded']))
+                    print("----------------------------------------------------------------------------------------------------\n")
                     print("\033[1;30;47m")
-                    qr.add_data(s['payment_request'])
+                    qr.add_data(nnn['payment_request'])
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-            input("\nContinue... ")
+            input("Continue...")
+            clear()
+            blogo()
         except:
             break
+    clear()
+    blogo()
 
-def locallistchannels():
-    lncli = " listchannels"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    n = d['channels']
-    while True:
+def lnpayPayInvoice():
+    a = loadFileConnLNPay(['key'])
+    b = str(a['key'])
+    n = loadFileConnLNPay(['wallet_key_id'])
+    q = str(n['wallet_key_id'])
+    lnpay_py.initialize(b)
+    clear()
+    blogo()
+    my_wallet = LNPayWallet(q)
+    try:
+        print("\n\tLNPAY PAY INVOICE\n")
+        inv = input("\nInvoice: ")
+        curl = 'curl -u' + b +': https://lnpay.co/v1/node/default/payments/decodeinvoice?payment_request=' + inv
         clear()
-        print("\033[1;32;40m")
+        rsh = os.popen(curl).read()
+        nn = str(rsh)
+        dd = json.loads(nn)
+        clear()
         blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\t\nChannels\n")
-        try:
-            print("\n\tLIST CHANNELS\n")
-            for r in range(len(n)):
-                s = n[r]
-                print("Node ID: " + s['remote_pubkey'])
+        print("\n----------------------------------------------------------------------------------------------------")
+        print("""
+        \tLNPAY INVOICE DECODED
 
-            nd = input("\nSelect a Node ID: ")
-            for r in range(len(n)):
-                s = n[r]
-                nn = s['remote_pubkey']
-                if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
-                    print("""
-                    \tCHANNEL DECODED
-                    Active: {}
-                    Node ID: {}
-                    Channel Point: {}
-                    Channel Capacity: {} sats
-                    Local Balance: {} sats
-                    Remote Balance: {} sats
-                    Total Sent: {} sats
-                    Total Received: {} sats
-                    """.format(s['active'], s['remote_pubkey'], s['channel_point'], s['capacity'], s['local_balance'], s['remote_balance'], s['total_satoshis_sent'], s['total_satoshis_received']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
-
-            input("\nContinue... ")
-        except:
-            break
-
-def localgetinfo():
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    print("\n----------------------------------------------------------------------------------------------------------------")
-    print("""
-    \tNODE INFORMATION
-    Version: {}
-    Node ID: {}
-    Alias: {}
-    Color: {}
-    Pending Channels: {}
-    Active Channels: {}
-    Inactive Channels: {}
-    Peers: {}
-    URLS: {}
-    """.format(d['version'], d['identity_pubkey'], d['alias'], d['color'], d['num_pending_channels'], d['num_active_channels'], d['num_inactive_channels'], d['num_peers'], d['uris']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
-
-def localaddinvoice():
-    lncli = " addinvoice"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    try:
-        amount = input("Amount in sats: ")
-        mem = input("Memo: ")
-        memo = mem.replace(" ","_")
-        lsd = os.popen(lndconnectload['ln'] + lncli + " --memo {}-PyBLOCK --amt {}".format(memo, amount)).read()
-        lsd0 = str(lsd)
-        d = json.loads(lsd0)
-        print("\033[1;30;47m")
-        qr.add_data(d['payment_request'])
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        qr.clear()
-        print("Lightning Invoice: " + d['payment_request'])
-        b = str(d['payment_request'])
-        while True:
-            lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + b).read()
-            lsd0 = str(lsd)
-            d = json.loads(lsd0)
-            r = d['payment_hash']
-            lsdn = os.popen(lndconnectload['ln'] + " lookupinvoice " + r).read()
-            lsdn0 = str(lsdn)
-            n = json.loads(lsdn0)
-            if n['state'] == 'SETTLED':
-                print("\033[1;32;40m")
-                clear()
-                blogo()
-                tick()
-                print("\033[0;37;40m")
-                t.sleep(2)
-                break
-            elif n['state'] == 'CANCELED':
-                print("\033[1;31;40m")
-                clear()
-                blogo()
-                canceled()
-                print("\033[0;37;40m")
-                t.sleep(2)
-                break
+        Destination: {}
+        Amount: {} sats
+        Memo: {}
+        Invoice: {}
+        """.format(dd['destination'], dd['num_satoshis'], dd['description'], inv))
+        print("----------------------------------------------------------------------------------------------------\n")
+        print("<<< Cancel Control + C")
+        input("\nEnter to Continue... ")
+        invoice_params = {
+            'payment_request': inv
+        }
+        pay_result = my_wallet.pay_invoice(invoice_params)
     except:
         pass
 
-def localpayinvoice():
+def lnpayTransBWallets():
+    a = loadFileConnLNPay(['key'])
+    b = str(a['key'])
+    n = loadFileConnLNPay(['wallet_key_id'])
+    q = str(n['wallet_key_id'])
+    lnpay_py.initialize(b)
+    clear()
+    blogo()
+    print("""\n\tLNPAY TRANSFER BETWEEN WALLETS
+    \nCaution: If you Transfer to another of your LNPay wallets
+    you will only access to your funds via Web.\n""")
     try:
-        invoiceN = input("Insert the invoice to pay: ")
-        invoice = invoiceN.lower()
-        lncli = " payinvoice "
-        lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
-        lsd0 = str(lsd)
-        d = json.loads(lsd0)
-        if d['num_satoshis'] == "0":
-            amt = " --amt "
-            amount =  input("Amount in satoshis: ")
-            os.system(lndconnectload['ln'] + lncli + invoice + amt + amount)
-            t.sleep(2)
-        else:
-            os.system(lndconnectload['ln'] + lncli + invoice )
-            t.sleep(2)
-    except:
-        pass
-
-def localgetnetworkinfo():
-    lncli = " getnetworkinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    print("\n----------------------------------------------------------------------------------------------------------------")
-    print("""
-    \tLIGHTNING NETWORK INFORMATION
-    Numbers of Nodes: {}
-    Numbers of Channels: {}
-    Total Network Capacity: {} sats
-    Average Channel Size: {}
-    Minimum Channel Size: {}
-    Maximum Channel Size: {}
-    Median Channel Size: {} sats
-    Zombie channels: {}
-    """.format(d['num_nodes'], d['num_channels'], d['total_network_capacity'], d['avg_channel_size'], d['min_channel_size'], d['max_channel_size'], d['median_channel_size_sat'], d['num_zombie_chans']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
-
-def localkeysend():
-    try:
-        print("\n\tYou ar going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.")
-        lncli = " sendpayment "
-        node = input("Send to NodeID: ")
-        amount = input("Amount in sats: ")
-        while True:
-            if amount == "" or amount == "0":
-                amount = input("\nAmount in sats: ")
-            else:
-                break
-        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --final_cltv_delta=40")
-    except:
-        pass
-
-def localchannelbalance():
-    lncli = " channelbalance"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    print("\n----------------------------------------------------------------------------------------------------------------")
-    print("""
-    \tLOCAL CHANNEL BALANCE
-    Balance: {} sats
-    Pending Channels: {} sats
-    """.format(d['balance'], d['pending_open_balance']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
-
-def localnewaddress():
-    lncli = " newaddress p2wkh"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    print("\033[1;30;47m")
-    qr.add_data(d['address'])
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    qr.clear()
-    print("Bitcoin Address: " + d['address'])
-    input("\nContinue... ")
-
-def localbalanceOC():
-    lncli = " walletbalance"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    print("\n------------------------------------------------------------------------------------")
-    print("\n\tLOCAL ONCHAIN BALANCE\n")
-    print("Total Balance: " + d['total_balance'] + " sats")
-    print("Confirmed Balance: " + d['confirmed_balance'] + " sats")
-    print("Unconfirmed Balance: " + d['unconfirmed_balance'] + " sats")
-    print("------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
-
-# Remote connection with rest -------------------------------------
-
-
-def getnewinvoice():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    try:
-        amount = input("Amount in sats: ")
+        wall = input("Wallet destination ID: ")
+        amt = input("Amount in Sats: ")
         memo = input("Memo: ")
-        url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
-        data = {
+        my_wallet = LNPayWallet(q)
+        transfer_params = {
+            'dest_wallet_id': wall,
+            'num_satoshis': amt,
+            'memo': memo
+        }
+        transfer_result = my_wallet.internal_transfer(transfer_params)
+        p = transfer_result['wtx_transfer_in']
+        e = transfer_result['wtx_transfer_out']
+        f = e['wal']
+        v = p['wal']
+        print("\n----------------------------------------------------------------------------------------------------")
+        print("""
+        \tLNPAY TRANSFER BETEWWN WALLETS INFORMATION
 
-            }
-        if amount == "":
-            r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"memo": memo + " -PyBLOCK"},
-                )
-        else:
-            r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"value": amount, "memo": memo + " -PyBLOCK"},
-                )
-
-        a = r.json()
-        print("\033[1;30;47m")
-        qr.add_data(a['payment_request'])
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        qr.clear()
-        print("Lightning Invoice: " + a['payment_request'])
-        b = str(a['payment_request'])
-        while True:
-            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], b)
-            r = requests.get(url, headers=headers, verify=cert_path)
-            a = r.json()
-            url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
-            rr = requests.get(url, headers=headers, verify=cert_path)
-            m = rr.json()
-            if m['state'] == 'SETTLED':
-                print("\033[1;32;40m")
-                clear()
-                blogo()
-                tick()
-                print("\033[0;37;40m")
-                t.sleep(2)
-                break
-            elif m['state'] == 'CANCELED':
-                print("\033[1;31;40m")
-                clear()
-                blogo()
-                canceled()
-                print("\033[0;37;40m")
-                t.sleep(2)
-                break
+        ID: {}
+        Amount: {} sats
+        Memo: {}
+        To Wallet: {}
+        From Wallet: {}
+        """.format(p['id'], p['num_satoshis'], p['user_label'], v['user_label'], f['user_label']))
+        print("----------------------------------------------------------------------------------------------------\n")
+        input("Continue...")
     except:
         pass
 
-def payinvoice():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    try:
+
+#-----------------------------END LNPAY--------------------------------
+
+#-----------------------------OPENNODE--------------------------------
+
+def loadFileConnOpenNode(opennodeLoad):
+    opennodeLoad = {"key":"","wdr":"","inv":""}
+
+    if os.path.isfile('opennode.conf'): # Check if the file 'bclock.conf' is in the same folder
+        opennodeData= pickle.load(open("opennode.conf", "rb")) # Load the file 'bclock.conf'
+        opennodeLoad = opennodeData # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO OPENNODE.COM.
+                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                           SAVE THE FILE '\033[1;33;40mopennodeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+        """)
+        opennodeLoad["key"] = input("API Read Only Key: ")
+        opennodeLoad["wdr"] = input("API Withdrawall Key: ")
+        opennodeLoad["inv"] = input("API Invoices Key: ")
+        pickle.dump(opennodeLoad, open("opennode.conf", "wb"))
+    clear()
+    blogo()
+    return opennodeLoad
+
+def createFileConnOpenNode():
+    opennodeLoad = {"key":"","wdr":"","inv":""}
+
+    clear()
+    blogo()
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO OPENNODE.COM.
+               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                       SAVE THE FILE '\033[1;33;40mopennodeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    """)
+    opennodeLoad["key"] = input("API Read Only Key: ")
+    opennodeLoad["wdr"] = input("API Withdrawall Key: ")
+    opennodeLoad["inv"] = input("API Invoices Key: ")
+    pickle.dump(opennodeLoad, open("opennode.conf", "wb"))
+
+def OpenNodelistfunds():
+    a = loadFileConnOpenNode(['wdr'])
+    b = str(a['wdr'])
+    curl = "curl https://api.opennode.co/v1/account/balance -H "+ '"Content-Type: application/json" -H "Authorization: {}"'.format(b)
+    sh = os.popen(curl).read()
+    clear()
+    blogo()
+    n = str(sh)
+    d = json.loads(n)
+    r = d['data']
+    p = r['balance']
+    print("\n----------------------------------------------------------------------------------------------------")
+    print("""
+    OPENNODE BALANCE
+
+    Amount: {} sats
+    """.format(p['BTC']))
+    print("----------------------------------------------------------------------------------------------------\n")
+    input("Continue...")
+
+def OpenNodecreatecharge():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    a = loadFileConnOpenNode(['key'])
+    b = str(a['key'])
+    fiat = input("Are you going to pay in FIAT? Y/n:")
+    if fiat in ["Y", "y"]:
+        print("\n----------------------------------------------------------------------------------------------------")
+        print("""
+        \tFIAT supported on OpenNode:
+
+        AED,AFN,ALL,AMD,ANG,AOA,ARS,AUD,AWG,AZN,BAM,BBD,BDT,BGN,BHD,BIF,BMD,BND,BOB,BRL,BSD,BTN,BWP,
+        BYN,BZD,CAD,CDF,CHF,CLF,CLP,CNH,CNY,COP,CRC,CUC,CUP,CVE,CZK,DJF,DKK,DOP,DZD,EGP,ERN,ETB,EUR,
+        FJD,FKP,GBP,GEL,GGP,GHS,GIP,GMD,GNF,GTQ,GYD,HKD,HNL,HRK,HTG,HUF,IDR,ILS,IMP,INR,IQD,IRR,ISK,
+        JEP,JMD,JOD,JPY,KES,KGS,KHR,KMF,KPW,KRW,KWD,KYD,KZT,LAK,LBP,LKR,LRD,LSL,LYD,MAD,MDL,MGA,MKD,
+        MMK,MNT,MOP,MRO,MUR,MVR,MWK,MXN,MYR,MZN,NAD,NGN,NIO,NOK,NPR,NZD,OMR,PAB,PEN,PGK,PHP,PKR,PLN,
+        PYG,QAR,RON,RSD,RUB,RWF,SAR,SBD,SCR,SDG,SEK,SGD,SHP,SLL,SOS,SRD,SSP,STD,SVC,SYP,SZL,THB,TJS,
+        TMT,TND,TOP,TRY,TTD,TWD,TZS,UAH,UGX,USD,UYU,UZS,VES,VND,VUV,WST,XAF,XAG,XAU,XCD,XDR,XOF,XPD,
+        XPF,XPT,YER,ZAR,ZMW,ZWL,USDC.
+        """)
+        print("\n----------------------------------------------------------------------------------------------------")
+        selection = input("Select a FIAT currency: ")
+        amt = input("Amount in {}: ".format(selection))
+        curl = 'curl https://api.opennode.co/v1/charges -X POST -H ' + '"Authorization: {}"'.format(b) + ' -H "Content-Type: application/json" -d ' + "'{" + '"amount": "{}", "currency": "{}"'.format(amt,selection.upper()) +  "}'"
+        sh = os.popen(curl).read()
+        clear()
+        blogo()
+        n = str(sh)
+        d = json.loads(n)
+        dd = d['data']
+        qq = dd['lightning_invoice']
+        pp = dd['chain_invoice']
+        nn = qq['payreq']
+        mm = nn.lower()
         while True:
-            bolt11N = input("Insert the invoice to pay: ")
-            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
-            r = requests.get(url, headers=headers, verify=cert_path)
-            s = r.json()
+            try:
+                print("\n----------------------------------------------------------------------------------------------------")
+                print("""
+                \tOPENNODE PAYMENT REQUEST
+
+                Amount: {} {}
+                ID: {}
+                Status: {}
+                Invoice: {}
+                Onchain Address: {}
+                Amount: {} sats
+                """.format(amt, selection.upper(), dd['id'], dd['status'], mm, pp['address'], dd['amount']))
+                print("----------------------------------------------------------------------------------------------------\n")
+                p = pp['address']
+                pay = input("Invoice or Onchain Address? I/O: ")
+                if pay =="I" or pay == "i":
+                    print("\033[1;30;47m")
+                    qr.add_data(mm)
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+                    qr.clear()
+                    print("\nLightning Invoice: " + mm)
+                elif pay =="O" or pay == "o":
+                    print("\033[1;30;47m")
+                    qr.add_data(p)
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+                    qr.clear()
+                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print("\nOnchain Address: " + p)
+                input("\nContinue...")
+                clear()
+                blogo()
+            except:
+                break
+    elif fiat == "N" or fiat == "n":
+        amt = input("Amount in sats: ")
+        curl = 'curl https://api.opennode.co/v1/charges -X POST -H' + '"Authorization: {}"'.format(b) + ' -H "Content-Type: application/json" -d ' + "'{" + '"amount": "{}", "currency": "BTC"'.format(amt) +  "}'"
+        sh = os.popen(curl).read()
+        clear()
+        blogo()
+        n = str(sh)
+        d = json.loads(n)
+        dd = d['data']
+        qq = dd['lightning_invoice']
+        pp = dd['chain_invoice']
+        nn = qq['payreq']
+        mm = nn.lower()
+        while True:
+            try:
+                print("\n----------------------------------------------------------------------------------------------------")
+                print("""
+                \tOPENNODE PAYMENT REQUEST
+
+                Amount: {} sats
+                ID: {}
+                Status: {}
+                Invoice: {}
+                Onchain Address: {}
+                Amount: {} sats
+                """.format(amt, dd['id'], dd['status'], mm, pp['address'], dd['amount']))
+                print("----------------------------------------------------------------------------------------------------\n")
+                p = pp['address']
+                pay = input("Invoice or Onchain Address? I/O: ")
+                if pay =="I" or pay == "i":
+                    print("\033[1;30;47m")
+                    qr.add_data(mm)
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+                    qr.clear()
+                    print("\nLightning Invoice: " + mm)
+                elif pay =="O" or pay == "o":
+                    print("\033[1;30;47m")
+                    qr.add_data(p)
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+                    qr.clear()
+                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print("\nOnchain Address: " + p)
+                input("\nContinue...")
+                clear()
+                blogo()
+            except:
+                break
+
+
+def OpenNodeiniciatewithdrawal():
+    a = loadFileConnOpenNode(['wdr'])
+    b = str(a['wdr'])
+    c = loadFileConnOpenNode(['key'])
+    d = str(a['key'])
+    lnchain = input("Are you going to pay with Lightning or Onchain? L/O: ")
+    clear()
+    blogo()
+    if lnchain in ["L", "l"]:
+        try:
+            while True:
+                invoice = input("\nInvoice: ")
+                checkcurl = 'curl https://api.opennode.co/v1/charge/decode -X POST -H "Authorization: {}" -H "Content-Type: application/json" -d '.format(b) + "'{" + '"pay_req": "{}"'.format(invoice) + "}'"
+                ssh = os.popen(checkcurl).read()
+                nn = str(ssh)
+                dd = json.loads(nn)
+                print(dd)
+                if invoice == "":
+                    print("\n----------------------------------------------------------------------------------------------------")
+                    print("""
+                    \tOPENNODE TRANSFER REQUEST
+
+                    Message: {}
+                    """.format(dd['message']))
+                    print("----------------------------------------------------------------------------------------------------\n")
+                else:
+                    break
+            rr = dd['data']
+            ss = rr['pay_req']
+
             print("\n----------------------------------------------------------------------------------------------------")
             print("""
-            \tINVOICE DECODED
-            Destination: {}
-            Payment Hash: {}
+            \tOPENNODE TRANSFER REQUEST
+
+            Network: {}
             Amount: {} sats
-            Description: {}
-            """.format(s['destination'], s['payment_hash'], s['num_satoshis'], s['description']))
+            Destination: {}
+            Hash: {}
+            """.format(ss['network'],ss['amount'],ss['pub_key'],ss['hash']))
             print("----------------------------------------------------------------------------------------------------\n")
             print("<<< Cancel Control + C")
             input("\nEnter to Continue... ")
-            bolt11 = bolt11N.lower()
-            r = requests.post(
-                url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
-            )
-            try:
-                r.json()['error']
-                print("\nThe Invoice don't have an amount. Please insert an Invoice with amount. \n")
-                continue
-            except:
-                break
-        ok, checking_id, fee_msat, error_message = r.ok, None, 0, None
-        r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path,)
-        t.sleep(5)
-        if r.ok:
-            checking_id = r.json()["payment_hash"]
-            print("\033[1;32;40m")
+
+            curl = 'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {}"'.format(b) + " -d '{" + '"type": "ln", "address": "{}", "callback_url": ""'.format(invoice) + "}'"
+            sh = os.popen(curl).read()
+            n = str(sh)
+            d = json.loads(n)
             clear()
             blogo()
             tick()
-            print("\033[0;37;40m")
             t.sleep(2)
-        else:
-            error_message = r.json()["error"]
-            print("\033[1;31;40m")
+        except:
+            pass
+
+    elif lnchain == "O" or lnchain == "o":
+        try:
+            while True:
+                print("\n\tOPENNODE TRANSFER REQUEST\n")
+                print("\n\tMinimum amount 200000 sats\n")
+                address = input("\nBitcoin Address: ")
+                amt = int(input("Amount in sats: "))
+                curl = 'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {}"'.format(b) + " -d '{" + '"type": "chain", "amount": {}, "address": "{}", "callback_url": ""'.format(amt,address) + "}'"
+                if amt < 199999:
+                    sh = os.popen(curl).read()
+                    n = str(sh)
+                    d = json.loads(n)
+                    print("\n----------------------------------------------------------------------------------------------------")
+                    print("""
+                    \tOPENNODE TRANSFER REQUEST
+
+                    Message: {}
+                    """.format(d['message']))
+                    print("----------------------------------------------------------------------------------------------------\n")
+                elif amt > 200000:
+                    sh = os.popen(curl).read()
+                    n = str(sh)
+                    d = json.loads(n)
+                    dd = d['data']
+                    print("\n----------------------------------------------------------------------------------------------------")
+                    print("""
+                    \tOPENNODE TRANSFER REQUEST
+
+                    Amount: {} sats
+                    Address Destination: {}
+                    Fee: {}
+                    Status: {}
+                    """.format(dd['amount'],dd['address'],dd['fee'], dd['status']))
+                    print("----------------------------------------------------------------------------------------------------\n")
+                    input("\nContinue... ")
+                    clear()
+                    blogo()
+                    logoB()
+                    t.sleep(2)
+                    break
+        except:
+            pass
+
+def OpenNodeListPayments():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    a = loadFileConnOpenNode(['wdr'])
+    b = str(a['wdr'])
+    curl = 'curl https://api.opennode.co/v1/withdrawals -H "Content-Type: application/json" -H "Authorization: {}"'.format(b)
+    sh = os.popen(curl).read()
+    clear()
+    blogo()
+    print("\n\tOPENNODE TRANSACTIONS LIST\n")
+    n = str(sh)
+    d = json.loads(n)
+    da = d['data']
+    while True:
+        try:
+            for item_ in da:
+                s = item_
+                n = s['status']
+                q = str(n)
+                print("ID: " + s['id'] + " " + q)
+            nd = input("\nSelect ID: ")
+            for item in da:
+                s = item
+                nn = s['id']
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------")
+                    print("""
+                    \tOPENNODE TRANSACTION DECODED
+                    ID: {}
+                    Amount: {} sats
+                    Type: {}
+                    Invoice or Tx ID: {}
+                    Status: {}
+                    """.format(s['id'], s['amount'], s['type'], s['reference'], s['status']))
+                    print("----------------------------------------------------------------------------------------------------\n")
+                    print("\033[1;30;47m")
+                    qr.add_data(s['reference'])
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+                    qr.clear()
+            input("Continue...")
             clear()
             blogo()
-            canceled()
-            print("\033[0;37;40m")
-            t.sleep(2)
-    except:
-        pass
+            print("\n\tOPENNODE TRANSACTIONS LIST\n")
+        except:
+            break
+#-----------------------------END OPENNODE--------------------------------
 
-def getnewaddress():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
+#-----------------------------TIPPINME--------------------------------
+
+def loadFileTippinMe(tippinmeLoad):
+    tippinmeLoad = {"key":""}
+
+    if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
+        tippinmeData= pickle.load(open("tippinme.conf", "rb")) # Load the file 'bclock.conf'
+        tippinmeLoad = tippinmeData # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOUR CONFIGURATION INFORMATION WILL BE SAVE IN '\033[1;33;40mtippinme.conf\033[0;37;40m'
+                                                                IF YOU NEED TO START AGAIN, DELETE IT.\n
+        """)
+        tippinmeLoad["key"] = input("Twitter @user: ")
+        pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
+    clear()
+    blogo()
+    return tippinmeLoad
+
+def createFileTippinMe():
+    tippinmeLoad = {"key":""}
+    clear()
+    blogo()
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOUR CONFIGURATION INFORMATION WILL BE SAVE IN '\033[1;33;40mtippinme.conf\033[0;37;40m'
+                                                                IF YOU NEED TO START AGAIN, DELETE IT.\n
+    """)
+    tippinmeLoad["key"] = input("Twitter @user: ")
+    pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
+
+def tippinmeGetInvoice():
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
     box_size=10,
     border=4,
     )
+    a = loadFileTippinMe(['key'])
+    b = str(a['key'])
     try:
-        url = 'https://{}/v1/newaddress'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        addr = r.json()
+        print("\n\tTIPPINME GENERATE INVOICE\n")
+        q = input("Amount in Sats: ")
+        clear()
+        blogo()
+        url = 'https://api.tippin.me/v1/public/addinvoice/{}/{}'.format(b,q)
+        response = requests.get(url)
+        responseB = str(response.text)
+        responseC = responseB
+        lnreq = responseC.split(',')
+        lnbc1 = lnreq[1]
+        lnbc1S = str(lnbc1)
+        lnbc1R = lnbc1S.split(':')
+        lnbc1W = lnbc1R[1]
+        ln = str(lnbc1W)
+        ln1 = ln.strip('"')
         print("\033[1;30;47m")
-        qr.add_data(addr['address'])
+        qr.add_data(ln1)
         qr.print_ascii()
         print("\033[0;37;40m")
-        print("Bitcoin Address: " + addr['address'])
-        qr.clear()
-        input("\nContinue... ")
+        print("LND Invoice: " + ln1)
+        response.close()
+        input("Continue...")
     except:
         pass
 
-def listinvoice():
+
+#-----------------------------END TIPPINME--------------------------------
+
+
+#-----------------------------LNTXBOT--------------------------------
+
+def loadFileLNTXBOT(lntxbotLoad):
+    lntxbotLoad = {"key":"", "log":""}
+
+    if os.path.isfile('lntxbot.conf'): # Check if the file 'bclock.conf' is in the same folder
+        lntxbotData= pickle.load(open("lntxbot.conf", "rb")) # Load the file 'bclock.conf'
+        lntxbotLoad = lntxbotData # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
+                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                           SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+        """)
+        lntxbotLoad["key"] = input("Full Access API: ")
+        lntxbotLoad["log"] = input("Telegram @USER: ")
+        pickle.dump(lntxbotLoad, open("lntxbot.conf", "wb"))
+    clear()
+    blogo()
+    return lntxbotLoad
+
+def createFileLNTXBOT():
+    lntxbotLoad = {"key":"", "log":""}
+    clear()
+    blogo()
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
+               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                       SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    """)
+    lntxbotLoad["key"] = input("Full Access API: ")
+    pickle.dump(lntxbotLoad, open("lntxbot.conf", "wb"))
+
+def lntxbotGetInvoice():
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
     box_size=10,
     border=4,
     )
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    a = r.json()
-    n = a['invoices']
+    a = loadFileLNTXBOT(['key'])
+    b = str(a['key'])
+    c = loadFileLNTXBOT(['log'])
+    d = str(c['log'])
+    curl = 'curl -X GET https://lntxbot.bigsun.xyz/@{} -H'.format(d) + '"X-Api-Key: {}"'.format(b) + '-H "Content-type: application/json"'
+    sh = os.popen(curl).read()
+    n = str(sh)
+    print(n)
+    d = json.loads(n)
+    print(d)
+    print("\033[1;30;47m")
+    qr.add_data(ln1)
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    print("LND Invoice: " + ln1)
+    response.close()
+    input("Continue...")
+
+#-----------------------------END LNTXBOT--------------------------------
+
+#-----------------------------BITNODES--------------------------------
+
+def bitnodesListSnapshots():
+
+    curl = 'curl -H "Accept: application/json; indent=4" https://bitnodes.io/api/v1/snapshots/'
+    sh = os.popen(curl).read()
+    clear()
+    blogo()
+    print("\n\tBITNODES SNAPSHOTS LIST\n")
+    n = str(sh)
+    d = json.loads(n)
+    da = d['results']
     while True:
-        clear()
-        print("\033[1;32;40m")
-        blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\tInvoices\n")
         try:
-            print("\n\tLIST INVOICES\n")
-            for r in range(len(n)):
-                s = n[r]
-                print("Invoice: " + s['r_hash'] + " " + s['state'])
-
-            nd = input("\nSelect RHash: ")
-            for item in n:
+            for item_ in da:
+                s = item_
+                print("Timestamp: " + str(s['timestamp']))
+            nd = input("\nSelect ID: ")
+            for item in da:
                 s = item
-                nn = s['r_hash']
+                nn = str(s['timestamp'])
                 if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("\n----------------------------------------------------------------------------------------------------")
                     print("""
-                    \tINVOICE DECODED
-                    Memo: {}
-                    Invoice: {}
-                    Amount: {} sats
-                    State: {}
-                    """.format(s['memo'], s['payment_request'], s['amt_paid_sat'], s['state']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
-                    print("\033[1;30;47m")
-                    qr.add_data(s['payment_request'])
-                    qr.print_ascii()
-                    print("\033[0;37;40m")
-                    qr.clear()
-            input("\nContinue... ")
+                    \tBITNODES DECODED
+                    URL: {}
+                    Timestamp: {}
+                    Total Nodes: {}
+                    Latest Block Height: {}
+                    """.format(s['url'], s['timestamp'], s['total_nodes'], s['latest_height']))
+                    print("----------------------------------------------------------------------------------------------------\n")
+            input("Continue...")
+            clear()
+            blogo()
         except:
-            break
-    input("\nContinue... ")
-
-def getinfo():
-    try:
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        a = r.json()
-        print("\n----------------------------------------------------------------------------------------------------------------")
-        print("""
-        \t NODE INFORMATION
-        Version: {}
-        Node ID: {}
-        Alias: {}
-        Color: {}
-        Pending Channels: {}
-        Active Channels: {}
-        Inactive Channels: {}
-        Peers: {}
-        URLS: {}
-        """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
-        print("----------------------------------------------------------------------------------------------------------------\n")
-        input("\nContinue... ")
-    except:
-        pass
-
-def channels():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    a = r.json()
-    n = a['channels']
-    while True:
-        clear()
-        print("\033[1;32;40m")
-        blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\t\nChannels\n")
-        try:
-            print("\n\tLIST CHANNELS\n")
-            for r in range(len(n)):
-                s = n[r]
-                print("Node ID: " + s['remote_pubkey'])
-
-            nd = input("\nSelect a Node ID: ")
-            for item in n:
-                s = item
-                nn = s['remote_pubkey']
-                if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
-                    print("""
-                    \tCHANNEL DECODED
-                    Active: {}
-                    Node ID: {}
-                    Channel Point: {}
-                    Channel Capacity: {} sats
-                    Local Balance: {} sats
-                    Remote Balance: {} sats
-                    Total Sent: {} sats
-                    Total Received: {} sats
-                    """.format(s['active'], s['remote_pubkey'], s['channel_point'], s['capacity'], s['local_balance'], s['remote_balance'], s['total_satoshis_sent'], s['total_satoshis_received']))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
-
-            input("\nContinue... ")
-        except:
-            break
-
-def channelbalance():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    a = r.json()
-    print("\n----------------------------------------------------------------------------------------------------------------")
-    print("""
-    \tLOCAL CHANNEL BALANCE
-    Balance: {} sats
-    Pending Channels: {} sats
-    """.format(a['balance'], a['pending_open_balance']))
-    print("----------------------------------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
-
-def listonchaintxs():
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/transactions'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    a = r.json()
-    n = a['transactions']
-    while True:
-        clear()
-        print("\033[1;32;40m")
-        blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\t\nTransactions\n")
-        try:
-            for r in range(len(n)):
-                s = n[r]
-                print("\n\tLIST ONCHAIN TRANSACTIONS\n")
-                print("Transaction Hash: " + s['tx_hash'])
-            nd = input("\nSelect RHash: ")
-
-            for item in n:
-                s = item
-                nn = s['tx_hash']
-                trx = s['dest_addresses']
-                if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------------------")
-                    print("""
-                    \tONCHAIN TRANSACTION DECODED
-                    Amount: {} sats
-                    Tx Hash: {}
-                    Block Hash: {}
-                    Block Height: {}
-                    Confirmations: {}
-                    Destination: {}
-                    """.format(s['amount'], s['tx_hash'], s['block_hash'], s['block_height'], s['num_confirmations'], trx))
-                    print("----------------------------------------------------------------------------------------------------------------\n")
-                    print("\nTransaction Hash")
-                    print("\033[1;30;47m")
-                    qr.add_data(s['tx_hash'])
-                    qr.print_ascii()
-                    print("\033[0;37;40m")
-                    qr.clear()
-            input("\nContinue... ")
-        except:
-            break
-
-def balanceOC():
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/balance/blockchain'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    a = r.json()
-    print("\n------------------------------------------------------------------------------------")
-    print("\n\tLOCAL ONCHAIN BALANCE\n")
-    print("Total Balance: " + a['total_balance'] + " sats")
-    print("Confirmed Balance: " + a['confirmed_balance'] + " sats")
-    print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
-    print("------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
+            pass
 
 
-# END Remote connection with rest -------------------------------------
+#-----------------------------END BITNODES--------------------------------

@@ -69,7 +69,6 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
         print("\n----------------------------------------------------------------------------------------------------------------")
         print("""
         \tGET BLOCKCHAIN INFORMATION
-
         Chain: {}
         Blocks: {}
         Best BlockHash: {}
@@ -136,7 +135,6 @@ def locallistchaintxns():
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
                     \nONCHAIN TRANSACTION DECODED
-
                     Amount: {} sats
                     Tx Hash: {}
                     Block Hash: {}
@@ -190,7 +188,6 @@ def locallistinvoices():
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
                     \nINVOICE DECODED
-
                     Memo: {}
                     Invoice: {}
                     Amount: {} sats
@@ -233,7 +230,6 @@ def locallistchannels():
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
                     \tCHANNEL DECODED
-
                     Active: {}
                     Node ID: {}
                     Channel Point: {}
@@ -257,7 +253,6 @@ def localgetinfo():
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
     \tNODE INFORMATION
-
     Version: {}
     Node ID: {}
     Alias: {}
@@ -284,8 +279,9 @@ def localaddinvoice():
     )
     try:
         amount = input("Amount in sats: ")
-        memo = input("Memo: ")
-        lsd = os.popen(lndconnectload['ln'] + lncli + " --memo " + memo + "-PyBLOCK" + " --amt " + amount).read()
+        mem = input("Memo: ")
+        memo = mem.replace(" ","_")
+        lsd = os.popen(lndconnectload['ln'] + lncli + " --memo {}-PyBLOCK --amt {}".format(memo, amount)).read()
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         print("\033[1;30;47m")
@@ -349,7 +345,6 @@ def localgetnetworkinfo():
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
     \tLIGHTNING NETWORK INFORMATION
-
     Numbers of Nodes: {}
     Numbers of Channels: {}
     Total Network Capacity: {} sats
@@ -385,7 +380,6 @@ def localchannelbalance():
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
     \tLOCAL CHANNEL BALANCE
-
     Balance: {} sats
     Pending Channels: {} sats
     """.format(d['balance'], d['pending_open_balance']))
@@ -504,7 +498,6 @@ def payinvoice():
             print("\n----------------------------------------------------------------------------------------------------")
             print("""
             \tINVOICE DECODED
-
             Destination: {}
             Payment Hash: {}
             Amount: {} sats
@@ -604,7 +597,6 @@ def listinvoice():
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
                     \tINVOICE DECODED
-
                     Memo: {}
                     Invoice: {}
                     Amount: {} sats
@@ -632,7 +624,6 @@ def getinfo():
         print("\n----------------------------------------------------------------------------------------------------------------")
         print("""
         \t NODE INFORMATION
-
         Version: {}
         Node ID: {}
         Alias: {}
@@ -702,7 +693,6 @@ def channelbalance():
     print("\n----------------------------------------------------------------------------------------------------------------")
     print("""
     \tLOCAL CHANNEL BALANCE
-
     Balance: {} sats
     Pending Channels: {} sats
     """.format(a['balance'], a['pending_open_balance']))
@@ -745,7 +735,6 @@ def listonchaintxs():
                     print("\n----------------------------------------------------------------------------------------------------------------")
                     print("""
                     \tONCHAIN TRANSACTION DECODED
-
                     Amount: {} sats
                     Tx Hash: {}
                     Block Hash: {}
