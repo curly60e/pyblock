@@ -420,7 +420,6 @@ def localbalanceOC():
 
 # Remote connection with rest -------------------------------------
 
-
 def getnewinvoice():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -767,6 +766,5 @@ def balanceOC():
     print("Unconfirmed Balance: " + a['unconfirmed_balance'] + " sats")
     print("------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
-
 
 # END Remote connection with rest -------------------------------------
