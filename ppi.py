@@ -107,7 +107,6 @@ def lnbitCreateNewInvoice():
     except:
         pass
 
-
 def lnbitPayInvoice():
     bolt = input("Invoice: ")
     a = loadFileConnLNBits(['admin_key'])
@@ -238,7 +237,6 @@ def lnbitListPawWall():
         clear()
         blogo()
 
-
 def lnbitDeletePayWall():
     while True:
         try:
@@ -294,8 +292,8 @@ def lnbitDeletePayWall():
             break
 
 #-----------------------------END LNBITS--------------------------------
-
 #-----------------------------LNPAY--------------------------------
+
 def loadFileConnLNPay(lnpayLoad):
     lnpayLoad = {"key":""}
 
@@ -330,7 +328,6 @@ def createFileConnLNPay():
     print("\n\tWALLET ACCESS KEYS\n")
     lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
     pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
-
 
 def lnpayGetBalance():
     a = loadFileConnLNPay(['key'])
@@ -401,7 +398,6 @@ def lnpayCreateInvoice():
                 continue
     except:
         pass
-
 
 def lnpayGetTransactions():
     qr = qrcode.QRCode(
@@ -537,9 +533,7 @@ def lnpayTransBWallets():
     except:
         pass
 
-
 #-----------------------------END LNPAY--------------------------------
-
 #-----------------------------OPENNODE--------------------------------
 
 def loadFileConnOpenNode(opennodeLoad):
@@ -723,7 +717,6 @@ def OpenNodecreatecharge():
             except:
                 break
 
-
 def OpenNodeiniciatewithdrawal():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
@@ -871,8 +864,8 @@ def OpenNodeListPayments():
             print("\n\tOPENNODE TRANSACTIONS LIST\n")
         except:
             break
-#-----------------------------END OPENNODE--------------------------------
 
+#-----------------------------END OPENNODE--------------------------------
 #-----------------------------TIPPINME--------------------------------
 
 def loadFileTippinMe(tippinmeLoad):
@@ -938,10 +931,7 @@ def tippinmeGetInvoice():
     except:
         pass
 
-
 #-----------------------------END TIPPINME--------------------------------
-
-
 #-----------------------------LNTXBOT--------------------------------
 
 def loadFileLNTXBOT(lntxbotLoad):
@@ -1003,7 +993,6 @@ def lntxbotGetInvoice():
     input("Continue...")
 
 #-----------------------------END LNTXBOT--------------------------------
-
 #-----------------------------BITNODES--------------------------------
 
 def bitnodesListSnapshots():
@@ -1041,5 +1030,43 @@ def bitnodesListSnapshots():
         except:
             pass
 
+#-----------------------------END BITNODES------------------------------
+#-----------------------------TALLYCOIN------------------------------
 
-#-----------------------------END BITNODES--------------------------------
+def TallyCoingetnewinvoice():
+    cert_path = lndconnectload["tls"]
+    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    headers = {'Grpc-Metadata-macaroon': macaroon}
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    try:
+        amount = input("Amount in sats: ")
+        memo = input("Memo: ")
+        url = 'https://{}/v1/payment/request/'.format(lndconnectload["ip_port"])
+        data = {
+
+            }
+        if amount == "":
+            r = requests.post(
+                    url,
+                    headers=headers, verify=cert_path,
+                    json={"memo": memo + " -PyBLOCK"},
+                )
+        else:
+            r = requests.post(
+                    url,
+                    headers=headers, verify=cert_path,
+                    json={"value": amount, "memo": memo + " -PyBLOCK"},
+                )
+
+        a = r.json()
+
+    except:
+        pass
+
+TallyCoingetnewinvoice()
+#-----------------------------TALLYCOIN------------------------------
