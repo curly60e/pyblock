@@ -5,7 +5,7 @@
 import requests
 import qrcode
 
-
+#Dev PayNym
 def donationPN():
     qr = qrcode.QRCode(
     version=1,
@@ -18,8 +18,10 @@ def donationPN():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("PayNym: " + url)
 
+#Dev Address
 def donationAddr():
     qr = qrcode.QRCode(
     version=1,
@@ -32,8 +34,10 @@ def donationAddr():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("Bitcoin Address Bech32: " + url)
 
+#Dev LN
 def donationLN():
     qr = qrcode.QRCode(
     version=1,
@@ -56,10 +60,11 @@ def donationLN():
     qr.add_data(ln1)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("LND Invoice: " + ln1)
     response.close()
 
-
+#Tester Address
 def donationAddrTst():
     qr = qrcode.QRCode(
     version=1,
@@ -72,8 +77,10 @@ def donationAddrTst():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("Bitcoin Address Bech32: " + url)
 
+#Tester LN 
 def donationLNTst():
     qr = qrcode.QRCode(
     version=1,
@@ -96,6 +103,7 @@ def donationLNTst():
     qr.add_data(ln1)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("LND Invoice: " + ln1)
     response.close()
 
@@ -111,4 +119,5 @@ def decodeQR():
     qr.add_data(url)
     qr.print_ascii()
     print("\033[0;37;40m")
+    qr.close()
     print("Bitcoin Address: " + url)
