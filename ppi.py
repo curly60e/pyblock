@@ -169,12 +169,12 @@ def lnbitCreatePayWall():
             d = json.loads(n)
             while True:
                 print("\n\tLNBITS PAYWALL LIST\n")
-                for r in range(len(d)):
-                    s = d[r]
+                for item_ in d:
+                    s = item_
                     print("ID: " + s['id'])
                 nd = input("\nSelect ID: ")
-                for r in range(len(d)):
-                    s = d[r]
+                for item in d:
+                    s = item
                     nn = s['id']
                     if nd == nn:
                         print("\n----------------------------------------------------------------------------------------------------------------")
@@ -647,14 +647,14 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
-                if pay =="I" or pay == "i":
+                if pay in ["I", "i"]:
                     print("\033[1;30;47m")
                     qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nLightning Invoice: " + mm)
-                elif pay =="O" or pay == "o":
+                elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
                     qr.add_data(p)
                     qr.print_ascii()
@@ -667,7 +667,7 @@ def OpenNodecreatecharge():
                 blogo()
             except:
                 break
-    elif fiat == "N" or fiat == "n":
+    elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
         curl = 'curl https://api.opennode.co/v1/charges -X POST -H' + '"Authorization: {}"'.format(b) + ' -H "Content-Type: application/json" -d ' + "'{" + '"amount": "{}", "currency": "BTC"'.format(amt) +  "}'"
         sh = os.popen(curl).read()
@@ -696,14 +696,14 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
-                if pay =="I" or pay == "i":
+                if pay in ["I", "i"]:
                     print("\033[1;30;47m")
                     qr.add_data(mm)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nLightning Invoice: " + mm)
-                elif pay =="O" or pay == "o":
+                elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
                     qr.add_data(p)
                     qr.print_ascii()
@@ -771,7 +771,7 @@ def OpenNodeiniciatewithdrawal():
         except:
             pass
 
-    elif lnchain == "O" or lnchain == "o":
+    elif lnchain in ["O", "o"]:
         try:
             while True:
                 print("\n\tOPENNODE TRANSFER REQUEST\n")
