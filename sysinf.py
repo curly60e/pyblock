@@ -5,9 +5,9 @@
 import psutil
 
 
-def sysinfoDetail():  #Cpu and memory usage
+def sysinfoDetail(): #Cpu and memory usage
     try:
-        # gives a single float value
+            # gives a single float value
         print("   \033[0;37;40m----------------------------")
         print("   \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "\033[0;37;40m%")
         print("   \033[3;33;40mMemory Usage: \033[1;32;40m" "{}\033[0;37;40m%".format(int(psutil.virtual_memory().percent)))
