@@ -122,14 +122,14 @@ def locallistchaintxns():
         print("\t\nTransactions\n")
         try:
             print("\n\tLIST ONCHAIN TRANSACTIONS\n")
-            for item_ in n:
-                s = item_
+            for r in range(len(n)):
+                s = n[r]
 
                 print("Transaction Hash: " + s['tx_hash'])
             nd = input("\nSelect RHash: ")
 
-            for item in n:
-                s = item
+            for r in range(len(n)):
+                s = n[r]
                 nn = s['tx_hash']
                 trx = s['dest_addresses']
                 if nd == nn:
@@ -176,15 +176,15 @@ def locallistinvoices():
         print("\tInvoices\n")
         try:
             print("\n\tLIST INVOICES\n")
-            for item_ in n:
-                s = item_
+            for r in range(len(n)):
+                s = n[r]
 
                 print("Invoice: " + s['r_hash'] + " " + s['state'])
 
             nd = input("\nSelect RHash: ")
 
-            for item in n:
-                s = item
+            for r in range(len(n)):
+                s = n[r]
                 nn = s['r_hash']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -221,15 +221,13 @@ def locallistchannels():
         print("\t\nChannels\n")
         try:
             print("\n\tLIST CHANNELS\n")
-            for item_ in n:
-                s = item_
-
+            for r in range(len(n)):
+                s = n[r]
                 print("Node ID: " + s['remote_pubkey'])
 
             nd = input("\nSelect a Node ID: ")
-
-            for item in n:
-                s = item
+            for r in range(len(n)):
+                s = n[r]
                 nn = s['remote_pubkey']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------------------")
@@ -284,58 +282,64 @@ def localaddinvoice():
     box_size=10,
     border=4,
     )
-    amount = input("Amount in sats: ")
-    memo = input("Memo: ")
-    lsd = os.popen(lndconnectload['ln'] + lncli + " --memo " + memo + "-PyBLOCK" + " --amt " + amount).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    print("\033[1;30;47m")
-    qr.add_data(d['payment_request'])
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    qr.clear()
-    print("Lightning Invoice: " + d['payment_request'])
-    b = str(d['payment_request'])
-    while True:
-        lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + b).read()
+    try:
+        amount = input("Amount in sats: ")
+        memo = input("Memo: ")
+        lsd = os.popen(lndconnectload['ln'] + lncli + " --memo " + memo + "-PyBLOCK" + " --amt " + amount).read()
         lsd0 = str(lsd)
         d = json.loads(lsd0)
-        r = d['payment_hash']
-        lsdn = os.popen(lndconnectload['ln'] + " lookupinvoice " + r).read()
-        lsdn0 = str(lsdn)
-        n = json.loads(lsdn0)
-        if n['state'] == 'SETTLED':
-            print("\033[1;32;40m")
-            clear()
-            blogo()
-            tick()
-            print("\033[0;37;40m")
-            t.sleep(2)
-            break
-        elif n['state'] == 'CANCELED':
-            print("\033[1;31;40m")
-            clear()
-            blogo()
-            canceled()
-            print("\033[0;37;40m")
-            t.sleep(2)
-            break
+        print("\033[1;30;47m")
+        qr.add_data(d['payment_request'])
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        qr.clear()
+        print("Lightning Invoice: " + d['payment_request'])
+        b = str(d['payment_request'])
+        while True:
+            lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + b).read()
+            lsd0 = str(lsd)
+            d = json.loads(lsd0)
+            r = d['payment_hash']
+            lsdn = os.popen(lndconnectload['ln'] + " lookupinvoice " + r).read()
+            lsdn0 = str(lsdn)
+            n = json.loads(lsdn0)
+            if n['state'] == 'SETTLED':
+                print("\033[1;32;40m")
+                clear()
+                blogo()
+                tick()
+                print("\033[0;37;40m")
+                t.sleep(2)
+                break
+            elif n['state'] == 'CANCELED':
+                print("\033[1;31;40m")
+                clear()
+                blogo()
+                canceled()
+                print("\033[0;37;40m")
+                t.sleep(2)
+                break
+    except:
+        pass
 
 def localpayinvoice():
-    invoiceN = input("Insert the invoice to pay: ")
-    invoice = invoiceN.lower()
-    lncli = " payinvoice "
-    lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    if d['num_satoshis'] == "0":
-        amt = " --amt "
-        amount =  input("Amount in satoshis: ")
-        os.system(lndconnectload['ln'] + lncli + invoice + amt + amount)
-    else:
-        os.system(lndconnectload['ln'] + lncli + invoice )
-
-    t.sleep(2)
+    try:
+        invoiceN = input("Insert the invoice to pay: ")
+        invoice = invoiceN.lower()
+        lncli = " payinvoice "
+        lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
+        lsd0 = str(lsd)
+        d = json.loads(lsd0)
+        if d['num_satoshis'] == "0":
+            amt = " --amt "
+            amount =  input("Amount in satoshis: ")
+            os.system(lndconnectload['ln'] + lncli + invoice + amt + amount)
+            t.sleep(2)
+        else:
+            os.system(lndconnectload['ln'] + lncli + invoice )
+            t.sleep(2)
+    except:
+        pass
 
 def localgetnetworkinfo():
     lncli = " getnetworkinfo"
@@ -359,16 +363,19 @@ def localgetnetworkinfo():
     input("\nContinue... ")
 
 def localkeysend():
-    print("\n\tYou ar going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.")
-    lncli = " sendpayment "
-    node = input("Send to NodeID: ")
-    amount = input("Amount in sats: ")
-    while True:
-        if amount in ["", "0"]:
-            amount = input("\nAmount in sats: ")
-        else:
-            break
-    os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --final_cltv_delta=40")
+    try:
+        print("\n\tYou ar going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.")
+        lncli = " sendpayment "
+        node = input("Send to NodeID: ")
+        amount = input("Amount in sats: ")
+        while True:
+            if amount == "" or amount == "0":
+                amount = input("\nAmount in sats: ")
+            else:
+                break
+        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --final_cltv_delta=40")
+    except:
+        pass
 
 def localchannelbalance():
     lncli = " channelbalance"
@@ -525,14 +532,16 @@ def payinvoice():
             clear()
             blogo()
             tick()
+            print("\033[0;37;40m")
+            t.sleep(2)
         else:
             error_message = r.json()["error"]
             print("\033[1;31;40m")
             clear()
             blogo()
             canceled()
-        print("\033[0;37;40m")
-        t.sleep(2)
+            print("\033[0;37;40m")
+            t.sleep(2)
     except:
         pass
 
@@ -585,11 +594,9 @@ def listinvoice():
             print("\n\tLIST INVOICES\n")
             for r in range(len(n)):
                 s = n[r]
-
                 print("Invoice: " + s['r_hash'] + " " + s['state'])
 
             nd = input("\nSelect RHash: ")
-
             for item in n:
                 s = item
                 nn = s['r_hash']
@@ -660,11 +667,9 @@ def channels():
             print("\n\tLIST CHANNELS\n")
             for r in range(len(n)):
                 s = n[r]
-
                 print("Node ID: " + s['remote_pubkey'])
 
             nd = input("\nSelect a Node ID: ")
-
             for item in n:
                 s = item
                 nn = s['remote_pubkey']
