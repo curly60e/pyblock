@@ -25,7 +25,6 @@ def satnode():
 def matrixsc():
     if os.path.isdir('$HOME/pyblock/terminal_matrix'):
         print("OK Pass")
-
     else:
         url = "https://github.com/curly60e/terminal_matrix.git"
         os.system("git clone " + url)
