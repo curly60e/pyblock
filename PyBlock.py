@@ -9,6 +9,7 @@ import pickle
 import psutil
 import qrcode
 import random
+import xmltodict
 import sys
 import subprocess
 from clone import *
@@ -442,6 +443,7 @@ def APIOpenNode():
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
     \033[1;32;40mC.\033[0;37;40m Wallet Balance
     \033[1;32;40mD.\033[0;37;40m List Payments
+    \033[1;32;40mS.\033[0;37;40m Status
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(bitLN['NN']))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -689,6 +691,10 @@ def menuOpenNode(menuOP):
         clear()
         prt()
         OpenNodeListPayments()
+    elif menuOP in ["S", "s"]:
+        clear()
+        prt()
+        OpenNodeCheckStatus()
     elif menuOP in ["R", "r"]:
         APIMenu()
 

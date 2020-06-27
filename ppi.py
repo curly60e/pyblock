@@ -9,6 +9,7 @@ import os.path
 import qrcode
 import lnpay_py
 import requests
+import xmltodict
 import simplejson as json
 import time as t
 from art import *
@@ -593,6 +594,32 @@ def OpenNodelistfunds():
     print("----------------------------------------------------------------------------------------------------\n")
     input("Continue...")
 
+def OpenNodeCheckStatus():
+    curl = "curl -X GET https://status.opennode.com/history.rss"
+    sh = os.popen(curl).read()
+    clear()
+    blogo()
+    my_dict=xmltodict.parse(sh)
+    n=json.dumps(my_dict)
+    nn = str(n)
+    qq = json.loads(n)
+    a = qq['rss']
+    b = a['channel']
+    c = b['title']
+    d = b['item']
+    dd = d[0]
+    e = dd['title']
+    print("""
+    \n----------------------------------------------------------------------------------------------------
+    \n\t{}
+
+    {}\n
+    {}
+
+    \n----------------------------------------------------------------------------------------------------
+    """.format(c.upper(),e,b['pubDate']))
+    input("Enter to Continue...")
+
 def OpenNodecreatecharge():
     qr = qrcode.QRCode(
     version=1,
@@ -628,7 +655,7 @@ def OpenNodecreatecharge():
         d = json.loads(n)
         dd = d['data']
         qq = dd['lightning_invoice']
-        pp = dd['chain_invoice']
+        pp = dd['address']
         nn = qq['payreq']
         mm = nn.lower()
         while True:
@@ -643,9 +670,8 @@ def OpenNodecreatecharge():
                 Invoice: {}
                 Onchain Address: {}
                 Amount: {} sats
-                """.format(amt, selection.upper(), dd['id'], dd['status'], mm, pp['address'], dd['amount']))
+                """.format(amt, selection.upper(), dd['id'], dd['status'], mm, pp, dd['amount']))
                 print("----------------------------------------------------------------------------------------------------\n")
-                p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay in ["I", "i"]:
                     print("\033[1;30;47m")
@@ -656,12 +682,12 @@ def OpenNodecreatecharge():
                     print("\nLightning Invoice: " + mm)
                 elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
-                    qr.add_data(p)
+                    qr.add_data(pp)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nAmount in sats: {} sats".format(dd['amount']))
-                    print("\nOnchain Address: " + p)
+                    print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
                 blogo()
@@ -677,7 +703,7 @@ def OpenNodecreatecharge():
         d = json.loads(n)
         dd = d['data']
         qq = dd['lightning_invoice']
-        pp = dd['chain_invoice']
+        pp = dd['address']
         nn = qq['payreq']
         mm = nn.lower()
         while True:
@@ -692,9 +718,8 @@ def OpenNodecreatecharge():
                 Invoice: {}
                 Onchain Address: {}
                 Amount: {} sats
-                """.format(amt, dd['id'], dd['status'], mm, pp['address'], dd['amount']))
+                """.format(amt, dd['id'], dd['status'], mm, pp, dd['amount']))
                 print("----------------------------------------------------------------------------------------------------\n")
-                p = pp['address']
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay in ["I", "i"]:
                     print("\033[1;30;47m")
@@ -705,12 +730,12 @@ def OpenNodecreatecharge():
                     print("\nLightning Invoice: " + mm)
                 elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
-                    qr.add_data(p)
+                    qr.add_data(pp)
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
                     print("\nAmount in sats: {} sats".format(dd['amount']))
-                    print("\nOnchain Address: " + p)
+                    print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
                 blogo()
@@ -1032,6 +1057,85 @@ def bitnodesListSnapshots():
 
 #-----------------------------END BITNODES------------------------------
 #-----------------------------TALLYCOIN------------------------------
+def loadFileConnTallyCo(tallycoLoad):
+    tallycoLoad = {"tallyco.conf":"","id":""}
 
+    if os.path.isfile('tallyco.conf'): # Check if the file 'bclock.conf' is in the same folder
+        tallyData= pickle.load(open("tallyco.conf", "rb")) # Load the file 'bclock.conf'
+        tallycoLoad = tallyData # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO OPENNODE.COM.
+                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                           SAVE THE FILE '\033[1;33;40mtallycoSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+        """)
+        print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
+        tallycoLoad["fundraiser_id"] = input("Fundraiser ID: ")
+        tallycoLoad["id"] = input("User ID or Twitter @USER: ")
+        pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
+    clear()
+    blogo()
+    return tallycoLoad
+
+def createFileConnTallyCo():
+    tallycoLoad = {"fundraiser_id":"","id":""}
+
+    clear()
+    blogo()
+    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO OPENNODE.COM.
+               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
+                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
+                                       SAVE THE FILE '\033[1;33;40mtallycoSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
+    """)
+    print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
+    tallycoLoad["fundraiser_id"] = input("Fundraiser ID: ")
+    tallycoLoad["id"] = input("User ID or Twitter @USER: ")
+    pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
+
+def tallycoGetPayment():
+    c = loadFileConnTallyCo(['id'])
+    d = str(c['id'])
+    amount = input("Amount in Sats: ")
+    print("""\nPayment Method Example: 'ln' or 'btc'
+             'ln' = Lightnin Netowrk
+             'btc'= Bitcoin Onchain Payment
+                \n""")
+    lnd_onchain = input("Payment Method: ")
+    curl = "curl -d " + '"type=profile&id={}&satoshi_amount={}&payment_method={}"'.format(d, amount, lnd_onchain) + " -X POST https://api.tallyco.in/v1/payment/request/"
+    tallycomethod = os.popen(curl).read()
+    n = str(tallycomethod)
+    d = json.loads(n)
+    clear()
+    blogo()
+    print(d)
+
+def tallycoFundraiser():
+    a = loadFileConnTallyCo(['fundraiser_id'])
+    b = str(a['fundraiser_id'])
+    curl = 'curl -d "fundraiser_id={}" -X POST https://api.tallyco.in/v1/fundraiser/'.format(b)
+    tallycomethod = os.popen(curl).read()
+    n = str(tallycomethod)
+    d = json.loads(n)
+    clear()
+    blogo()
+    print(d)
+
+def tallycoDonateid():
+    donate = input("Donate to ID: ")
+    amount = input("Amount in Sats: ")
+    print("""\nPayment Method Example: 'ln' or 'btc'
+             'ln' = Lightnin Netowrk
+             'btc'= Bitcoin Onchain Payment
+                \n""")
+    lnd_onchain = input("Payment Method: ")
+    curl = "curl -d " + '"type=profile&id={}&satoshi_amount={}&payment_method={}"'.format(donate, amount, lnd_onchain) + " -X POST https://api.tallyco.in/v1/payment/request/"
+    tallycomethod = os.popen(curl).read()
+    n = str(tallycomethod)
+    d = json.loads(n)
+    clear()
+    blogo()
+    print(d)
 
 #-----------------------------TALLYCOIN------------------------------
