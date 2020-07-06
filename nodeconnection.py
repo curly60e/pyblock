@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.5.0
+#Version: 0.6.0b
 
 import base64, codecs, json, requests
 import pickle
@@ -765,3 +765,8 @@ def balanceOC():
     input("\nContinue... ")
 
 # END Remote connection with rest -------------------------------------
+#---------------------------------OPENDIME-----------------------------
+
+def ADDRbalance():
+    import os, sys; sys.path.insert(0, os.path.normpath(__file__ + '/support/pycode.zip'))
+    import support.pycode.od_wallet; support.pycode.od_wallet.main()

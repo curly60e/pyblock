@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.5.0
+#Version: 0.6.0b
 
 import os
 import qrcode
@@ -174,7 +174,7 @@ def devAddr():
 def donate():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.5.0
+    Version 0.6.0b
 
     \033[1;32;40mA.\033[0;37;40m Make PyBLOCK Great Again
     <<< Back Main Menu Press Control + C

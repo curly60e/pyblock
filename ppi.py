@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.5.0
+#Version: 0.6.0b
 
 import base64, codecs, json, requests
 import pickle
@@ -1014,6 +1014,7 @@ def lntxbotGetInvoice():
     qr.print_ascii()
     print("\033[0;37;40m")
     print("LND Invoice: " + ln1)
+    qr.clear()
     response.close()
     input("Continue...")
 
@@ -1095,6 +1096,12 @@ def createFileConnTallyCo():
     pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
 
 def tallycoGetPayment():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
     c = loadFileConnTallyCo(['id'])
     d = str(c['id'])
     amount = input("Amount in Sats: ")
@@ -1109,7 +1116,26 @@ def tallycoGetPayment():
     d = json.loads(n)
     clear()
     blogo()
-    print(d)
+    if lnd_onchain == "ln":
+        e = d['lightning_pay_request']
+        f = e.lower()
+        print("\033[1;30;47m")
+        qr.add_data(f)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("LND Invoice: " + f)
+        qr.clear()
+        input("\nContinue...")
+    elif lnd_onchain == "btc":
+        e = d['btc_address']
+        print("\033[1;30;47m")
+        qr.add_data(e)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("Amount: " + d['cost'])
+        print("Bitcoin Address: " + e)
+        qr.clear()
+        input("\nContinue...")
 
 def tallycoFundraiser():
     a = loadFileConnTallyCo(['fundraiser_id'])
@@ -1121,6 +1147,7 @@ def tallycoFundraiser():
     clear()
     blogo()
     print(d)
+
 
 def tallycoDonateid():
     donate = input("Donate to ID: ")
@@ -1137,5 +1164,7 @@ def tallycoDonateid():
     clear()
     blogo()
     print(d)
+
+
 
 #-----------------------------TALLYCOIN------------------------------
