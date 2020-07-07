@@ -13,6 +13,7 @@ import xmltodict
 import simplejson as json
 import time as t
 from art import *
+from nodeconnection import *
 from pblogo import *
 from logos import *
 from lnpay_py.wallet import LNPayWallet
@@ -1150,6 +1151,14 @@ def tallycoFundraiser():
 
 
 def tallycoDonateid():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    clear()
+    blogo()
     donate = input("Donate to ID: ")
     amount = input("Amount in Sats: ")
     print("""\nPayment Method Example: 'ln' or 'btc'
@@ -1163,7 +1172,44 @@ def tallycoDonateid():
     d = json.loads(n)
     clear()
     blogo()
-    print(d)
+    if lnd_onchain in ["ln", "lN", "Ln", "LN"]:
+        node_not = input("Do you want to pay this tip with your node? Y/n: ")
+        if node_not in ["Y", "y"]:
+            lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            if lndconnectload['ip_port']:
+                e = d['lightning_pay_request']
+                f = e.lower()
+                print("\nInvoice: " + f + "\n")
+                payinvoice()
+            elif lndconnectload['ln']:
+                e = d['lightning_pay_request']
+                f = e.lower()
+                print("\nInvoice: " + f + "\n")
+                localpayinvoice()
+        elif node_not in ["N", "n"]:
+            e = d['lightning_pay_request']
+            f = e.lower()
+            print("\033[1;30;47m")
+            qr.add_data(f)
+            qr.print_ascii()
+            print("\033[0;37;40m")
+            print("LND Invoice: " + f)
+            qr.clear()
+            input("\nContinue...")
+    elif lnd_onchain in ["btc", "bTC", "BtC", "BTC", "BTc", "btC"]:
+        e = d['btc_address']
+        print("\033[1;30;47m")
+        qr.add_data(e)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("Amount: " + d['cost'])
+        print("Bitcoin Address: " + e)
+        qr.clear()
+        input("\nContinue...")
+
+tallycoDonateid()
 
 
 
