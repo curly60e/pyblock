@@ -378,9 +378,10 @@ def APIMenu():
     Version 0.6.0b
 
     \033[1;32;40mA.\033[0;37;40m TippinMe FREE
-    \033[1;32;40mB.\033[0;37;40m LNBits   \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mC.\033[0;37;40m LNPay    \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mD.\033[0;37;40m OpenNode \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mB.\033[0;37;40m TallyCo  FREE
+    \033[1;32;40mC.\033[0;37;40m LNBits   \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mD.\033[0;37;40m LNPay    \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mE.\033[0;37;40m OpenNode \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -460,6 +461,20 @@ def APITippinMe():
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APITallyCo():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m TallyCoin \033[1;34;40mFree\033[0;37;40m Menu
+    Version 0.6.0b
+
+    \033[1;32;40mA.\033[0;37;40m Get Payment
+    \033[1;32;40mB.\033[0;37;40m Pay Fundraiser
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
@@ -648,13 +663,16 @@ def aaccPPiOpenNode():
         input("Continue...")
 
 def aaccPPiTippinMe():
-    bitLN = {"NN":"","pd":""}
     if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("tippinme.conf", "rb")) # Load the file 'bclock.conf'
-        bitLN = bitData # Copy the variable pathv to 'path'
         APITippinMe()
     else:
         createFileTippinMe()
+
+def aaccPPiTallyCo():
+    if os.path.isfile('tallyco.conf'): # Check if the file 'bclock.conf' is in the same folder
+        APITallyCo()
+    else:
+        createFileConnTallyCo()
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
 
@@ -662,11 +680,21 @@ def menuPI(menuWN):
     if menuWN in ["A", "a"]:
         aaccPPiTippinMe()
     elif menuWN in ["B", "b"]:
-        aaccPPiLNBits()
+        aaccPPiTallyCo()
     elif menuWN in ["C", "c"]:
-        aaccPPiLNPay()
+        aaccPPiLNBits()
     elif menuWN in ["D", "d"]:
+        aaccPPiLNPay()
+    elif menuWN in ["E", "e"]:
         aaccPPiOpenNode()
+
+def menuTallyCo(menuTLC):
+    if menuTLC in ["A", "a"]:
+        tallycoGetPayment()
+    elif menuTLC in ["B", "b"]:
+        tallycoDonateid()
+    elif menuTLC in ["R", "r"]:
+        APIMenu()
 
 def menuTippinMe(menuTM):
     if menuTM in ["A", "a"]:
