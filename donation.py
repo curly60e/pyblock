@@ -21,7 +21,6 @@ def donationPN():
     qr.clear()
     print("PayNym: " + url)
 
-#Dev Address
 def donationAddr():
     qr = qrcode.QRCode(
     version=1,
