@@ -82,30 +82,43 @@ def lnbitCreateNewInvoice():
         d = json.loads(n)
         q = d['payment_request']
         c = q.lower()
+        node_not = input("Do you want to pay this tip with your node? Y/n: ")
+
         while True:
-            print("\033[1;30;47m")
-            qr.add_data(c)
-            qr.print_ascii()
-            print("\033[0;37;40m")
-            qr.clear()
-            print("Lightning Invoice: " + c)
-            t.sleep(10)
-            dn = str(d['checking_id'])
-            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
-            rsh = os.popen(checkcurl).read()
-            clear()
-            blogo()
-            nn = str(rsh)
-            dd = json.loads(nn)
-            db = dd['paid']
-            if db == True:
+            if node_not in ["Y", "y"]:
+                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                if lndconnectload['ip_port']:
+                    print("\nInvoice: " + c + "\n")
+                    payinvoice()
+                elif lndconnectload['ln']:
+                    print("\nInvoice: " + c + "\n")
+                    localpayinvoice()
+            elif node_not in ["N", "n"]:
+                print("\033[1;30;47m")
+                qr.add_data(c)
+                qr.print_ascii()
+                print("\033[0;37;40m")
+                qr.clear()
+                print("Lightning Invoice: " + c)
+                t.sleep(10)
+                dn = str(d['checking_id'])
+                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
+                rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
-                tick()
-                t.sleep(2)
-                break
-            else:
-                continue
+                nn = str(rsh)
+                dd = json.loads(nn)
+                db = dd['paid']
+                if db == True:
+                    clear()
+                    blogo()
+                    tick()
+                    t.sleep(2)
+                    break
+                else:
+                    continue
     except:
         pass
 
@@ -375,29 +388,43 @@ def lnpayCreateInvoice():
     }
     try:
         invoice = my_wallet.create_invoice(invoice_params)
+        clear()
+        blogo()
+        node_not = input("Do you want to pay this tip with your node? Y/n: ")
         while True:
-            print("\033[1;30;47m")
-            qr.add_data(invoice['payment_request'])
-            qr.print_ascii()
-            print("\033[0;37;40m")
-            qr.clear()
-            print("Lightning Invoice: " + invoice['payment_request'])
-            t.sleep(10)
-            curl = 'curl -u ' + b + ': https://lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
-            rsh = os.popen(curl).read()
-            clear()
-            blogo()
-            nn = str(rsh)
-            dd = json.loads(nn)
-            db = dd['settled']
-            if db == 1:
+            if node_not in ["Y", "y"]:
+                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                if lndconnectload['ip_port']:
+                    print("\nInvoice: " + invoice['payment_request'] + "\n")
+                    payinvoice()
+                elif lndconnectload['ln']:
+                    print("\nInvoice: " + invoice['payment_request'] + "\n")
+                    localpayinvoice()
+            elif node_not in ["N", "n"]:
+                print("\033[1;30;47m")
+                qr.add_data(invoice['payment_request'])
+                qr.print_ascii()
+                print("\033[0;37;40m")
+                qr.clear()
+                print("Lightning Invoice: " + invoice['payment_request'])
+                t.sleep(10)
+                curl = 'curl -u ' + b + ': https://lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
+                rsh = os.popen(curl).read()
                 clear()
                 blogo()
-                tick()
-                t.sleep(2)
-                break
-            else:
-                continue
+                nn = str(rsh)
+                dd = json.loads(nn)
+                db = dd['settled']
+                if db == 1:
+                    clear()
+                    blogo()
+                    tick()
+                    t.sleep(2)
+                    break
+                else:
+                    continue
     except:
         pass
 
@@ -675,12 +702,24 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay in ["I", "i"]:
-                    print("\033[1;30;47m")
-                    qr.add_data(mm)
-                    qr.print_ascii()
-                    print("\033[0;37;40m")
-                    qr.clear()
-                    print("\nLightning Invoice: " + mm)
+                    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+                    if node_not in ["Y", "y"]:
+                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+                        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                        if lndconnectload['ip_port']:
+                            print("\nInvoice: " + mm + "\n")
+                            payinvoice()
+                        elif lndconnectload['ln']:
+                            print("\nInvoice: " + mm + "\n")
+                            localpayinvoice()
+                    elif node_not in ["N", "n"]:
+                        print("\033[1;30;47m")
+                        qr.add_data(mm)
+                        qr.print_ascii()
+                        print("\033[0;37;40m")
+                        qr.clear()
+                        print("\nLightning Invoice: " + mm)
                 elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
                     qr.add_data(pp)
@@ -723,12 +762,24 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay in ["I", "i"]:
-                    print("\033[1;30;47m")
-                    qr.add_data(mm)
-                    qr.print_ascii()
-                    print("\033[0;37;40m")
-                    qr.clear()
-                    print("\nLightning Invoice: " + mm)
+                    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+                    if node_not in ["Y", "y"]:
+                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+                        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                        if lndconnectload['ip_port']:
+                            print("\nInvoice: " + mm + "\n")
+                            payinvoice()
+                        elif lndconnectload['ln']:
+                            print("\nInvoice: " + mm + "\n")
+                            localpayinvoice()
+                    elif node_not in ["N", "n"]:
+                        print("\033[1;30;47m")
+                        qr.add_data(mm)
+                        qr.print_ascii()
+                        print("\033[0;37;40m")
+                        qr.clear()
+                        print("\nLightning Invoice: " + mm)
                 elif pay in ["O", "o"]:
                     print("\033[1;30;47m")
                     qr.add_data(pp)
@@ -947,13 +998,25 @@ def tippinmeGetInvoice():
         lnbc1W = lnbc1R[1]
         ln = str(lnbc1W)
         ln1 = ln.strip('"')
-        print("\033[1;30;47m")
-        qr.add_data(ln1)
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        print("LND Invoice: " + ln1)
-        response.close()
-        input("Continue...")
+        node_not = input("Do you want to pay this tip with your node? Y/n: ")
+        if node_not in ["Y", "y"]:
+            lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            if lndconnectload['ip_port']:
+                print("\nInvoice: " + ln1 + "\n")
+                payinvoice()
+            elif lndconnectload['ln']:
+                print("\nInvoice: " + ln1 + "\n")
+                localpayinvoice()
+        elif node_not in ["N", "n"]:
+            print("\033[1;30;47m")
+            qr.add_data(ln1)
+            qr.print_ascii()
+            print("\033[0;37;40m")
+            print("LND Invoice: " + ln1)
+            response.close()
+            input("Continue...")
     except:
         pass
 
@@ -1139,7 +1202,7 @@ def tallycoGetPayment():
             qr.clear()
             input("\nContinue...")
     except:
-        pass()
+        pass
 
 
 def tallycoDonateid():
@@ -1202,7 +1265,7 @@ def tallycoDonateid():
             qr.clear()
             input("\nContinue...")
     except:
-        pass()
+        pass
 
 
 #-----------------------------TALLYCOIN------------------------------
