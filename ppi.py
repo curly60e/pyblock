@@ -1137,7 +1137,6 @@ def loadFileConnTallyCo(tallycoLoad):
                                            SAVE THE FILE '\033[1;33;40mtallycoSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
         """)
         print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
-        tallycoLoad["fundraiser_id"] = input("Fundraiser ID: ")
         tallycoLoad["id"] = input("User ID or Twitter @USER: ")
         pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
     clear()
@@ -1155,7 +1154,6 @@ def createFileConnTallyCo():
                                        SAVE THE FILE '\033[1;33;40mtallycoSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
     """)
     print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
-    tallycoLoad["fundraiser_id"] = input("Fundraiser ID: ")
     tallycoLoad["id"] = input("User ID or Twitter @USER: ")
     pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
 
