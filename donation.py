@@ -4,6 +4,7 @@
 
 import requests
 import qrcode
+import pickle
 from nodeconnection import *
 
 #Dev PayNym
