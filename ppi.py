@@ -82,7 +82,7 @@ def lnbitCreateNewInvoice():
         d = json.loads(n)
         q = d['payment_request']
         c = q.lower()
-        node_not = input("Do you want to pay this tip with your node? Y/n: ")
+        node_not = input("Do you want to pay this invoice with your node? Y/n: ")
 
         while True:
             if node_not in ["Y", "y"]:
@@ -390,7 +390,7 @@ def lnpayCreateInvoice():
         invoice = my_wallet.create_invoice(invoice_params)
         clear()
         blogo()
-        node_not = input("Do you want to pay this tip with your node? Y/n: ")
+        node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         while True:
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
@@ -702,7 +702,7 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay in ["I", "i"]:
-                    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+                    node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
@@ -762,7 +762,7 @@ def OpenNodecreatecharge():
                 print("----------------------------------------------------------------------------------------------------\n")
                 pay = input("Invoice or Onchain Address? I/O: ")
                 if pay in ["I", "i"]:
-                    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+                    node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
@@ -998,7 +998,7 @@ def tippinmeGetInvoice():
         lnbc1W = lnbc1R[1]
         ln = str(lnbc1W)
         ln1 = ln.strip('"')
-        node_not = input("Do you want to pay this tip with your node? Y/n: ")
+        node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
             lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
@@ -1021,106 +1021,6 @@ def tippinmeGetInvoice():
         pass
 
 #-----------------------------END TIPPINME--------------------------------
-#-----------------------------LNTXBOT--------------------------------
-
-def loadFileLNTXBOT(lntxbotLoad):
-    lntxbotLoad = {"key":"", "log":""}
-
-    if os.path.isfile('lntxbot.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lntxbotData= pickle.load(open("lntxbot.conf", "rb")) # Load the file 'bclock.conf'
-        lntxbotLoad = lntxbotData # Copy the variable pathv to 'path'
-    else:
-        clear()
-        blogo()
-        print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
-                   WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
-                          IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
-                                           SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
-        """)
-        lntxbotLoad["key"] = input("Full Access API: ")
-        lntxbotLoad["log"] = input("Telegram @USER: ")
-        pickle.dump(lntxbotLoad, open("lntxbot.conf", "wb"))
-    clear()
-    blogo()
-    return lntxbotLoad
-
-def createFileLNTXBOT():
-    lntxbotLoad = {"key":"", "log":""}
-    clear()
-    blogo()
-    print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TIPPIN.ME.
-               WE WILL NEED SOME INFORMATION FROM YOUR ACCOUNT THAT THE ONLY ONE THAT WILL HAVE ACCESS IS YOU.
-                      IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
-                                       SAVE THE FILE '\033[1;33;40mtippinmeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
-    """)
-    lntxbotLoad["key"] = input("Full Access API: ")
-    pickle.dump(lntxbotLoad, open("lntxbot.conf", "wb"))
-
-def lntxbotGetInvoice():
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    a = loadFileLNTXBOT(['key'])
-    b = str(a['key'])
-    c = loadFileLNTXBOT(['log'])
-    d = str(c['log'])
-    curl = 'curl -X GET https://lntxbot.bigsun.xyz/@{} -H'.format(d) + '"X-Api-Key: {}"'.format(b) + '-H "Content-type: application/json"'
-    sh = os.popen(curl).read()
-    n = str(sh)
-    print(n)
-    d = json.loads(n)
-    print(d)
-    print("\033[1;30;47m")
-    qr.add_data(ln1)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("LND Invoice: " + ln1)
-    qr.clear()
-    response.close()
-    input("Continue...")
-
-#-----------------------------END LNTXBOT--------------------------------
-#-----------------------------BITNODES--------------------------------
-
-def bitnodesListSnapshots():
-
-    curl = 'curl -H "Accept: application/json; indent=4" https://bitnodes.io/api/v1/snapshots/'
-    sh = os.popen(curl).read()
-    clear()
-    blogo()
-    print("\n\tBITNODES SNAPSHOTS LIST\n")
-    n = str(sh)
-    d = json.loads(n)
-    da = d['results']
-    while True:
-        try:
-            for item_ in da:
-                s = item_
-                print("Timestamp: " + str(s['timestamp']))
-            nd = input("\nSelect ID: ")
-            for item in da:
-                s = item
-                nn = str(s['timestamp'])
-                if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------")
-                    print("""
-                    \tBITNODES DECODED
-                    URL: {}
-                    Timestamp: {}
-                    Total Nodes: {}
-                    Latest Block Height: {}
-                    """.format(s['url'], s['timestamp'], s['total_nodes'], s['latest_height']))
-                    print("----------------------------------------------------------------------------------------------------\n")
-            input("Continue...")
-            clear()
-            blogo()
-        except:
-            pass
-
-#-----------------------------END BITNODES------------------------------
 #-----------------------------TALLYCOIN------------------------------
 def loadFileConnTallyCo(tallycoLoad):
     tallycoLoad = {"tallyco.conf":"","id":""}
