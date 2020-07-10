@@ -6,7 +6,12 @@ import os
 import qrcode
 import requests
 import time as t
+from nodeconnection import *
+from pblogo import *
+from logos import *
 
+def clear(): # clear the screen
+    os.system('cls' if os.name=='nt' else 'clear')
 
 def apisender():
     qr = qrcode.QRCode(
@@ -65,17 +70,31 @@ def apisender():
     print("\n\033[0;37;40mYour Token Authorization: \033[1;31;40m" + token + "\033[0;37;40m")
     print("\033[0;37;40mYour Order Number: \033[1;31;40m" + order + "\033[0;37;40m")
     print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m\n")
-    print("\033[1;30;47m")
-    qr.add_data(cln)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("\nLND Invoice: " + cln + "\n")
-    sh.close()
-    continue1 = input("Continue? Y: ")
-    if continue1 == "Y" or continue1 == "y":
-        donate()
-    else:
-        t.sleep(2)
+    clear()
+    blogo()
+    node_not = input("Do you want to pay this message with your node? Y/n: ")
+    if node_not in ["Y", "y"]:
+        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+        if lndconnectload['ip_port']:
+            print("\nInvoice: " + cln + "\n")
+            payinvoice()
+        elif lndconnectload['ln']:
+            print("\nInvoice: " + cln + "\n")
+            localpayinvoice()
+    elif node_not in ["N", "n"]:
+        print("\033[1;30;47m")
+        qr.add_data(cln)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("\nLND Invoice: " + cln + "\n")
+        sh.close()
+        continue1 = input("Continue? Y: ")
+        if continue1 == "Y" or continue1 == "y":
+            donate()
+        else:
+            t.sleep(2)
 
 def apisenderFile():
     qr = qrcode.QRCode(
@@ -133,17 +152,31 @@ def apisenderFile():
     print("\n\033[0;37;40mYour Token Authorization: \033[1;31;40m" + token + "\033[0;37;40m")
     print("\033[0;37;40mYour Order Number: \033[1;31;40m" + order + "\033[0;37;40m")
     print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m")
-    print("\033[1;30;47m")
-    qr.add_data(cln)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("\nLND Invoice: " + cln)
-    sh.close()
-    continue1 = input("Continue? Y: ")
-    if continue1 == "Y" or continue1 == "y":
-        donate()
-    else:
-        t.sleep(2)
+    clear()
+    blogo()
+    node_not = input("Do you want to pay this message with your node? Y/n: ")
+    if node_not in ["Y", "y"]:
+        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+        if lndconnectload['ip_port']:
+            print("\nInvoice: " + cln + "\n")
+            payinvoice()
+        elif lndconnectload['ln']:
+            print("\nInvoice: " + cln + "\n")
+            localpayinvoice()
+    elif node_not in ["N", "n"]:
+        print("\033[1;30;47m")
+        qr.add_data(cln)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("\nLND Invoice: " + cln)
+        sh.close()
+        continue1 = input("Continue? Y: ")
+        if continue1 == "Y" or continue1 == "y":
+            donate()
+        else:
+            t.sleep(2)
 
 def devAddr():
     qr = qrcode.QRCode(
@@ -164,12 +197,26 @@ def devAddr():
     lnbc1W = lnbc1R[1]
     ln = str(lnbc1W)
     ln1 = ln.strip('"')
-    print("\033[1;30;47m")
-    qr.add_data(ln1)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("LND Invoice: " + ln1)
-    response.close()
+    clear()
+    blogo()
+    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+    if node_not in ["Y", "y"]:
+        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+        if lndconnectload['ip_port']:
+            print("\nInvoice: " + ln1 + "\n")
+            payinvoice()
+        elif lndconnectload['ln']:
+            print("\nInvoice: " + ln1 + "\n")
+            localpayinvoice()
+    elif node_not in ["N", "n"]:
+        print("\033[1;30;47m")
+        qr.add_data(ln1)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("LND Invoice: " + ln1)
+        response.close()
 
 def donate():
     print("""\t\t

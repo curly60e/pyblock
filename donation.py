@@ -4,6 +4,7 @@
 
 import requests
 import qrcode
+from nodeconnection import *
 
 #Dev PayNym
 def donationPN():
@@ -55,13 +56,25 @@ def donationLN():
     lnbc1W = lnbc1R[1]
     ln = str(lnbc1W)
     ln1 = ln.strip('"')
-    print("\033[1;30;47m")
-    qr.add_data(ln1)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("LND Invoice: " + ln1)
-    qr.clear()
-    response.close()
+    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+    if node_not in ["Y", "y"]:
+        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+        if lndconnectload['ip_port']:
+            print("\nInvoice: " + ln1 + "\n")
+            payinvoice()
+        elif lndconnectload['ln']:
+            print("\nInvoice: " + ln1 + "\n")
+            localpayinvoice()
+    elif node_not in ["N", "n"]:
+        print("\033[1;30;47m")
+        qr.add_data(ln1)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("LND Invoice: " + ln1)
+        qr.clear()
+        response.close()
 
 #Tester Address
 def donationAddrTst():
@@ -98,13 +111,25 @@ def donationLNTst():
     lnbc1W = lnbc1R[1]
     ln = str(lnbc1W)
     ln1 = ln.strip('"')
-    print("\033[1;30;47m")
-    qr.add_data(ln1)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    print("LND Invoice: " + ln1)
-    qr.clear()
-    response.close()
+    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+    if node_not in ["Y", "y"]:
+        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+        if lndconnectload['ip_port']:
+            print("\nInvoice: " + ln1 + "\n")
+            payinvoice()
+        elif lndconnectload['ln']:
+            print("\nInvoice: " + ln1 + "\n")
+            localpayinvoice()
+    elif node_not in ["N", "n"]:
+        print("\033[1;30;47m")
+        qr.add_data(ln1)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("LND Invoice: " + ln1)
+        qr.clear()
+        response.close()
 
 def decodeQR():
     qr = qrcode.QRCode(
