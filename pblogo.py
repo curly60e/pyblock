@@ -48,8 +48,6 @@ def tick():
 
 \033[0;37;40m""")
 
-blogo()
-tick()
 
 def canceled():
     print("""
