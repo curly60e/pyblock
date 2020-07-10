@@ -471,7 +471,7 @@ def APITallyCo():
     Version 0.6.0b
 
     \033[1;32;40mA.\033[0;37;40m Get Payment
-    \033[1;32;40mB.\033[0;37;40m Pay Fundraiser
+    \033[1;32;40mB.\033[0;37;40m Tip User
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
