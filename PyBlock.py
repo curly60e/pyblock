@@ -683,7 +683,7 @@ def checkupdate():
     di = json.loads(n)
     if di['version'] == version:
         q = print(" ")
-    elif di['version'] != version:
+    else:
         print("\n---------------------------------------------------")
         q = print("\n    \033[1;31;40mNew version available\033[0;37;40m > Press U to Upgrade\n")
         print("---------------------------------------------------")
