@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.0rc1
+#Version: 0.6.0b
 
 import os
 import os.path
@@ -12,6 +12,9 @@ import random
 import xmltodict
 import sys
 import subprocess
+import requests
+import json
+import simplejson as json
 from clone import *
 from donation import *
 from feed import *
@@ -31,8 +34,6 @@ def sysinfo():  #Cpu and memory usage
     print("   \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
     print("   \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
     print("   \033[0;37;40m----------------------")
-
-
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
@@ -208,7 +209,7 @@ def menu(): #Main Menu
     \033[3;33;40mP.\033[0;37;40m Premium
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""")
+    \n\n""".format(checkupdate()))
     menuA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuUserConn(): #Menu before connection over ssh
@@ -228,7 +229,7 @@ def menuUserConn(): #Menu before connection over ssh
     \033[3;33;40mP.\033[0;37;40m Premium
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""")
+    \n\n""".format(checkupdate()))
     menuRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def advanceMenu(): # Advanced Menu
@@ -673,6 +674,27 @@ def aaccPPiTallyCo():
         APITallyCo()
     else:
         createFileConnTallyCo()
+
+def checkupdate():
+    r = requests.get('https://raw.githubusercontent.com/curly60e/pyblock/master/ver.txt')
+    version = "0.6.0rc1"
+    r.headers['Content-Type']
+    n = r.text
+    di = json.loads(n)
+    if di['version'] == version:
+        q = print(" ")
+    elif di['version'] != version:
+        print("\n---------------------------------------------------")
+        q = print("\n    \033[1;31;40mNew version available\033[0;37;40m > Press U to Upgrade\n")
+        print("---------------------------------------------------")
+
+
+def upgrade():
+    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py"
+    clear()
+    blogo()
+    a = os.popen(gitchekcout).read()
+    print(a)
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
 
@@ -858,6 +880,8 @@ def menuA(menuS): #Execution of the Main Menu options
         APIMenu()
     elif menuS in ["X", "x"]:
         dnt()
+    elif menuS in ["U", "u"]:
+        upgrade()
     elif menuS in ["T", "t"]:
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
@@ -918,6 +942,8 @@ def menuRemote(menuS): #Execution of the Main Menu options
         APIMenu()
     elif menuS in ["X", "x"]:
         dnt()
+    elif menuS in ["U", "u"]:
+        upgrade()
     elif menuS in ["T", "t"]: #Test feature fast access
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
