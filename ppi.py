@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.0b
+#Version: 0.6.0
 
 import base64, codecs, json, requests
 import pickle

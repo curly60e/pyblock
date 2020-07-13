@@ -195,7 +195,7 @@ def menu(): #Main Menu
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Local Node
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -219,7 +219,7 @@ def menuUserConn(): #Menu before connection over ssh
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Remote Node RPC
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -238,7 +238,7 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -254,7 +254,7 @@ def remoteadvanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -270,7 +270,7 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
@@ -284,7 +284,7 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
@@ -299,7 +299,7 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
@@ -313,7 +313,7 @@ def satnodeMenu(): # Satnode Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m Start SatNode
     \033[1;32;40mB.\033[0;37;40m Feed
@@ -330,7 +330,7 @@ def menuLND():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Remote node connection
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -352,7 +352,7 @@ def menuLNDLOCAL():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Local node connection
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -376,7 +376,7 @@ def APIMenu():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m TippinMe FREE
     \033[1;32;40mB.\033[0;37;40m TallyCo  FREE
@@ -397,7 +397,7 @@ def APILnbit():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNBits SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -418,7 +418,7 @@ def APILnPay():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNPay SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -439,7 +439,7 @@ def APIOpenNode():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m OpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -456,7 +456,7 @@ def APITippinMe():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TippinMe \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
@@ -469,7 +469,7 @@ def APITallyCo():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TallyCoin \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.0b
+    Version 0.6.0
 
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
