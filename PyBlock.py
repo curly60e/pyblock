@@ -688,7 +688,6 @@ def checkupdate():
         q = print("\n    \033[1;31;40mNew version available\033[0;37;40m > Press U to Upgrade\n")
         print("---------------------------------------------------")
 
-
 def upgrade():
     gitfetch = "git fetch"
     gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py"
@@ -698,6 +697,9 @@ def upgrade():
     a = os.popen(gitchekcout).read()
     print(b)
     print(a)
+    print("\n---------------------------------------------------")
+    print("\n\033[1;31;40mYou'll need to restart PyBLOCK\033[0;37;40m\n")
+    print("\n---------------------------------------------------\n")
     input("Continue...")
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
