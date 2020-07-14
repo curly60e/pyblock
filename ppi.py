@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.1
+#Version: 0.6.2
 
 import base64, codecs, json, requests
 import pickle
@@ -1166,4 +1166,60 @@ def tallycoDonateid():
         pass
 
 
-#-----------------------------TALLYCOIN------------------------------
+#-----------------------------END TALLYCOIN------------------------------
+#-----------------------------MEMPOOL.SPACE------------------------------
+
+def fee():
+    try:
+        while True:
+            r = requests.get('https://mempool.space/api/v1/fees/recommended')
+            r.headers['Content-Type']
+            n = r.text
+            di = json.loads(n)
+            clear()
+            blogo()
+            print("""
+            ------------------------
+                Fastest Fee:   {}
+                Half Hour Fee: {}
+                Hour Fee:      {}
+            ------------------------
+            <<< Back Control + C
+            """.format(di['fastestFee'], di['halfHourFee'], di['hourFee']))
+            t.sleep(5)
+            print("\n\t    Getting New Information")
+    except:
+        pass
+
+def blocks():
+    try:
+        while True:
+            clear()
+            blogo()
+            print("\n\t             Getting New Information")
+            r = requests.get('https://mempool.space/api/v1/fees/mempool-blocks')
+            r.headers['Content-Type']
+            n = r.text
+            di = json.loads(n)
+            for n in range(len(di)):
+                q = di[n]
+                clear()
+                blogo()
+                print("""
+                -----------------------------------------
+                                  BLOCK
+                -----------------------------------------
+                    Block Size:   {} bytes
+                    Block VSize:  {} bytes
+                    Transactions: {}
+                    Total Fees:   {}
+                    Median Fee:   {}
+                -----------------------------------------
+                <<< Back Control + C
+                """.format(q['blockSize'], q['blockVSize'], q['nTx'], q['totalFees'], q['medianFee']))
+                t.sleep(3)
+    except:
+        pass
+
+
+#-----------------------------END MEMPOOL.SPACE------------------------------
