@@ -378,11 +378,11 @@ def APIMenu():
     \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
     Version 0.6.0
 
-    \033[1;32;40mA.\033[0;37;40m TippinMe FREE
+    \033[1;32;40mA.\033[0;37;40m TippinMe   FREE
     \033[1;32;40mB.\033[0;37;40m Tallycoin  FREE
-    \033[1;32;40mC.\033[0;37;40m LNBits   \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mD.\033[0;37;40m LNPay    \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mE.\033[0;37;40m OpenNode \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mC.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mD.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mE.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
