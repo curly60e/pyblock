@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.1
+#Version: 0.6.2
 
 import os
 import os.path
@@ -195,7 +195,7 @@ def menu(): #Main Menu
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Local Node
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -219,7 +219,7 @@ def menuUserConn(): #Menu before connection over ssh
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Remote Node RPC
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -238,7 +238,7 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -254,7 +254,7 @@ def remoteadvanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -270,7 +270,7 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
@@ -284,7 +284,7 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
@@ -299,7 +299,7 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
@@ -313,7 +313,7 @@ def satnodeMenu(): # Satnode Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m Start SatNode
     \033[1;32;40mB.\033[0;37;40m Feed
@@ -330,7 +330,7 @@ def menuLND():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Remote node connection
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -352,7 +352,7 @@ def menuLNDLOCAL():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Local node connection
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -376,16 +376,31 @@ def APIMenu():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m TippinMe   FREE
     \033[1;32;40mB.\033[0;37;40m Tallycoin  FREE
-    \033[1;32;40mC.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mD.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mE.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mC.\033[0;37;40m Mempool    FREE
+    \033[1;32;40mD.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mE.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mF.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def mempoolmenu():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Mempool.space \033[1;34;40mFree\033[0;37;40m Menu
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Blocks
+    \033[1;32;40mB.\033[0;37;40m Recommended Fee
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnbit():
     bitLN = {"NN":"","pd":""}
@@ -397,7 +412,7 @@ def APILnbit():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNBits SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -418,7 +433,7 @@ def APILnPay():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNPay SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -439,7 +454,7 @@ def APIOpenNode():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m OpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -456,7 +471,7 @@ def APITippinMe():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TippinMe \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
@@ -469,7 +484,7 @@ def APITallyCo():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TallyCoin \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.1
+    Version 0.6.2
 
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
@@ -677,7 +692,7 @@ def aaccPPiTallyCo():
 
 def checkupdate():
     r = requests.get('https://raw.githubusercontent.com/curly60e/pyblock/master/ver.txt')
-    version = "0.6.1"
+    version = "0.6.2"
     r.headers['Content-Type']
     n = r.text
     di = json.loads(n)
@@ -710,11 +725,21 @@ def menuPI(menuWN):
     elif menuWN in ["B", "b"]:
         aaccPPiTallyCo()
     elif menuWN in ["C", "c"]:
-        aaccPPiLNBits()
+        mempoolmenu()
     elif menuWN in ["D", "d"]:
-        aaccPPiLNPay()
+        aaccPPiLNBits()
     elif menuWN in ["E", "e"]:
+        aaccPPiLNPay()
+    elif menuWN in ["F", "f"]:
         aaccPPiOpenNode()
+
+def mempoolmenuS(menuMem):
+    if menuMem in ["A", "a"]:
+        blocks()
+    elif menuMem in ["B", "b"]:
+        fee()
+    elif menuMem in ["R", "r"]:
+        APIMenu()
 
 def menuTallyCo(menuTLC):
     if menuTLC in ["A", "a"]:
