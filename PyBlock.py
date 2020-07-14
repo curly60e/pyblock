@@ -677,7 +677,7 @@ def aaccPPiTallyCo():
 
 def checkupdate():
     r = requests.get('https://raw.githubusercontent.com/curly60e/pyblock/master/ver.txt')
-    version = "0.6.0"
+    version = "0.6.1"
     r.headers['Content-Type']
     n = r.text
     di = json.loads(n)
