@@ -16,6 +16,7 @@ sseclient-py
 urllib3
 lnpay-py
 xmltodict
+python-cfonts
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
