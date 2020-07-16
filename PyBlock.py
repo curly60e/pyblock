@@ -15,6 +15,8 @@ import subprocess
 import requests
 import json
 import simplejson as json
+import shelve
+from cfonts import render, say
 from clone import *
 from donation import *
 from feed import *
@@ -84,9 +86,7 @@ def readHexTx(): # Hex Decoder using Hexyl on an external node
     os.system(decodeTX)
 
 def prt():
-    print("\033[1;32;40m")
     blogo()
-    print("\033[0;37;40m")
 
 def tmp():
     t.sleep(15)
@@ -188,6 +188,12 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
 
 #--------------------------------- Menu section -----------------------------------
 
+def padToCenter(l:list,w:int)->str:
+    """Manual centering"""
+    padding =  ' '*(w//2) # a 1 char line would need at most w/2 spaces in front
+    parts = [ padding[0: (w-len(p))//2+1]+p for p in l]
+    return '\n'.join(parts)
+
 def menu(): #Main Menu
     clear()
     prt()
@@ -207,6 +213,7 @@ def menu(): #Main Menu
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[3;33;40mP.\033[0;37;40m Premium
+    \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""".format(checkupdate()))
@@ -227,6 +234,7 @@ def menuUserConn(): #Menu before connection over ssh
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[3;33;40mP.\033[0;37;40m Premium
+    \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""".format(checkupdate()))
@@ -344,6 +352,165 @@ def menuLND():
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""")
     menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def settings4():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Change Logo Design
+    \033[1;31;40mB.\033[0;37;40m Change Logo Colors
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuSettings(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def design():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Design Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Block
+    \033[1;31;40mB.\033[0;37;40m Slick
+    \033[1;31;40mC.\033[0;37;40m Tiny
+    \033[1;31;40mD.\033[0;37;40m Grid
+    \033[1;31;40mE.\033[0;37;40m Pallet
+    \033[1;31;40mF.\033[0;37;40m Shade
+    \033[1;31;40mG.\033[0;37;40m Chrome
+    \033[1;31;40mH.\033[0;37;40m Simple
+    \033[1;31;40mI.\033[0;37;40m Simple Block
+    \033[1;31;40mJ.\033[0;37;40m 3D
+    \033[1;31;40mK.\033[0;37;40m Simple 3D
+    \033[1;31;40mL.\033[0;37;40m Huge
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colors():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Front Color
+    \033[1;31;40mB.\033[0;37;40m Back Color
+    \033[1;31;40mC.\033[0;37;40m Rainbow
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectFront():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Front Color Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuColorsSelectFront(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectBack():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Back Color Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuColorsSelectBack(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectRainbow():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Start Color
+    \033[1;31;40mB.\033[0;37;40m End Color
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuColorsSelectRainbow(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectRainbowStart():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Start Color Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuColorsSelectRainbowStart(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectRainbowEnd():
+    clear()
+    prt()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow End Color Menu
+    Remote node connection
+    Version 0.6.2
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""")
+    menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuLNDLOCAL():
     clear()
@@ -716,8 +883,340 @@ def upgrade():
     print("\n\t\033[1;31;40mYou'll need to restart PyBLOCK\033[0;37;40m\n")
     print("---------------------------------------------------\n")
     input("Continue...")
+
+def testlogo():
+    output = render('PyBLOCK', colors=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
+    print(output)
+    print("""
+
+    -------------------------
+        Design:      {}
+        Front Color: {}
+        Back Color:  {}
+    -------------------------
+
+    """.format(settings['design'], settings['colorA'], settings['colorB']))
+    try:
+        print("<<< Cancel Control + C")
+        input("Enter To Apply...")
+        settings["gradient"] = "color"
+        pickle.dump(settings, open("pyblocksettings.conf", "wb"))
+    except:
+        settings4()
+
+def testlogoRB():
+    output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
+    print(output)
+    print("""
+
+    -------------------------
+        Design:      {}
+        Start Color: {}
+        End Color:   {}
+    -------------------------
+
+    """.format(settings['design'], settings['colorA'], settings['colorB']))
+    try:
+        print("<<< Cancel Control + C")
+        input("Enter To Apply...")
+        settings["gradient"] = "grd"
+        pickle.dump(settings, open("pyblocksettings.conf", "wb"))
+    except:
+        settings4()
+
+
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
+
+def menuSettings(menuSTT):
+    if menuSTT in ["A", "a"]:
+        clear()
+        prt()
+        design()
+    elif menuSTT in ["B", "b"]:
+        clear()
+        prt()
+        colors()
+
+
+def menuColors(menuCLS):
+    if menuCLS in ["A", "a"]:
+        colorsSelectFront()
+    elif menuCLS in ["B", "b"]:
+        colorsSelectBack()
+    elif menuCLS in ["C", "c"]:
+        colorsSelectRainbow()
+    elif menuCLS in ["F", "f"]:
+        colors()
+
+def menuColorsSelectRainbow(menuRF):
+    if menuRF in ["A", "a"]:
+        colorsSelectRainbowStart()
+    elif menuRF in ["B", "b"]:
+        colorsSelectRainbowEnd()
+    elif menuRF in ["F", "f"]:
+        colors()
+
+def menuColorsSelectRainbowEnd(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        prt()
+        settings["colorB"] = "black"
+        testlogoRB()
+    elif menuCF in ["B", "b"]:
+        clear()
+        prt()
+        settings["colorB"] = "red"
+        testlogoRB()
+    elif menuCF in ["C", "c"]:
+        clear()
+        prt()
+        settings["colorB"] = "green"
+        testlogoRB()
+    elif menuCF in ["D", "d"]:
+        clear()
+        prt()
+        settings["colorB"] = "yellow"
+        testlogo()
+    elif menuCF in ["E", "e"]:
+        clear()
+        prt()
+        settings["colorB"] = "blue"
+        testlogoRB()
+    elif menuCF in ["F", "f"]:
+        clear()
+        prt()
+        settings["colorB"] = "magenta"
+        testlogoRB()
+    elif menuCF in ["G", "g"]:
+        clear()
+        prt()
+        settings["colorB"] = "cyan"
+        testlogoRB()
+    elif menuCF in ["H", "h"]:
+        clear()
+        prt()
+        settings["colorB"] = "white"
+        testlogoRB()
+    elif menuCF in ["I", "i"]:
+        clear()
+        prt()
+        settings["colorB"] = "gray"
+        testlogoRB()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+def menuColorsSelectRainbowStart(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        prt()
+        settings["colorA"] = "black"
+        testlogoRB()
+    elif menuCF in ["B", "b"]:
+        clear()
+        prt()
+        settings["colorA"] = "red"
+        testlogoRB()
+    elif menuCF in ["C", "c"]:
+        clear()
+        prt()
+        settings["colorA"] = "green"
+        testlogoRB()
+    elif menuCF in ["D", "d"]:
+        clear()
+        prt()
+        settings["colorA"] = "yellow"
+        testlogoRB()
+    elif menuCF in ["E", "e"]:
+        clear()
+        prt()
+        settings["colorA"] = "blue"
+        testlogoRB()
+    elif menuCF in ["F", "f"]:
+        clear()
+        prt()
+        settings["colorA"] = "magenta"
+        testlogoRB()
+    elif menuCF in ["G", "g"]:
+        clear()
+        prt()
+        settings["colorA"] = "cyan"
+        testlogoRB()
+    elif menuCF in ["H", "h"]:
+        clear()
+        prt()
+        settings["colorA"] = "white"
+        testlogoRB()
+    elif menuCF in ["I", "i"]:
+        clear()
+        prt()
+        settings["colorA"] = "gray"
+        testlogoRB()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+
+def menuColorsSelectBack(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        prt()
+        settings["colorB"] = "black"
+        testlogo()
+    elif menuCF in ["B", "b"]:
+        clear()
+        prt()
+        settings["colorB"] = "red"
+        testlogo()
+    elif menuCF in ["C", "c"]:
+        clear()
+        prt()
+        settings["colorB"] = "green"
+        testlogo()
+    elif menuCF in ["D", "d"]:
+        clear()
+        prt()
+        settings["colorB"] = "yellow"
+        testlogo()
+    elif menuCF in ["E", "e"]:
+        clear()
+        prt()
+        settings["colorB"] = "blue"
+        testlogo()
+    elif menuCF in ["F", "f"]:
+        clear()
+        prt()
+        settings["colorB"] = "magenta"
+        testlogo()
+    elif menuCF in ["G", "g"]:
+        clear()
+        prt()
+        settings["colorB"] = "cyan"
+        testlogo()
+    elif menuCF in ["H", "h"]:
+        clear()
+        prt()
+        settings["colorB"] = "white"
+        testlogo()
+    elif menuCF in ["I", "i"]:
+        clear()
+        prt()
+        settings["colorB"] = "gray"
+        testlogo()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+def menuColorsSelectFront(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        prt()
+        settings["colorA"] = "black"
+        testlogo()
+    elif menuCF in ["B", "b"]:
+        clear()
+        prt()
+        settings["colorA"] = "red"
+        testlogo()
+    elif menuCF in ["C", "c"]:
+        clear()
+        prt()
+        settings["colorA"] = "green"
+        testlogo()
+    elif menuCF in ["D", "d"]:
+        clear()
+        prt()
+        settings["colorA"] = "yellow"
+        testlogo()
+    elif menuCF in ["E", "e"]:
+        clear()
+        prt()
+        settings["colorA"] = "blue"
+        testlogo()
+    elif menuCF in ["F", "f"]:
+        clear()
+        prt()
+        settings["colorA"] = "magenta"
+        testlogo()
+    elif menuCF in ["G", "g"]:
+        clear()
+        prt()
+        settings["colorA"] = "cyan"
+        testlogo()
+    elif menuCF in ["H", "h"]:
+        clear()
+        prt()
+        settings["colorA"] = "white"
+        testlogo()
+    elif menuCF in ["I", "i"]:
+        clear()
+        prt()
+        settings["colorA"] = "gray"
+        testlogo()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+def menuDesign(menuDSN):
+    if menuDSN in ["A", "a"]:
+        clear()
+        prt()
+        settings["design"] = "block"
+        testlogo()
+    elif menuDSN in ["B", "b"]:
+        clear()
+        prt()
+        settings['design'] = "slick"
+        testlogo()
+    elif menuDSN in ["C", "c"]:
+        clear()
+        prt()
+        settings['design'] = "tiny"
+        testlogo()
+    elif menuDSN in ["D", "d"]:
+        clear()
+        prt()
+        settings['design'] = "grid"
+        testlogo()
+    elif menuDSN in ["E", "e"]:
+        clear()
+        prt()
+        settings['design'] = "pallet"
+        testlogo()
+    elif menuDSN in ["F", "f"]:
+        clear()
+        prt()
+        settings['design'] = "shade"
+        testlogo()
+    elif menuDSN in ["G", "g"]:
+        clear()
+        prt()
+        settings['design'] = "chrome"
+        testlogo()
+    elif menuDSN in ["H", "h"]:
+        clear()
+        prt()
+        settings['design'] = "simple"
+        testlogo()
+    elif menuDSN in ["I", "i"]:
+        clear()
+        prt()
+        settings['design'] = "simpleBlock"
+        testlogo()
+    elif menuDSN in ["J", "j"]:
+        clear()
+        prt()
+        settings['design'] = "3d"
+        testlogo()
+    elif menuDSN in ["K", "k"]:
+        clear()
+        prt()
+        settings['design'] = "simple3d"
+        testlogo()
+    elif menuDSN in ["L", "l"]:
+        clear()
+        prt()
+        settings['design'] = "huge"
+        testlogo()
+    elif menuDSN in ["K", "k"]:
+        menu()
 
 def menuPI(menuWN):
     if menuWN in ["A", "a"]:
@@ -913,6 +1412,8 @@ def menuA(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS in ["U", "u"]:
         upgrade()
+    elif menuS in ["G", "g"]:
+        settings4()
     elif menuS in ["T", "t"]:
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
@@ -975,6 +1476,8 @@ def menuRemote(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS in ["U", "u"]:
         upgrade()
+    elif menuS in ["G", "g"]:
+        settings4()
     elif menuS in ["T", "t"]: #Test feature fast access
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
@@ -1339,6 +1842,7 @@ def menuF(menuV): # Tester Donation access Menu
 
 while True: # Loop
     clear()
+    settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
     if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
