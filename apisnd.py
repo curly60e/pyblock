@@ -1,11 +1,12 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.4
+#Version: 0.6.5
 
 import os
 import qrcode
 import requests
 import time as t
+import sys
 from nodeconnection import *
 from pblogo import *
 from logos import *
@@ -20,24 +21,47 @@ def apisender():
     box_size=10,
     border=4,
     )
-    url = 'https://api.blockstream.space/order'
     message = input("\nInsert your Message: ")
+    a = sys.getsizeof(message)
+    mini = 6000
+    n = (a * 50)
+    if n <= mini:
+        q = str(mini)
+    elif n >= mini:
+        k = n + mini
+        q = str(k)
+
+    url = 'https://api.blockstream.space/order'
     sentby = " - PyBLOCK."
-    print("ATENTION: Minimum amount for sending a text is 5000 MSats")
+    print("\n\tATENTION: YOU NEED TO PAY " + q + " MilliSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
     sh = os.popen(curl)
+    clear()
+    blogo()
     sh0 = sh.read()
     while True:
         if 'Bid too low' in sh0:
             print("\n\t\033[1;31;40mATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\033[0;37;40m\n")
             print("Try again...\n")
-            url = 'https://api.blockstream.space/order'
             message = input("\nInsert your Message: ")
-            print("ATENTION: Minimum amount for sending a text is 5000 MSats")
+            a = sys.getsizeof(message)
+            mini = 6000
+            n = (a * 50)
+            if n <= mini:
+                q = str(mini)
+            elif n >= mini:
+                k = n + mini
+                q = str(k)
+
+            url = 'https://api.blockstream.space/order'
+            sentby = " - PyBLOCK."
+            print("\n\tATENTION: YOU NEED TO PAY " + q + " MilliSats")
             amountmsat = input("\nInsert the amount in MSats: ")
             curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
             sh = os.popen(curl)
+            clear()
+            blogo()
             sh0 = sh.read()
         elif 'lightning_invoice' in sh0:
             break
