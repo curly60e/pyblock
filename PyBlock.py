@@ -15,7 +15,6 @@ import subprocess
 import requests
 import json
 import simplejson as json
-import shelve
 from cfonts import render, say
 from clone import *
 from donation import *
