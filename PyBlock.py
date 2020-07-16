@@ -1215,8 +1215,6 @@ def menuDesign(menuDSN):
         prt()
         settings['design'] = "huge"
         testlogo()
-    elif menuDSN in ["K", "k"]:
-        menu()
 
 def menuPI(menuWN):
     if menuWN in ["A", "a"]:
@@ -1840,9 +1838,9 @@ def menuF(menuV): # Tester Donation access Menu
 
 #--------------------------------- End Main Menu execution --------------------------------
 
+settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
     clear()
-    settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
     if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
