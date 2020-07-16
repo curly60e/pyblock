@@ -2,7 +2,6 @@
 #PyBLOCK its a clock of the Bitcoin blockchain.
 #Version: 0.6.2
 import os
-import shelve
 import pickle
 from cfonts import render, say
 
