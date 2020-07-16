@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.4
+#Version: 0.6.5
 
 import os
 import os.path
@@ -194,7 +194,7 @@ def menu(): #Main Menu
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Local Node
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -219,7 +219,7 @@ def menuUserConn(): #Menu before connection over ssh
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Remote Node RPC
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -239,7 +239,7 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -255,7 +255,7 @@ def remoteadvanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
@@ -271,7 +271,7 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
@@ -285,7 +285,7 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
@@ -300,7 +300,7 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
@@ -314,7 +314,7 @@ def satnodeMenu(): # Satnode Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Start SatNode
     \033[1;32;40mB.\033[0;37;40m Feed
@@ -331,7 +331,7 @@ def menuLND():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -353,7 +353,7 @@ def settings4():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Change Logo Design
     \033[1;31;40mB.\033[0;37;40m Change Logo Colors
@@ -368,7 +368,7 @@ def design():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Design Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Block
     \033[1;31;40mB.\033[0;37;40m Slick
@@ -393,7 +393,7 @@ def colors():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
@@ -409,7 +409,7 @@ def colorsSelectFront():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Front Color Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -431,7 +431,7 @@ def colorsSelectBack():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Back Color Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -453,7 +453,7 @@ def colorsSelectRainbow():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Start Color
     \033[1;31;40mB.\033[0;37;40m End Color
@@ -468,7 +468,7 @@ def colorsSelectRainbowStart():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Start Color Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -490,7 +490,7 @@ def colorsSelectRainbowEnd():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow End Color Menu
     Remote node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -512,7 +512,7 @@ def menuLNDLOCAL():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Local node connection
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -536,7 +536,7 @@ def APIMenu():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m TippinMe   FREE
     \033[1;32;40mB.\033[0;37;40m Tallycoin  FREE
@@ -554,7 +554,7 @@ def mempoolmenu():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Mempool.space \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
@@ -572,7 +572,7 @@ def APILnbit():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNBits SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -593,7 +593,7 @@ def APILnPay():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNPay SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -614,7 +614,7 @@ def APIOpenNode():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m OpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -631,7 +631,7 @@ def APITippinMe():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TippinMe \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
@@ -644,7 +644,7 @@ def APITallyCo():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TallyCoin \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.4
+    Version 0.6.5
 
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
@@ -852,7 +852,7 @@ def aaccPPiTallyCo():
 
 def checkupdate():
     r = requests.get('https://raw.githubusercontent.com/curly60e/pyblock/master/ver.txt')
-    version = "0.6.4"
+    version = "0.6.5"
     r.headers['Content-Type']
     n = r.text
     di = json.loads(n)
