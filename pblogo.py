@@ -17,10 +17,10 @@ def blogo():
 
     if settings["gradient"] == "grd":
         output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
-        print(output)
     else:
         output = render('PyBLOCK', colors=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
-        print(output)
+
+    print(output)
 
 def tick():
     print("""\033[1;32;40m
