@@ -188,12 +188,6 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
 
 #--------------------------------- Menu section -----------------------------------
 
-def padToCenter(l:list,w:int)->str:
-    """Manual centering"""
-    padding =  ' '*(w//2) # a 1 char line would need at most w/2 spaces in front
-    parts = [ padding[0: (w-len(p))//2+1]+p for p in l]
-    return '\n'.join(parts)
-
 def menu(): #Main Menu
     clear()
     prt()
@@ -938,7 +932,6 @@ def menuSettings(menuSTT):
         prt()
         colors()
 
-
 def menuColors(menuCLS):
     if menuCLS in ["A", "a"]:
         colorsSelectFront()
@@ -1054,7 +1047,6 @@ def menuColorsSelectRainbowStart(menuCF):
         testlogoRB()
     elif menuCF in ["R", "r"]:
         colors()
-
 
 def menuColorsSelectBack(menuCF):
     if menuCF in ["A", "a"]:
