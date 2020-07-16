@@ -33,7 +33,7 @@ def apisender():
 
     url = 'https://api.blockstream.space/order'
     sentby = " - PyBLOCK."
-    print("\n\tATENTION: YOU NEED TO PAY " + q + " MilliSats")
+    print("\n\tATENTION: YOU NEED TO PAY \033[1;31;40m" + q + "\033[0;37;40m MilliSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
     sh = os.popen(curl)
@@ -56,7 +56,7 @@ def apisender():
 
             url = 'https://api.blockstream.space/order'
             sentby = " - PyBLOCK."
-            print("\n\tATENTION: YOU NEED TO PAY " + q + " MilliSats")
+            print("\n\tATENTION: YOU NEED TO PAY \033[1;31;40m" + q + "\033[0;37;40m MilliSats")
             amountmsat = input("\nInsert the amount in MSats: ")
             curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
             sh = os.popen(curl)
