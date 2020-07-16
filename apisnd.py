@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.3
+#Version: 0.6.4
 
 import os
 import qrcode
@@ -30,7 +30,8 @@ def apisender():
     sh0 = sh.read()
     while True:
         if 'Bid too low' in sh0:
-            print("ATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\n")
+            print("\n\t\033[1;31;40mATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\033[0;37;40m\n")
+            print("Try again...\n")
             url = 'https://api.blockstream.space/order'
             message = input("\nInsert your Message: ")
             print("ATENTION: Minimum amount for sending a text is 5000 MSats")
@@ -112,7 +113,8 @@ def apisenderFile():
     sh0 = sh.read()
     while True:
         if 'Bid too low' in sh0:
-            print("ATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\n")
+            print("\n\t\033[1;31;40mATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\033[0;37;40m\n")
+            print("Try again...\n")
             url = 'https://api.blockstream.space/order'
             message = input("\nInsert the path to the File: ")
             print("ATENTION: Minimum amount for sending a File is 50000 MSats")
