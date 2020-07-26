@@ -1,6 +1,5 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
-#Version: 0.6.5
 
 import os
 import os.path
@@ -29,6 +28,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
+version = "0.6.6"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -71,7 +71,7 @@ def getgenesis(): # get and decode Genesis block
     os.system(path['bitcoincli'] + bitcoincli)
 
 def close():
-    print("<<< Back to the Main Menu Press Control + C.\n\n")
+    print("<<< Back Control + C.\n\n")
 
 def readHexBlock(): # Hex Decoder using Hexyl on local node
     hexa = input("Add the Block Hash you want to decode: ")
@@ -194,7 +194,7 @@ def menu(): #Main Menu
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Local Node
-    Version 0.6.5
+    Version {}
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -209,7 +209,7 @@ def menu(): #Main Menu
     \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""".format(checkupdate()))
+    \n\n""".format(version, checkupdate()))
     menuA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuUserConn(): #Menu before connection over ssh
@@ -219,7 +219,7 @@ def menuUserConn(): #Menu before connection over ssh
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Remote Node RPC
-    Version 0.6.5
+    Version {}
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -230,7 +230,7 @@ def menuUserConn(): #Menu before connection over ssh
     \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""".format(checkupdate()))
+    \n\n""".format(version, checkupdate()))
     menuRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def advanceMenu(): # Advanced Menu
@@ -239,14 +239,14 @@ def advanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def remoteadvanceMenu(): # Advanced Menu
@@ -255,14 +255,14 @@ def remoteadvanceMenu(): # Advanced Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Bitconi-cli Console
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuBA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dnt(): # Donation selection menu
@@ -271,12 +271,12 @@ def dnt(): # Donation selection menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Developers Donation
     \033[1;32;40mB.\033[0;37;40m Testers Donation
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntDev(): # Dev Donation Menu
@@ -285,13 +285,13 @@ def dntDev(): # Dev Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m PayNym
     \033[1;32;40mB.\033[0;37;40m Bitcoin Address
     \033[1;32;40mC.\033[0;37;40m Lightning Network
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntTst(): # Tester Donation Menu
@@ -300,12 +300,12 @@ def dntTst(): # Tester Donation Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Bitcoin Address
     \033[1;32;40mB.\033[0;37;40m Lightning Network
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuF(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def satnodeMenu(): # Satnode Menu
@@ -314,14 +314,14 @@ def satnodeMenu(): # Satnode Menu
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Start SatNode
     \033[1;32;40mB.\033[0;37;40m Feed
     \033[1;32;40mC.\033[0;37;40m Setup
     \033[1;34;40mS.\033[0;37;40m Send a Message to Space
     \033[1;36;40mD.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuLND():
@@ -331,7 +331,7 @@ def menuLND():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -343,7 +343,7 @@ def menuLND():
     \033[1;32;40mN.\033[0;37;40m Get Node Info
     \033[1;32;40mO.\033[0;37;40m Onchain Balance
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def settings4():
@@ -353,22 +353,22 @@ def settings4():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Change Logo Design
     \033[1;31;40mB.\033[0;37;40m Change Logo Colors
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuSettings(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def design():
+def designQ():
     clear()
     prt()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Design Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Block
     \033[1;31;40mB.\033[0;37;40m Slick
@@ -383,7 +383,7 @@ def design():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colors():
@@ -393,13 +393,13 @@ def colors():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;31;40mC.\033[0;37;40m Rainbow
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFront():
@@ -409,7 +409,7 @@ def colorsSelectFront():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Front Color Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -421,7 +421,7 @@ def colorsSelectFront():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuColorsSelectFront(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBack():
@@ -431,7 +431,7 @@ def colorsSelectBack():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Back Color Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -443,7 +443,7 @@ def colorsSelectBack():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuColorsSelectBack(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbow():
@@ -453,12 +453,12 @@ def colorsSelectRainbow():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Start Color
     \033[1;31;40mB.\033[0;37;40m End Color
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuColorsSelectRainbow(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowStart():
@@ -468,7 +468,7 @@ def colorsSelectRainbowStart():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Start Color Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -480,7 +480,7 @@ def colorsSelectRainbowStart():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuColorsSelectRainbowStart(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowEnd():
@@ -490,7 +490,7 @@ def colorsSelectRainbowEnd():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow End Color Menu
     Remote node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Black
     \033[1;31;40mB.\033[0;37;40m Red
@@ -502,7 +502,7 @@ def colorsSelectRainbowEnd():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuLNDLOCAL():
@@ -512,7 +512,7 @@ def menuLNDLOCAL():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
     Local node connection
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mI.\033[0;37;40m New Invoice
     \033[1;31;40mP.\033[0;37;40m Pay Invoice
@@ -527,7 +527,7 @@ def menuLNDLOCAL():
     \033[1;33;40mX.\033[0;37;40m List Onchain Transactions
     \033[1;32;40mO.\033[0;37;40m Onchain Balance
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuLNlocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIMenu():
@@ -536,7 +536,7 @@ def APIMenu():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m TippinMe   FREE
     \033[1;32;40mB.\033[0;37;40m Tallycoin  FREE
@@ -545,7 +545,7 @@ def APIMenu():
     \033[1;32;40mE.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
     \033[1;32;40mF.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""".format(lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    \n\n""".format(version(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def mempoolmenu():
@@ -554,12 +554,12 @@ def mempoolmenu():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Mempool.space \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnbit():
@@ -572,7 +572,7 @@ def APILnbit():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNBits SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -580,7 +580,7 @@ def APILnbit():
     \033[1;32;40mD.\033[0;37;40m Delete PayWall
     \033[1;32;40mE.\033[0;37;40m List PayWalls
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""".format(bitLN['NN']))
+    \n\n""".format(version,bitLN['NN']))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnPay():
@@ -593,7 +593,7 @@ def APILnPay():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNPay SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -601,7 +601,7 @@ def APILnPay():
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""".format(bitLN['NN']))
+    \n\n""".format(version,bitLN['NN']))
     menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNode():
@@ -614,7 +614,7 @@ def APIOpenNode():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m OpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
@@ -622,7 +622,7 @@ def APIOpenNode():
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;32;40mS.\033[0;37;40m Status
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""".format(bitLN['NN']))
+    \n\n""".format(version,bitLN['NN']))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITippinMe():
@@ -631,11 +631,11 @@ def APITippinMe():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TippinMe \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITallyCo():
@@ -644,12 +644,12 @@ def APITallyCo():
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TallyCoin \033[1;34;40mFree\033[0;37;40m Menu
-    Version 0.6.5
+    Version {}
 
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""")
+    \n\n""".format(version))
     menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
@@ -852,7 +852,6 @@ def aaccPPiTallyCo():
 
 def checkupdate():
     r = requests.get('https://raw.githubusercontent.com/curly60e/pyblock/master/ver.txt')
-    version = "0.6.5"
     r.headers['Content-Type']
     n = r.text
     di = json.loads(n)
@@ -925,7 +924,7 @@ def menuSettings(menuSTT):
     if menuSTT in ["A", "a"]:
         clear()
         prt()
-        design()
+        designQ()
     elif menuSTT in ["B", "b"]:
         clear()
         prt()
