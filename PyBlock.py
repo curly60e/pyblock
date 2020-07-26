@@ -361,7 +361,7 @@ def settings4():
     \n\n""".format(version))
     menuSettings(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def design():
+def designQ():
     clear()
     prt()
     sysinfo()
@@ -924,7 +924,7 @@ def menuSettings(menuSTT):
     if menuSTT in ["A", "a"]:
         clear()
         prt()
-        design()
+        designQ()
     elif menuSTT in ["B", "b"]:
         clear()
         prt()
