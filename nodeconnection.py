@@ -88,6 +88,15 @@ def remoteconsole(): # get into the console from bitcoin-cli
         a = rpc(cle)
         print(a)
 
+def runthenumbersConn():
+    try:
+        b = rpc('gettxoutsetinfo')
+        c = str(b)
+        print(c)
+        input("\nContinue...")
+    except:
+        pass
+
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def consoleLN(): # get into the console from bitcoin-cli
