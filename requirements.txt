@@ -17,6 +17,7 @@ urllib3
 lnpay-py
 xmltodict
 python-cfonts
+termcolor
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers

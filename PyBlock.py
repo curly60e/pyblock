@@ -24,11 +24,12 @@ from sysinf import *
 from pblogo import *
 from apisnd import *
 from ppi import *
+from termcolor import colored, cprint
 from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.6.6"
+version = "0.6.7"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -183,6 +184,12 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
                 lsd.close()
         except (KeyboardInterrupt, SystemExit):
             menu()
+
+def runthenumbers():
+    bitcoincli = " gettxoutsetinfo"
+    os.system(path['bitcoincli'] + bitcoincli)
+    input("\nContinue...")
+
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 #--------------------------------- Menu section -----------------------------------
@@ -202,6 +209,7 @@ def menu(): #Main Menu
     \033[1;32;40mD.\033[0;37;40m Decode in HEX any block
     \033[1;32;40mE.\033[0;37;40m Decode in HEX any transaction
     \033[1;32;40mF.\033[0;37;40m Show confirmations from a transaction
+    \033[1;32;40mG.\033[0;37;40m Run the Numbers
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
@@ -223,8 +231,9 @@ def menuUserConn(): #Menu before connection over ssh
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
-    \033[1;33;40mL.\033[0;37;40m Lightning Network
+    \033[1;32;40mC.\033[0;37;40m Run the Numbers
     \033[1;32;40mH.\033[0;37;40m Advanced
+    \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[3;33;40mP.\033[0;37;40m Premium
     \033[1;32;40mG.\033[0;37;40m Settings
@@ -1326,7 +1335,6 @@ def menuA(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menu()
     elif menuS in ["C", "c"]:
         clear()
         prt()
@@ -1375,6 +1383,29 @@ def menuA(menuS): #Execution of the Main Menu options
                 break
     elif menuS in ["F", "f"]:
         getrawtx()
+    elif menuS in ["G", "g"]:
+        clear()
+        prt()
+        calc = """
+                    ----------------------------
+
+                             PROCESSING
+                            THE  NUMBERS
+
+                    ----------------------------
+         """
+        comeback = """
+
+                    ----------------------------
+                       MAKE YOURSELF A COFFEE
+                         AND COME BACK IN A
+                               MOMENT
+                    ----------------------------
+
+        """
+        cprint(comeback, 'yellow')
+        cprint(calc, 'red', attrs=['blink'])
+        runthenumbers()
     elif menuS in ["H", "h"]:
         advanceMenu()
     elif menuS in ["L", "l"]:
@@ -1401,8 +1432,6 @@ def menuA(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS in ["U", "u"]:
         upgrade()
-    elif menuS in ["G", "g"]:
-        settings4()
     elif menuS in ["T", "t"]:
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
@@ -1430,7 +1459,6 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menuUserConn()
     elif menuS in ["B", "b"]:
         while True:
             try:
@@ -1440,6 +1468,30 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
+
+    elif menuS in ["C", "c"]:
+        clear()
+        prt()
+        calc = """
+                    ----------------------------
+
+                             PROCESSING
+                            THE  NUMBERS
+
+                    ----------------------------
+        """
+        comeback = """
+
+                    ----------------------------
+                       MAKE YOURSELF A COFFEE
+                         AND COME BACK IN A
+                               MOMENT
+                    ----------------------------
+
+        """
+        cprint(comeback, 'yellow')
+        cprint(calc, 'red', attrs=['blink'])
+        runthenumbersConn()
     elif menuS in ["H", "h"]:
         remoteadvanceMenu()
     elif menuS in ["L", "l"]:
