@@ -1335,7 +1335,6 @@ def menuA(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menu()
     elif menuS in ["C", "c"]:
         clear()
         prt()
@@ -1433,8 +1432,6 @@ def menuA(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS in ["U", "u"]:
         upgrade()
-    elif menuS in ["G", "g"]:
-        settings4()
     elif menuS in ["T", "t"]:
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
@@ -1462,7 +1459,6 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menuUserConn()
     elif menuS in ["B", "b"]:
         while True:
             try:
