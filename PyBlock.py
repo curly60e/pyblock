@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.6.8"
+version = "0.6.9"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -1335,7 +1335,6 @@ def menuA(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menu()
     elif menuS in ["C", "c"]:
         clear()
         prt()
@@ -1384,7 +1383,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 break
     elif menuS in ["F", "f"]:
         getrawtx()
-    elif menuS in ["N", "n"]:
+    elif menuS in ["G", "g"]:
         clear()
         prt()
         calc = """
@@ -1433,7 +1432,7 @@ def menuA(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS in ["U", "u"]:
         upgrade()
-    elif menuS in ["G", "g"]:
+    elif menuS in ["N", "n"]:
         settings4()
     elif menuS in ["T", "t"]:
         clear()
@@ -1462,7 +1461,6 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menuUserConn()
     elif menuS in ["B", "b"]:
         while True:
             try:
