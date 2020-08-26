@@ -1335,7 +1335,6 @@ def menuA(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menu()
     elif menuS in ["C", "c"]:
         clear()
         prt()
@@ -1462,7 +1461,6 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
-                menuUserConn()
     elif menuS in ["B", "b"]:
         while True:
             try:
