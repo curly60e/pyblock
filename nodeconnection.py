@@ -9,6 +9,7 @@ import os.path
 import qrcode
 import simplejson as json
 import time as t
+from cfonts import render, say
 from art import *
 from pblogo import *
 

@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.6.7"
+version = "0.6.8"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -214,7 +214,7 @@ def menu(): #Main Menu
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[3;33;40mP.\033[0;37;40m Premium
-    \033[1;32;40mG.\033[0;37;40m Settings
+    \033[1;32;40mN.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""".format(version, checkupdate()))
@@ -1335,6 +1335,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
+                menu()
     elif menuS in ["C", "c"]:
         clear()
         prt()
@@ -1383,7 +1384,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 break
     elif menuS in ["F", "f"]:
         getrawtx()
-    elif menuS in ["G", "g"]:
+    elif menuS in ["N", "n"]:
         clear()
         prt()
         calc = """
@@ -1432,6 +1433,8 @@ def menuA(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS in ["U", "u"]:
         upgrade()
+    elif menuS in ["G", "g"]:
+        settings4()
     elif menuS in ["T", "t"]:
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
@@ -1459,6 +1462,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
                 tmp()
             except:
                 break
+                menuUserConn()
     elif menuS in ["B", "b"]:
         while True:
             try:
