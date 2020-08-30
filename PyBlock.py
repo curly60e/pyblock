@@ -1637,10 +1637,6 @@ def menuLNlocal(menuLL):
         clear()
         blogo()
         localkeysend()
-    elif menuLL in ["P", "p"]:
-        clear()
-        blogo()
-        locallistpeers()
     elif menuLL in ["Z", "z"]:
         clear()
         blogo()
