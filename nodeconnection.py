@@ -110,7 +110,7 @@ def consoleLN(): # get into the console from bitcoin-cli
         print(lsd1)
         lsd.close()
 
-def locallistpeers():
+def locallistpeersQQ():
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
