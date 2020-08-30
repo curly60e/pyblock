@@ -1900,7 +1900,7 @@ while True: # Loop
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     else:
-        prt()
+        blogo()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
         print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
         path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
