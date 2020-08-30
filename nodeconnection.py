@@ -184,7 +184,6 @@ def localconnectpeer():
         input("\nContinue... ")
     except:
         pass
-localconnectpeer()
 
 def locallistchaintxns():
     qr = qrcode.QRCode(
