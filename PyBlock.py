@@ -525,7 +525,7 @@ def menuLNDLOCAL():
     \033[1;32;40mK.\033[0;37;40m Make a KeySend Payment
     \033[1;31;40mL.\033[0;37;40m List Invoices
     \033[1;32;40mQ.\033[0;37;40m Channel Balance
-    \033[1;32;40mP.\033[0;37;40m Show Peers
+    \033[1;32;40mE.\033[0;37;40m Show Peers
     \033[1;32;40mZ.\033[0;37;40m Connect Peers
     \033[1;32;40mC.\033[0;37;40m Show Channels
     \033[1;32;40mN.\033[0;37;40m Get Node Info
@@ -1637,6 +1637,10 @@ def menuLNlocal(menuLL):
         clear()
         blogo()
         localkeysend()
+    elif menuLL in ["E", "e"]:
+        clear()
+        blogo()
+        locallistpeersQQ()
     elif menuLL in ["Z", "z"]:
         clear()
         blogo()
