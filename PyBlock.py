@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.6.9"
+version = "0.7.0"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -85,9 +85,6 @@ def readHexTx(): # Hex Decoder using Hexyl on an external node
     decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
     os.system(decodeTX)
 
-def prt():
-    blogo()
-
 def tmp():
     t.sleep(15)
 
@@ -107,7 +104,7 @@ def screensv():
     except (KeyboardInterrupt, SystemExit):
         matrix.close()
         clear()
-        ptr()
+        blogo()
         menu()
 
 def delay_print(s):
@@ -120,7 +117,7 @@ def delay_print(s):
 def connected(info): # here we complete the connection to the external node
     if info in ["Y", "y"]:
         clear()
-        prt()
+        blogo()
         print("\nAdd your node information\n")
         menuUserConn()
     else:
@@ -165,7 +162,7 @@ def getrawtx(): # show confirmatins from transactions
     while True:
         try:
             clear()
-            prt()
+            blogo()
             close()
             if tx == "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b":
                 print("""\t\t\n\033[1;35;40mThis transaction it's the first one of the Bitcoin Blockchain on Block 0 by Satoshi Nakamoto.
@@ -196,7 +193,7 @@ def runthenumbers():
 
 def menu(): #Main Menu
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -222,7 +219,7 @@ def menu(): #Main Menu
 
 def menuUserConn(): #Menu before connection over ssh
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -244,7 +241,7 @@ def menuUserConn(): #Menu before connection over ssh
 
 def advanceMenu(): # Advanced Menu
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -260,7 +257,7 @@ def advanceMenu(): # Advanced Menu
 
 def remoteadvanceMenu(): # Advanced Menu
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -276,7 +273,7 @@ def remoteadvanceMenu(): # Advanced Menu
 
 def dnt(): # Donation selection menu
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -290,7 +287,7 @@ def dnt(): # Donation selection menu
 
 def dntDev(): # Dev Donation Menu
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -305,7 +302,7 @@ def dntDev(): # Dev Donation Menu
 
 def dntTst(): # Tester Donation Menu
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -319,7 +316,7 @@ def dntTst(): # Tester Donation Menu
 
 def satnodeMenu(): # Satnode Menu
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
@@ -335,7 +332,7 @@ def satnodeMenu(): # Satnode Menu
 
 def menuLND():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
@@ -357,7 +354,7 @@ def menuLND():
 
 def settings4():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings Menu
@@ -372,7 +369,7 @@ def settings4():
 
 def designQ():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Design Menu
@@ -397,7 +394,7 @@ def designQ():
 
 def colors():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors Menu
@@ -413,7 +410,7 @@ def colors():
 
 def colorsSelectFront():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Front Color Menu
@@ -435,7 +432,7 @@ def colorsSelectFront():
 
 def colorsSelectBack():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Back Color Menu
@@ -457,7 +454,7 @@ def colorsSelectBack():
 
 def colorsSelectRainbow():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Menu
@@ -472,7 +469,7 @@ def colorsSelectRainbow():
 
 def colorsSelectRainbowStart():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow Start Color Menu
@@ -494,7 +491,7 @@ def colorsSelectRainbowStart():
 
 def colorsSelectRainbowEnd():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Rainbow End Color Menu
@@ -516,7 +513,7 @@ def colorsSelectRainbowEnd():
 
 def menuLNDLOCAL():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Lightning Network Menu
@@ -528,6 +525,8 @@ def menuLNDLOCAL():
     \033[1;32;40mK.\033[0;37;40m Make a KeySend Payment
     \033[1;31;40mL.\033[0;37;40m List Invoices
     \033[1;32;40mQ.\033[0;37;40m Channel Balance
+    \033[1;32;40mP.\033[0;37;40m Show Peers
+    \033[1;32;40mZ.\033[0;37;40m Connect Peers
     \033[1;32;40mC.\033[0;37;40m Show Channels
     \033[1;32;40mN.\033[0;37;40m Get Node Info
     \033[1;32;40mW.\033[0;37;40m Get Network Information
@@ -541,7 +540,7 @@ def menuLNDLOCAL():
 
 def APIMenu():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m API \033[1;34;40mPremium\033[0;37;40m Menu
@@ -559,7 +558,7 @@ def APIMenu():
 
 def mempoolmenu():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Mempool.space \033[1;34;40mFree\033[0;37;40m Menu
@@ -577,7 +576,7 @@ def APILnbit():
         bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNBits SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
@@ -598,7 +597,7 @@ def APILnPay():
         bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m LNPay SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
@@ -619,7 +618,7 @@ def APIOpenNode():
         bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m OpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m Menu
@@ -636,7 +635,7 @@ def APIOpenNode():
 
 def APITippinMe():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TippinMe \033[1;34;40mFree\033[0;37;40m Menu
@@ -649,7 +648,7 @@ def APITippinMe():
 
 def APITallyCo():
     clear()
-    prt()
+    blogo()
     sysinfo()
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m TallyCoin \033[1;34;40mFree\033[0;37;40m Menu
@@ -697,7 +696,7 @@ def aaccPPiLNBits():
             curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
-            prt()
+            blogo()
             n = str(sh)
             d = json.loads(n)
             q = d['payment_request']
@@ -753,7 +752,7 @@ def aaccPPiLNPay():
             curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
-            prt()
+            blogo()
             n = str(sh)
             d = json.loads(n)
             q = d['payment_request']
@@ -809,7 +808,7 @@ def aaccPPiOpenNode():
             curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
-            prt()
+            blogo()
             n = str(sh)
             d = json.loads(n)
             q = d['payment_request']
@@ -932,11 +931,11 @@ def testlogoRB():
 def menuSettings(menuSTT):
     if menuSTT in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         designQ()
     elif menuSTT in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         colors()
 
 def menuColors(menuCLS):
@@ -960,47 +959,47 @@ def menuColorsSelectRainbow(menuRF):
 def menuColorsSelectRainbowEnd(menuCF):
     if menuCF in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "black"
         testlogoRB()
     elif menuCF in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "red"
         testlogoRB()
     elif menuCF in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "green"
         testlogoRB()
     elif menuCF in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "yellow"
         testlogo()
     elif menuCF in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "blue"
         testlogoRB()
     elif menuCF in ["F", "f"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "magenta"
         testlogoRB()
     elif menuCF in ["G", "g"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "cyan"
         testlogoRB()
     elif menuCF in ["H", "h"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "white"
         testlogoRB()
     elif menuCF in ["I", "i"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "gray"
         testlogoRB()
     elif menuCF in ["R", "r"]:
@@ -1009,47 +1008,47 @@ def menuColorsSelectRainbowEnd(menuCF):
 def menuColorsSelectRainbowStart(menuCF):
     if menuCF in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "black"
         testlogoRB()
     elif menuCF in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "red"
         testlogoRB()
     elif menuCF in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "green"
         testlogoRB()
     elif menuCF in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "yellow"
         testlogoRB()
     elif menuCF in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "blue"
         testlogoRB()
     elif menuCF in ["F", "f"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "magenta"
         testlogoRB()
     elif menuCF in ["G", "g"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "cyan"
         testlogoRB()
     elif menuCF in ["H", "h"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "white"
         testlogoRB()
     elif menuCF in ["I", "i"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "gray"
         testlogoRB()
     elif menuCF in ["R", "r"]:
@@ -1058,47 +1057,47 @@ def menuColorsSelectRainbowStart(menuCF):
 def menuColorsSelectBack(menuCF):
     if menuCF in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "black"
         testlogo()
     elif menuCF in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "red"
         testlogo()
     elif menuCF in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "green"
         testlogo()
     elif menuCF in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "yellow"
         testlogo()
     elif menuCF in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "blue"
         testlogo()
     elif menuCF in ["F", "f"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "magenta"
         testlogo()
     elif menuCF in ["G", "g"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "cyan"
         testlogo()
     elif menuCF in ["H", "h"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "white"
         testlogo()
     elif menuCF in ["I", "i"]:
         clear()
-        prt()
+        blogo()
         settings["colorB"] = "gray"
         testlogo()
     elif menuCF in ["R", "r"]:
@@ -1107,47 +1106,47 @@ def menuColorsSelectBack(menuCF):
 def menuColorsSelectFront(menuCF):
     if menuCF in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "black"
         testlogo()
     elif menuCF in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "red"
         testlogo()
     elif menuCF in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "green"
         testlogo()
     elif menuCF in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "yellow"
         testlogo()
     elif menuCF in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "blue"
         testlogo()
     elif menuCF in ["F", "f"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "magenta"
         testlogo()
     elif menuCF in ["G", "g"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "cyan"
         testlogo()
     elif menuCF in ["H", "h"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "white"
         testlogo()
     elif menuCF in ["I", "i"]:
         clear()
-        prt()
+        blogo()
         settings["colorA"] = "gray"
         testlogo()
     elif menuCF in ["R", "r"]:
@@ -1156,62 +1155,62 @@ def menuColorsSelectFront(menuCF):
 def menuDesign(menuDSN):
     if menuDSN in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         settings["design"] = "block"
         testlogo()
     elif menuDSN in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "slick"
         testlogo()
     elif menuDSN in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "tiny"
         testlogo()
     elif menuDSN in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "grid"
         testlogo()
     elif menuDSN in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "pallet"
         testlogo()
     elif menuDSN in ["F", "f"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "shade"
         testlogo()
     elif menuDSN in ["G", "g"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "chrome"
         testlogo()
     elif menuDSN in ["H", "h"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "simple"
         testlogo()
     elif menuDSN in ["I", "i"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "simpleBlock"
         testlogo()
     elif menuDSN in ["J", "j"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "3d"
         testlogo()
     elif menuDSN in ["K", "k"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "simple3d"
         testlogo()
     elif menuDSN in ["L", "l"]:
         clear()
-        prt()
+        blogo()
         settings['design'] = "huge"
         testlogo()
 
@@ -1254,23 +1253,23 @@ def menuTippinMe(menuTM):
 def menuOpenNode(menuOP):
     if menuOP in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         OpenNodecreatecharge()
     elif menuOP in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         OpenNodeiniciatewithdrawal()
     elif menuOP in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         OpenNodelistfunds()
     elif menuOP in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         OpenNodeListPayments()
     elif menuOP in ["S", "s"]:
         clear()
-        prt()
+        blogo()
         OpenNodeCheckStatus()
     elif menuOP in ["R", "r"]:
         APIMenu()
@@ -1278,23 +1277,23 @@ def menuOpenNode(menuOP):
 def menuLNPAY(menuNW):
     if menuNW in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         lnpayCreateInvoice()
     elif menuNW in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         lnpayPayInvoice()
     elif menuNW in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         lnpayGetBalance()
     elif menuNW in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         lnpayGetTransactions()
     elif menuNW in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         lnpayTransBWallets()
     elif menuNW in ["R", "r"]:
         APIMenu()
@@ -1302,23 +1301,23 @@ def menuLNPAY(menuNW):
 def menuLNBPI(menuLNQ):
     if menuLNQ in ["A", "a"]:
         clear()
-        prt()
+        blogo()
         lnbitCreateNewInvoice()
     elif menuLNQ in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         lnbitPayInvoice()
     elif menuLNQ in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         lnbitCreatePayWall()
     elif menuLNQ in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         lnbitDeletePayWall()
     elif menuLNQ in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         lnbitListPawWall()
     elif menuLNQ in ["R", "r"]:
         APIMenu()
@@ -1337,7 +1336,7 @@ def menuA(menuS): #Execution of the Main Menu options
                 break
     elif menuS in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         getgenesis()
         a = input("Do you want to return to the Main Menu? Y/n: ")
         if a in ["Y", "y"]:
@@ -1358,25 +1357,25 @@ def menuA(menuS): #Execution of the Main Menu options
                 menuSelection()
     elif menuS in ["D", "d"]:
         clear()
-        prt()
+        blogo()
         readHexBlock()
         while True:
             r = input("Do you want to continue decoding? Y/n: ")
             if r in ["Y", "y"]:
                 clear()
-                prt()
+                blogo()
                 readHexBlock()
             else:
                 break
     elif menuS in ["E", "e"]:
         clear()
-        prt()
+        blogo()
         readHexTx()
         while True:
             r = input("Do you want to continue decoding? Y/n: ")
             if r in ["Y", "y"]:
                 clear()
-                prt()
+                blogo()
                 sysinfo()
                 readHexTx()
             else:
@@ -1385,7 +1384,7 @@ def menuA(menuS): #Execution of the Main Menu options
         getrawtx()
     elif menuS in ["G", "g"]:
         clear()
-        prt()
+        blogo()
         calc = """
                     ----------------------------
 
@@ -1410,7 +1409,7 @@ def menuA(menuS): #Execution of the Main Menu options
         advanceMenu()
     elif menuS in ["L", "l"]:
         clear()
-        prt()
+        blogo()
         menuSelectionLN()
     elif menuS in ["Q", "q"]:
         os._exit(0)
@@ -1424,7 +1423,7 @@ def menuA(menuS): #Execution of the Main Menu options
         exit()
     elif menuS in ["S", "s"]:
         clear()
-        prt()
+        blogo()
         satnodeMenu()
     elif menuS in ["P", "p"]:
         APIMenu()
@@ -1473,7 +1472,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
 
     elif menuS in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         calc = """
                     ----------------------------
 
@@ -1498,7 +1497,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
         remoteadvanceMenu()
     elif menuS in ["L", "l"]:
         clear()
-        prt()
+        blogo()
         menuSelectionLN()
     elif menuS in ["Q", "q"]:
         os._exit(0)
@@ -1512,7 +1511,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
         exit()
     elif menuS in ["S", "s"]:
         clear()
-        prt()
+        blogo()
         satnodeMenu()
     elif menuS in ["P", "p"]:
         APIMenu()
@@ -1542,39 +1541,39 @@ def menuRemote(menuS): #Execution of the Main Menu options
 def menuLN(menuLL):
     if menuLL in ["I", "i"]:
         clear()
-        prt()
+        blogo()
         getnewinvoice()
     elif menuLL in ["P", "p"]:
         clear()
-        prt()
+        blogo()
         payinvoice()
     elif menuLL in ["Q", "q"]:
         clear()
-        prt()
+        blogo()
         channelbalance()
     elif menuLL in ["L", "l"]:
         clear()
-        prt()
+        blogo()
         listinvoice()
     elif menuLL in ["X", "x"]:
         clear()
-        prt()
+        blogo()
         listonchaintxs()
     elif menuLL in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         channels()
     elif menuLL in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         getnewaddress()
     elif menuLL in ["N", "n"]:
         clear()
-        prt()
+        blogo()
         getinfo()
     elif menuLL in ["O", "o"]:
         clear()
-        prt()
+        blogo()
         balanceOC()
     elif menuLL in ["R", "r"]:
         menuUserConn()
@@ -1585,49 +1584,49 @@ def menuLN(menuLL):
 def menuLNlocal(menuLL):
     if menuLL in ["I", "i"]:
         clear()
-        prt()
+        blogo()
         localaddinvoice()
     elif menuLL in ["P", "p"]:
         clear()
-        prt()
+        blogo()
         localpayinvoice()
     elif menuLL in ["Q", "q"]:
         clear()
-        prt()
+        blogo()
         localchannelbalance()
     elif menuLL in ["L", "l"]:
         clear()
-        prt()
+        blogo()
         locallistinvoices()
     elif menuLL in ["X", "x"]:
         clear()
-        prt()
+        blogo()
         locallistchaintxns()
     elif menuLL in ["C", "c"]:
         clear()
-        prt()
+        blogo()
         locallistchannels()
     elif menuLL in ["B", "b"]:
         clear()
-        prt()
+        blogo()
         localnewaddress()
     elif menuLL in ["N", "n"]:
         clear()
-        prt()
+        blogo()
         localgetinfo()
     elif menuLL in ["O", "o"]:
         clear()
-        prt()
+        blogo()
         localbalanceOC()
     elif menuLL in ["W", "w"]:
         clear()
-        prt()
+        blogo()
         localgetnetworkinfo()
     elif menuLL in ["J", "j"]:
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 sysinfo()
                 close()
                 consoleLN()
@@ -1636,8 +1635,16 @@ def menuLNlocal(menuLL):
                 break
     elif menuLL in ["K", "k"]:
         clear()
-        prt()
+        blogo()
         localkeysend()
+    elif menuLL in ["P", "p"]:
+        clear()
+        blogo()
+        locallistpeers()
+    elif menuLL in ["Z", "z"]:
+        clear()
+        blogo()
+        localconnectpeer()
     elif menuLL in ["R", "r"]:
         menuSelection()
 
@@ -1648,7 +1655,7 @@ def menuB(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 sysinfo()
                 close()
                 console()
@@ -1659,17 +1666,17 @@ def menuB(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 close()
                 logoA()
                 tmp()
                 clear()
-                prt()
+                blogo()
                 close()
                 logoB()
                 tmp()
                 clear()
-                prt()
+                blogo()
                 close()
                 logoC()
                 tmp()
@@ -1679,7 +1686,7 @@ def menuB(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 sysinfo()
                 close()
                 decodeQR()
@@ -1690,7 +1697,7 @@ def menuB(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 close()
                 sysinfoDetail()
                 t.sleep(1)
@@ -1714,7 +1721,7 @@ def menuBA(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 sysinfo()
                 close()
                 remoteconsole()
@@ -1725,17 +1732,17 @@ def menuBA(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 close()
                 logoA()
                 tmp()
                 clear()
-                prt()
+                blogo()
                 close()
                 logoB()
                 tmp()
                 clear()
-                prt()
+                blogo()
                 close()
                 logoC()
                 tmp()
@@ -1745,7 +1752,7 @@ def menuBA(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 sysinfo()
                 close()
                 decodeQR()
@@ -1756,7 +1763,7 @@ def menuBA(menuR): # Advanced access Menu
         while True:
             try:
                 clear()
-                prt()
+                blogo()
                 close()
                 sysinfoDetail()
                 t.sleep(1)
@@ -1795,7 +1802,7 @@ def menuD(menuN): # Satnode access Menu
             if message in ["F", "f"]:
                 try:
                     clear()
-                    prt()
+                    blogo()
                     close()
                     apisenderFile()
                     t.sleep(30)
@@ -1805,7 +1812,7 @@ def menuD(menuN): # Satnode access Menu
             elif message in ["T", "t"]:
                 try:
                     clear()
-                    prt()
+                    blogo()
                     close()
                     apisender()
                     t.sleep(30)
@@ -1828,7 +1835,7 @@ def menuE(menuQ): # Dev Donation access Menu
     if menuQ in ["A", "a"]:
         try:
             clear()
-            prt()
+            blogo()
             close()
             donationPN()
             t.sleep(50)
@@ -1838,7 +1845,7 @@ def menuE(menuQ): # Dev Donation access Menu
     elif menuQ in ["B", "b"]:
         try:
             clear()
-            prt()
+            blogo()
             close()
             donationAddr()
             t.sleep(50)
@@ -1848,7 +1855,7 @@ def menuE(menuQ): # Dev Donation access Menu
     elif menuQ in ["C", "c"]:
         try:
             clear()
-            prt()
+            blogo()
             close()
             donationLN()
             t.sleep(50)
@@ -1862,7 +1869,7 @@ def menuF(menuV): # Tester Donation access Menu
     if menuV in ["A", "a"]:
         try:
             clear()
-            prt()
+            blogo()
             close()
             donationAddrTst()
             t.sleep(50)
@@ -1872,7 +1879,7 @@ def menuF(menuV): # Tester Donation access Menu
     elif menuV in ["B", "b"]:
         try:
             clear()
-            prt()
+            blogo()
             close()
             donationLNTst()
             t.sleep(50)
