@@ -331,6 +331,12 @@ def locallistchannels():
             break
 
 def localgetinfo():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
     lncli = " getinfo"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -338,6 +344,7 @@ def localgetinfo():
     print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \tNODE INFORMATION
+
     Version: {}
     Node ID: {}
     Alias: {}
@@ -348,6 +355,11 @@ def localgetinfo():
     Peers: {}
     URLS: {}
     """.format(d['version'], d['identity_pubkey'], d['alias'], d['color'], d['num_pending_channels'], d['num_active_channels'], d['num_inactive_channels'], d['num_peers'], d['uris']))
+    print("\033[1;30;47m")
+    qr.add_data(d['identity_pubkey'])
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    qr.clear()
     print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
@@ -695,30 +707,38 @@ def listinvoice():
     input("\nContinue... ")
 
 def getinfo():
-    try:
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        a = r.json()
-        print("\n----------------------------------------------------------------------------------------------------")
-        print("""
-        \t NODE INFORMATION
-        Version: {}
-        Node ID: {}
-        Alias: {}
-        Color: {}
-        Pending Channels: {}
-        Active Channels: {}
-        Inactive Channels: {}
-        Peers: {}
-        URLS: {}
-        """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
-        print("----------------------------------------------------------------------------------------------------\n")
-        input("\nContinue... ")
-    except:
-        pass
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    cert_path = lndconnectload["tls"]
+    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    headers = {'Grpc-Metadata-macaroon': macaroon}
+    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    r = requests.get(url, headers=headers, verify=cert_path)
+    a = r.json()
+    print("\n----------------------------------------------------------------------------------------------------")
+    print("""
+    \t NODE INFORMATION
+    Version: {}
+    Node ID: {}
+    Alias: {}
+    Color: {}
+    Pending Channels: {}
+    Active Channels: {}
+    Inactive Channels: {}
+    Peers: {}
+    URLS: {}
+    """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
+    print("\033[1;30;47m")
+    qr.add_data(a['identity_pubkey'])
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    qr.clear()
+    print("----------------------------------------------------------------------------------------------------\n")
+    input("\nContinue... ")
 
 def channels():
     cert_path = lndconnectload["tls"]
