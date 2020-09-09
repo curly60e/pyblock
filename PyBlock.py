@@ -549,9 +549,10 @@ def APIMenu():
     \033[1;32;40mA.\033[0;37;40m TippinMe   FREE
     \033[1;32;40mB.\033[0;37;40m Tallycoin  FREE
     \033[1;32;40mC.\033[0;37;40m Mempool    FREE
-    \033[1;32;40mD.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mE.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mF.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mD.\033[0;37;40m CoinGecko  FREE
+    \033[1;32;40mE.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mF.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mG.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1222,10 +1223,14 @@ def menuPI(menuWN):
     elif menuWN in ["C", "c"]:
         mempoolmenu()
     elif menuWN in ["D", "d"]:
-        aaccPPiLNBits()
+        clear()
+        blogo()
+        CoingeckoPP()
     elif menuWN in ["E", "e"]:
-        aaccPPiLNPay()
+        aaccPPiLNBits()
     elif menuWN in ["F", "f"]:
+        aaccPPiLNPay()
+    elif menuWN in ["G", "g"]:
         aaccPPiOpenNode()
 
 def mempoolmenuS(menuMem):
