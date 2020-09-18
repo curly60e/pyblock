@@ -22,6 +22,40 @@ from pycoingecko import CoinGeckoAPI
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
+def closed():
+    print("<<< Back Control + C.\n\n")
+#-----------------------------RATE.SX--------------------------------
+
+def rateSXList():
+    while True:
+        try:
+            list = "curl rate.sx/?n=1"
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            closed()
+            print(a)
+            t.sleep(20)
+        except:
+            break
+
+def rateSXGraph():
+    while True:
+        try:
+            list = "curl rate.sx/btc"
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            closed()
+            print(a)
+            t.sleep(20)
+        except:
+            break
+
+#-----------------------------END RATE.SX--------------------------------
+
+
+
 #-----------------------------COINGECKO--------------------------------
 
 def CoingeckoPP():
