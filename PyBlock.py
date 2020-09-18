@@ -550,12 +550,27 @@ def APIMenu():
     \033[1;32;40mB.\033[0;37;40m Tallycoin  FREE
     \033[1;32;40mC.\033[0;37;40m Mempool    FREE
     \033[1;32;40mD.\033[0;37;40m CoinGecko  FREE
-    \033[1;32;40mE.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mF.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mG.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mE.\033[0;37;40m Rate.sx    FREE
+    \033[1;32;40mF.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mG.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mH.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def rateSX():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Rate.sx \033[1;34;40mFree\033[0;37;40m Menu
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Rate
+    \033[1;32;40mB.\033[0;37;40m Chart
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    rateSXMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def mempoolmenu():
     clear()
@@ -1215,6 +1230,8 @@ def menuDesign(menuDSN):
         settings['design'] = "huge"
         testlogo()
 
+#------------API---------------------
+
 def menuPI(menuWN):
     if menuWN in ["A", "a"]:
         aaccPPiTippinMe()
@@ -1227,10 +1244,12 @@ def menuPI(menuWN):
         blogo()
         CoingeckoPP()
     elif menuWN in ["E", "e"]:
-        aaccPPiLNBits()
+        rateSX()
     elif menuWN in ["F", "f"]:
-        aaccPPiLNPay()
+        aaccPPiLNBits()
     elif menuWN in ["G", "g"]:
+        aaccPPiLNPay()
+    elif menuWN in ["H", "h"]:
         aaccPPiOpenNode()
 
 def mempoolmenuS(menuMem):
@@ -1326,6 +1345,20 @@ def menuLNBPI(menuLNQ):
         lnbitListPawWall()
     elif menuLNQ in ["R", "r"]:
         APIMenu()
+
+def rateSXMenu(menuSX):
+    if menuSX in ["A", "a"]:
+        clear()
+        blogo()
+        rateSXList()
+    elif menuSX in ["B", "b"]:
+        clear()
+        blogo()
+        rateSXGraph()
+    elif menuSX in ["R", "r"]:
+        APIMenu()
+
+#---------------END API-----------
 
 def menuA(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
