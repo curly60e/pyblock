@@ -27,9 +27,47 @@ def closed():
 #-----------------------------RATE.SX--------------------------------
 
 def rateSXList():
+    clear()
+    blogo()
+    fiat = """
+            -------------------------------------------
+                    AUD    Australian dollar
+                    BRL    Brazilian real
+                    CAD    Canadian dollar
+                    CHF    Swiss franc
+                    CLP    Chilean peso
+                    CNY    Chinese yuan
+                    CZK    Czech koruna
+                    DKK    Danish krone
+                    EUR    Euro
+                    GBP    Pound sterling
+                    HKD    Hong Kong dollar
+                    HUF    Hungarian forint
+                    IDR    Indonesian rupiah
+                    ILS    Israeli shekel
+                    INR    Indian rupee
+                    JPY    Japanese yen
+                    KRW    South Korean won
+                    MXN    Mexican peso
+                    MYR    Malaysian ringgit
+                    NOK    Norwegian krone
+                    NZD    New Zealand dollar
+                    PHP    Philippine peso
+                    PKR    Pakistani rupee
+                    PLN    Polish zloty
+                    RUB    Russian ruble
+                    SEK    Swedish krona
+                    SGD    Singapore dollar
+                    THB    Thai baht
+                    TRY    Turkish lira
+                    TWD    New Taiwan dollar
+            -------------------------------------------
+    """
+    print(fiat)
+    selectFiat = input("Insert a Fiat currency: ")
     while True:
         try:
-            list = "curl rate.sx/?n=1"
+            list = "curl " + selectFiat + ".rate.sx/?n=1"
             a = os.popen(list).read()
             clear()
             blogo()
@@ -40,9 +78,47 @@ def rateSXList():
             break
 
 def rateSXGraph():
+    clear()
+    blogo()
+    fiat = """
+            -------------------------------------------
+                    AUD    Australian dollar
+                    BRL    Brazilian real
+                    CAD    Canadian dollar
+                    CHF    Swiss franc
+                    CLP    Chilean peso
+                    CNY    Chinese yuan
+                    CZK    Czech koruna
+                    DKK    Danish krone
+                    EUR    Euro
+                    GBP    Pound sterling
+                    HKD    Hong Kong dollar
+                    HUF    Hungarian forint
+                    IDR    Indonesian rupiah
+                    ILS    Israeli shekel
+                    INR    Indian rupee
+                    JPY    Japanese yen
+                    KRW    South Korean won
+                    MXN    Mexican peso
+                    MYR    Malaysian ringgit
+                    NOK    Norwegian krone
+                    NZD    New Zealand dollar
+                    PHP    Philippine peso
+                    PKR    Pakistani rupee
+                    PLN    Polish zloty
+                    RUB    Russian ruble
+                    SEK    Swedish krona
+                    SGD    Singapore dollar
+                    THB    Thai baht
+                    TRY    Turkish lira
+                    TWD    New Taiwan dollar
+            -------------------------------------------
+    """
+    print(fiat)
+    selectFiat = input("Insert a Fiat currency: ")
     while True:
         try:
-            list = "curl rate.sx/btc"
+            list = "curl " + selectFiat + ".rate.sx/btc"
             a = os.popen(list).read()
             clear()
             blogo()
