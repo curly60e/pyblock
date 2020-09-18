@@ -110,6 +110,81 @@ def consoleLN(): # get into the console from bitcoin-cli
         print(lsd1)
         lsd.close()
 
+def locallistpeersQQ():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    while True:
+        clear()
+        print("\033[1;32;40m")
+        blogo()
+        print("\033[0;37;40m")
+        print("<<< Back to the Main Menu Press Control + C.\n\n")
+        lncli = " listpeers"
+        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd0 = str(lsd)
+        d = json.loads(lsd0)
+        n = d['peers']
+        try:
+            print("\n\tLIST PEERS\n")
+            for item_ in n:
+                s = item_
+
+                print("PubKey: " + s['pub_key'] + " @" + s['address'])
+            nd = input("\nSelect PubKey: ")
+            for item in n:
+                s = item
+                nn = s['pub_key']
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------")
+                    print("""
+                        PEER DECODED\n
+                        Bytes Sent: {}
+                        Bytes Recv: {}
+                        Sat Sent: {} sats
+                        Sat Recv: {} sats
+                    """.format(s['bytes_sent'], s['bytes_recv'], s['sat_sent'], s['sat_recv']))
+                    print("-----------------------------------------------------------------------------------------------------\n")
+                    print("\n\tPeer: " + nd)
+                    print("\033[1;30;47m")
+                    qr.add_data(s['pub_key'])
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+                    qr.clear()
+
+            pp = input("\nDo you want to disconnect? Y/n: ")
+            if pp in ["Y", "y"]:
+                lncli = " disconnect"
+                lsd = os.popen(lndconnectload['ln'] + lncli + " " + nd).read()
+                lsd0 = str(lsd)
+                d = json.loads(lsd0)
+                print("\n\tDisconnected from peer " + nd)
+                input("\nContinue... ")
+            elif pp in ["N", "n"]:
+                input("\nContinue... ")
+        except:
+            break
+
+def localconnectpeer():
+    try:
+        clear()
+        print("\033[1;32;40m")
+        blogo()
+        print("\033[0;37;40m")
+        print("<<< Back to the Main Menu Press Control + C.\n\n")
+        print("\n\tCONNECT TO NEW PEER\n")
+        a = input("Insert PeerID@IP:PORT: ")
+        lncli = " connect "
+        lsd = os.popen(lndconnectload['ln'] + lncli + a).read()
+        lsd0 = str(lsd)
+        print(lsd0)
+        input("\nContinue... ")
+    except:
+        pass
+
 def locallistchaintxns():
     qr = qrcode.QRCode(
     version=1,
@@ -256,6 +331,12 @@ def locallistchannels():
             break
 
 def localgetinfo():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
     lncli = " getinfo"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -263,6 +344,7 @@ def localgetinfo():
     print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \tNODE INFORMATION
+
     Version: {}
     Node ID: {}
     Alias: {}
@@ -273,6 +355,11 @@ def localgetinfo():
     Peers: {}
     URLS: {}
     """.format(d['version'], d['identity_pubkey'], d['alias'], d['color'], d['num_pending_channels'], d['num_active_channels'], d['num_inactive_channels'], d['num_peers'], d['uris']))
+    print("\033[1;30;47m")
+    qr.add_data(d['identity_pubkey'])
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    qr.clear()
     print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
@@ -620,30 +707,38 @@ def listinvoice():
     input("\nContinue... ")
 
 def getinfo():
-    try:
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        a = r.json()
-        print("\n----------------------------------------------------------------------------------------------------")
-        print("""
-        \t NODE INFORMATION
-        Version: {}
-        Node ID: {}
-        Alias: {}
-        Color: {}
-        Pending Channels: {}
-        Active Channels: {}
-        Inactive Channels: {}
-        Peers: {}
-        URLS: {}
-        """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
-        print("----------------------------------------------------------------------------------------------------\n")
-        input("\nContinue... ")
-    except:
-        pass
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    cert_path = lndconnectload["tls"]
+    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    headers = {'Grpc-Metadata-macaroon': macaroon}
+    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    r = requests.get(url, headers=headers, verify=cert_path)
+    a = r.json()
+    print("\n----------------------------------------------------------------------------------------------------")
+    print("""
+    \t NODE INFORMATION
+    Version: {}
+    Node ID: {}
+    Alias: {}
+    Color: {}
+    Pending Channels: {}
+    Active Channels: {}
+    Inactive Channels: {}
+    Peers: {}
+    URLS: {}
+    """.format(a['version'], a['identity_pubkey'], a['alias'], a['color'], a['num_pending_channels'], a['num_active_channels'], a['num_inactive_channels'], a['num_peers'], a['uris']))
+    print("\033[1;30;47m")
+    qr.add_data(a['identity_pubkey'])
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    qr.clear()
+    print("----------------------------------------------------------------------------------------------------\n")
+    input("\nContinue... ")
 
 def channels():
     cert_path = lndconnectload["tls"]
