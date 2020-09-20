@@ -76,14 +76,14 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = "curl " + lang + ".wttr.in/" + selectData2 + "?" + unit
+            list = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
             a = os.popen(list).read()
             clear()
             blogo()
             print(a)
             input("Continue...")
         else:
-            list = "curl wttr.in/" + selectData
+            list = "curl wttr.in/" + selectData + "?F"
             a = os.popen(list).read()
             clear()
             blogo()
@@ -141,14 +141,14 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&lang=" + lang + "'"
+            list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
             a = os.popen(list).read()
             clear()
             blogo()
             print(a)
             input("Continue...")
         else:
-            list = "curl v2.wttr.in/" + selectData
+            list = "curl v2.wttr.in/" + selectData + "?F"
             a = os.popen(list).read()
             clear()
             blogo()
