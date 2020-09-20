@@ -210,6 +210,7 @@ def menu(): #Main Menu
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;32;40mW.\033[0;37;40m Weather
     \033[3;33;40mP.\033[0;37;40m Premium
     \033[1;32;40mN.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
@@ -232,12 +233,27 @@ def menuUserConn(): #Menu before connection over ssh
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
     \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;32;40mW.\033[0;37;40m Weather
     \033[3;33;40mP.\033[0;37;40m Premium
     \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
     \n\n""".format(version, checkupdate()))
     menuRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def weatherMenu():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m V1
+    \033[1;32;40mB.\033[0;37;40m V2
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def advanceMenu(): # Advanced Menu
     clear()
@@ -1360,6 +1376,12 @@ def rateSXMenu(menuSX):
 
 #---------------END API-----------
 
+def menuWeather(menuWD):
+    if menuWD in ["A", "a"]:
+        wttrDataV1()
+    elif menuWD in ["B", "b"]:
+        wttrDataV2()
+
 def menuA(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
         artist()
@@ -1469,6 +1491,8 @@ def menuA(menuS): #Execution of the Main Menu options
         dnt()
     elif menuS in ["U", "u"]:
         upgrade()
+    elif menuS in ["W", "w"]:
+        weatherMenu()
     elif menuS in ["N", "n"]:
         settings4()
     elif menuS in ["T", "t"]:
@@ -1559,6 +1583,8 @@ def menuRemote(menuS): #Execution of the Main Menu options
         upgrade()
     elif menuS in ["G", "g"]:
         settings4()
+    elif menuS in ["W", "w"]:
+        weatherMenu()
     elif menuS in ["T", "t"]: #Test feature fast access
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")

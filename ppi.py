@@ -24,6 +24,142 @@ def clear(): # clear the screen
 
 def closed():
     print("<<< Back Control + C.\n\n")
+
+
+#-----------------------------wttr.in--------------------------------
+def wttrDataV1():
+    try:
+        clear()
+        blogo()
+        weatherList = """
+        ------------------------------------------------------------------------------------
+
+
+
+            \033[1;31;40m*\033[0;37;40m uruguay                # city name
+            \033[1;31;40m*\033[0;37;40m ~Giza+pyramid          # any location (+ for spaces)
+            \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
+            \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
+            \033[1;31;40m*\033[0;37;40m @lightninghood.com     # domain name
+            \033[1;31;40m*\033[0;37;40m 94107                  # area codes
+            \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
+            \033[1;31;40m*\033[0;37;40m moon                   # Moon phase (add ,+US or ,+France for these cities)
+            \033[1;31;40m*\033[0;37;40m moon@2009-01-03        # Moon phase for the date (@2016-10-25)
+
+            PRESS \033[1;31;40mM\033[0;37;40m TO INSERT MORE DATA
+
+        ------------------------------------------------------------------------------------
+
+        """
+        print(weatherList)
+        selectData = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
+        if selectData in ['M', 'm']:
+            moreData = """
+
+        ------------------------------------------------------------------------------------
+                                        Supported languages
+
+                        ar af be ca da de el es et fr fa hi hu ia id it nb nl
+                        oc pl pt-br ro ru tr th uk vi zh-cn zh-tw (supported)
+
+        ------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------
+                                             Units
+
+                    m        # metric (SI) (used by default everywhere except US)
+                    u        # USCS (used by default in US)
+                    M        # show wind speed in m/s
+
+        ------------------------------------------------------------------------------------
+            """
+            print(moreData)
+            selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
+            lang = input("Insert your language: ")
+            unit = input("Insert your metric units: ")
+            list = "curl " + lang + ".wttr.in/" + selectData2 + "?" + unit
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print(a)
+            input("Continue...")
+        else:
+            list = "curl wttr.in/" + selectData
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print(a)
+            input("Continue...")
+    except:
+        pass
+
+def wttrDataV2():
+    try:
+        clear()
+        blogo()
+        weatherList = """
+        ------------------------------------------------------------------------------------
+
+
+
+            \033[1;31;40m*\033[0;37;40m uruguay                # city name
+            \033[1;31;40m*\033[0;37;40m ~Giza+pyramid          # any location (+ for spaces)
+            \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
+            \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
+            \033[1;31;40m*\033[0;37;40m @lightninghood.com     # domain name
+            \033[1;31;40m*\033[0;37;40m 94107                  # area codes
+            \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
+            \033[1;31;40m*\033[0;37;40m moon                   # Moon phase (add ,+US or ,+France for these cities)
+            \033[1;31;40m*\033[0;37;40m moon@2009-01-03        # Moon phase for the date (@2016-10-25)
+
+            PRESS \033[1;31;40mM\033[0;37;40m TO INSERT MORE DATA
+
+        ------------------------------------------------------------------------------------
+
+        """
+        print(weatherList)
+        selectData = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
+        if selectData in ['M', 'm']:
+            moreData = """
+
+        ------------------------------------------------------------------------------------
+                                        Supported languages
+
+                        ar af be ca da de el es et fr fa hi hu ia id it nb nl
+                        oc pl pt-br ro ru tr th uk vi zh-cn zh-tw (supported)
+
+        ------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------
+                                             Units
+
+                    m        # metric (SI) (used by default everywhere except US)
+                    u        # USCS (used by default in US)
+                    M        # show wind speed in m/s
+
+        ------------------------------------------------------------------------------------
+            """
+            print(moreData)
+            selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
+            lang = input("Insert your language: ")
+            unit = input("Insert your metric units: ")
+            list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&lang=" + lang + "'"
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print(a)
+            input("Continue...")
+        else:
+            list = "curl v2.wttr.in/" + selectData
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print(a)
+            input("Continue...")
+    except:
+        pass
+
+
+#-----------------------------END wttr.in--------------------------------
+
 #-----------------------------RATE.SX--------------------------------
 
 def rateSXList():
