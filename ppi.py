@@ -84,11 +84,11 @@ def wttrDataV1():
             input("Continue...")
         else:
             list = "curl wttr.in/" + selectData
-        a = os.popen(list).read()
-        clear()
-        blogo()
-        print(a)
-        input("Continue...")
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print(a)
+            input("Continue...")
     except:
         pass
 
@@ -149,11 +149,11 @@ def wttrDataV2():
             input("Continue...")
         else:
             list = "curl v2.wttr.in/" + selectData
-        a = os.popen(list).read()
-        clear()
-        blogo()
-        print(a)
-        input("Continue...")
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print(a)
+            input("Continue...")
     except:
         pass
 
