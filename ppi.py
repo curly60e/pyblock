@@ -46,7 +46,7 @@ def wttrDataV1():
             \033[1;31;40m*\033[0;37;40m moon                   # Moon phase (add ,+US or ,+France for these cities)
             \033[1;31;40m*\033[0;37;40m moon@2009-01-03        # Moon phase for the date (@2016-10-25)
 
-            PRESS \033[1;31;40mM\033[0;37;40m TO INSERT MORE DATA
+            PRESS \033[1;30;40mM\033[0;37;40m TO INSERT MORE DATA
 
         ------------------------------------------------------------------------------------
 
