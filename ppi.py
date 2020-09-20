@@ -67,7 +67,7 @@ def rateSXList():
     selectFiat = input("Insert a Fiat currency: ")
     while True:
         try:
-            list = "curl " + selectFiat + ".rate.sx/?n=1"
+            list = "curl '" + selectFiat + ".rate.sx/?F&n=1'"
             a = os.popen(list).read()
             clear()
             blogo()
