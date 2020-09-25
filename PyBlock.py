@@ -214,7 +214,7 @@ def countdownblock():
             block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
             b = block
             if a == b:
-                print("Congratulations, you achieve block" + a)
+                print("Congratulations, you achieve block " + a)
                 input("\nContinue...")
                 break
             elif n != int(b):
