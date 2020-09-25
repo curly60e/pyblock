@@ -222,8 +222,6 @@ def countdownblock():
                 q = int(a) - int(b)
                 print("Remaining: " + str(q) + " Blocks\n")
                 n = int(b)
-            else:
-                pass
         except:
             break
 
