@@ -79,7 +79,7 @@ def countdownblockConn():
     clear()
     blogo()
     print("""
-    --------------------- BLOCK {} COUNT DOWN ---------------------
+    --------------------- BLOCK {} COUNTDOWN ---------------------
 
      """.format(a))
     print("\nCountDown:", int(c))
