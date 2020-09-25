@@ -29,13 +29,14 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.7.3"
+version = "0.7.4"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
     print("   \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
     print("   \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
     print("   \033[0;37;40m----------------------")
+    print("\a")
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
@@ -124,35 +125,40 @@ def connected(info): # here we complete the connection to the external node
         menu()
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
-    custom = input("Do you want random designs? Y/n: ")
-    if custom in ["Y", "y"]:
-        while True:
-            try:
-                clear()
-                close()
-                design()
-                tmp()
-            except (KeyboardInterrupt, SystemExit):
-                menu()
-                raise
-    else:
-        while True:
-            try:
-                clear()
-                close()
-                getblockcount()
-                tmp()
-            except (KeyboardInterrupt, SystemExit):
-                menu()
-                raise
+    while True:
+        try:
+            clear()
+            close()
+            design()
+            tmp()
+        except (KeyboardInterrupt, SystemExit):
+            menu()
+            raise
 
 def design():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
-    print("\033[1;32;40m")
-    tprint(b, font="rnd-large")
-    print("\033[0;37;40m")
+    a = b
+    while True:
+        bitcoinclient = path['bitcoincli'] + " getblockcount"
+        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        b = block
+        if b > a:
+            print("\033[1;32;40m")
+            tprint(b, font="rnd-large")
+            print("\a\033[0;37;40m")
+            t.sleep(10)
+            break
+        elif b == a:
+            print("\033[1;32;40m")
+            tprint(b, font="rnd-large")
+            print("\033[0;37;40m")
+            t.sleep(10)
+            clear()
+            closed()
+        else:
+            break
 
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
