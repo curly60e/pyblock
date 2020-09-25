@@ -187,6 +187,29 @@ def runthenumbers():
     os.system(path['bitcoincli'] + bitcoincli)
     input("\nContinue...")
 
+def countdownblock():
+    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    b = block
+    a = input("Insert your block target: ")
+    clear()
+    blogo()
+    print("CountDown: ", b)
+    while a > b:
+        bitcoinclient = path['bitcoincli'] + " getblockcount"
+        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        b = block
+        if a == b:
+            print("Congratulations, you achieve block" + a)
+            break
+        elif b:
+            pass
+        elif a > b:
+            print("CountDown: ", b)
+
+    input("Continue...")
+
+
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 #--------------------------------- Menu section -----------------------------------
@@ -241,16 +264,31 @@ def menuUserConn(): #Menu before connection over ssh
     \n\n""".format(version, checkupdate()))
     menuRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def runTheNumbersMenu():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Run the Numbers Menu
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Countdown
+    \033[1;32;40mB.\033[0;37;40m Audit
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+
 def weatherMenu():
     clear()
     blogo()
     sysinfo()
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
+    \033[1;31;40mPyBLOCK\033[0;37;40m Weather Menu
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m V1
-    \033[1;32;40mB.\033[0;37;40m V2
+    \033[1;32;40mA.\033[0;37;40m Version 1
+    \033[1;32;40mB.\033[0;37;40m Version 2
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1382,6 +1420,35 @@ def menuWeather(menuWD):
     elif menuWD in ["B", "b"]:
         wttrDataV2()
 
+def runTheNumbersControl(menuNumbers):
+    if menuNumbers in ["A", "a"]:
+        clear()
+        blogo()
+        countdownblock()
+    elif menuNumbers in ["B", "b"]:
+        clear()
+        blogo()
+        calc = """
+                    ----------------------------
+
+                             PROCESSING
+                            THE  NUMBERS
+
+                    ----------------------------
+         """
+        comeback = """
+
+                    ----------------------------
+                       MAKE YOURSELF A COFFEE
+                         AND COME BACK IN A
+                               MOMENT
+                    ----------------------------
+
+        """
+        cprint(comeback, 'yellow')
+        cprint(calc, 'red', attrs=['blink'])
+        runthenumbers()
+
 def menuA(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
         artist()
@@ -1443,28 +1510,7 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS in ["F", "f"]:
         getrawtx()
     elif menuS in ["G", "g"]:
-        clear()
-        blogo()
-        calc = """
-                    ----------------------------
-
-                             PROCESSING
-                            THE  NUMBERS
-
-                    ----------------------------
-         """
-        comeback = """
-
-                    ----------------------------
-                       MAKE YOURSELF A COFFEE
-                         AND COME BACK IN A
-                               MOMENT
-                    ----------------------------
-
-        """
-        cprint(comeback, 'yellow')
-        cprint(calc, 'red', attrs=['blink'])
-        runthenumbers()
+        runTheNumbersMenu()
     elif menuS in ["H", "h"]:
         advanceMenu()
     elif menuS in ["L", "l"]:
