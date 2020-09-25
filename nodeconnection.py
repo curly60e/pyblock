@@ -101,7 +101,8 @@ def countdownblockConn():
                 n = int(c)
         except:
             break
-
+    input("\nContinue...")
+    
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     try:
         a = rpc('getblockchaininfo')
