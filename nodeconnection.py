@@ -99,8 +99,6 @@ def countdownblockConn():
                 q = int(a) - int(c)
                 print("Remaining: " + str(q) + " Blocks\n")
                 n = int(c)
-            else:
-                pass
         except:
             break
 
