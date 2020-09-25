@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.7.5"
+version = "0.7.6"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -215,7 +215,6 @@ def countdownblock():
             b = block
             if a == int(b):
                 print("#RuningTheNumbers " + a + " PyBLOCK")
-                input("\nContinue...")
                 break
             elif n != int(b):
                 print("CountDown: ", b)
@@ -224,7 +223,7 @@ def countdownblock():
                 n = int(b)
         except:
             break
-
+    input("\nContinue...")
 
 
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
