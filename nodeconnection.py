@@ -91,7 +91,7 @@ def countdownblockConn():
             b = rpc('getblockcount')
             c = str(b)
             if a == int(c):
-                print("#RuningTheNumbers " + a + "PyBLOCK")
+                print("#RuningTheNumbers " + a + " PyBLOCK")
                 input("\nContinue...")
                 break
             elif n != int(c):
