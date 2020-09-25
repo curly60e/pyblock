@@ -213,8 +213,8 @@ def countdownblock():
             bitcoinclient = path['bitcoincli'] + " getblockcount"
             block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
             b = block
-            if a == b:
-                print("#RuningTheNumbers " + a + "PyBLOCK")
+            if a == int(b):
+                print("#RuningTheNumbers " + a + " PyBLOCK")
                 input("\nContinue...")
                 break
             elif n != int(b):
