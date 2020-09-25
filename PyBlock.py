@@ -201,7 +201,7 @@ def countdownblock():
     clear()
     blogo()
     print("""
-    --------------------- BLOCK {} COUNT DOWN ---------------------
+    --------------------- BLOCK {} COUNTDOWN ---------------------
 
      """.format(a))
     n = int(b)
