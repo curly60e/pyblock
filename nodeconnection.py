@@ -17,6 +17,8 @@ lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
+def closed():
+    print("<<< Back Control + C.\n\n")
 
 if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
     lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
@@ -48,14 +50,27 @@ def rpc(method, params=[]):
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 def remotegetblock():
-    try:
+    b = rpc('getblockcount')
+    c = str(b)
+    a = c
+    while True:
         b = rpc('getblockcount')
         c = str(b)
-        print("\033[1;32;40m")
-        tprint(c, font="rnd-large")
-        print("\033[0;37;40m")
-    except:
-        pass
+        if c > a:
+            print("\033[1;32;40m")
+            tprint(c, font="rnd-large")
+            print("\a\033[0;37;40m")
+            t.sleep(10)
+            break
+        elif c == a:
+            print("\033[1;32;40m")
+            tprint(c, font="rnd-large")
+            print("\033[0;37;40m")
+            t.sleep(10)
+            clear()
+            closed()
+        else:
+            break
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     try:
