@@ -90,9 +90,7 @@ def countdownblockConn():
         try:
             b = rpc('getblockcount')
             c = str(b)
-            if a == int(c):
-                print("#RuningTheNumbers " + a + " PyBLOCK")
-                input("\nContinue...")
+            if a == c:
                 break
             elif n != int(c):
                 print("CountDown: ", c)
@@ -101,8 +99,9 @@ def countdownblockConn():
                 n = int(c)
         except:
             break
+    print("#RuningTheNumbers " + str(a) + " PyBLOCK")
     input("\nContinue...")
-    
+
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     try:
         a = rpc('getblockchaininfo')
