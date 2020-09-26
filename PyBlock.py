@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.7.6"
+version = "0.7.7"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -213,8 +213,7 @@ def countdownblock():
             bitcoinclient = path['bitcoincli'] + " getblockcount"
             block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
             b = block
-            if a == int(b):
-                print("#RuningTheNumbers " + a + " PyBLOCK")
+            if a == b:
                 break
             elif n != int(b):
                 print("CountDown: ", b)
@@ -223,9 +222,8 @@ def countdownblock():
                 n = int(b)
         except:
             break
+    print("#RuningTheNumbers " + str(a) + " PyBLOCK")
     input("\nContinue...")
-
-
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 #--------------------------------- Menu section -----------------------------------
