@@ -99,7 +99,7 @@ def countdownblockConn():
                 n = int(c)
         except:
             break
-    print("#RuningTheNumbers " + str(a) + " PyBLOCK")
+    print("#RunTheNumbers " + str(a) + " PyBLOCK")
     input("\nContinue...")
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount

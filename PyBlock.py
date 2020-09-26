@@ -222,7 +222,7 @@ def countdownblock():
                 n = int(b)
         except:
             break
-    print("#RuningTheNumbers " + str(a) + " PyBLOCK")
+    print("#RunTheNumbers " + str(a) + " PyBLOCK")
     input("\nContinue...")
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
