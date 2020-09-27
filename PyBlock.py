@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.7.7"
+version = "0.7.8"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -224,6 +224,41 @@ def countdownblock():
             break
     print("#RunTheNumbers " + str(a) + " PyBLOCK")
     input("\nContinue...")
+
+def localHalving():
+    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    b = block
+    c = b
+    oneh = 0 - int(c) + 210000
+    twoh = 210000 - int(c) + 210000
+    thrh = 420000 - int(c) + 210000
+    forh = 630000 - int(c) + 210000
+    fifh = 840000 - int(c) + 210000
+    sixh = 1050000 - int(c) + 210000
+    sevh = 1260000 - int(c) + 210000
+    eith = 1470000 - int(c) + 210000
+    ninh = 1680000 - int(c) + 210000
+    tenh = 1890000 - int(c) + 210000
+
+    q = """
+    ------------------- HALVING HISTORY -------------------
+
+            1st  Halving: in {} Blocks {}
+            2nd  Halving: in {} Blocks {}
+            3rd  Halving: in {} Blocks {}
+            4th  Halving: in {} Blocks {}
+            5th  Halving: in {} Blocks {}
+            6th  Halving: in {} Blocks {}
+            7th  Halving: in {} Blocks {}
+            8th  Halving: in {} Blocks {}
+            9th  Halving: in {} Blocks {}
+            10th Halving: in {} Blocks {}
+
+    -------------------------------------------------------
+    """.format("0" if int(c) == 210000 else oneh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 420000 else twoh,"\033[1;32;40mCOMPLETE\033[0;37;40m", "0" if int(c) == 630000 else thrh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 840000 else forh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 840000 else "\033[1;35;40mPENDING\033[0;37;40m", "0" if int(c) >= 1050000 else fifh , "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1050000 else "\033[1;35;40mPENDING\033[0;37;40m", sixh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1260000 else "\033[1;35;40mPENDING\033[0;37;40m", sevh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1470000 else "\033[1;35;40mPENDING\033[0;37;40m", eith,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1680000 else "\033[1;35;40mPENDING\033[0;37;40m", ninh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m", tenh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m")
+    print(q)
+    input("\nContinue...")
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 #--------------------------------- Menu section -----------------------------------
@@ -285,8 +320,10 @@ def runTheNumbersMenu():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Local Run the Numbers Menu
     Version {}
-    \033[1;32;40mA.\033[0;37;40m Countdown
-    \033[1;32;40mB.\033[0;37;40m Audit
+
+    \033[1;32;40mA.\033[0;37;40m Countdown Block
+    \033[1;32;40mB.\033[0;37;40m Countdown Halving
+    \033[1;32;40mC.\033[0;37;40m Audit
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -298,8 +335,10 @@ def runTheNumbersMenuConn():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Remote Run the Numbers Menu
     Version {}
-    \033[1;32;40mA.\033[0;37;40m Countdown
-    \033[1;32;40mB.\033[0;37;40m Audit
+
+    \033[1;32;40mA.\033[0;37;40m Countdown Block
+    \033[1;32;40mB.\033[0;37;40m Countdown Halving
+    \033[1;32;40mC.\033[0;37;40m Audit
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1448,6 +1487,10 @@ def runTheNumbersControl(menuNumbers):
     elif menuNumbers in ["B", "b"]:
         clear()
         blogo()
+        localHalving()
+    elif menuNumbers in ["C", "c"]:
+        clear()
+        blogo()
         calc = """
                     ----------------------------
                              PROCESSING
@@ -1473,6 +1516,10 @@ def runTheNumbersControlConn(menuNumbersconn):
     elif menuNumbersconn in ["B", "b"]:
         clear()
         blogo()
+        remoteHalving()
+    elif menuNumbersconn in ["C", "c"]:
+        clear()
+        blogo()
         calc = """
                     ----------------------------
                              PROCESSING
@@ -1489,6 +1536,7 @@ def runTheNumbersControlConn(menuNumbersconn):
         cprint(comeback, 'yellow')
         cprint(calc, 'red', attrs=['blink'])
         runthenumbersConn()
+
 def menuWeather(menuWD):
     if menuWD in ["A", "a"]:
         wttrDataV1()
