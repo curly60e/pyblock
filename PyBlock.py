@@ -228,7 +228,7 @@ def countdownblock():
 def localHalving():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block.strip(' ')
+    b = block
     c = b
     oneh = 0 - int(c) + 210000
     twoh = 210000 - int(c) + 210000
