@@ -26,6 +26,23 @@ def closed():
     print("<<< Back Control + C.\n\n")
 
 
+#-----------------------------bwt.dev--------------------------------
+
+def bwtConn():
+    try:
+        clear()
+        blogo()
+        conn = "curl -s https://bwt.dev/banner.txt"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        print(a)
+        input("Continue...")
+    except:
+        pass
+
+#-----------------------------END bwt.dev--------------------------------
+
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
     try:
