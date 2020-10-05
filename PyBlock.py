@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.7.8"
+version = "0.7.9"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -242,7 +242,7 @@ def localHalving():
     tenh = 1890000 - int(c) + 210000
 
     q = """
-    ------------------- HALVING HISTORY -------------------
+    \033[0;37;40------------------- HALVING CLOCK -------------------
 
             1st  Halving: in {} Blocks {}
             2nd  Halving: in {} Blocks {}
@@ -669,9 +669,10 @@ def APIMenu():
     \033[1;32;40mC.\033[0;37;40m Mempool    FREE
     \033[1;32;40mD.\033[0;37;40m CoinGecko  FREE
     \033[1;32;40mE.\033[0;37;40m Rate.sx    FREE
-    \033[1;32;40mF.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mG.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mH.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mF.\033[0;37;40m BWT        FREE
+    \033[1;32;40mG.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mH.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mI.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1364,10 +1365,12 @@ def menuPI(menuWN):
     elif menuWN in ["E", "e"]:
         rateSX()
     elif menuWN in ["F", "f"]:
-        aaccPPiLNBits()
+        bwtConn()
     elif menuWN in ["G", "g"]:
-        aaccPPiLNPay()
+        aaccPPiLNBits()
     elif menuWN in ["H", "h"]:
+        aaccPPiLNPay()
+    elif menuWN in ["I", "i"]:
         aaccPPiOpenNode()
 
 def mempoolmenuS(menuMem):
