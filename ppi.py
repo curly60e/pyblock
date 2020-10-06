@@ -26,6 +26,27 @@ def closed():
     print("<<< Back Control + C.\n\n")
 
 
+#-----------------------------GAMES--------------------------------
+#------------------------------------------------------------------
+
+def gorched():
+    try:
+        clear()
+        blogo()
+        conn = "sudo snap install gorched"
+        access = "gorched --width 101 --height 54"
+        a = os.popen(conn).read()
+        b = os.popen(access).read()
+        print(a)
+        print(b)
+    except:
+        pass
+
+#----------------------------------------------------------------------
+#-----------------------------END GAMES--------------------------------
+
+
+
 #-----------------------------bwt.dev--------------------------------
 
 def bwtConn():

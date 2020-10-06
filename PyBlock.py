@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.7.9"
+version = "0.8.0"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -284,6 +284,7 @@ def menu(): #Main Menu
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
     \033[3;33;40mP.\033[0;37;40m Premium
+    \033[3;34;40mM.\033[0;37;40m Games
     \033[1;32;40mN.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
@@ -307,6 +308,7 @@ def menuUserConn(): #Menu before connection over ssh
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
     \033[3;33;40mP.\033[0;37;40m Premium
+    \033[3;34;40mM.\033[0;37;40m Games
     \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
@@ -677,6 +679,19 @@ def APIMenu():
     \n\n""".format(version,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def GamesMenu():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK \033[1;34;40mGames\033[0;37;40m Menu
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Gorched    \033[3;35;40m{gorched}\033[0;37;40m
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version,gorched = "PAID" if os.path.isfile("gorchedSN.conf") else "PREMIUM", lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    menuGamesPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def rateSX():
     clear()
     blogo()
@@ -980,6 +995,139 @@ def aaccPPiOpenNode():
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
         input("Continue...")
+
+def aaccPPiGorched():
+    a = """
+    ----------------------------------------------------------
+
+                    TO PLAY THIS GAME YOU'LL
+                     NEED TO PAY 10000 SATS
+                        JUST ONE TIME
+               SAVE YOUR SN.CONF IN A SAFE PLACE
+
+    ----------------------------------------------------------
+    """
+    try:
+        bitLN = {"NN":"","pd":""}
+        if os.path.isfile('gorchedSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+            bitData= pickle.load(open("gorchedSN.conf", "rb")) # Load the file 'bclock.conf'
+            bitLN = bitData # Copy the variable pathv to 'path'
+            gorched()
+        else:
+            clear()
+            blogo()
+            print(a)
+            node_not = input("Do you want to pay this Game Access with your node? Y/n: ")
+            if node_not in ["Y", "y"]:
+                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                bitLN['NN'] = randrange(10000000)
+                curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "Games on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+                sh = os.popen(curl).read()
+                clear()
+                blogo()
+                n = str(sh)
+                d = json.loads(n)
+                q = d['payment_request']
+                c = q.lower()
+                if lndconnectload['ip_port']:
+                    while True:
+                        print("Lightning Invoice: " + c)
+                        payinvoice()
+                        dn = str(d['checking_id'])
+                        t.sleep(10)
+                        checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                        rsh = os.popen(checkcurl).read()
+                        clear()
+                        blogo()
+                        nn = str(rsh)
+                        dd = json.loads(nn)
+                        db = dd['paid']
+                        if db is True:
+                            clear()
+                            blogo()
+                            tick()
+                            bitLN['pd'] = "PAID"
+                            pickle.dump(bitLN, open("gorchedSN.conf", "wb"))
+                            gorched()
+                            break
+                        else:
+                            continue
+
+                elif lndconnectload['ln']:
+                    while True:
+                        print("Lightning Invoice: " + c)
+                        localpayinvoice()
+                        dn = str(d['checking_id'])
+                        t.sleep(10)
+                        checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                        rsh = os.popen(checkcurl).read()
+                        clear()
+                        blogo()
+                        nn = str(rsh)
+                        dd = json.loads(nn)
+                        db = dd['paid']
+                        if db is True:
+                            clear()
+                            blogo()
+                            tick()
+                            bitLN['pd'] = "PAID"
+                            pickle.dump(bitLN, open("gorchedSN.conf", "wb"))
+                            gorched()
+                            break
+                        else:
+                            continue
+
+            else:
+                qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+                )
+                bitLN['NN'] = randrange(10000000)
+                curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+                sh = os.popen(curl).read()
+                clear()
+                blogo()
+                n = str(sh)
+                d = json.loads(n)
+                q = d['payment_request']
+                c = q.lower()
+                while True:
+                    print("\033[1;30;47m")
+                    qr.add_data(c)
+                    qr.print_ascii()
+                    print("\033[0;37;40m")
+                    qr.clear()
+                    print("Lightning Invoice: " + c)
+                    dn = str(d['checking_id'])
+                    t.sleep(10)
+                    checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                    rsh = os.popen(checkcurl).read()
+                    clear()
+                    blogo()
+                    nn = str(rsh)
+                    dd = json.loads(nn)
+                    db = dd['paid']
+                    if db is True:
+                        clear()
+                        blogo()
+                        tick()
+                        bitLN['pd'] = "PAID"
+                        pickle.dump(bitLN, open("gorchedSN.conf", "wb"))
+                        gorched()
+                        break
+                    else:
+                        continue
+
+    except:
+        clear()
+        blogo()
+        print("\n\tSERIAL NUMBER NOT FOUND\n")
+        input("Continue...")
+
 
 def aaccPPiTippinMe():
     if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
@@ -1351,6 +1499,10 @@ def menuDesign(menuDSN):
 
 #------------API---------------------
 
+def menuGamesPI(menuGMS):
+    if menuGMS in ["A", "a"]:
+        aaccPPiGorched()
+
 def menuPI(menuWN):
     if menuWN in ["A", "a"]:
         aaccPPiTippinMe()
@@ -1630,6 +1782,8 @@ def menuA(menuS): #Execution of the Main Menu options
         satnodeMenu()
     elif menuS in ["P", "p"]:
         APIMenu()
+    elif menuS in ["M", "m"]:
+        GamesMenu()
     elif menuS in ["X", "x"]:
         dnt()
     elif menuS in ["U", "u"]:
@@ -1699,6 +1853,8 @@ def menuRemote(menuS): #Execution of the Main Menu options
         satnodeMenu()
     elif menuS in ["P", "p"]:
         APIMenu()
+    elif menuS in ["M", "m"]:
+        GamesMenu()
     elif menuS in ["X", "x"]:
         dnt()
     elif menuS in ["U", "u"]:
