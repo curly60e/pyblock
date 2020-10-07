@@ -29,16 +29,12 @@ def closed():
 #-----------------------------GAMES--------------------------------
 #------------------------------------------------------------------
 
-def gorched():
+def sn1984():
     try:
         clear()
         blogo()
-        conn = "sudo snap install gorched"
-        access = "gorched --width 101 --height 54"
-        a = os.popen(conn).read()
-        b = os.popen(access).read()
-        print(a)
-        print(b)
+        conn = "telnet 1984.ws 23"
+        os.system(conn).read()
     except:
         pass
 
