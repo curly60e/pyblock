@@ -284,7 +284,7 @@ def menu(): #Main Menu
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
     \033[3;33;40mP.\033[0;37;40m Premium
-    \033[3;34;40mM.\033[0;37;40m Games
+    \033[3;34;40mM.\033[0;37;40m Arcade
     \033[1;32;40mN.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
@@ -308,7 +308,7 @@ def menuUserConn(): #Menu before connection over ssh
     \033[1;34;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
     \033[3;33;40mP.\033[0;37;40m Premium
-    \033[3;34;40mM.\033[0;37;40m Games
+    \033[3;34;40mM.\033[0;37;40m Arcade
     \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
@@ -687,9 +687,9 @@ def GamesMenu():
     \033[1;31;40mPyBLOCK \033[1;34;40mGames\033[0;37;40m Menu
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m Gorched    \033[3;35;40m{gorched}\033[0;37;40m
+    \033[1;32;40mA.\033[0;37;40m 1984.ws  \033[3;35;40m{sn1984}\033[0;37;40m
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""".format(version,gorched = "PAID" if os.path.isfile("gorchedSN.conf") else "PREMIUM", lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    \n\n""".format(version,sn1984 = "PAID" if os.path.isfile("1984SN.conf") else "PREMIUM"))
     menuGamesPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def rateSX():
@@ -1009,10 +1009,10 @@ def aaccPPiGorched():
     """
     try:
         bitLN = {"NN":"","pd":""}
-        if os.path.isfile('gorchedSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("gorchedSN.conf", "rb")) # Load the file 'bclock.conf'
+        if os.path.isfile('1984SN.conf'): # Check if the file 'bclock.conf' is in the same folder
+            bitData= pickle.load(open("1984SN.conf", "rb")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
-            gorched()
+            sn1984()
         else:
             clear()
             blogo()
@@ -1049,8 +1049,8 @@ def aaccPPiGorched():
                             blogo()
                             tick()
                             bitLN['pd'] = "PAID"
-                            pickle.dump(bitLN, open("gorchedSN.conf", "wb"))
-                            gorched()
+                            pickle.dump(bitLN, open("1984SN.conf", "wb"))
+                            sn1984()
                             break
                         else:
                             continue
@@ -1073,8 +1073,8 @@ def aaccPPiGorched():
                             blogo()
                             tick()
                             bitLN['pd'] = "PAID"
-                            pickle.dump(bitLN, open("gorchedSN.conf", "wb"))
-                            gorched()
+                            pickle.dump(bitLN, open("1984SN.conf", "wb"))
+                            sn1984()
                             break
                         else:
                             continue
@@ -1087,7 +1087,7 @@ def aaccPPiGorched():
                 border=4,
                 )
                 bitLN['NN'] = randrange(10000000)
-                curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+                curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "Games on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
                 sh = os.popen(curl).read()
                 clear()
                 blogo()
@@ -1116,7 +1116,7 @@ def aaccPPiGorched():
                         blogo()
                         tick()
                         bitLN['pd'] = "PAID"
-                        pickle.dump(bitLN, open("gorchedSN.conf", "wb"))
+                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
                         gorched()
                         break
                     else:
