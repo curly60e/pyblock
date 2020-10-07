@@ -684,7 +684,7 @@ def GamesMenu():
     blogo()
     sysinfo()
     print("""\t\t
-    \033[1;31;40mPyBLOCK \033[1;34;40mGames\033[0;37;40m Menu
+    \033[1;31;40mPyBLOCK \033[1;34;40mArcade\033[0;37;40m Menu
     Version {}
 
     \033[1;32;40mA.\033[0;37;40m 1984.ws  \033[3;35;40m{sn1984}\033[0;37;40m
