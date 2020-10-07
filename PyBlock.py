@@ -1117,7 +1117,7 @@ def aaccPPiGorched():
                         tick()
                         bitLN['pd'] = "PAID"
                         pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                        gorched()
+                        sn1984()
                         break
                     else:
                         continue
