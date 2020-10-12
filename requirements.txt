@@ -20,7 +20,7 @@ python-cfonts
 termcolor
 pycoingecko
 googleapis-common-protos==1.52.0
-grpcio==1.32.0
+grpcio
 protobuf==3.13.0
 six==1.15.0
 #
