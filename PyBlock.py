@@ -1007,7 +1007,7 @@ def checkupdate():
 
 def upgrade():
     gitfetch = "git fetch"
-    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py "
+    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py requirements.txt"
     clear()
     blogo()
     b = os.popen(gitfetch).read()
