@@ -645,6 +645,7 @@ def menuLNDLOCAL():
     \033[1;32;40mK.\033[0;37;40m Make a KeySend Payment
     \033[1;31;40mL.\033[0;37;40m List Invoices
     \033[1;32;40mQ.\033[0;37;40m Channel Balance
+    \033[1;32;40mF.\033[0;37;40m Rebalance Channel
     \033[1;32;40mE.\033[0;37;40m Show Peers
     \033[1;32;40mZ.\033[0;37;40m Connect Peers
     \033[1;32;40mC.\033[0;37;40m Show Channels
@@ -1155,7 +1156,7 @@ def checkupdate():
 
 def upgrade():
     gitfetch = "git fetch"
-    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py"
+    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py requirements.txt"
     clear()
     blogo()
     b = os.popen(gitfetch).read()
@@ -1936,6 +1937,8 @@ def menuLNlocal(menuLL):
         clear()
         blogo()
         localchannelbalance()
+    elif menuLL in ["F", "f"]:
+        localrebalancelnd()
     elif menuLL in ["L", "l"]:
         clear()
         blogo()
