@@ -592,6 +592,42 @@ def localbalanceOC():
     print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
+
+def localrebalancelnd():
+    lncli = " listchannels"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    d = json.loads(lsd0)
+    n = d['channels']
+    while True:
+        clear()
+        print("\033[1;32;40m")
+        blogo()
+        print("\033[0;37;40m")
+        print("<<< Back to the Main Menu Press Control + C.\n\n")
+        print("\t\nChannels\n")
+        try:
+            print("""\n\tLIST CHANNELS TO REBALANCE\n
+                                 \t\033[1;34;40mLOCAL\033[0;37;40m BALANCE \t\033[1;31;40mREMOTE\033[0;37;40m BALANCE
+            """)
+
+            for r in range(len(n)):
+                s = n[r]
+                if int(s['local_balance']) >= int(s['remote_balance']):
+                    total = int(s['local_balance']) - int(s['remote_balance'])
+                elif int(s['local_balance']) <= int(s['remote_balance']):
+                    total = int(s['remote_balance']) - int(s['local_balance'])
+                print("Node ID: " + str(s['chan_id']) + "\t\033[1;34;40m " + str(s['local_balance']) + "\033[0;37;40m sats \033[1;31;40m\t" + str(s['remote_balance']) + "\033[0;37;40m sats \033[3;33;40m" + "\tDIFFERENCE: {}\033[0;37;40m sats".format(str(total)) )
+            fromnode = input("\nSelect FROM a Node ID : ")
+            tonode = input("\nSelect TO a Node ID : ")
+            amt = input("\nAmount in sats: ")
+            fee = input("\nMax Fee factor in sats: ")
+            fromtonode = "python3 rebalance.py -f {} -t {} -a {} --max-fee-factor {}".format(fromnode,tonode,amt,fee)
+            os.system(str(fromtonode))
+            t.sleep(2)
+        except:
+            break
+
 # Remote connection with rest -------------------------------------
 
 def getnewinvoice():
