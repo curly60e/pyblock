@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.7.9"
+version = "0.7.9.1"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -1007,7 +1007,7 @@ def checkupdate():
 
 def upgrade():
     gitfetch = "git fetch"
-    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py"
+    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py"
     clear()
     blogo()
     b = os.popen(gitfetch).read()
