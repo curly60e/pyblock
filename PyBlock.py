@@ -242,7 +242,7 @@ def localHalving():
     tenh = 1890000 - int(c) + 210000
 
     q = """
-    \033[0;37;40------------------- HALVING CLOCK -------------------
+    \033[0;37;40m------------------- HALVING CLOCK -------------------
 
             1st  Halving: in {} Blocks {}
             2nd  Halving: in {} Blocks {}
