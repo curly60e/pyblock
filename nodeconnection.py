@@ -608,16 +608,16 @@ def localrebalancelnd():
         print("\t\nChannels\n")
         try:
             print("""\n\tLIST CHANNELS TO REBALANCE\n
-                                 \t\033[2;32;40mLOCAL\033[0;37;40m BALANCE \t\033[1;31;40mREMOTE\033[0;37;40m BALANCE
+                                 \t\033[1;32;40mLOCAL\033[0;37;40m BALANCE \t\033[1;31;40mREMOTE\033[0;37;40m BALANCE
             """)
 
-            for item in n:
-                s = item
+            for r in range(len(n)):
+                s = n[r]
                 if int(s['local_balance']) >= int(s['remote_balance']):
                     total = int(s['local_balance']) - int(s['remote_balance'])
                 elif int(s['local_balance']) <= int(s['remote_balance']):
                     total = int(s['remote_balance']) - int(s['local_balance'])
-                print("Node ID: " + str(s['chan_id']) + "\t\033[2;32;40m " + str(s['local_balance']) + "\033[0;37;40m sats \033[1;31;40m\t" + str(s['remote_balance']) + "\033[0;37;40m sats \033[3;33;40m" + "\tDIFFERENCE: {}\033[0;37;40m sats".format(str(total)) )
+                print("Node ID: " + str(s['chan_id']) + "\t\033[1;32;40m " + str(s['local_balance']) + "\033[0;37;40m sats \033[1;31;40m\t" + str(s['remote_balance']) + "\033[0;37;40m sats \033[3;33;40m" + "\tDIFFERENCE: {}\033[0;37;40m sats".format(str(total)) )
             fromnode = input("\nSelect FROM a Node ID : ")
             tonode = input("\nSelect TO a Node ID : ")
             amt = input("\nAmount in sats: ")
