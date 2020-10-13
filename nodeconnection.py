@@ -595,11 +595,11 @@ def localbalanceOC():
 
 def localrebalancelnd():
     lncli = " listchannels"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    d = json.loads(lsd0)
-    n = d['channels']
     while True:
+        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd0 = str(lsd)
+        d = json.loads(lsd0)
+        n = d['channels']
         clear()
         print("\033[1;32;40m")
         blogo()
