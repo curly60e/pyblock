@@ -611,8 +611,8 @@ def localrebalancelnd():
                                  \t\033[2;32;40mLOCAL\033[0;37;40m BALANCE \t\033[1;31;40mREMOTE\033[0;37;40m BALANCE
             """)
 
-            for item in n:
-                s = item
+            for r in range(len(n)):
+                s = n[r]
                 if int(s['local_balance']) >= int(s['remote_balance']):
                     total = int(s['local_balance']) - int(s['remote_balance'])
                 elif int(s['local_balance']) <= int(s['remote_balance']):
@@ -624,7 +624,7 @@ def localrebalancelnd():
             fee = input("\nMax Fee factor in sats: ")
             fromtonode = "python3 rebalance.py -f {} -t {} -a {} --max-fee-factor {}".format(fromnode,tonode,amt,fee)
             os.system(str(fromtonode))
-            t.sleep(2)
+            input("Continue...")
         except:
             break
 
