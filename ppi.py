@@ -26,6 +26,31 @@ def closed():
     print("<<< Back Control + C.\n\n")
 
 
+#-----------------------------GAMES--------------------------------
+#------------------------------------------------------------------
+
+def gameroom():
+    try:
+        clear()
+        blogo()
+        conn = "ssh gameroom@bitreich.org"
+        os.system(conn).read()
+    except:
+        pass
+#----------------------------------------------------------------------
+
+def sn1984():
+    try:
+        clear()
+        blogo()
+        conn = "telnet 1984.ws 23"
+        os.system(conn).read()
+    except:
+        pass
+#-----------------------------END GAMES--------------------------------
+
+
+
 #-----------------------------bwt.dev--------------------------------
 
 def bwtConn():
