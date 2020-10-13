@@ -624,7 +624,7 @@ def localrebalancelnd():
             fee = input("\nMax Fee factor in sats: ")
             fromtonode = "python3 rebalance.py -f {} -t {} -a {} --max-fee-factor {}".format(fromnode,tonode,amt,fee)
             os.system(str(fromtonode))
-            t.sleep(2)
+            input("Continue...")
         except:
             break
 
