@@ -371,6 +371,7 @@ def advanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
+    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[3;34;40mTELNET NEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -387,6 +388,7 @@ def remoteadvanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
+    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[3;34;40mTELNET NEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuBA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -680,18 +682,18 @@ def APIMenu():
     \n\n""".format(version,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     menuPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def GamesMenu():
-    clear()
-    blogo()
-    sysinfo()
-    print("""\t\t
-    \033[1;31;40mPyBLOCK \033[1;34;40mArcade\033[0;37;40m Menu
-    Version {}
+#def GamesMenu():
+#    clear()
+#    blogo()
+#    sysinfo()
+#    print("""\t\t
+#    \033[1;31;40mPyBLOCK \033[1;34;40mArcade\033[0;37;40m Menu
+#    Version {}
 
-    \033[1;32;40mA.\033[0;37;40m 1984.ws  \033[3;35;40m{sn1984}\033[0;37;40m
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""".format(version,sn1984 = "PAID" if os.path.isfile("1984SN.conf") else "PREMIUM"))
-    menuGamesPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+#    \033[1;32;40mA.\033[0;37;40m 1984.ws  \033[3;35;40m{sn1984}\033[0;37;40m
+#    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+#    \n\n""".format(version,sn1984 = "PAID" if os.path.isfile("1984SN.conf") else "PREMIUM"))
+#    menuGamesPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def rateSX():
     clear()
@@ -1013,7 +1015,7 @@ def aaccPPiGorched():
         if os.path.isfile('1984SN.conf'): # Check if the file 'bclock.conf' is in the same folder
             bitData= pickle.load(open("1984SN.conf", "rb")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
-            sn1984()
+            gameroom()
         else:
             clear()
             blogo()
@@ -1051,7 +1053,7 @@ def aaccPPiGorched():
                             tick()
                             bitLN['pd'] = "PAID"
                             pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                            sn1984()
+                            gameroom()
                             break
                         else:
                             continue
@@ -1075,7 +1077,7 @@ def aaccPPiGorched():
                             tick()
                             bitLN['pd'] = "PAID"
                             pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                            sn1984()
+                            gameroom()
                             break
                         else:
                             continue
@@ -1118,7 +1120,7 @@ def aaccPPiGorched():
                         tick()
                         bitLN['pd'] = "PAID"
                         pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                        sn1984()
+                        gameroom()
                         break
                     else:
                         continue
@@ -1784,7 +1786,7 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS in ["P", "p"]:
         APIMenu()
     elif menuS in ["M", "m"]:
-        GamesMenu()
+        gameroom()
     elif menuS in ["X", "x"]:
         dnt()
     elif menuS in ["U", "u"]:
@@ -1855,7 +1857,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
     elif menuS in ["P", "p"]:
         APIMenu()
     elif menuS in ["M", "m"]:
-        GamesMenu()
+        gameroom()
     elif menuS in ["X", "x"]:
         dnt()
     elif menuS in ["U", "u"]:
@@ -2038,6 +2040,8 @@ def menuB(menuR): # Advanced access Menu
                 t.sleep(50)
             except:
                 break
+    elif menuR in ["H", "h"]:
+        sn1984()
     elif menuR in ["S", "s"]:
         while True:
             try:
@@ -2114,6 +2118,8 @@ def menuBA(menuR): # Advanced access Menu
                 t.sleep(1)
             except:
                 break
+    elif menuR in ["H", "h"]:
+        sn1984()
     elif menuR in ["R", "r"]:
         try:
             menuSelection()
