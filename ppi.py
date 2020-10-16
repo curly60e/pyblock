@@ -140,16 +140,12 @@ def wttrDataV1():
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
             list = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
         else:
             list = "curl wttr.in/" + selectData + "?F"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print(a)
         input("Continue...")
     except:
         pass
@@ -204,16 +200,12 @@ def wttrDataV2():
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
             list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
         else:
             list = "curl v2.wttr.in/" + selectData + "?F"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print(a)
         input("Continue...")
     except:
         pass
