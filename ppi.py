@@ -39,18 +39,27 @@ def gameroom():
         pass
 #----------------------------------------------------------------------
 
-def sn1984():
+def trustednode():
     try:
         clear()
         blogo()
-        conn = "telnet 1984.ws 23"
-        os.system(conn).read()
+        addv = """
+        ---------------------------------------------------------------
+
+                    REMEMBER TO INITIALIZE \033[1;35;40mTOR\033[0;37;40m ON THE SHELL
+
+                            $ source torsocks on
+
+        ---------------------------------------------------------------
+
+        """
+        print(addv)
+        input("Continue...")
+        conn = "telnet cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion 6023"
+        os.system(conn)
     except:
         pass
 #-----------------------------END GAMES--------------------------------
-
-
-
 #-----------------------------bwt.dev--------------------------------
 
 def bwtConn():
@@ -119,18 +128,13 @@ def wttrDataV1():
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
             list = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
-            input("Continue...")
         else:
             list = "curl wttr.in/" + selectData + "?F"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
-            input("Continue...")
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print(a)
+        input("Continue...")
     except:
         pass
 
@@ -184,18 +188,14 @@ def wttrDataV2():
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
             list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
-            input("Continue...")
+
         else:
             list = "curl v2.wttr.in/" + selectData + "?F"
-            a = os.popen(list).read()
-            clear()
-            blogo()
-            print(a)
-            input("Continue...")
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print(a)
+        input("Continue...")
     except:
         pass
 

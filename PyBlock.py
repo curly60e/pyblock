@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.8.0"
+version = "0.8.1"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -130,11 +130,8 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             clear()
             close()
             design()
-            tmp()
-        except (KeyboardInterrupt, SystemExit):
-            menu()
-            raise
-
+        except:
+            break
 def design():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
@@ -145,21 +142,18 @@ def design():
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         if b > a:
-            print("\033[1;32;40m")
-            tprint(b, font="rnd-large")
-            print("\a\033[0;37;40m")
+            output = render(str(b), colors=['red', 'yellow'], align='center')
+            print("\a" + output)
             t.sleep(10)
             break
         elif b == a:
-            print("\033[1;32;40m")
-            tprint(b, font="rnd-large")
-            print("\033[0;37;40m")
+            output = render(str(b), colors=['red', 'yellow'], align='center')
+            print(output)
             t.sleep(10)
             clear()
-            closed()
+            close()
         else:
             break
-
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
@@ -371,7 +365,7 @@ def advanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;32;40mTELNET NEEDED\033[0;37;40m]
+    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -388,7 +382,7 @@ def remoteadvanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;32;40mTELNET NEEDED\033[0;37;40m]
+    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuBA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2041,7 +2035,7 @@ def menuB(menuR): # Advanced access Menu
             except:
                 break
     elif menuR in ["H", "h"]:
-        sn1984()
+        trustednode()
     elif menuR in ["S", "s"]:
         while True:
             try:
@@ -2119,7 +2113,7 @@ def menuBA(menuR): # Advanced access Menu
             except:
                 break
     elif menuR in ["H", "h"]:
-        sn1984()
+        trustednode()
     elif menuR in ["R", "r"]:
         try:
             menuSelection()
