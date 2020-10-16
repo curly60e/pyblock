@@ -126,40 +126,34 @@ def connected(info): # here we complete the connection to the external node
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
-        try:
-            clear()
-            close()
-            design()
-            tmp()
-        except (KeyboardInterrupt, SystemExit):
-            menu()
-            raise
+        clear()
+        close()
+        design()
+        tmp()
 
 def design():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     a = b
+    t.sleep(10)
     while True:
         bitcoinclient = path['bitcoincli'] + " getblockcount"
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         if b > a:
-            print("\033[1;32;40m")
-            tprint(b, font="rnd-large")
-            print("\a\033[0;37;40m")
+            output = render(str(b), colors=['red', 'yellow'], align='center')
+            print("\a" + output)
             t.sleep(10)
             break
         elif b == a:
-            print("\033[1;32;40m")
-            tprint(b, font="rnd-large")
-            print("\033[0;37;40m")
+            output = render(str(b), colors=['red', 'yellow'], align='center')
+            print(output)
             t.sleep(10)
             clear()
             closed()
         else:
             break
-
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
