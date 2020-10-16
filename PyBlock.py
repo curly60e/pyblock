@@ -371,24 +371,10 @@ def advanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone \033[5;32;40m<---\033[0;37;40m
+    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def hackerzone():
-    clear()
-    blogo()
-    sysinfo()
-    print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m Hacker Zone Menu
-    Version {}
-
-    \033[1;32;40mA.\033[0;37;40m 1984.sw [\033[1;32;40mTELNET \033[1;31;40mNEEDED\033[0;37;40m]
-    \033[1;32;40mB.\033[0;37;40m Trusted Server [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
-    \n\n""".format(version))
-    menuHZone(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def remoteadvanceMenu(): # Advanced Menu
     clear()
@@ -402,7 +388,7 @@ def remoteadvanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone \033[5;32;40m<---\033[0;37;40m
+    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuBA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1227,12 +1213,6 @@ def testlogoRB():
 
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
-
-def menuHZone(menuhz):
-    if menuhz in ["A", "a"]:
-        sn1984()
-    elif menuhz in ["B", "b"]:
-        trustednode()
 
 def menuSettings(menuSTT):
     if menuSTT in ["A", "a"]:
@@ -2061,7 +2041,7 @@ def menuB(menuR): # Advanced access Menu
             except:
                 break
     elif menuR in ["H", "h"]:
-        hackerzone()
+        trustednode()
     elif menuR in ["S", "s"]:
         while True:
             try:
@@ -2139,7 +2119,7 @@ def menuBA(menuR): # Advanced access Menu
             except:
                 break
     elif menuR in ["H", "h"]:
-        hackerzone()
+        trustednode()
     elif menuR in ["R", "r"]:
         try:
             menuSelection()
