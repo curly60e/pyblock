@@ -39,6 +39,27 @@ def gameroom():
         pass
 #----------------------------------------------------------------------
 
+def trustednode():
+    try:
+        clear()
+        blogo()
+        addv = """
+        ---------------------------------------------------------------
+
+                    REMEMBER TO INITIALIZE \033[1;35;40mTOR\033[0;37;40m ON THE SHELL
+
+                            $ source torsocks on
+
+        ---------------------------------------------------------------
+
+        """
+        print(addv)
+        input("Continue...")
+        conn = "telnet cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion 6023"
+        os.system(conn)
+    except:
+        pass
+
 def sn1984():
     try:
         clear()
