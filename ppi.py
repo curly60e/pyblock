@@ -144,14 +144,13 @@ def wttrDataV1():
             clear()
             blogo()
             print(a)
-            input("Continue...")
         else:
             list = "curl wttr.in/" + selectData + "?F"
             a = os.popen(list).read()
             clear()
             blogo()
             print(a)
-            input("Continue...")
+        input("Continue...")
     except:
         pass
 
@@ -209,14 +208,13 @@ def wttrDataV2():
             clear()
             blogo()
             print(a)
-            input("Continue...")
         else:
             list = "curl v2.wttr.in/" + selectData + "?F"
             a = os.popen(list).read()
             clear()
             blogo()
             print(a)
-            input("Continue...")
+        input("Continue...")
     except:
         pass
 
