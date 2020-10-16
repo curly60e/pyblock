@@ -90,15 +90,13 @@ def remotegetblock():
         b = rpc('getblockcount')
         c = str(b)
         if c > a:
-            print("\033[1;32;40m")
-            tprint(c, font="rnd-large")
-            print("\a\033[0;37;40m")
+            output = render(str(c), colors=['red', 'yellow'], align='center')
+            print("\a" + output)
             t.sleep(10)
             break
         elif c == a:
-            print("\033[1;32;40m")
-            tprint(c, font="rnd-large")
-            print("\033[0;37;40m")
+            output = render(str(c), colors=['red', 'yellow'], align='center')
+            print(output)
             t.sleep(10)
             clear()
             closed()
