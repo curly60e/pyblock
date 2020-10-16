@@ -59,19 +59,7 @@ def trustednode():
         os.system(conn)
     except:
         pass
-
-def sn1984():
-    try:
-        clear()
-        blogo()
-        conn = "telnet 1984.ws 23"
-        os.system(conn).read()
-    except:
-        pass
 #-----------------------------END GAMES--------------------------------
-
-
-
 #-----------------------------bwt.dev--------------------------------
 
 def bwtConn():
@@ -200,6 +188,7 @@ def wttrDataV2():
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
             list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
+
         else:
             list = "curl v2.wttr.in/" + selectData + "?F"
         a = os.popen(list).read()
