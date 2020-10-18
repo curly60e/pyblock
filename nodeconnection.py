@@ -64,7 +64,7 @@ def remoteHalving():
     tenh = 1890000 - int(c) + 210000
 
     q = """
-    ------------------- HALVING HISTORY -------------------
+    \033[0;37;40m------------------- HALVING HISTORY -------------------
 
             1st  Halving: in {} Blocks {}
             2nd  Halving: in {} Blocks {}

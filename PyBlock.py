@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.8.1"
+version = "0.8.2"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
