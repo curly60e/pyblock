@@ -409,9 +409,8 @@ def dntDev(): # Dev Donation Menu
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m PayNym
-    \033[1;32;40mB.\033[0;37;40m Bitcoin Address
-    \033[1;32;40mC.\033[0;37;40m Lightning Network
+    \033[1;32;40mA.\033[0;37;40m Bitcoin Address
+    \033[1;32;40mB.\033[0;37;40m Lightning Network
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2177,17 +2176,8 @@ def menuD(menuN): # Satnode access Menu
         menuSelection()
 
 def menuE(menuQ): # Dev Donation access Menu
+
     if menuQ in ["A", "a"]:
-        try:
-            clear()
-            blogo()
-            close()
-            donationPN()
-            t.sleep(50)
-            menuSelection()
-        except:
-            menuSelection()
-    elif menuQ in ["B", "b"]:
         try:
             clear()
             blogo()
@@ -2197,7 +2187,7 @@ def menuE(menuQ): # Dev Donation access Menu
             menuSelection()
         except:
             menuSelection()
-    elif menuQ in ["C", "c"]:
+    elif menuQ in ["B", "b"]:
         try:
             clear()
             blogo()
