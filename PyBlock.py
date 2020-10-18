@@ -409,7 +409,6 @@ def advanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -426,7 +425,6 @@ def remoteadvanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuBA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
