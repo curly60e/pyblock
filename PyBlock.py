@@ -38,6 +38,20 @@ def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
     print("\a")
 
+def rpc(method, params=[]):
+    payload = json.dumps({
+        "jsonrpc": "2.0",
+        "id": "minebet",
+        "method": method,
+        "params": params
+    })
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+        path = pathv # Copy the variable pathv to 'path'
+    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+
+
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -267,10 +281,22 @@ def menu(): #Main Menu
     clear()
     blogo()
     sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Local Node
-    Version {}
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -281,38 +307,50 @@ def menu(): #Main Menu
     \033[1;32;40mG.\033[0;37;40m Run the Numbers
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
-    \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;36;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
-    \033[3;33;40mP.\033[0;37;40m Premium
-    \033[3;34;40mM.\033[0;37;40m Arcade
+    \033[1;33;40mP.\033[0;37;40m Premium
+    \033[1;36;40mM.\033[0;37;40m Arcade
     \033[1;32;40mN.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""".format(version, checkupdate()))
+    \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     menuA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuUserConn(): #Menu before connection over ssh
     clear()
     blogo()
     sysinfo()
+    a = "Local" if path['bitcoincli'] else "Remote"
+    blk = rpc('getblockchaininfo')
+    d = blk
+
+    cert_path = lndconnectload["tls"]
+    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    headers = {'Grpc-Metadata-macaroon': macaroon}
+    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    r = requests.get(url, headers=headers, verify=cert_path)
+    alias = r.json()
+
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Remote Node RPC
-    Version {}
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
     \033[1;32;40mC.\033[0;37;40m Run the Numbers
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
-    \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;36;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
-    \033[3;33;40mP.\033[0;37;40m Premium
-    \033[3;34;40mM.\033[0;37;40m Arcade
+    \033[1;33;40mP.\033[0;37;40m Premium
+    \033[1;36;40mM.\033[0;37;40m Arcade
     \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""".format(version, checkupdate()))
+    \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     menuRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenu():
@@ -2663,21 +2701,7 @@ def menuF(menuV): # Tester Donation access Menu
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
-
-
-def rpc(method, params=[]):
-    payload = json.dumps({
-        "jsonrpc": "2.0",
-        "id": "minebet",
-        "method": method,
-        "params": params
-    })
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
-    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
-
+#---------------------------------------------------------------------------------
 def testClockRemote():
     b = rpc('getblockcount')
     c = str(b)
