@@ -144,7 +144,6 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
     try:
         a = rpc('getblockchaininfo')
         d = a
-        print(d)
         clear()
         print("\033[1;32;40m")
         blogo()
