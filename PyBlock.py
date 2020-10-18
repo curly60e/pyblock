@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.8.1"
+version = "0.8.2"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -37,6 +37,20 @@ def sysinfo():  #Cpu and memory usage
     print("   \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
     print("   \033[0;37;40m----------------------")
     print("\a")
+
+def rpc(method, params=[]):
+    payload = json.dumps({
+        "jsonrpc": "2.0",
+        "id": "minebet",
+        "method": method,
+        "params": params
+    })
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+        path = pathv # Copy the variable pathv to 'path'
+    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     bitcoincli = " getblockchaininfo"
@@ -132,29 +146,35 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             design()
         except:
             break
+
 def design():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     a = b
     while True:
+        if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+            settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+            settingsClock = settingsv # Copy the variable pathv to 'path'
+        else:
+            settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+            pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
         bitcoinclient = path['bitcoincli'] + " getblockcount"
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         if b > a:
-            output = render(str(b), colors=['red', 'yellow'], align='center')
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a" + output)
             t.sleep(10)
             break
         elif b == a:
-            output = render(str(b), colors=['red', 'yellow'], align='center')
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print(output)
             t.sleep(10)
             clear()
             close()
         else:
             break
-
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
 def getrawtx(): # show confirmatins from transactions
@@ -261,10 +281,22 @@ def menu(): #Main Menu
     clear()
     blogo()
     sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Local Node
-    Version {}
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
@@ -275,38 +307,50 @@ def menu(): #Main Menu
     \033[1;32;40mG.\033[0;37;40m Run the Numbers
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
-    \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;36;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
-    \033[3;33;40mP.\033[0;37;40m Premium
-    \033[3;34;40mM.\033[0;37;40m Arcade
+    \033[1;33;40mP.\033[0;37;40m Premium
+    \033[1;36;40mM.\033[0;37;40m Arcade
     \033[1;32;40mN.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""".format(version, checkupdate()))
+    \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     menuA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuUserConn(): #Menu before connection over ssh
     clear()
     blogo()
     sysinfo()
+    a = "Local" if path['bitcoincli'] else "Remote"
+    blk = rpc('getblockchaininfo')
+    d = blk
+
+    cert_path = lndconnectload["tls"]
+    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    headers = {'Grpc-Metadata-macaroon': macaroon}
+    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    r = requests.get(url, headers=headers, verify=cert_path)
+    alias = r.json()
+
     print("""\t\t
-    \033[1;31;40mPyBLOCK\033[0;37;40m Menu
-    Remote Node RPC
-    Version {}
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;31;40mA.\033[0;37;40m Run PyBLOCK
     \033[1;32;40mB.\033[0;37;40m Show Blockchain information
     \033[1;32;40mC.\033[0;37;40m Run the Numbers
     \033[1;32;40mH.\033[0;37;40m Advanced
     \033[1;33;40mL.\033[0;37;40m Lightning Network
-    \033[1;34;40mS.\033[0;37;40m SatNode
+    \033[1;36;40mS.\033[0;37;40m SatNode
     \033[1;32;40mW.\033[0;37;40m Weather
-    \033[3;33;40mP.\033[0;37;40m Premium
-    \033[3;34;40mM.\033[0;37;40m Arcade
+    \033[1;33;40mP.\033[0;37;40m Premium
+    \033[1;36;40mM.\033[0;37;40m Arcade
     \033[1;32;40mG.\033[0;37;40m Settings
     \033[1;35;40mX.\033[0;37;40m Donate
     \033[1;33;40mQ.\033[0;37;40m Exit
-    \n\n""".format(version, checkupdate()))
+    \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     menuRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenu():
@@ -365,7 +409,6 @@ def advanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -382,7 +425,6 @@ def remoteadvanceMenu(): # Advanced Menu
     \033[1;32;40mB.\033[0;37;40m FunB
     \033[1;32;40mC.\033[0;37;40m Show QR from a Bitcoin Address
     \033[1;32;40mS.\033[0;37;40m Sysinfo
-    \033[1;32;40mH.\033[0;37;40m Hacker Zone [\033[1;35;40mTOR\033[0;37;40m \033[1;31;40mNEEDED\033[0;37;40m]
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuBA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -409,9 +451,8 @@ def dntDev(): # Dev Donation Menu
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m PayNym
-    \033[1;32;40mB.\033[0;37;40m Bitcoin Address
-    \033[1;32;40mC.\033[0;37;40m Lightning Network
+    \033[1;32;40mA.\033[0;37;40m Bitcoin Address
+    \033[1;32;40mB.\033[0;37;40m Lightning Network
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -468,7 +509,23 @@ def menuLND():
     \n\n""".format(version))
     menuLN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def settings4():
+def settings4Local():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings Menu
+    Local node connection
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Change Logo Design
+    \033[1;31;40mB.\033[0;37;40m Change Logo Colors
+    \033[1;31;40mC.\033[0;37;40m Change Clock Colors
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuSettingsLocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def settings4Remote():
     clear()
     blogo()
     sysinfo()
@@ -479,11 +536,61 @@ def settings4():
 
     \033[1;32;40mA.\033[0;37;40m Change Logo Design
     \033[1;31;40mB.\033[0;37;40m Change Logo Colors
+    \033[1;31;40mC.\033[0;37;40m Change Clock Colors
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
-    menuSettings(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    menuSettingsRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designQ():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Design Menu
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Block
+    \033[1;31;40mB.\033[0;37;40m Slick
+    \033[1;31;40mC.\033[0;37;40m Tiny
+    \033[1;31;40mD.\033[0;37;40m Grid
+    \033[1;31;40mE.\033[0;37;40m Pallet
+    \033[1;31;40mF.\033[0;37;40m Shade
+    \033[1;31;40mG.\033[0;37;40m Chrome
+    \033[1;31;40mH.\033[0;37;40m Simple
+    \033[1;31;40mI.\033[0;37;40m Simple Block
+    \033[1;31;40mJ.\033[0;37;40m 3D
+    \033[1;31;40mK.\033[0;37;40m Simple 3D
+    \033[1;31;40mL.\033[0;37;40m Huge
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def designC():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Design Menu
+    Local node connection
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Block
+    \033[1;31;40mB.\033[0;37;40m Slick
+    \033[1;31;40mC.\033[0;37;40m Tiny
+    \033[1;31;40mD.\033[0;37;40m Grid
+    \033[1;31;40mE.\033[0;37;40m Pallet
+    \033[1;31;40mF.\033[0;37;40m Shade
+    \033[1;31;40mG.\033[0;37;40m Chrome
+    \033[1;31;40mH.\033[0;37;40m Simple
+    \033[1;31;40mI.\033[0;37;40m Simple Block
+    \033[1;31;40mJ.\033[0;37;40m 3D
+    \033[1;31;40mK.\033[0;37;40m Simple 3D
+    \033[1;31;40mL.\033[0;37;40m Huge
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuDesignClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def designCRemote():
     clear()
     blogo()
     sysinfo()
@@ -506,9 +613,39 @@ def designQ():
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
-    menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    menuDesignClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colors():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors Menu
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Front Color
+    \033[1;31;40mB.\033[0;37;40m Back Color
+    \033[1;31;40mC.\033[0;37;40m Rainbow
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsC():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors Menu
+    Local node connection
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Front Color
+    \033[1;31;40mB.\033[0;37;40m Back Color
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuColorsClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsCRemote():
     clear()
     blogo()
     sysinfo()
@@ -519,10 +656,9 @@ def colors():
 
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
-    \033[1;31;40mC.\033[0;37;40m Rainbow
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
-    menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    menuColorsClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFront():
     clear()
@@ -546,6 +682,50 @@ def colorsSelectFront():
     \n\n""".format(version))
     menuColorsSelectFront(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def colorsSelectFrontClock():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Front Color Menu
+    Remote node connection
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuColorsSelectFrontClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectFrontClockRemote():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Front Color Menu
+    Remote node connection
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuColorsSelectFrontClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def colorsSelectBack():
     clear()
     blogo()
@@ -567,6 +747,50 @@ def colorsSelectBack():
     \033[1;36;40mR.\033[0;37;40m Return Main Menu
     \n\n""".format(version))
     menuColorsSelectBack(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectBackClock():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Back Color Menu
+    Remote node connection
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuColorsSelectBackClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def colorsSelectBackClockRemote():
+    clear()
+    blogo()
+    sysinfo()
+    print("""\t\t
+    \033[1;31;40mPyBLOCK\033[0;37;40m Settings > Colors > Back Color Menu
+    Remote node connection
+    Version {}
+
+    \033[1;32;40mA.\033[0;37;40m Black
+    \033[1;31;40mB.\033[0;37;40m Red
+    \033[1;31;40mC.\033[0;37;40m Green
+    \033[1;31;40mD.\033[0;37;40m Yellow
+    \033[1;31;40mE.\033[0;37;40m Blue
+    \033[1;31;40mF.\033[0;37;40m Magenta
+    \033[1;31;40mG.\033[0;37;40m Cyan
+    \033[1;31;40mH.\033[0;37;40m White
+    \033[1;31;40mI.\033[0;37;40m Gray
+    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \n\n""".format(version))
+    menuColorsSelectBackClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbow():
     clear()
@@ -1182,7 +1406,7 @@ def testlogo():
         settings["gradient"] = "color"
         pickle.dump(settings, open("pyblocksettings.conf", "wb"))
     except:
-        settings4()
+        pass
 
 def testlogoRB():
     output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -1202,13 +1426,34 @@ def testlogoRB():
         settings["gradient"] = "grd"
         pickle.dump(settings, open("pyblocksettings.conf", "wb"))
     except:
-        settings4()
+        pass
 
+def testClock():
+    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    b = block
+    output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='left')
+    print(output)
+    print("""
+
+    -------------------------
+        Front Color: {}
+        Back Color:  {}
+    -------------------------
+
+    """.format(settingsClock['colorA'], settingsClock['colorB']))
+    try:
+        print("<<< Cancel Control + C")
+        input("Enter To Apply...")
+        settingsClock["gradient"] = "color"
+        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+    except:
+        pass
 
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
 
-def menuSettings(menuSTT):
+def menuSettingsLocal(menuSTT):
     if menuSTT in ["A", "a"]:
         clear()
         blogo()
@@ -1217,6 +1462,24 @@ def menuSettings(menuSTT):
         clear()
         blogo()
         colors()
+    elif menuSTT in ["C", "c"]:
+        clear()
+        blogo()
+        colorsC()
+
+def menuSettingsRemote(menuSTT):
+    if menuSTT in ["A", "a"]:
+        clear()
+        blogo()
+        designQ()
+    elif menuSTT in ["B", "b"]:
+        clear()
+        blogo()
+        colors()
+    elif menuSTT in ["C", "c"]:
+        clear()
+        blogo()
+        colorsCRemote()
 
 def menuColors(menuCLS):
     if menuCLS in ["A", "a"]:
@@ -1225,6 +1488,22 @@ def menuColors(menuCLS):
         colorsSelectBack()
     elif menuCLS in ["C", "c"]:
         colorsSelectRainbow()
+    elif menuCLS in ["F", "f"]:
+        colors()
+
+def menuColorsClock(menuCLS):
+    if menuCLS in ["A", "a"]:
+        colorsSelectFrontClock()
+    elif menuCLS in ["B", "b"]:
+        colorsSelectBackClock()
+    elif menuCLS in ["F", "f"]:
+        colors()
+
+def menuColorsClockRemote(menuCLS):
+    if menuCLS in ["A", "a"]:
+        colorsSelectFrontClockRemote()
+    elif menuCLS in ["B", "b"]:
+        colorsSelectBackClockRemote()
     elif menuCLS in ["F", "f"]:
         colors()
 
@@ -1429,6 +1708,202 @@ def menuColorsSelectFront(menuCF):
         blogo()
         settings["colorA"] = "gray"
         testlogo()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+def menuColorsSelectFrontClock(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "black"
+        testClock()
+    elif menuCF in ["B", "b"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "red"
+        testClock()
+    elif menuCF in ["C", "c"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "green"
+        testClock()
+    elif menuCF in ["D", "d"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "yellow"
+        testClock()
+    elif menuCF in ["E", "e"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "blue"
+        testClock()
+    elif menuCF in ["F", "f"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "magenta"
+        testClock()
+    elif menuCF in ["G", "g"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "cyan"
+        testClock()
+    elif menuCF in ["H", "h"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "white"
+        testClock()
+    elif menuCF in ["I", "i"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "gray"
+        testClock()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+def menuColorsSelectBackClock(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "black"
+        testClock()
+    elif menuCF in ["B", "b"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "red"
+        testClock()
+    elif menuCF in ["C", "c"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "green"
+        testClock()
+    elif menuCF in ["D", "d"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "yellow"
+        testClock()
+    elif menuCF in ["E", "e"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "blue"
+        testClock()
+    elif menuCF in ["F", "f"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "magenta"
+        testClock()
+    elif menuCF in ["G", "g"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "cyan"
+        testClock()
+    elif menuCF in ["H", "h"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "white"
+        testClock()
+    elif menuCF in ["I", "i"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "gray"
+        testClock()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+def menuColorsSelectFrontClockRemote(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "black"
+        testClockRemote()
+    elif menuCF in ["B", "b"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "red"
+        testClockRemote()
+    elif menuCF in ["C", "c"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "green"
+        testClockRemote()
+    elif menuCF in ["D", "d"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "yellow"
+        testClockRemote()
+    elif menuCF in ["E", "e"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "blue"
+        testClockRemote()
+    elif menuCF in ["F", "f"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "magenta"
+        testClockRemote()
+    elif menuCF in ["G", "g"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "cyan"
+        testClockRemote()
+    elif menuCF in ["H", "h"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "white"
+        testClockRemote()
+    elif menuCF in ["I", "i"]:
+        clear()
+        blogo()
+        settingsClock["colorA"] = "gray"
+        testClockRemote()
+    elif menuCF in ["R", "r"]:
+        colors()
+
+def menuColorsSelectBackClockRemote(menuCF):
+    if menuCF in ["A", "a"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "black"
+        testClockRemote()
+    elif menuCF in ["B", "b"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "red"
+        testClockRemote()
+    elif menuCF in ["C", "c"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "green"
+        testClockRemote()
+    elif menuCF in ["D", "d"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "yellow"
+        testClockRemote()
+    elif menuCF in ["E", "e"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "blue"
+        testClockRemote()
+    elif menuCF in ["F", "f"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "magenta"
+        testClockRemote()
+    elif menuCF in ["G", "g"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "cyan"
+        testClockRemote()
+    elif menuCF in ["H", "h"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "white"
+        testClockRemote()
+    elif menuCF in ["I", "i"]:
+        clear()
+        blogo()
+        settingsClock["colorB"] = "gray"
+        testClockRemote()
     elif menuCF in ["R", "r"]:
         colors()
 
@@ -1788,7 +2263,7 @@ def menuA(menuS): #Execution of the Main Menu options
     elif menuS in ["W", "w"]:
         weatherMenu()
     elif menuS in ["N", "n"]:
-        settings4()
+        settings4Local()
     elif menuS in ["T", "t"]:
         clear()
         delay_print("\033[1;32;40mWake up, Neo...")
@@ -1857,7 +2332,7 @@ def menuRemote(menuS): #Execution of the Main Menu options
     elif menuS in ["U", "u"]:
         upgrade()
     elif menuS in ["G", "g"]:
-        settings4()
+        settings4Remote()
     elif menuS in ["W", "w"]:
         weatherMenu()
     elif menuS in ["T", "t"]: #Test feature fast access
@@ -2177,17 +2652,8 @@ def menuD(menuN): # Satnode access Menu
         menuSelection()
 
 def menuE(menuQ): # Dev Donation access Menu
+
     if menuQ in ["A", "a"]:
-        try:
-            clear()
-            blogo()
-            close()
-            donationPN()
-            t.sleep(50)
-            menuSelection()
-        except:
-            menuSelection()
-    elif menuQ in ["B", "b"]:
         try:
             clear()
             blogo()
@@ -2197,7 +2663,7 @@ def menuE(menuQ): # Dev Donation access Menu
             menuSelection()
         except:
             menuSelection()
-    elif menuQ in ["C", "c"]:
+    elif menuQ in ["B", "b"]:
         try:
             clear()
             blogo()
@@ -2233,10 +2699,34 @@ def menuF(menuV): # Tester Donation access Menu
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
+#---------------------------------------------------------------------------------
+def testClockRemote():
+    b = rpc('getblockcount')
+    c = str(b)
+    a = c
+    output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='left')
+    print(output)
+    print("""
+
+    -------------------------
+        Front Color: {}
+        Back Color:  {}
+    -------------------------
+
+    """.format(settingsClock['colorA'], settingsClock['colorB']))
+    try:
+        print("<<< Cancel Control + C")
+        input("Enter To Apply...")
+        settingsClock["gradient"] = "color"
+        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+    except:
+        pass
 
 #--------------------------------- End Main Menu execution --------------------------------
 
+
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
     clear()
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}

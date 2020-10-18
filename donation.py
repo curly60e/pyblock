@@ -7,22 +7,6 @@ import qrcode
 import pickle
 from nodeconnection import *
 
-#Dev PayNym
-def donationPN():
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    url = 'PM8TJbSH9iCPZ2bz9D7MTHpaCnT35Pm4kfJ6gRccoKmMjz5qsQ6rBWpBRCnJHMpTo8kc5K2SF4MADA9f4uKwc5iC8A3FtKJc7eb5wFDF3vcuSfneaC15'
-    print("\033[1;30;47m")
-    qr.add_data(url)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    qr.clear()
-    print("PayNym: " + url)
-
 def donationAddr():
     qr = qrcode.QRCode(
     version=1,
@@ -30,7 +14,7 @@ def donationAddr():
     box_size=10,
     border=4,
     )
-    url = 'bc1qf5c88chttajazrlwudt7x9xx5u0qf8y2lguj62'
+    url = 'bc1q2y367tufk4ml4pkmhawydzv3qt7j0lykxpa32k'
     print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()

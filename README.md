@@ -24,7 +24,7 @@
 
 <img src="./resources/images/satnode.PNG" width="50%" />
 
-# PyBlock v0.8.1
+# PyBlock v0.8.2
 Dashboard Bitcoin information program
 
 A simple Python Block Clock to check the Blockchain information.
@@ -166,12 +166,7 @@ A simple Python Block Clock to check the Blockchain information.
   - Install [Hexyl](https://github.com/sharkdp/hexyl)
   - Install Curl on Debian based type:
     - sudo apt install curl
-  - Install Tor & TELNET on Debian based type [ONLY FOR HACKER ZONE CONNECTION]:
-    - sudo apt install tor
-      * To activate Tor on the shell type:
-        - source torsocks on
-    - sudo apt install telnet
-      * After this you can execute PyBlock and connect to the HACKER ZONE.
+
 ## How to execute
 
   - python3 PyBlock.py
@@ -180,7 +175,12 @@ A simple Python Block Clock to check the Blockchain information.
   It will appear a place you can put your Bitcoin-cli path
 
   - "Path to your Bitcoin-cli: " #Add the path and shoot Enter.
-
+  - Install Tor & TELNET on Debian based type [ONLY FOR HACKER ZONE CONNECTION]:
+    - sudo apt install tor
+      * To activate Tor on the shell type:
+        - source torsocks on
+    - sudo apt install telnet
+      * After this you can execute PyBlock and connect to the HACKER ZONE.
 
 ### Contributors
 

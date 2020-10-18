@@ -247,7 +247,7 @@ def donate():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
 
-    \033[1;32;40mA.\033[0;37;40m Make PyBLOCK Great Again
+    \033[1;32;40mA.\033[0;37;40m Donate
     <<< Back Main Menu Press Control + C
     \n\n""")
     menuB = (input("\033[1;32;40mSelect option: \033[0;37;40m"))

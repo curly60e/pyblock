@@ -33,6 +33,14 @@ def gameroom():
     try:
         clear()
         blogo()
+        print("""
+        --------------------------------------
+
+                  INITIATE ARCADE?
+
+        --------------------------------------
+        """.format(closed()))
+        input("\a\nContinue...")
         conn = "ssh gameroom@bitreich.org"
         os.system(conn).read()
     except:
@@ -43,6 +51,7 @@ def trustednode():
     try:
         clear()
         blogo()
+        closed()
         addv = """
         ---------------------------------------------------------------
 
@@ -54,7 +63,7 @@ def trustednode():
 
         """
         print(addv)
-        input("Continue...")
+        input("\a\nContinue...")
         conn = "telnet cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion 6023"
         os.system(conn)
     except:
@@ -66,12 +75,14 @@ def bwtConn():
     try:
         clear()
         blogo()
+        closed()
         conn = "curl -s https://bwt.dev/banner.txt"
         a = os.popen(conn).read()
         clear()
         blogo()
+        closed()
         print(a)
-        input("Continue...")
+        input("\a\nContinue...")
     except:
         pass
 

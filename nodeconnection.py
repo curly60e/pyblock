@@ -14,6 +14,7 @@ from art import *
 from pblogo import *
 
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
@@ -64,7 +65,7 @@ def remoteHalving():
     tenh = 1890000 - int(c) + 210000
 
     q = """
-    ------------------- HALVING HISTORY -------------------
+    \033[0;37;40m------------------- HALVING HISTORY -------------------
 
             1st  Halving: in {} Blocks {}
             2nd  Halving: in {} Blocks {}
@@ -87,15 +88,21 @@ def remotegetblock():
     c = str(b)
     a = c
     while True:
+        if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+            settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+            settingsClock = settingsv # Copy the variable pathv to 'path'
+        else:
+            settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+            pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
         b = rpc('getblockcount')
         c = str(b)
         if c > a:
-            output = render(str(c), colors=['red', 'yellow'], align='center')
+            output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a" + output)
             t.sleep(10)
             break
         elif c == a:
-            output = render(str(c), colors=['red', 'yellow'], align='center')
+            output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print(output)
             t.sleep(10)
             clear()
@@ -137,7 +144,6 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
     try:
         a = rpc('getblockchaininfo')
         d = a
-        print(d)
         clear()
         print("\033[1;32;40m")
         blogo()
