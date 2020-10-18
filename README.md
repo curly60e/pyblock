@@ -175,7 +175,12 @@ A simple Python Block Clock to check the Blockchain information.
   It will appear a place you can put your Bitcoin-cli path
 
   - "Path to your Bitcoin-cli: " #Add the path and shoot Enter.
-
+  - Install Tor & TELNET on Debian based type [ONLY FOR HACKER ZONE CONNECTION]:
+    - sudo apt install tor
+      * To activate Tor on the shell type:
+        - source torsocks on
+    - sudo apt install telnet
+      * After this you can execute PyBlock and connect to the HACKER ZONE.
 
 ### Contributors
 
