@@ -142,41 +142,25 @@ def design():
         if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
             settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
             settingsClock = settingsv # Copy the variable pathv to 'path'
-            bitcoinclient = path['bitcoincli'] + " getblockcount"
-            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-            b = block
-            if b > a:
-                output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-                print("\a" + output)
-                t.sleep(10)
-                break
-            elif b == a:
-                output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-                print(output)
-                t.sleep(10)
-                clear()
-                close()
-            else:
-                break
         else:
             settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
             pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
-            bitcoinclient = path['bitcoincli'] + " getblockcount"
-            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-            b = block
-            if b > a:
-                output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-                print("\a" + output)
-                t.sleep(10)
-                break
-            elif b == a:
-                output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-                print(output)
-                t.sleep(10)
-                clear()
-                close()
-            else:
-                break
+        bitcoinclient = path['bitcoincli'] + " getblockcount"
+        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        b = block
+        if b > a:
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            print("\a" + output)
+            t.sleep(10)
+            break
+        elif b == a:
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            print(output)
+            t.sleep(10)
+            clear()
+            close()
+        else:
+            break
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
 def getrawtx(): # show confirmatins from transactions
