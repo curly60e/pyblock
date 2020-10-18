@@ -281,10 +281,7 @@ def menu(): #Main Menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local"
-    else:
-        n = "Remote"
+    n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
     b = json.loads(a)
@@ -324,10 +321,7 @@ def menuUserConn(): #Menu before connection over ssh
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        a = "Local"
-    else:
-        a = "Remote"
+    a = "Local" if path['bitcoincli'] else "Remote"
     blk = rpc('getblockchaininfo')
     d = blk
 
