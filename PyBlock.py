@@ -1254,17 +1254,16 @@ def aaccPPiLNBits():
                 nn = str(rsh)
                 dd = json.loads(nn)
                 db = dd['paid']
-                if db is True:
-                    clear()
-                    blogo()
-                    tick()
-                    bitLN['pd'] = "PAID"
-                    pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
-                    createFileConnLNBits()
-                    break
-                else:
+                if db is not True:
                     continue
 
+                clear()
+                blogo()
+                tick()
+                bitLN['pd'] = "PAID"
+                pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
+                createFileConnLNBits()
+                break
     except:
         clear()
         blogo()
@@ -1310,17 +1309,16 @@ def aaccPPiLNPay():
                 nn = str(rsh)
                 dd = json.loads(nn)
                 db = dd['paid']
-                if db is True:
-                    clear()
-                    blogo()
-                    tick()
-                    bitLN['pd'] = "PAID"
-                    pickle.dump(bitLN, open("lnpaySN.conf", "wb"))
-                    createFileConnLNPay()
-                    break
-                else:
+                if db is not True:
                     continue
 
+                clear()
+                blogo()
+                tick()
+                bitLN['pd'] = "PAID"
+                pickle.dump(bitLN, open("lnpaySN.conf", "wb"))
+                createFileConnLNPay()
+                break
     except:
         clear()
         blogo()
@@ -1366,17 +1364,16 @@ def aaccPPiOpenNode():
                 nn = str(rsh)
                 dd = json.loads(nn)
                 db = dd['paid']
-                if db is True:
-                    clear()
-                    blogo()
-                    tick()
-                    bitLN['pd'] = "PAID"
-                    pickle.dump(bitLN, open("opennodeSN.conf", "wb"))
-                    createFileConnOpenNode()
-                    break
-                else:
+                if db is not True:
                     continue
 
+                clear()
+                blogo()
+                tick()
+                bitLN['pd'] = "PAID"
+                pickle.dump(bitLN, open("opennodeSN.conf", "wb"))
+                createFileConnOpenNode()
+                break
     except:
         clear()
         blogo()
@@ -1431,17 +1428,16 @@ def aaccPPiGorched():
                         nn = str(rsh)
                         dd = json.loads(nn)
                         db = dd['paid']
-                        if db is True:
-                            clear()
-                            blogo()
-                            tick()
-                            bitLN['pd'] = "PAID"
-                            pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                            gameroom()
-                            break
-                        else:
+                        if db is not True:
                             continue
 
+                        clear()
+                        blogo()
+                        tick()
+                        bitLN['pd'] = "PAID"
+                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
+                        gameroom()
+                        break
                 elif lndconnectload['ln']:
                     while True:
                         print("Lightning Invoice: " + c)
@@ -1455,17 +1451,16 @@ def aaccPPiGorched():
                         nn = str(rsh)
                         dd = json.loads(nn)
                         db = dd['paid']
-                        if db is True:
-                            clear()
-                            blogo()
-                            tick()
-                            bitLN['pd'] = "PAID"
-                            pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                            gameroom()
-                            break
-                        else:
+                        if db is not True:
                             continue
 
+                        clear()
+                        blogo()
+                        tick()
+                        bitLN['pd'] = "PAID"
+                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
+                        gameroom()
+                        break
             else:
                 qr = qrcode.QRCode(
                 version=1,
@@ -1498,17 +1493,16 @@ def aaccPPiGorched():
                     nn = str(rsh)
                     dd = json.loads(nn)
                     db = dd['paid']
-                    if db is True:
-                        clear()
-                        blogo()
-                        tick()
-                        bitLN['pd'] = "PAID"
-                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                        gameroom()
-                        break
-                    else:
+                    if db is not True:
                         continue
 
+                    clear()
+                    blogo()
+                    tick()
+                    bitLN['pd'] = "PAID"
+                    pickle.dump(bitLN, open("1984SN.conf", "wb"))
+                    gameroom()
+                    break
     except:
         clear()
         blogo()
