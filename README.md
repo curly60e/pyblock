@@ -24,7 +24,7 @@
 
 <img src="./resources/images/satnode.PNG" width="50%" />
 
-# PyBlock v0.8.2
+# PyBlock v0.9.0
 Dashboard Bitcoin information program
 
 A simple Python Block Clock to check the Blockchain information.
@@ -188,7 +188,6 @@ A simple Python Block Clock to check the Blockchain information.
 [@SamouraiDev](https://twitter.com/SamouraiDev)
 [@Korynewton](https://github.com/korynewton)
 [@Joao S. O. Bueno](https://github.com/jsbueno/terminal_matrix)
-[@C-Otto](https://github.com/C-Otto/rebalance-lnd)
 
 ### Testers
 
