@@ -2685,6 +2685,8 @@ def menuD(menuN): # Satnode access Menu
         readFile()
     elif menuN in ["S", "s"]:
         try:
+            clear()
+            blogo()
             close()
             message = input("\n\033[0;37;40mYour message it's a \033[1;34;40mF\033[0;37;40mile or a plain \033[1;32;40mT\033[0;37;40mext? \033[1;34;40mF\033[0;37;40m/\033[1;32;40mT\033[0;37;40m: ")
             if message in ["F", "f"]:
@@ -2710,12 +2712,15 @@ def menuD(menuN): # Satnode access Menu
         except:
             menuSelection()
     elif menuN in ["C", "c"]:
-        print("\n\t This only will work on Linux or Unix systems.\n")
-        a = input("Do we continue? Y/n: ")
-        if a in ["Y", "y"]:
-            gitclone()
-        else:
-            menuSelection()
+        try:
+            print("\n\t This only will work on Linux or Unix systems.\n")
+            a = input("Do we continue? Y/n: ")
+            if a in ["Y", "y"]:
+                gitclone()
+            else:
+                menuSelection()
+        except:
+            pass
     elif menuN in ["R", "r"]:
         menuSelection()
 
