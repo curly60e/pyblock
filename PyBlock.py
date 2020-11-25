@@ -677,7 +677,7 @@ def runTheNumbersMenu():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;36;40mR.\033[0;37;40m Return
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -702,7 +702,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;36;40mR.\033[0;37;40m Return
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -716,7 +716,7 @@ def weatherMenu():
 
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
-    \033[1;36;40mR.\033[0;37;40m Return
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
