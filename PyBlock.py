@@ -2770,7 +2770,7 @@ def lightningnetworkREMOTEcontrol(lncore):
         blogo()
         getinfo()
     elif lncore in ["Q", "q"]:
-        mainmenuREMOTE()
+        menuSelection()
 
 def platfformsREMOTEcontrol(platf):
     if platf in ["A", "a"]:
