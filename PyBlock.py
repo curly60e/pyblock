@@ -2381,13 +2381,12 @@ def decodeHexLOCAL(hexloc):
             readHexTx()
             while True:
                 r = input("Do you want to continue decoding? Y/n: ")
-                if r in ["Y", "y"]:
-                    clear()
-                    blogo()
-                    sysinfo()
-                    readHexTx()
-                else:
+                if r not in ["Y", "y"]:
                     break
+                clear()
+                blogo()
+                sysinfo()
+                readHexTx()
         except:
             pass
 def lightningnetworkLOCALcontrol(lncore):
