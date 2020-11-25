@@ -389,7 +389,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[31;1mQ.\033[0;37;40m Return
+    \u001b[33;1mR.\033[0;37;40m Return
     \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -419,7 +419,7 @@ def bitcoincoremenuREMOTE():
     \u001b[38;5;202mC.\033[0;37;40m Run the Numbers
     \u001b[38;5;202mD.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mE.\033[0;37;40m Miscellaneous
-    \u001b[31;1mQ.\033[0;37;40m Return
+    \u001b[33;1mR.\033[0;37;40m Return
     \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -459,7 +459,7 @@ def lightningnetworkLOCAL():
     \u001b[33;1mM.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mN.\033[0;37;40m Get Node Info
     \u001b[33;1mO.\033[0;37;40m Get Network Information
-    \u001b[31;1mQ.\033[0;37;40m Return
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -493,7 +493,7 @@ def lightningnetworkREMOTE():
     \u001b[33;1mG.\033[0;37;40m Onchain Balance
     \u001b[33;1mH.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mI.\033[0;37;40m Get Node Info
-    \u001b[31;1mQ.\033[0;37;40m Return
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     lightningnetworkREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -530,7 +530,7 @@ def APIMenuLOCAL():
     \033[1;32;40mJ.\033[0;37;40m SatNode    FREE
     \033[1;32;40mK.\033[0;37;40m Weather    FREE
     \033[1;32;40mL.\033[0;37;40m Arcade     FREE
-    \u001b[31;1mR.\033[0;37;40m Return Main Menu
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -567,7 +567,7 @@ def APIMenuREMOTE():
     \033[1;32;40mJ.\033[0;37;40m SatNode    FREE
     \033[1;32;40mK.\033[0;37;40m Weather    FREE
     \033[1;32;40mL.\033[0;37;40m Arcade     FREE
-    \u001b[31;1mR.\033[0;37;40m Return Main Menu
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -677,7 +677,7 @@ def runTheNumbersMenu():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -702,7 +702,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -716,7 +716,7 @@ def weatherMenu():
 
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -728,9 +728,9 @@ def dnt(): # Donation selection menu
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m Developers Donation
-    \033[1;32;40mB.\033[0;37;40m Testers Donation
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \u001b[38;5;15mA.\033[0;37;40m Developers Donation
+    \u001b[38;5;15mB.\033[0;37;40m Testers Donation
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -742,9 +742,9 @@ def dntDev(): # Dev Donation Menu
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m Bitcoin Address
-    \033[1;32;40mB.\033[0;37;40m Lightning Network
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
+    \u001b[33;1mB.\033[0;37;40m Lightning Network
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -756,9 +756,9 @@ def dntTst(): # Tester Donation Menu
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m Bitcoin Address
-    \033[1;32;40mB.\033[0;37;40m Lightning Network
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
+    \u001b[33;1mB.\033[0;37;40m Lightning Network
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuF(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -774,7 +774,7 @@ def satnodeMenu(): # Satnode Menu
     \033[1;32;40mB.\033[0;37;40m Feed
     \033[1;32;40mC.\033[0;37;40m Setup
     \033[1;34;40mS.\033[0;37;40m Send a Message to Space
-    \033[1;36;40mD.\033[0;37;40m Return Main Menu
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -788,7 +788,7 @@ def rateSX():
 
     \033[1;32;40mA.\033[0;37;40m Rate
     \033[1;32;40mB.\033[0;37;40m Chart
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     rateSXMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -802,7 +802,7 @@ def mempoolmenu():
 
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -823,7 +823,7 @@ def APILnbit():
     \033[1;32;40mC.\033[0;37;40m New PayWall
     \033[1;32;40mD.\033[0;37;40m Delete PayWall
     \033[1;32;40mE.\033[0;37;40m List PayWalls
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version,bitLN['NN']))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -844,7 +844,7 @@ def APILnPay():
     \033[1;32;40mC.\033[0;37;40m Wallet Balance
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version,bitLN['NN']))
     menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -865,7 +865,7 @@ def APIOpenNode():
     \033[1;32;40mC.\033[0;37;40m Wallet Balance
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;32;40mS.\033[0;37;40m Status
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version,bitLN['NN']))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -878,7 +878,7 @@ def APITippinMe():
     Version {}
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -892,7 +892,7 @@ def APITallyCo():
 
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 #-------------------------------- SETTINGS -----------------------------------------------
@@ -907,10 +907,10 @@ def settings4Local():
     Local node connection
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m Change Logo Design
-    \033[1;31;40mB.\033[0;37;40m Change Logo Colors
-    \033[1;31;40mC.\033[0;37;40m Change Clock Colors
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
+    \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
+    \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuSettingsLocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -923,10 +923,10 @@ def settings4Remote():
     Remote node connection
     Version {}
 
-    \033[1;32;40mA.\033[0;37;40m Change Logo Design
-    \033[1;31;40mB.\033[0;37;40m Change Logo Colors
-    \033[1;31;40mC.\033[0;37;40m Change Clock Colors
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
+    \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
+    \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
+    \u001b[31;1mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuSettingsRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -950,7 +950,7 @@ def designQ():
     \033[1;31;40mJ.\033[0;37;40m 3D
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -975,7 +975,7 @@ def designC():
     \033[1;31;40mJ.\033[0;37;40m 3D
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuDesignClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1000,7 +1000,7 @@ def designCRemote():
     \033[1;31;40mJ.\033[0;37;40m 3D
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuDesignClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1015,7 +1015,7 @@ def colors():
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;31;40mC.\033[0;37;40m Rainbow
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1030,7 +1030,7 @@ def colorsC():
 
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1045,7 +1045,7 @@ def colorsCRemote():
 
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1067,7 +1067,7 @@ def colorsSelectFront():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectFront(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1089,7 +1089,7 @@ def colorsSelectFrontClock():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectFrontClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1111,7 +1111,7 @@ def colorsSelectFrontClockRemote():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectFrontClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1133,7 +1133,7 @@ def colorsSelectBack():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectBack(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1155,7 +1155,7 @@ def colorsSelectBackClock():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectBackClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1177,7 +1177,7 @@ def colorsSelectBackClockRemote():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectBackClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1192,7 +1192,7 @@ def colorsSelectRainbow():
 
     \033[1;32;40mA.\033[0;37;40m Start Color
     \033[1;31;40mB.\033[0;37;40m End Color
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectRainbow(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1214,7 +1214,7 @@ def colorsSelectRainbowStart():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectRainbowStart(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -1236,7 +1236,7 @@ def colorsSelectRainbowEnd():
     \033[1;31;40mG.\033[0;37;40m Cyan
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return Main Menu
+    \033[1;36;40mR.\033[0;37;40m Return
     \n\n""".format(version))
     menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -2589,7 +2589,7 @@ def lightningnetworkLOCALcontrol(lncore):
         clear()
         blogo()
         localgetnetworkinfo()
-    elif lncore in ["Q", "q"]:
+    elif lncore in ["R", "r"]:
         menuSelection()
 
 def platfformsLOCALcontrol(platf):
@@ -2769,7 +2769,7 @@ def lightningnetworkREMOTEcontrol(lncore):
         clear()
         blogo()
         getinfo()
-    elif lncore in ["Q", "q"]:
+    elif lncore in ["R", "r"]:
         menuSelection()
 
 def platfformsREMOTEcontrol(platf):
@@ -2799,6 +2799,8 @@ def platfformsREMOTEcontrol(platf):
         weatherMenu()
     elif platf in ["L", "l"]:
         gameroom()
+    elif platf in ["R", "r"]:
+        menuSelection()
 
 def menuC(menuO): # Donation access Menu
     if menuO in ["A", "a"]:
@@ -2846,11 +2848,10 @@ def menuD(menuN): # Satnode access Menu
             gitclone()
         else:
             menuSelection()
-    elif menuN in ["D", "d"]:
+    elif menuN in ["R", "r"]:
         menuSelection()
 
 def menuE(menuQ): # Dev Donation access Menu
-
     if menuQ in ["A", "a"]:
         try:
             clear()
