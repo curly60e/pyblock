@@ -1426,137 +1426,6 @@ def aaccPPiOpenNode():
         print("\n\tSERIAL NUMBER NOT FOUND\n")
         input("Continue...")
 
-def aaccPPiGorched():
-    a = """
-    ----------------------------------------------------------
-
-                    TO PLAY THIS GAME YOU'LL
-                     NEED TO PAY 10000 SATS
-                        JUST ONE TIME
-               SAVE YOUR SN.CONF IN A SAFE PLACE
-
-    ----------------------------------------------------------
-    """
-    try:
-        bitLN = {"NN":"","pd":""}
-        if os.path.isfile('1984SN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("1984SN.conf", "rb")) # Load the file 'bclock.conf'
-            bitLN = bitData # Copy the variable pathv to 'path'
-            gameroom()
-        else:
-            clear()
-            blogo()
-            print(a)
-            node_not = input("Do you want to pay this Game Access with your node? Y/n: ")
-            if node_not in ["Y", "y"]:
-                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-                bitLN['NN'] = randrange(10000000)
-                curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "Games on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-                sh = os.popen(curl).read()
-                clear()
-                blogo()
-                n = str(sh)
-                d = json.loads(n)
-                q = d['payment_request']
-                c = q.lower()
-                if lndconnectload['ip_port']:
-                    while True:
-                        print("Lightning Invoice: " + c)
-                        payinvoice()
-                        dn = str(d['checking_id'])
-                        t.sleep(10)
-                        checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                        rsh = os.popen(checkcurl).read()
-                        clear()
-                        blogo()
-                        nn = str(rsh)
-                        dd = json.loads(nn)
-                        db = dd['paid']
-                        if db is not True:
-                            continue
-
-                        clear()
-                        blogo()
-                        tick()
-                        bitLN['pd'] = "PAID"
-                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                        gameroom()
-                        break
-
-                elif lndconnectload['ln']:
-                    while True:
-                        print("Lightning Invoice: " + c)
-                        localpayinvoice()
-                        dn = str(d['checking_id'])
-                        t.sleep(10)
-                        checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                        rsh = os.popen(checkcurl).read()
-                        clear()
-                        blogo()
-                        nn = str(rsh)
-                        dd = json.loads(nn)
-                        db = dd['paid']
-                        if db is not True:
-                            continue
-
-                        clear()
-                        blogo()
-                        tick()
-                        bitLN['pd'] = "PAID"
-                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                        gameroom()
-                        break
-            else:
-                qr = qrcode.QRCode(
-                version=1,
-                error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=10,
-                border=4,
-                )
-                bitLN['NN'] = randrange(10000000)
-                curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "Games on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-                sh = os.popen(curl).read()
-                clear()
-                blogo()
-                n = str(sh)
-                d = json.loads(n)
-                q = d['payment_request']
-                c = q.lower()
-                while True:
-                    print("\033[1;30;47m")
-                    qr.add_data(c)
-                    qr.print_ascii()
-                    print("\033[0;37;40m")
-                    qr.clear()
-                    print("Lightning Invoice: " + c)
-                    dn = str(d['checking_id'])
-                    t.sleep(10)
-                    checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                    rsh = os.popen(checkcurl).read()
-                    clear()
-                    blogo()
-                    nn = str(rsh)
-                    dd = json.loads(nn)
-                    db = dd['paid']
-                    if db is True:
-                        clear()
-                        blogo()
-                        tick()
-                        bitLN['pd'] = "PAID"
-                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                        gameroom()
-                        break
-                    else:
-                        continue
-
-    except:
-        clear()
-        blogo()
-        print("\n\tSERIAL NUMBER NOT FOUND\n")
-        input("Continue...")
-
 
 def aaccPPiTippinMe():
     if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
@@ -2456,8 +2325,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         miscellaneousLOCAL()
 
 def miscellaneousLOCALmenu(misce):
-    if misce in ["A", "a"]:
-        while True:
+    while True:
+        if misce in ["A", "a"]:
             try:
                 clear()
                 blogo()
@@ -2476,16 +2345,16 @@ def miscellaneousLOCALmenu(misce):
                 tmp()
             except:
                 break
-    elif misce in ["B", "b"]:
-        while True:
-            try:
-                clear()
-                blogo()
-                close()
-                sysinfoDetail()
-                t.sleep(1)
-            except:
-                break
+        elif misce in ["B", "b"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    close()
+                    sysinfoDetail()
+                    t.sleep(1)
+                except:
+                    break
 
 def decodeHexLOCAL(hexloc):
     if hexloc in ["A", "a"]:
@@ -2701,8 +2570,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         miscellaneousREMOTE()
 
 def miscellaneousREMOTEmenu(misce):
-    if misce in ["A", "a"]:
-        while True:
+    while True:
+        if misce in ["A", "a"]:
             try:
                 clear()
                 blogo()
@@ -2721,16 +2590,16 @@ def miscellaneousREMOTEmenu(misce):
                 tmp()
             except:
                 break
-    elif misce in ["B", "b"]:
-        while True:
-            try:
-                clear()
-                blogo()
-                close()
-                sysinfoDetail()
-                t.sleep(1)
-            except:
-                break
+        elif misce in ["B", "b"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    close()
+                    sysinfoDetail()
+                    t.sleep(1)
+                except:
+                    break
 
 def lightningnetworkREMOTEcontrol(lncore):
     if lncore in ["A", "a"]:
