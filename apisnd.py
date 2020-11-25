@@ -135,17 +135,20 @@ def apisenderFile():
     sh = os.popen(curl)
     sh0 = sh.read()
     while True:
-        if 'Bid too low' in sh0:
-            print("\n\t\033[1;31;40mATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\033[0;37;40m\n")
-            print("Try again...\n")
-            url = 'https://api.blockstream.space/order'
-            message = input("\nInsert the path to the File: ")
-            print("ATENTION: Minimum amount for sending a File is 50000 MSats")
-            amountmsat = input("\nInsert the amount in MSats: ")
-            curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
-            sh = os.popen(curl)
-            sh0 = sh.read()
-        elif 'lightning_invoice' in sh0:
+        try:
+            if 'Bid too low' in sh0:
+                print("\n\t\033[1;31;40mATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\033[0;37;40m\n")
+                print("Try again...\n")
+                url = 'https://api.blockstream.space/order'
+                message = input("\nInsert the path to the File: ")
+                print("ATENTION: Minimum amount for sending a File is 50000 MSats")
+                amountmsat = input("\nInsert the amount in MSats: ")
+                curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
+                sh = os.popen(curl)
+                sh0 = sh.read()
+            elif 'lightning_invoice' in sh0:
+                break
+        except:
             break
 
     sh1 = str(sh0)
@@ -179,29 +182,32 @@ def apisenderFile():
     print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m")
     clear()
     blogo()
-    node_not = input("Do you want to pay this message with your node? Y/n: ")
-    if node_not in ["Y", "y"]:
-        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        if lndconnectload['ip_port']:
-            print("\nInvoice: " + cln + "\n")
-            payinvoice()
-        elif lndconnectload['ln']:
-            print("\nInvoice: " + cln + "\n")
-            localpayinvoice()
-    elif node_not in ["N", "n"]:
-        print("\033[1;30;47m")
-        qr.add_data(cln)
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        print("\nLND Invoice: " + cln)
-        sh.close()
-        continue1 = input("Continue? Y: ")
-        if continue1 == "Y" or continue1 == "y":
-            donate()
-        else:
-            t.sleep(2)
+    try:
+        node_not = input("Do you want to pay this message with your node? Y/n: ")
+        if node_not in ["Y", "y"]:
+            lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            if lndconnectload['ip_port']:
+                print("\nInvoice: " + cln + "\n")
+                payinvoice()
+            elif lndconnectload['ln']:
+                print("\nInvoice: " + cln + "\n")
+                localpayinvoice()
+        elif node_not in ["N", "n"]:
+            print("\033[1;30;47m")
+            qr.add_data(cln)
+            qr.print_ascii()
+            print("\033[0;37;40m")
+            print("\nLND Invoice: " + cln)
+            sh.close()
+            continue1 = input("Continue? Y: ")
+            if continue1 == "Y" or continue1 == "y":
+                donate()
+            else:
+                t.sleep(2)
+    except:
+        pass
 
 def devAddr():
     qr = qrcode.QRCode(
@@ -224,31 +230,34 @@ def devAddr():
     ln1 = ln.strip('"')
     clear()
     blogo()
-    node_not = input("Do you want to pay this tip with your node? Y/n: ")
-    if node_not in ["Y", "y"]:
-        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        if lndconnectload['ip_port']:
-            print("\nInvoice: " + ln1 + "\n")
-            payinvoice()
-        elif lndconnectload['ln']:
-            print("\nInvoice: " + ln1 + "\n")
-            localpayinvoice()
-    elif node_not in ["N", "n"]:
-        print("\033[1;30;47m")
-        qr.add_data(ln1)
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        print("LND Invoice: " + ln1)
-        response.close()
+    try:
+        node_not = input("Do you want to pay this tip with your node? Y/n: ")
+        if node_not in ["Y", "y"]:
+            lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
+            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            if lndconnectload['ip_port']:
+                print("\nInvoice: " + ln1 + "\n")
+                payinvoice()
+            elif lndconnectload['ln']:
+                print("\nInvoice: " + ln1 + "\n")
+                localpayinvoice()
+        elif node_not in ["N", "n"]:
+            print("\033[1;30;47m")
+            qr.add_data(ln1)
+            qr.print_ascii()
+            print("\033[0;37;40m")
+            print("LND Invoice: " + ln1)
+            response.close()
+    except:
+        pass
 
 def donate():
     print("""\t\t
     \033[1;31;40mPyBLOCK\033[0;37;40m Menu
 
     \033[1;32;40mA.\033[0;37;40m Donate
-    <<< Back Main Menu Press Control + C
+    <<< Back Control + C
     \n\n""")
     menuB = (input("\033[1;32;40mSelect option: \033[0;37;40m"))
     if menuB in ["A", "a"]:
