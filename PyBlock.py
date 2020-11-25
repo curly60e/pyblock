@@ -1540,17 +1540,16 @@ def aaccPPiGorched():
                     nn = str(rsh)
                     dd = json.loads(nn)
                     db = dd['paid']
-                    if db is True:
-                        clear()
-                        blogo()
-                        tick()
-                        bitLN['pd'] = "PAID"
-                        pickle.dump(bitLN, open("1984SN.conf", "wb"))
-                        gameroom()
-                        break
-                    else:
+                    if db is not True:
                         continue
 
+                    clear()
+                    blogo()
+                    tick()
+                    bitLN['pd'] = "PAID"
+                    pickle.dump(bitLN, open("1984SN.conf", "wb"))
+                    gameroom()
+                    break
     except:
         clear()
         blogo()
@@ -2456,8 +2455,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         miscellaneousLOCAL()
 
 def miscellaneousLOCALmenu(misce):
-    if misce in ["A", "a"]:
-        while True:
+    while True:
+        if misce in ["A", "a"]:
             try:
                 clear()
                 blogo()
@@ -2476,8 +2475,7 @@ def miscellaneousLOCALmenu(misce):
                 tmp()
             except:
                 break
-    elif misce in ["B", "b"]:
-        while True:
+        elif misce in ["B", "b"]:
             try:
                 clear()
                 blogo()
@@ -2512,13 +2510,12 @@ def decodeHexLOCAL(hexloc):
             readHexTx()
             while True:
                 r = input("Do you want to continue decoding? Y/n: ")
-                if r in ["Y", "y"]:
-                    clear()
-                    blogo()
-                    sysinfo()
-                    readHexTx()
-                else:
+                if r not in ["Y", "y"]:
                     break
+                clear()
+                blogo()
+                sysinfo()
+                readHexTx()
         except:
             pass
 def lightningnetworkLOCALcontrol(lncore):
@@ -2701,8 +2698,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         miscellaneousREMOTE()
 
 def miscellaneousREMOTEmenu(misce):
-    if misce in ["A", "a"]:
-        while True:
+    while True:
+        if misce in ["A", "a"]:
             try:
                 clear()
                 blogo()
@@ -2721,8 +2718,7 @@ def miscellaneousREMOTEmenu(misce):
                 tmp()
             except:
                 break
-    elif misce in ["B", "b"]:
-        while True:
+        elif misce in ["B", "b"]:
             try:
                 clear()
                 blogo()
