@@ -484,16 +484,16 @@ def lightningnetworkREMOTE():
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
-    \033[1;31;40mA.\033[0;37;40m New Invoice
-    \033[1;31;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m New Bitcoin Address
-    \033[1;35;40mD.\033[0;37;40m List Invoices
-    \033[1;35;40mE.\033[0;37;40m Channel Balance
-    \033[1;35;40mF.\033[0;37;40m Show Channels
-    \033[1;35;40mG.\033[0;37;40m Onchain Balance
-    \033[1;35;40mH.\033[0;37;40m List Onchain Transactions
-    \033[1;35;40mI.\033[0;37;40m Get Node Info
-    \033[1;33;40mQ.\033[0;37;40m Return
+    \u001b[33;1mA.\033[0;37;40m New Invoice
+    \u001b[33;1mB.\033[0;37;40m Pay Invoice
+    \u001b[33;1mC.\033[0;37;40m New Bitcoin Address
+    \u001b[33;1mD.\033[0;37;40m List Invoices
+    \u001b[33;1mE.\033[0;37;40m Channel Balance
+    \u001b[33;1mF.\033[0;37;40m Show Channels
+    \u001b[33;1mG.\033[0;37;40m Onchain Balance
+    \u001b[33;1mH.\033[0;37;40m List Onchain Transactions
+    \u001b[33;1mI.\033[0;37;40m Get Node Info
+    \u001b[31;1mQ.\033[0;37;40m Return
     \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     lightningnetworkREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
