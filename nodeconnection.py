@@ -141,28 +141,28 @@ def countdownblockConn():
     input("\nContinue...")
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
-    try:
-        a = rpc('getblockchaininfo')
-        d = a
-        clear()
-        print("\033[1;32;40m")
-        blogo()
-        print("\033[0;37;40m")
-        print("<<< Back to the Main Menu Press Control + C.\n\n")
-        print("\n----------------------------------------------------------------------------------------------------")
-        print("""
-        \tGET BLOCKCHAIN INFORMATION
-        Chain: {}
-        Blocks: {}
-        Best BlockHash: {}
-        Difficulty: {}
-        Verification Progress: {}
-        Size on Disk: {}
-        Pruned: {}
-        """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-        print("----------------------------------------------------------------------------------------------------\n")
-    except:
-        pass
+    while True:
+        try:
+            a = rpc('getblockchaininfo')
+            d = a
+            clear()
+            blogo()
+            closed()
+            print("""
+            ----------------------------------------------------------------------------
+            \tGET BLOCKCHAIN INFORMATION
+            Chain: {}
+            Blocks: {}
+            Best BlockHash: {}
+            Difficulty: {}
+            Verification Progress: {}
+            Size on Disk: {}
+            Pruned: {}
+            ----------------------------------------------------------------------------
+            """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
+            t.sleep(2)
+        except:
+            break
 
 def remoteconsole(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
