@@ -537,7 +537,8 @@ def localgetnetworkinfo():
 
 def localkeysend():
     try:
-        print("\n\tYou ar going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.")
+        closed()
+        print("\n\tYou ar going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.\n")
         lncli = " sendpayment "
         node = input("Send to NodeID: ")
         amount = input("Amount in sats: ")
@@ -555,13 +556,16 @@ def localchannelbalance():
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     d = json.loads(lsd0)
-    print("\n----------------------------------------------------------------------------------------------------")
     print("""
+    ---------------------------------------------------------
+
     \tLOCAL CHANNEL BALANCE
+
     Balance: {} sats
     Pending Channels: {} sats
+
+    ---------------------------------------------------------
     """.format(d['balance'], d['pending_open_balance']))
-    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 def localnewaddress():
@@ -909,13 +913,16 @@ def channelbalance():
     url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
-    print("\n----------------------------------------------------------------------------------------------------")
     print("""
+    ---------------------------------------------------------
+
     \tLOCAL CHANNEL BALANCE
+
     Balance: {} sats
     Pending Channels: {} sats
+
+    ---------------------------------------------------------
     """.format(a['balance'], a['pending_open_balance']))
-    print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
 def listonchaintxs():
