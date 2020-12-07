@@ -24,6 +24,8 @@ grpcio
 protobuf==3.13.0
 six==1.15.0
 robohash
+pillow
+numpy
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
