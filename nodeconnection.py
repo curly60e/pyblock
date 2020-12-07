@@ -110,36 +110,6 @@ def remotegetblock():
         else:
             break
 
-def countdownblockConn():
-    b = rpc('getblockcount')
-    c = str(b)
-    a = int(input("Insert your block target: "))
-    clear()
-    blogo()
-    print("""
-    --------------------- BLOCK {} COUNTDOWN ---------------------
-
-     """.format(a))
-    print("\nCountDown:", int(c))
-    n = int(c)
-    q = int(a) - int(c)
-    print("Remaining: " + str(q) + " Blocks\n")
-    while a > int(c):
-        try:
-            b = rpc('getblockcount')
-            c = str(b)
-            if a == c:
-                break
-            elif n != int(c):
-                print("CountDown: ", c)
-                q = int(a) - int(c)
-                print("Remaining: " + str(q) + " Blocks\n")
-                n = int(c)
-        except:
-            break
-    print("#RunTheNumbers " + str(a) + " PyBLOCK")
-    input("\nContinue...")
-
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     while True:
         try:
