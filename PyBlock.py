@@ -29,7 +29,7 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 
 
-version = "0.9.0"
+version = "0.9.1"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -232,33 +232,36 @@ def countdownblock():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
-    a = input("Insert your block target: ")
-    clear()
-    blogo()
-    print("""
-    --------------------- BLOCK {} COUNTDOWN ---------------------
+    try:
+        a = input("Insert your block target: ")
+        clear()
+        blogo()
+        print("""
+        --------------------- BLOCK {} COUNTDOWN ---------------------
 
-     """.format(a))
-    n = int(b)
-    print("\nCountDown:", b)
-    q = int(a) - int(b)
-    print("Remaining: " + str(q) + " Blocks\n")
-    while a > b:
-        try:
-            bitcoinclient = path['bitcoincli'] + " getblockcount"
-            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-            b = block
-            if a == b:
+         """.format(a))
+        n = int(b)
+        print("\nCountDown:", b)
+        q = int(a) - int(b)
+        print("Remaining: " + str(q) + " Blocks\n")
+        while a > b:
+            try:
+                bitcoinclient = path['bitcoincli'] + " getblockcount"
+                block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+                b = block
+                if a == b:
+                    break
+                elif n != int(b):
+                    print("CountDown: ", b)
+                    q = int(a) - int(b)
+                    print("Remaining: " + str(q) + " Blocks\n")
+                    n = int(b)
+            except:
                 break
-            elif n != int(b):
-                print("CountDown: ", b)
-                q = int(a) - int(b)
-                print("Remaining: " + str(q) + " Blocks\n")
-                n = int(b)
-        except:
-            break
-    print("#RunTheNumbers " + str(a) + " PyBLOCK")
-    input("\nContinue...")
+        print("#RunTheNumbers " + str(a) + " PyBLOCK")
+        input("\nContinue...")
+    except:
+        menuSelection()
 
 def localHalving():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
@@ -2936,6 +2939,7 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         t.sleep(3)
         screensv()
 
+
 def bitcoincoremenuLOCALcontrolA(bcore):
     if bcore in ["A", "a"]:
         while True:
@@ -3393,21 +3397,24 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    clear()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    try:
+        clear()
+        path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
-    if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
-    else:
-        blogo()
-        print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-        print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
-        path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
-        path['rpcuser'] = input("RPC User: ")
-        path['rpcpass'] = input("RPC Password: ")
-        print("\n\tLocal Bitcoin Core Node connection.\n")
-        path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-        pickle.dump(path, open("bclock.conf", "wb"))
+        if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+            pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+            path = pathv # Copy the variable pathv to 'path'
+        else:
+            blogo()
+            print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
+            print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
+            path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
+            path['rpcuser'] = input("RPC User: ")
+            path['rpcpass'] = input("RPC Password: ")
+            print("\n\tLocal Bitcoin Core Node connection.\n")
+            path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
+            pickle.dump(path, open("bclock.conf", "wb"))
 
-    menuSelection()
+        menuSelection()
+    except:
+        sys.exit(101)
