@@ -7,11 +7,16 @@ import pickle
 import os
 import os.path
 import qrcode
+import sys
 import simplejson as json
 import time as t
+import numpy as np
 from cfonts import render, say
 from art import *
 from pblogo import *
+from PIL import Image
+from robohash import Robohash
+
 
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
 settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
@@ -82,6 +87,7 @@ def remoteHalving():
     """.format("0" if int(c) == 210000 else oneh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 420000 else twoh,"\033[1;32;40mCOMPLETE\033[0;37;40m", "0" if int(c) == 630000 else thrh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 840000 else forh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 840000 else "\033[1;35;40mPENDING\033[0;37;40m", "0" if int(c) >= 1050000 else fifh , "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1050000 else "\033[1;35;40mPENDING\033[0;37;40m", sixh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1260000 else "\033[1;35;40mPENDING\033[0;37;40m", sevh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1470000 else "\033[1;35;40mPENDING\033[0;37;40m", eith,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1680000 else "\033[1;35;40mPENDING\033[0;37;40m", ninh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m", tenh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m")
     print(q)
     input("\nContinue...")
+
 
 def remotegetblock():
     b = rpc('getblockcount')
@@ -186,6 +192,7 @@ def locallistpeersQQ():
                 s = item_
 
                 print("PubKey: " + s['pub_key'] + " @" + s['address'])
+
             nd = input("\nSelect PubKey: ")
             for item in n:
                 s = item

@@ -14,6 +14,7 @@ import subprocess
 import requests
 import json
 import simplejson as json
+import numpy as np
 from cfonts import render, say
 from clone import *
 from donation import *
@@ -27,9 +28,12 @@ from ppi import *
 from termcolor import colored, cprint
 from nodeconnection import *
 from terminal_matrix.matrix import *
+from PIL import Image
+from robohash import Robohash
 
 
-version = "0.9.1"
+
+version = "0.9.2"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -262,7 +266,7 @@ def countdownblock():
         input("\nContinue...")
     except:
         menuSelection()
-        
+
 def countdownblockConn():
     b = rpc('getblockcount')
     c = str(b)
@@ -295,6 +299,7 @@ def countdownblockConn():
         input("\nContinue...")
     except:
         menuSelection()
+
 
 def localHalving():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
@@ -332,6 +337,64 @@ def localHalving():
     input("\nContinue...")
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
+#--------------------------------- NYMs -----------------------------------
+
+def get_ansi_color_code(r, g, b):
+    if r == g and g == b:
+        if r < 8:
+            return 16
+        if r > 248:
+            return 231
+        return round(((r - 8) / 247) * 24) + 232
+    return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
+
+
+def get_color(r, g, b):
+    return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
+
+
+def robotNym():
+    try:
+        if path['bitcoincli']:
+            lncli = " getinfo"
+            lsd = os.popen(lndconnectload['ln'] + lncli).read()
+            lsd0 = str(lsd)
+            alias = json.loads(lsd0)
+        else:
+            cert_path = lndconnectload["tls"]
+            macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+            headers = {'Grpc-Metadata-macaroon': macaroon}
+            url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+            r = requests.get(url, headers=headers, verify=cert_path)
+            alias = r.json()
+
+        hash = alias['identity_pubkey']
+        rh = Robohash(hash)
+        rh.assemble(roboset='set1')
+        with open("file.png", "wb") as f:
+        	rh.img.save(f, format="png")
+
+        img_path = open("file.png", "rb")
+        img = Image.open(img_path)
+
+        h = 40
+        w = int((img.width / img.height) * 90)
+
+        img = img.resize((w,h), Image.ANTIALIAS)
+        img_arr = np.asarray(img)
+        h,w,c = img_arr.shape
+
+        for x in range(h):
+            for y in range(w):
+                pix = img_arr[x][y]
+                print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+            print()
+        image = "\n\t\t\t\t\t    \u001b[31;1mNode\u001b[38;5;93mNym\033[0;37;40m\n"+ "\n\t         \u001b[33;1m" + alias['identity_pubkey'] + "\033[0;37;40m"
+        print(image)
+        input("\n\nContinue...")
+    except:
+        menuSelection()
+
 #--------------------------------- Menu section -----------------------------------
 
 def MainMenuLOCAL(): #Main Menu
@@ -348,12 +411,12 @@ def MainMenuLOCAL(): #Main Menu
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
-
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
+
 
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
     \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
@@ -385,6 +448,7 @@ def MainMenuREMOTE(): #Main Menu
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
+
 
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
     \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
@@ -2971,6 +3035,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         t.sleep(3)
         screensv()
+    elif menuS in ["nym", "Nym", "NYM", "nYm", "nyM", "NYm", "NyM", "nYM"]:
+        clear()
+        blogo()
+        robotNym()
 
 
 def bitcoincoremenuLOCALcontrolA(bcore):
@@ -3230,6 +3298,10 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         clear()
         t.sleep(3)
         screensv()
+    elif menuS in ["nym", "Nym", "NYM", "nYm", "nyM", "NYm", "NyM", "nYM"]:
+        clear()
+        blogo()
+        robotNym()
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
@@ -3423,6 +3495,7 @@ def testClockRemote():
         pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
     except:
         pass
+
 
 #--------------------------------- End Main Menu execution --------------------------------
 
