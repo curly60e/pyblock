@@ -262,6 +262,39 @@ def countdownblock():
         input("\nContinue...")
     except:
         menuSelection()
+        
+def countdownblockConn():
+    b = rpc('getblockcount')
+    c = str(b)
+    try:
+        a = int(input("Insert your block target: "))
+        clear()
+        blogo()
+        print("""
+        --------------------- BLOCK {} COUNTDOWN ---------------------
+
+         """.format(a))
+        print("\nCountDown:", int(c))
+        n = int(c)
+        q = int(a) - int(c)
+        print("Remaining: " + str(q) + " Blocks\n")
+        while a > int(c):
+            try:
+                b = rpc('getblockcount')
+                c = str(b)
+                if a == c:
+                    break
+                elif n != int(c):
+                    print("CountDown: ", c)
+                    q = int(a) - int(c)
+                    print("Remaining: " + str(q) + " Blocks\n")
+                    n = int(c)
+            except:
+                break
+        print("#RunTheNumbers " + str(a) + " PyBLOCK")
+        input("\nContinue...")
+    except:
+        menuSelection()
 
 def localHalving():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
