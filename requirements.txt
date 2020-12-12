@@ -26,6 +26,11 @@ six==1.15.0
 robohash
 pillow
 numpy
+ansi
+urwid
+dashing
+emoji
+tabulate
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
