@@ -397,12 +397,10 @@ def robotNym():
 
 #---------------------------------Warden Terminal----------------------------------
 def callGitWardenTerminal():
-    if os.path.isdir('warden_terminal'):
-        os.system("cd warden_terminal && python3 node_warden.py")
-    else:
+    if not os.path.isdir('warden_terminal'):
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
         os.system(git)
-        os.system("cd warden_terminal && python3 node_warden.py")
+    os.system("cd warden_terminal && python3 node_warden.py")
 #--------------------------------- Menu section -----------------------------------
 
 def MainMenuLOCAL(): #Main Menu
