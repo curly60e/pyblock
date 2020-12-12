@@ -84,7 +84,6 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
         except:
             break
 
-
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
     os.system(path['bitcoincli'] + bitcoincli)
@@ -395,6 +394,15 @@ def robotNym():
     except:
         menuSelection()
 
+
+#---------------------------------Warden Terminal----------------------------------
+def callGitWardenTerminal():
+    if os.path.isdir('warden_terminal'):
+        os.system("cd warden_terminal && python3 node_warden.py")
+    else:
+        git = "git clone https://github.com/pxsocs/warden_terminal.git"
+        os.system(git)
+        os.system("cd warden_terminal && python3 node_warden.py")
 #--------------------------------- Menu section -----------------------------------
 
 def MainMenuLOCAL(): #Main Menu
@@ -3039,7 +3047,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         robotNym()
-
+    elif menuS in ["wt", "WT", "Wt", "wT"]:
+        clear()
+        blogo()
+        callGitWardenTerminal()
 
 def bitcoincoremenuLOCALcontrolA(bcore):
     if bcore in ["A", "a"]:
@@ -3522,5 +3533,7 @@ while True: # Loop
             pickle.dump(path, open("bclock.conf", "wb"))
 
         menuSelection()
+
+
     except:
         sys.exit(101)
