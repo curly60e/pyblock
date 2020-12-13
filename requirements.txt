@@ -32,6 +32,8 @@ dashing
 emoji
 tabulate
 python-dateutil
+pyttsx3
+yaspin
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
