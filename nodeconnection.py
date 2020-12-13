@@ -190,7 +190,27 @@ def locallistpeersQQ():
             print("\n\tLIST PEERS\n")
             for item_ in n:
                 s = item_
+                hash = s['pub_key']
+                rh = Robohash(hash)
+                rh.assemble(roboset='set1')
+                with open(hash +".png", "wb") as f:
+                	rh.img.save(f, format="png")
 
+                img_path = open(hash +".png", "rb")
+                img = Image.open(img_path)
+
+                h = 2
+                w = int((img.width / img.height) * 5)
+
+                img = img.resize((w,h), Image.ANTIALIAS)
+                img_arr = np.asarray(img)
+                h,w,c = img_arr.shape
+
+                for x in range(h):
+                    for y in range(w):
+                        pix = img_arr[x][y]
+                        print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+                    print()
                 print("PubKey: " + s['pub_key'] + " @" + s['address'])
 
             nd = input("\nSelect PubKey: ")
@@ -198,6 +218,25 @@ def locallistpeersQQ():
                 s = item
                 nn = s['pub_key']
                 if nd == nn:
+                    hash = s['pub_key']
+                    rh = Robohash(hash)
+                    rh.assemble(roboset='set1')
+
+                    img_path = open(hash +".png", "rb")
+                    img = Image.open(img_path)
+
+                    h = 20
+                    w = int((img.width / img.height) * 50)
+
+                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img_arr = np.asarray(img)
+                    h,w,c = img_arr.shape
+
+                    for x in range(h):
+                        for y in range(w):
+                            pix = img_arr[x][y]
+                            print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+                        print()
                     print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                         PEER DECODED\n
@@ -364,6 +403,27 @@ def locallistchannels():
             print("\n\tLIST CHANNELS\n")
             for item_ in n:
                 s = item_
+                hash = s['remote_pubkey']
+                rh = Robohash(hash)
+                rh.assemble(roboset='set1')
+                with open(hash +".png", "wb") as f:
+                	rh.img.save(f, format="png")
+
+                img_path = open(hash +".png", "rb")
+                img = Image.open(img_path)
+
+                h = 2
+                w = int((img.width / img.height) * 5)
+
+                img = img.resize((w,h), Image.ANTIALIAS)
+                img_arr = np.asarray(img)
+                h,w,c = img_arr.shape
+
+                for x in range(h):
+                    for y in range(w):
+                        pix = img_arr[x][y]
+                        print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+                    print()
                 print("Node ID: " + s['remote_pubkey'])
 
             nd = input("\nSelect a Node ID: ")
@@ -371,6 +431,25 @@ def locallistchannels():
                 s = item
                 nn = s['remote_pubkey']
                 if nd == nn:
+                    hash = s['remote_pubkey']
+                    rh = Robohash(hash)
+                    rh.assemble(roboset='set1')
+
+                    img_path = open(hash +".png", "rb")
+                    img = Image.open(img_path)
+
+                    h = 20
+                    w = int((img.width / img.height) * 50)
+
+                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img_arr = np.asarray(img)
+                    h,w,c = img_arr.shape
+
+                    for x in range(h):
+                        for y in range(w):
+                            pix = img_arr[x][y]
+                            print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+                        print()
                     print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \tCHANNEL DECODED
@@ -400,6 +479,27 @@ def localgetinfo():
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     d = json.loads(lsd0)
+    hash = d['identity_pubkey']
+    rh = Robohash(hash)
+    rh.assemble(roboset='set1')
+    with open(hash +".png", "wb") as f:
+    	rh.img.save(f, format="png")
+
+    img_path = open(hash +".png", "rb")
+    img = Image.open(img_path)
+
+    h = 20
+    w = int((img.width / img.height) * 50)
+
+    img = img.resize((w,h), Image.ANTIALIAS)
+    img_arr = np.asarray(img)
+    h,w,c = img_arr.shape
+
+    for x in range(h):
+        for y in range(w):
+            pix = img_arr[x][y]
+            print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+        print()
     print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \tNODE INFORMATION
@@ -818,6 +918,27 @@ def getinfo():
     url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
+    hash = a['identity_pubkey']
+    rh = Robohash(hash)
+    rh.assemble(roboset='set1')
+    with open(hash +".png", "wb") as f:
+    	rh.img.save(f, format="png")
+
+    img_path = open(hash +".png", "rb")
+    img = Image.open(img_path)
+
+    h = 20
+    w = int((img.width / img.height) * 50)
+
+    img = img.resize((w,h), Image.ANTIALIAS)
+    img_arr = np.asarray(img)
+    h,w,c = img_arr.shape
+
+    for x in range(h):
+        for y in range(w):
+            pix = img_arr[x][y]
+            print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+        print()
     print("\n----------------------------------------------------------------------------------------------------")
     print("""
     \t NODE INFORMATION
@@ -839,6 +960,21 @@ def getinfo():
     print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
+#--------------------------------- NYMs -----------------------------------
+
+def get_ansi_color_code(r, g, b):
+    if r == g and g == b:
+        if r < 8:
+            return 16
+        if r > 248:
+            return 231
+        return round(((r - 8) / 247) * 24) + 232
+    return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
+
+
+def get_color(r, g, b):
+    return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
+
 def channels():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -858,6 +994,27 @@ def channels():
             print("\n\tLIST CHANNELS\n")
             for r in range(len(n)):
                 s = n[r]
+                hash = s['remote_pubkey']
+                rh = Robohash(hash)
+                rh.assemble(roboset='set1')
+                with open(hash +".png" , "wb") as f:
+                	rh.img.save(f, format="png")
+
+                img_path = open(hash +".png" , "rb")
+                img = Image.open(img_path)
+
+                h = 2
+                w = int((img.width / img.height) * 5)
+
+                img = img.resize((w,h), Image.ANTIALIAS)
+                img_arr = np.asarray(img)
+                h,w,c = img_arr.shape
+
+                for x in range(h):
+                    for y in range(w):
+                        pix = img_arr[x][y]
+                        print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+                    print()
                 print("Node ID: " + s['remote_pubkey'])
 
             nd = input("\nSelect a Node ID: ")
@@ -865,6 +1022,25 @@ def channels():
                 s = item
                 nn = s['remote_pubkey']
                 if nd == nn:
+                    hash = s['remote_pubkey']
+                    rh = Robohash(hash)
+                    rh.assemble(roboset='set1')
+
+                    img_path = open(hash +".png" , "rb")
+                    img = Image.open(img_path)
+
+                    h = 20
+                    w = int((img.width / img.height) * 50)
+
+                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img_arr = np.asarray(img)
+                    h,w,c = img_arr.shape
+
+                    for x in range(h):
+                        for y in range(w):
+                            pix = img_arr[x][y]
+                            print(get_color(pix[0], pix[1], pix[2]), sep='', end='')
+                        print()
                     print("\n----------------------------------------------------------------------------------------------------")
                     print("""
                     \tCHANNEL DECODED
