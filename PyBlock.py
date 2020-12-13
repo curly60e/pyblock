@@ -3311,6 +3311,10 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         robotNym()
+    elif menuS in ["wt", "WT", "Wt", "wT"]:
+        clear()
+        blogo()
+        callGitWardenTerminal()
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
