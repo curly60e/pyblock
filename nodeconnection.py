@@ -193,8 +193,19 @@ def locallistpeersQQ():
                 hash = s['pub_key']
                 rh = Robohash(hash)
                 rh.assemble(roboset='set1')
-                with open(hash +".png", "wb") as f:
-                	rh.img.save(f, format="png")
+                if not os.path.isfile(str(hash + ".png")):
+                    with open(hash +".png", "wb") as f:
+                    	rh.img.save(f, format="png")
+
+                    img_path = open(hash +".png", "rb")
+                    img = Image.open(img_path)
+
+                    h = 2
+                    w = int((img.width / img.height) * 5)
+
+                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img_arr = np.asarray(img)
+                    h,w,c = img_arr.shape
 
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
@@ -406,8 +417,19 @@ def locallistchannels():
                 hash = s['remote_pubkey']
                 rh = Robohash(hash)
                 rh.assemble(roboset='set1')
-                with open(hash +".png", "wb") as f:
-                	rh.img.save(f, format="png")
+                if not os.path.isfile(str(hash + ".png")):
+                    with open(hash +".png", "wb") as f:
+                    	rh.img.save(f, format="png")
+
+                    img_path = open(hash +".png", "rb")
+                    img = Image.open(img_path)
+
+                    h = 2
+                    w = int((img.width / img.height) * 5)
+
+                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img_arr = np.asarray(img)
+                    h,w,c = img_arr.shape
 
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
@@ -482,8 +504,19 @@ def localgetinfo():
     hash = d['identity_pubkey']
     rh = Robohash(hash)
     rh.assemble(roboset='set1')
-    with open(hash +".png", "wb") as f:
-    	rh.img.save(f, format="png")
+    if not os.path.isfile(str(hash + ".png")):
+        with open(hash +".png", "wb") as f:
+        	rh.img.save(f, format="png")
+
+        img_path = open(hash +".png", "rb")
+        img = Image.open(img_path)
+
+        h = 20
+        w = int((img.width / img.height) * 50)
+
+        img = img.resize((w,h), Image.ANTIALIAS)
+        img_arr = np.asarray(img)
+        h,w,c = img_arr.shape
 
     img_path = open(hash +".png", "rb")
     img = Image.open(img_path)
@@ -921,8 +954,19 @@ def getinfo():
     hash = a['identity_pubkey']
     rh = Robohash(hash)
     rh.assemble(roboset='set1')
-    with open(hash +".png", "wb") as f:
-    	rh.img.save(f, format="png")
+    if not os.path.isfile(str(hash + ".png")):
+        with open(hash +".png", "wb") as f:
+        	rh.img.save(f, format="png")
+
+        img_path = open(hash +".png", "rb")
+        img = Image.open(img_path)
+
+        h = 20
+        w = int((img.width / img.height) * 50)
+
+        img = img.resize((w,h), Image.ANTIALIAS)
+        img_arr = np.asarray(img)
+        h,w,c = img_arr.shape
 
     img_path = open(hash +".png", "rb")
     img = Image.open(img_path)
@@ -997,10 +1041,21 @@ def channels():
                 hash = s['remote_pubkey']
                 rh = Robohash(hash)
                 rh.assemble(roboset='set1')
-                with open(hash +".png" , "wb") as f:
-                	rh.img.save(f, format="png")
+                if not os.path.isfile(str(hash + ".png")):
+                    with open(hash +".png", "wb") as f:
+                    	rh.img.save(f, format="png")
 
-                img_path = open(hash +".png" , "rb")
+                    img_path = open(hash +".png", "rb")
+                    img = Image.open(img_path)
+
+                    h = 2
+                    w = int((img.width / img.height) * 5)
+
+                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img_arr = np.asarray(img)
+                    h,w,c = img_arr.shape
+
+                img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
 
                 h = 2
