@@ -24,17 +24,8 @@ six==1.15.0
 robohash
 pillow
 numpy
-ansi
-urwid
-dashing
-emoji
-tabulate
-python-dateutil
-pyttsx3
-yaspin
-pysocks
-pyfiglet
-click
+googleapis-common-protos==1.52.0
+grpcio
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
