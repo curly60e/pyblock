@@ -1,4 +1,8 @@
-<img src="./resources/images/main.PNG" width="80%" />
+<img src="./resources/images/Logo.PNG" width="80%" />
+
+<br />
+
+<img src="./resources/images/main.PNG" width="50%" />
 
 <br />
 
