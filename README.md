@@ -6,10 +6,6 @@
 
 <br />
 
-<img src="./resources/images/design2.PNG" width="50%" />
-
-<br />
-
 <img src="./resources/images/image.png" width="50%" />
 
 <br />
