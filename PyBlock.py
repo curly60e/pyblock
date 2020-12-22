@@ -33,7 +33,7 @@ from robohash import Robohash
 
 
 
-version = "0.9.3"
+version = "0.9.4"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
