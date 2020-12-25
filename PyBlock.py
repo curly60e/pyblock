@@ -200,8 +200,6 @@ def design():
             a = b
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print(output)
-        elif x == a:
-            pass
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
