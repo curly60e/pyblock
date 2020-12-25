@@ -172,7 +172,7 @@ def design():
     b = block
     a = b
     output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-    print(output)
+    print("\x1b[?25l" + output)
     while True:
         x = a
         bitcoinclient = path['bitcoincli'] + " getblockcount"
@@ -182,7 +182,7 @@ def design():
             clear()
             close()
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\a" + output)
+            print("\a\x1b[?25l" + output)
             bitcoinclient = path['bitcoincli'] + " getbestblockhash"
             bb = os.popen(str(bitcoinclient)).read()
             ll = bb
@@ -191,15 +191,15 @@ def design():
             yy = json.loads(qq)
             mm = yy
             outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print(outputsize)
+            print("\x1b[?25l" + outputsize)
             outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print(outputtxs)
+            print("\x1b[?25l" + outputtxs)
             t.sleep(10)
             clear()
             close()
             a = b
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print(output)
+            print("\x1b[?25l" + output)
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
@@ -466,7 +466,7 @@ def MainMenuLOCAL(): #Main Menu
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
     \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def MainMenuREMOTE(): #Main Menu
@@ -498,7 +498,7 @@ def MainMenuREMOTE(): #Main Menu
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
     \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     mainmenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCAL():
@@ -532,7 +532,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuREMOTE():
@@ -562,7 +562,7 @@ def bitcoincoremenuREMOTE():
     \u001b[38;5;202mD.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mE.\033[0;37;40m Miscellaneous
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkLOCAL():
@@ -602,7 +602,7 @@ def lightningnetworkLOCAL():
     \u001b[33;1mN.\033[0;37;40m Get Node Info
     \u001b[33;1mO.\033[0;37;40m Get Network Information
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkREMOTE():
@@ -636,7 +636,7 @@ def lightningnetworkREMOTE():
     \u001b[33;1mH.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mI.\033[0;37;40m Get Node Info
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     lightningnetworkREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIMenuLOCAL():
@@ -684,7 +684,7 @@ def APIMenuLOCAL():
     \033[1;32;40mK.\033[0;37;40m Weather    FREE
     \033[1;32;40mL.\033[0;37;40m Arcade     FREE
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def decodeHex():
@@ -711,7 +711,7 @@ def decodeHex():
     \u001b[38;5;202mA.\033[0;37;40m Decode Blocks in HEX
     \u001b[38;5;202mB.\033[0;37;40m Decode Transactions in HEX
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     decodeHexLOCAL(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def miscellaneousLOCAL():
@@ -749,7 +749,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mA.\033[0;37;40m FunB
     \u001b[38;5;202mB.\033[0;37;40m Sysinfo
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenu():
@@ -788,7 +788,7 @@ def runTheNumbersMenu():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenuConn():
@@ -827,7 +827,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def weatherMenu():
@@ -865,7 +865,7 @@ def weatherMenu():
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dnt(): # Donation selection menu
@@ -903,7 +903,7 @@ def dnt(): # Donation selection menu
     \u001b[38;5;15mA.\033[0;37;40m Developers Donation
     \u001b[38;5;15mB.\033[0;37;40m Testers Donation
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntDev(): # Dev Donation Menu
@@ -941,7 +941,7 @@ def dntDev(): # Dev Donation Menu
     \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
     \u001b[33;1mB.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntTst(): # Tester Donation Menu
@@ -979,7 +979,7 @@ def dntTst(): # Tester Donation Menu
     \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
     \u001b[33;1mB.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuF(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def satnodeMenu(): # Satnode Menu
@@ -1019,7 +1019,7 @@ def satnodeMenu(): # Satnode Menu
     \033[1;32;40mC.\033[0;37;40m Setup
     \033[1;34;40mS.\033[0;37;40m Send a Message to Space
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def rateSX():
@@ -1057,7 +1057,7 @@ def rateSX():
     \033[1;32;40mA.\033[0;37;40m Rate
     \033[1;32;40mB.\033[0;37;40m Chart
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     rateSXMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def mempoolmenu():
@@ -1095,7 +1095,7 @@ def mempoolmenu():
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnbit():
@@ -1142,7 +1142,7 @@ def APILnbit():
     \033[1;32;40mD.\033[0;37;40m Delete PayWall
     \033[1;32;40mE.\033[0;37;40m List PayWalls
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnPay():
@@ -1189,7 +1189,7 @@ def APILnPay():
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNode():
@@ -1236,7 +1236,7 @@ def APIOpenNode():
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;32;40mS.\033[0;37;40m Status
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITippinMe():
@@ -1275,7 +1275,7 @@ def APITippinMe():
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITallyCo():
@@ -1315,7 +1315,7 @@ def APITallyCo():
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 #-------------------------------- SETTINGS -----------------------------------------------
 
@@ -1345,7 +1345,7 @@ def settings4Local():
     \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
     \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     menuSettingsLocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def settings4Remote():
@@ -1373,7 +1373,7 @@ def settings4Remote():
     \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
     \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     menuSettingsRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designQ():
@@ -1421,7 +1421,7 @@ def designQ():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designC():
@@ -1469,7 +1469,7 @@ def designC():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuDesignClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designCRemote():
@@ -1517,7 +1517,7 @@ def designCRemote():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuDesignClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colors():
@@ -1556,7 +1556,7 @@ def colors():
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;31;40mC.\033[0;37;40m Rainbow
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsC():
@@ -1594,7 +1594,7 @@ def colorsC():
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsCRemote():
@@ -1632,7 +1632,7 @@ def colorsCRemote():
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFront():
@@ -1677,7 +1677,7 @@ def colorsSelectFront():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectFront(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFrontClock():
@@ -1722,7 +1722,7 @@ def colorsSelectFrontClock():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectFrontClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFrontClockRemote():
@@ -1767,7 +1767,7 @@ def colorsSelectFrontClockRemote():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectFrontClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBack():
@@ -1812,7 +1812,7 @@ def colorsSelectBack():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectBack(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBackClock():
@@ -1857,7 +1857,7 @@ def colorsSelectBackClock():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectBackClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBackClockRemote():
@@ -1902,7 +1902,7 @@ def colorsSelectBackClockRemote():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectBackClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbow():
@@ -1940,7 +1940,7 @@ def colorsSelectRainbow():
     \033[1;32;40mA.\033[0;37;40m Start Color
     \033[1;31;40mB.\033[0;37;40m End Color
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectRainbow(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowStart():
@@ -1985,7 +1985,7 @@ def colorsSelectRainbowStart():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectRainbowStart(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowEnd():
@@ -2030,7 +2030,7 @@ def colorsSelectRainbowEnd():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
