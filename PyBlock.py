@@ -161,21 +161,26 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             break
 
 def design():
+    if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+        settingsClock = settingsv # Copy the variable pathv to 'path'
+    else:
+        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     a = b
+    output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    print(output)
     while True:
-        if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
-            settingsClock = settingsv # Copy the variable pathv to 'path'
-        else:
-            settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-            pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+        x = a
         bitcoinclient = path['bitcoincli'] + " getblockcount"
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         if b > a:
+            clear()
+            close()
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a" + output)
             bitcoinclient = path['bitcoincli'] + " getbestblockhash"
@@ -190,15 +195,14 @@ def design():
             outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print(outputtxs)
             t.sleep(10)
-            break
-        elif b == a:
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print(output)
-            t.sleep(10)
             clear()
             close()
-        else:
-            break
+            a = b
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            print(output)
+        elif x == a:
+            pass
+
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
 def getrawtx(): # show confirmatins from transactions
@@ -411,7 +415,6 @@ def callColdCore():
         if not os.path.isfile('public.txt'):
             msg = """
             \033[0;37;40m-------------------------\a\u001b[31;1mFILE NOT FOUND\033[0;37;40m----------------------------
-
                     To ColdCore works it needs to import your wallet's
                         public information on your coldcard, go to
                         -----------------------------------------
@@ -422,7 +425,6 @@ def callColdCore():
                              Copy the file \033[1;37;40mpublic.txt\033[0;37;40m inside
                                 the main \u001b[31;1mpyblock\033[0;37;40m folder
               (see: https://coldcardwallet.com/docs/microsd#dump-summary-file)
-
             -------------------------------------------------------------------"""
             print(msg)
             input("\nContinue...")
