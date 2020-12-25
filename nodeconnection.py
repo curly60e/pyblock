@@ -111,8 +111,6 @@ def remotegetblock():
             output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a" + output)
             a = c
-        elif x == a:
-            pass
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     while True:
