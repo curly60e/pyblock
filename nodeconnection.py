@@ -90,31 +90,27 @@ def remoteHalving():
 
 
 def remotegetblock():
+    if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+        settingsClock = settingsv # Copy the variable pathv to 'path'
+    else:
+        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
     b = rpc('getblockcount')
     c = str(b)
     a = c
+    output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    print("\x1b[?25l" + output)
     while True:
-        if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
-            settingsClock = settingsv # Copy the variable pathv to 'path'
-        else:
-            settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-            pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+        x = a
         b = rpc('getblockcount')
         c = str(b)
         if c > a:
-            output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\a" + output)
-            t.sleep(10)
-            break
-        elif c == a:
-            output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print(output)
-            t.sleep(10)
             clear()
             closed()
-        else:
-            break
+            output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            print("\a\x1b[?25l" + output)
+            a = c
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     while True:
@@ -200,7 +196,7 @@ def locallistpeersQQ():
                     img_path = open(hash +".png", "rb")
                     img = Image.open(img_path)
 
-                    h = 2
+                    h = 1
                     w = int((img.width / img.height) * 5)
 
                     img = img.resize((w,h), Image.ANTIALIAS)
@@ -210,7 +206,7 @@ def locallistpeersQQ():
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
 
-                h = 2
+                h = 1
                 w = int((img.width / img.height) * 5)
 
                 img = img.resize((w,h), Image.ANTIALIAS)
@@ -424,7 +420,7 @@ def locallistchannels():
                     img_path = open(hash +".png", "rb")
                     img = Image.open(img_path)
 
-                    h = 2
+                    h = 1
                     w = int((img.width / img.height) * 5)
 
                     img = img.resize((w,h), Image.ANTIALIAS)
@@ -434,7 +430,7 @@ def locallistchannels():
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
 
-                h = 2
+                h = 1
                 w = int((img.width / img.height) * 5)
 
                 img = img.resize((w,h), Image.ANTIALIAS)
@@ -1048,7 +1044,7 @@ def channels():
                     img_path = open(hash +".png", "rb")
                     img = Image.open(img_path)
 
-                    h = 2
+                    h = 1
                     w = int((img.width / img.height) * 5)
 
                     img = img.resize((w,h), Image.ANTIALIAS)
@@ -1058,7 +1054,7 @@ def channels():
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
 
-                h = 2
+                h = 1
                 w = int((img.width / img.height) * 5)
 
                 img = img.resize((w,h), Image.ANTIALIAS)
