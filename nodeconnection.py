@@ -196,7 +196,7 @@ def locallistpeersQQ():
                     img_path = open(hash +".png", "rb")
                     img = Image.open(img_path)
 
-                    h = 2
+                    h = 1
                     w = int((img.width / img.height) * 5)
 
                     img = img.resize((w,h), Image.ANTIALIAS)
@@ -206,7 +206,7 @@ def locallistpeersQQ():
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
 
-                h = 2
+                h = 1
                 w = int((img.width / img.height) * 5)
 
                 img = img.resize((w,h), Image.ANTIALIAS)
@@ -420,7 +420,7 @@ def locallistchannels():
                     img_path = open(hash +".png", "rb")
                     img = Image.open(img_path)
 
-                    h = 2
+                    h = 1
                     w = int((img.width / img.height) * 5)
 
                     img = img.resize((w,h), Image.ANTIALIAS)
@@ -430,7 +430,7 @@ def locallistchannels():
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
 
-                h = 2
+                h = 1
                 w = int((img.width / img.height) * 5)
 
                 img = img.resize((w,h), Image.ANTIALIAS)
@@ -1044,7 +1044,7 @@ def channels():
                     img_path = open(hash +".png", "rb")
                     img = Image.open(img_path)
 
-                    h = 2
+                    h = 1
                     w = int((img.width / img.height) * 5)
 
                     img = img.resize((w,h), Image.ANTIALIAS)
@@ -1054,7 +1054,7 @@ def channels():
                 img_path = open(hash +".png", "rb")
                 img = Image.open(img_path)
 
-                h = 2
+                h = 1
                 w = int((img.width / img.height) * 5)
 
                 img = img.resize((w,h), Image.ANTIALIAS)
