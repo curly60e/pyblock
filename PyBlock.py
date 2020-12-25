@@ -33,7 +33,7 @@ from robohash import Robohash
 
 
 
-version = "0.9.4"
+version = "0.9.3"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -161,21 +161,26 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             break
 
 def design():
+    if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+        settingsClock = settingsv # Copy the variable pathv to 'path'
+    else:
+        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     a = b
+    output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    print(output)
     while True:
-        if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
-            settingsClock = settingsv # Copy the variable pathv to 'path'
-        else:
-            settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-            pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+        x = a
         bitcoinclient = path['bitcoincli'] + " getblockcount"
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         if b > a:
+            clear()
+            close()
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a" + output)
             bitcoinclient = path['bitcoincli'] + " getbestblockhash"
@@ -190,15 +195,14 @@ def design():
             outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print(outputtxs)
             t.sleep(10)
-            break
-        elif b == a:
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print(output)
-            t.sleep(10)
             clear()
             close()
-        else:
-            break
+            a = b
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            print(output)
+        elif x == a:
+            pass
+
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
 def getrawtx(): # show confirmatins from transactions
@@ -401,41 +405,6 @@ def callGitWardenTerminal():
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
         os.system(git)
     os.system("cd warden_terminal && python3 node_warden.py")
-
-#---------------------------------ColdCore-----------------------------------------
-def callColdCore():
-    clear()
-    blogo()
-    close()
-    try:
-        if not os.path.isfile('public.txt'):
-            msg = """
-            \033[0;37;40m-------------------------\a\u001b[31;1mFILE NOT FOUND\033[0;37;40m----------------------------
-
-                    To ColdCore works it needs to import your wallet's
-                        public information on your coldcard, go to
-                        -----------------------------------------
-                        |                                       |
-                        |    \033[1;37;40mAdvanced > MicroSD > Dump Summary\033[0;37;40m  |
-                        |                                       |
-                        -----------------------------------------
-                             Copy the file \033[1;37;40mpublic.txt\033[0;37;40m inside
-                                the main \u001b[31;1mpyblock\033[0;37;40m folder
-              (see: https://coldcardwallet.com/docs/microsd#dump-summary-file)
-
-            -------------------------------------------------------------------"""
-            print(msg)
-            input("\nContinue...")
-        else:
-            if not os.path.isdir('coldcore'):
-                git = "git clone https://github.com/jamesob/coldcore.git"
-                install = "cd coldcore && chmod +x coldcore && cp coldcore ~/.local/bin/coldcore"
-                os.system(git)
-                os.system(install)
-            os.system("coldcore")
-    except:
-        menuSelection()
-
 #--------------------------------- Menu section -----------------------------------
 
 def MainMenuLOCAL(): #Main Menu
@@ -530,7 +499,6 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -3124,8 +3092,6 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         getrawtx()
     elif bcore in ["H", "h"]:
         miscellaneousLOCAL()
-    elif bcore in ["I", "i"]:
-        callColdCore()
 
 def miscellaneousLOCALmenu(misce):
     while True:
