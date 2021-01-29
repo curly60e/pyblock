@@ -15,6 +15,7 @@ import requests
 import json
 import simplejson as json
 import numpy as np
+import PyPDF2
 from cfonts import render, say
 from clone import *
 from donation import *
@@ -33,7 +34,7 @@ from robohash import Robohash
 
 
 
-version = "0.9.4"
+version = "0.9.5"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -142,15 +143,6 @@ def delay_print(s):
         time.sleep(0.25)
 #------------------------------------------------------
 
-def connected(info): # here we complete the connection to the external node
-    if info in ["Y", "y"]:
-        clear()
-        blogo()
-        print("\nAdd your node information\n")
-        menuUserConn()
-    else:
-        menu()
-
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
@@ -200,6 +192,7 @@ def design():
             a = b
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\x1b[?25l" + output)
+
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
@@ -338,6 +331,59 @@ def localHalving():
     input("\nContinue...")
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
+def pdfconvert():
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
+    if not os.path.isfile(str("bitcoin.pdf")):
+        clear()
+        blogo()
+        close()
+        print("""
+        -----------------------------------------
+
+                The Bitcoin Whitepaper
+                    is not in this
+                       directory
+
+        -----------------------------------------
+
+        """)
+        a = input("Do you want to download it from the Blockchain? Y/n: ")
+        if a in ["y", "Y"]:
+            clear()
+            blogo()
+            close()
+            print("""
+            ---------------------------------
+
+                    You are going to
+                      download the
+                    Whitepaper  from
+                     the Blockchain
+
+                     This file will
+                     be save in the
+                      main PyBLOCK
+                       folder  as
+                       bitcoin.pdf
+
+            ---------------------------------
+            """)
+            input("Continue...")
+            bitcoincli = """ getrawtransaction 54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713 | sed 's/0100000000000000/\\n/g' | tail -n +2 | cut -c7-136,139-268,271-400 | tr -d "\n" | cut -c17-368600 | xxd -p -r > bitcoin.pdf """
+            os.system(path['bitcoincli'] + bitcoincli)
+            clear()
+            blogo()
+            close()
+            os.system("pdf2txt.py bitcoin.pdf")
+            input("Continue...")
+    else:
+        clear()
+        blogo()
+        close()
+        os.system("pdf2txt.py bitcoin.pdf")
+        input("Continue...")
 #--------------------------------- NYMs -----------------------------------
 
 def get_ansi_color_code(r, g, b):
@@ -531,6 +577,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
+    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2256,6 +2303,7 @@ def upgrade():
     print("\n---------------------------------------------------")
     print("\n\t\033[1;31;40mYou'll need to restart PyBLOCK\033[0;37;40m\n")
     print("---------------------------------------------------\n")
+    os.system("pip3 install -r requirements.txt")
     input("Continue...")
 
 def testlogo():
@@ -3126,6 +3174,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         miscellaneousLOCAL()
     elif bcore in ["I", "i"]:
         callColdCore()
+    elif bcore in ["J", "j"]:
+        pdfconvert()
 
 def miscellaneousLOCALmenu(misce):
     while True:
@@ -3554,7 +3604,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
@@ -3575,6 +3625,6 @@ while True: # Loop
         menuSelection()
 
 
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
