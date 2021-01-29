@@ -26,6 +26,7 @@ pillow
 numpy
 googleapis-common-protos==1.52.0
 grpcio
+pdfminer
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
