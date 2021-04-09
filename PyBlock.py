@@ -33,7 +33,7 @@ from robohash import Robohash
 
 
 
-version = "0.9.5"
+version = "0.9.6"
 
 def sysinfo():  #Cpu and memory usage
     print("   \033[0;37;40m----------------------")
@@ -2112,7 +2112,7 @@ def aaccPPiLNBits():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -2168,7 +2168,7 @@ def aaccPPiLNPay():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -2224,7 +2224,7 @@ def aaccPPiOpenNode():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 100000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 10000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
             blogo()

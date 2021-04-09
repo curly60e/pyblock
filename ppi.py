@@ -444,14 +444,13 @@ def lnbitCreateNewInvoice():
                 nn = str(rsh)
                 dd = json.loads(nn)
                 db = dd['paid']
-                if db == True:
-                    clear()
-                    blogo()
-                    tick()
-                    t.sleep(2)
-                    break
-                else:
+                if db != True:
                     continue
+                clear()
+                blogo()
+                tick()
+                t.sleep(2)
+                break
     except:
         pass
 
@@ -475,12 +474,11 @@ def lnbitPayInvoice():
             nn = str(rsh)
             dd = json.loads(nn)
             db = dd['paid']
-            if db == True:
-                tick()
-                t.sleep(2)
-                break
-            else:
+            if db != True:
                 continue
+            tick()
+            t.sleep(2)
+            break
     except:
         pass
 
@@ -743,21 +741,20 @@ def lnpayCreateInvoice():
                 qr.clear()
                 print("Lightning Invoice: " + invoice['payment_request'])
                 t.sleep(10)
-                curl = 'curl -u ' + b + ': https://lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
+                curl = 'curl -u ' + b + ': https://api.lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
                 rsh = os.popen(curl).read()
                 clear()
                 blogo()
                 nn = str(rsh)
                 dd = json.loads(nn)
                 db = dd['settled']
-                if db == 1:
-                    clear()
-                    blogo()
-                    tick()
-                    t.sleep(2)
-                    break
-                else:
+                if db != 1:
                     continue
+                clear()
+                blogo()
+                tick()
+                t.sleep(2)
+                break
     except:
         pass
 
@@ -828,7 +825,7 @@ def lnpayPayInvoice():
     try:
         print("\n\tLNPAY PAY INVOICE\n")
         inv = input("\nInvoice: ")
-        curl = 'curl -u' + b +': https://lnpay.co/v1/node/default/payments/decodeinvoice?payment_request=' + inv
+        curl = 'curl -u' + b +': https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request=' + inv
         clear()
         rsh = os.popen(curl).read()
         nn = str(rsh)
@@ -1144,16 +1141,15 @@ def OpenNodeiniciatewithdrawal():
                 nn = str(ssh)
                 dd = json.loads(nn)
                 print(dd)
-                if invoice == "":
-                    print("\n----------------------------------------------------------------------------------------------------")
-                    print("""
+                if invoice != "":
+                    break
+                print("\n----------------------------------------------------------------------------------------------------")
+                print("""
                     \tOPENNODE TRANSFER REQUEST
 
                     Message: {}
                     """.format(dd['message']))
-                    print("----------------------------------------------------------------------------------------------------\n")
-                else:
-                    break
+                print("----------------------------------------------------------------------------------------------------\n")
             rr = dd['data']
             ss = rr['pay_req']
 
