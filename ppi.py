@@ -743,7 +743,7 @@ def lnpayCreateInvoice():
                 qr.clear()
                 print("Lightning Invoice: " + invoice['payment_request'])
                 t.sleep(10)
-                curl = 'curl -u ' + b + ': https://lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
+                curl = 'curl -u ' + b + ': https://api.lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
                 rsh = os.popen(curl).read()
                 clear()
                 blogo()
@@ -828,7 +828,7 @@ def lnpayPayInvoice():
     try:
         print("\n\tLNPAY PAY INVOICE\n")
         inv = input("\nInvoice: ")
-        curl = 'curl -u' + b +': https://lnpay.co/v1/node/default/payments/decodeinvoice?payment_request=' + inv
+        curl = 'curl -u' + b +': https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request=' + inv
         clear()
         rsh = os.popen(curl).read()
         nn = str(rsh)
