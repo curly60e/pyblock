@@ -663,13 +663,13 @@ def lnbitsLNURLw():
             print("\n\tLNURLW CREATED SUCCESSFULLY\n")
             t.sleep(2)
             clear()
-            checkcurl = 'curl -X GET https://lnbits.com/withdraw/api/v1/links -H ' '"X-Api-Key: {}"'.format(b)
-            sh = os.popen(checkcurl).read()
-            clear()
-            blogo()
-            n = str(sh)
-            d = json.loads(n)
             while True:
+                checkcurl = 'curl -X GET https://lnbits.com/withdraw/api/v1/links -H ' '"X-Api-Key: {}"'.format(b)
+                sh = os.popen(checkcurl).read()
+                clear()
+                blogo()
+                n = str(sh)
+                d = json.loads(n)
                 print("\n\tLNBITS LNURLW LIST\n")
                 for item_ in d:
                     s = item_
@@ -693,8 +693,8 @@ def lnbitsLNURLw():
                         """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
                         print("----------------------------------------------------------------------------------------------------------------\n")
                 input("Continue...")
-            clear()
-            blogo()
+                clear()
+                blogo()
         except:
             break
 
