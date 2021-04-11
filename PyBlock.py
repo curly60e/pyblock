@@ -32,15 +32,13 @@ from PIL import Image
 from robohash import Robohash
 
 
-
-version = "0.9.6.1"
+version = "0.9.7"
 
 def sysinfo():  #Cpu and memory usage
-    print("   \033[0;37;40m----------------------")
-    print("   \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print("   \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
-    print("   \033[0;37;40m----------------------")
-    print("\a")
+    print("    \033[0;37;40m----------------------")
+    print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
+    print("    \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
+    print("    \033[0;37;40m----------------------")
 
 def rpc(method, params=[]):
     payload = json.dumps({
@@ -500,7 +498,7 @@ def MainMenuLOCAL(): #Main Menu
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
     \033[1;37;40mVersion\033[0;37;40m: {}
 
 
@@ -532,7 +530,7 @@ def MainMenuREMOTE(): #Main Menu
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
     \033[1;37;40mVersion\033[0;37;40m: {}
 
 
@@ -647,8 +645,10 @@ def lightningnetworkLOCAL():
     \u001b[33;1mM.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mN.\033[0;37;40m Get Node Info
     \u001b[33;1mO.\033[0;37;40m Get Network Information
+    \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkREMOTE():
@@ -681,8 +681,10 @@ def lightningnetworkREMOTE():
     \u001b[33;1mG.\033[0;37;40m Onchain Balance
     \u001b[33;1mH.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mI.\033[0;37;40m Get Node Info
+    \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
     lightningnetworkREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIMenuLOCAL():
@@ -1187,6 +1189,8 @@ def APILnbit():
     \033[1;32;40mC.\033[0;37;40m New PayWall
     \033[1;32;40mD.\033[0;37;40m Delete PayWall
     \033[1;32;40mE.\033[0;37;40m List PayWalls
+    \033[1;32;40mF.\033[0;37;40m Create LNURL
+    \033[1;32;40mG.\033[0;37;40m List LNURL
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2286,9 +2290,9 @@ def checkupdate():
     if di['version'] == version:
         q = print(" ")
     else:
-        print("\n---------------------------------------------------")
-        q = print("\n    \033[1;31;40mNew version available\033[0;37;40m > Press U to Upgrade\n")
-        print("---------------------------------------------------")
+        print("\n    ------------------------------------------")
+        q = print("    \033[1;31;40mNew version available\033[0;37;40m > Press U to Upgrade")
+        print("    ------------------------------------------")
 
 def upgrade():
     gitfetch = "git fetch"
@@ -3001,6 +3005,14 @@ def menuLNBPI(menuLNQ):
         clear()
         blogo()
         lnbitListPawWall()
+    elif menuLNQ in ["F", "f"]:
+        clear()
+        blogo()
+        lnbitsLNURLw()
+    elif menuLNQ in ["G", "g"]:
+        clear()
+        blogo()
+        lnbitsLNURLwList()
     elif menuLNQ in ["R", "r"]:
         menuSelection()
 
@@ -3311,6 +3323,12 @@ def lightningnetworkLOCALcontrol(lncore):
         clear()
         blogo()
         localgetnetworkinfo()
+    elif lncore in ["Q", "q"]:
+        if os.path.isfile("lnbitSN.conf"):
+            lnbitsLNURLwList()
+    elif lncore in ["S", "s"]:
+        if os.path.isfile("lnbitSN.conf"):
+            lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
 
@@ -3469,6 +3487,12 @@ def lightningnetworkREMOTEcontrol(lncore):
         clear()
         blogo()
         getinfo()
+    elif lncore in ["Q", "q"]:
+        if os.path.isfile("lnbitSN.conf"):
+            lnbitsLNURLwList()
+    elif lncore in ["S", "s"]:
+        if os.path.isfile("lnbitSN.conf"):
+            lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
 
