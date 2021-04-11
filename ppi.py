@@ -637,7 +637,106 @@ def lnbitDeletePayWall():
         except:
             break
 
-#-----------------------------END LNBITS--------------------------------
+def lnbitsLNURLw():
+    while True:
+        try:
+            clear()
+            blogo()
+            print("""
+            ----------------------
+                 CREATE LNURL
+            ----------------------\n""")
+            title = input("Title: ")
+            minwith = input("Minimum Withdraw: ")
+            maxwith = input("Maximum Withdraw: ")
+            usesw = input("Uses: ")
+            waittime = input("Wait Time: ")
+            isunique = input("Is unique? true/false: ")
+            a = loadFileConnLNBits(['admin_key'])
+            b = str(a['admin_key'])
+            curl = 'curl -X POST https://lnbits.com/withdraw/api/v1/links -d ' + """'{"title":""" + f'"{title}", "min_withdrawable": {minwith}, "max_withdrawable": {maxwith}, "uses": {usesw}, "wait_time": {waittime}, "is_unique": {isunique}' + "}'"  + ' -H "Content-type: application/json" -H "X-Api-Key: {}"'.format(b)
+            sh = os.popen(curl).read()
+            clear()
+            blogo()
+            n = str(sh)
+            d = json.loads(n)
+            print("\n\tLNURLW CREATED SUCCESSFULLY\n")
+            t.sleep(2)
+            clear()
+            checkcurl = 'curl -X GET https://lnbits.com/withdraw/api/v1/links -H ' '"X-Api-Key: {}"'.format(b)
+            sh = os.popen(checkcurl).read()
+            clear()
+            blogo()
+            n = str(sh)
+            d = json.loads(n)
+            while True:
+                print("\n\tLNBITS LNURLW LIST\n")
+                for item_ in d:
+                    s = item_
+                    print("ID: " + s['id'] + " Uses: " + str(s['uses']) + " Used: " + str(s['used']))
+                nd = input("\nSelect ID: ")
+                for item in d:
+                    s = item
+                    nn = s['id']
+                    if nd == nn:
+                        print("\n----------------------------------------------------------------------------------------------------------------")
+                        print("""
+                        \tLNBITS LNURLW DECODED
+
+                        ID: {}
+                        LNURL: {}
+                        Wait Time: {}
+                        Uses: {}
+                        Used: {}
+                        Minimum Withdraw: {}
+                        Maximum Withdraw: {}
+                        """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
+                        print("----------------------------------------------------------------------------------------------------------------\n")
+                input("Continue...")
+            clear()
+            blogo()
+        except:
+            break
+
+def lnbitsLNURLwList():
+    try:
+        while True:
+            a = loadFileConnLNBits(['admin_key'])
+            b = str(a['admin_key'])
+            checkcurl = 'curl -X GET https://lnbits.com/withdraw/api/v1/links -H ' '"X-Api-Key: {}"'.format(b)
+            sh = os.popen(checkcurl).read()
+            clear()
+            blogo()
+            n = str(sh)
+            d = json.loads(n)
+            print("\n\tLNBITS LNURLW LIST\n")
+            for item_ in d:
+                s = item_
+                print("ID: " + s['id'] + " Uses: " + str(s['uses']) + " Used: " + str(s['used']))
+            nd = input("\nSelect ID: ")
+            for item in d:
+                s = item
+                nn = s['id']
+                if nd == nn:
+                    print("\n----------------------------------------------------------------------------------------------------------------")
+                    print("""
+                    \tLNBITS LNURLW DECODED
+
+                    ID: {}
+                    LNURL: {}
+                    Wait Time: {}
+                    Uses: {}
+                    Used: {}
+                    Minimum Withdraw: {}
+                    Maximum Withdraw: {}
+                    """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
+                    print("----------------------------------------------------------------------------------------------------------------\n")
+            input("Continue...")
+    except:
+        print("\n")
+        pass
+
+#-------------------------1d646820055e4e2da218e801eaacfc94----END LNBITS--------------------------------
 #-----------------------------LNPAY--------------------------------
 
 def loadFileConnLNPay(lnpayLoad):
