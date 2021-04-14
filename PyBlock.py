@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.7.1"
+version = "0.9.7.2"
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
@@ -986,8 +986,9 @@ def dntDev(): # Dev Donation Menu
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
-    \u001b[33;1mB.\033[0;37;40m Lightning Network
+    \u001b[38;5;202mA.\033[0;37;40m Samourai PayNym
+    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Address
+    \u001b[33;1mC.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2150,7 +2151,6 @@ def aaccPPiLNBits():
                 pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
                 createFileConnLNBits()
                 break
-
     except:
         clear()
         blogo()
@@ -3556,12 +3556,22 @@ def menuE(menuQ): # Dev Donation access Menu
             clear()
             blogo()
             close()
-            donationAddr()
+            donationPayNym()
             t.sleep(50)
             menuSelection()
         except:
             menuSelection()
     elif menuQ in ["B", "b"]:
+        try:
+            clear()
+            blogo()
+            close()
+            donationAddr()
+            t.sleep(50)
+            menuSelection()
+        except:
+            menuSelection()
+    elif menuQ in ["C", "c"]:
         try:
             clear()
             blogo()
