@@ -193,3 +193,17 @@ A simple Python Block Clock to check the Blockchain information.
 ### Testers
 
 [@__B__T__C__](https://twitter.com/__B__T__C__)
+
+DONATE PYBLOCK
+
+Samourai Wallet Paynym:
+
+<img src="images/codeimage.png" width="30%" />
+
+Lightning KeySend:
+
+<img src="images/keysend.png" width="30%" />
+
+Monero:
+
+<img src="images/qrcode.png" width="20%" />
