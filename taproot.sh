@@ -12,5 +12,9 @@ for BLOCK in $(seq "$SINCE" $((SINCE + ELAPSED - 1))); do
     (1) echo -n "🟩";;
     (0) echo -n "🟥";;
   esac
+  if ((($BLOCK + 1) % 48 == 0)); then echo; fi
 done
 echo
+
+PERCENTAGE=`echo $BLOCKCHAININFO | jq '.softforks.taproot.bip9.statistics | .count / .elapsed * 100'`
+echo $PERCENTAGE
