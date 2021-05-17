@@ -97,14 +97,9 @@ def opreturn():
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
-                url2 = 'http://opreturnbot.com/api/view/{}'.format(responseC)
-                r = requests.get(url2)
-                r2 = str(r.text)
-                r3 = r2
                 clear()
                 blogo()
                 print("\nTransaction ID: " + responseC)
-                print("OP_RETURN Message: " + r3)
                 input("\nContinue...")
             elif lndconnectload['ln']:
                 print("\nInvoice: " + b + "\n")
@@ -119,14 +114,9 @@ def opreturn():
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
-                url2 = 'http://opreturnbot.com/api/view/{}'.format(responseC)
-                r = requests.get(url2)
-                r2 = str(r.text)
-                r3 = r2
                 clear()
                 blogo()
                 print("\nTransaction ID: " + responseC)
-                print("OP_RETURN Message: " + r3)
                 input("\nContinue...")
         else:
             clear()
@@ -149,14 +139,9 @@ def opreturn():
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
-                url2 = 'http://opreturnbot.com/api/view/{}'.format(responseC)
-                r = requests.get(url2)
-                r2 = str(r.text)
-                r3 = r2
                 clear()
                 blogo()
                 print("\nTransaction ID: " + responseC)
-                print("OP_RETURN Message: " + r3)
                 input("\nContinue...")
             else:
                 cert_path = lndconnectload["tls"]
@@ -170,14 +155,9 @@ def opreturn():
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
-                url2 = 'http://opreturnbot.com/api/view/{}'.format(responseC)
-                r = requests.get(url2)
-                r2 = str(r.text)
-                r3 = r2
                 clear()
                 blogo()
                 print("\nTransaction ID: " + responseC)
-                print("OP_RETURN Message: " + r3)
                 input("\nContinue...")
     except:
         pass
