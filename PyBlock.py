@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.7.7"
+version = "0.9.8"
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
@@ -578,6 +578,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mT.\033[0;37;40m Taproot
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
@@ -610,6 +611,33 @@ def bitcoincoremenuLOCALTaproot():
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def bitcoincoremenuLOCALOPRETURN():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Send OP_RETURN
+    \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
+    \u001b[33;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    bitcoincoremenuLOCALcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def bitcoincoremenuREMOTE():
     clear()
     blogo()
@@ -636,9 +664,37 @@ def bitcoincoremenuREMOTE():
     \u001b[38;5;202mC.\033[0;37;40m Run the Numbers
     \u001b[38;5;202mD.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mE.\033[0;37;40m Miscellaneous
+    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def bitcoincoremenuREMOTEOPRETURN():
+    clear()
+    blogo()
+    sysinfo()
+    a = "Local" if path['bitcoincli'] else "Remote"
+    blk = rpc('getblockchaininfo')
+    d = blk
+
+    cert_path = lndconnectload["tls"]
+    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    headers = {'Grpc-Metadata-macaroon': macaroon}
+    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    r = requests.get(url, headers=headers, verify=cert_path)
+    alias = r.json()
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Send OP_RETURN
+    \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
+    \u001b[33;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
+    bitcoincoremenuREMOTEcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkLOCAL():
     clear()
@@ -3218,8 +3274,20 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
+    elif bcore in ["O", "o"]:
+        bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["T", "t"]:
         bitcoincoremenuLOCALTaproot()
+
+def bitcoincoremenuLOCALcontrolO(oreturn):
+    if oreturn in ["A", "a"]:
+        clear()
+        blogo()
+        opreturn()
+    elif oreturn in ["B", "b"]:
+        clear()
+        blogo()
+        opreturn_view()
 
 def bitcoincoremenuLOCALcontrolT(tproot):
     if tproot in ["A", "a"]:
@@ -3494,6 +3562,18 @@ def bitcoincoremenuREMOTEcontrol(bcore):
             pass
     elif bcore in ["E", "e"]:
         miscellaneousLOCAL()
+    elif bcore in ["O", "o"]:
+        bitcoincoremenuREMOTEOPRETURN()
+
+def bitcoincoremenuREMOTEcontrolO(oreturn):
+    if oreturn in ["A", "a"]:
+        clear()
+        blogo()
+        opreturn()
+    elif oreturn in ["B", "b"]:
+        clear()
+        blogo()
+        opreturn_view()
 
 def lightningnetworkREMOTEcontrol(lncore):
     if lncore in ["A", "a"]:
@@ -3682,7 +3762,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
@@ -3703,6 +3783,6 @@ while True: # Loop
         menuSelection()
 
 
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
