@@ -67,7 +67,7 @@ def opreturn():
         blogo()
         print("\n\tOP_RETURN Message\n")
         message = input("Message: ")
-        curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
+        curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
         while True:
             if len(message) > 80:
                 clear()
