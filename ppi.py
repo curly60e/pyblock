@@ -69,7 +69,7 @@ def opreturn():
         message = input("Message: ")
         curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
         while True:
-            if len(message) > 80:
+            if len(message) > 70:
                 clear()
                 blogo()
                 print("Error! Only 80 characters allowed!")
