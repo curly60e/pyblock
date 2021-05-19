@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.8.2"
+version = "0.9.8.3"
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
@@ -70,7 +70,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             blogo()
             print("\033[0;37;40m")
             print("<<< Back Control + C.\n\n")
-            print("\n----------------------------------------------------------------------------------------------------")
+            print("\n------------------------------------------------------------------------------------------")
             print("""
             Chain: {}
             Blocks: {}
@@ -80,7 +80,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             Size on Disk: {}
             Pruned: {}
             """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-            print("----------------------------------------------------------------------------------------------------\n")
+            print("------------------------------------------------------------------------------------------\n")
             t.sleep(10)
         except:
             break
