@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.8.3"
+version = "0.9.8.4"
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
@@ -3762,7 +3762,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    #try:
+    try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
@@ -3783,6 +3783,6 @@ while True: # Loop
         menuSelection()
 
 
-    #except:
-    #    print("\n")
-    #    sys.exit(101)
+    except:
+        print("\n")
+        sys.exit(101)
