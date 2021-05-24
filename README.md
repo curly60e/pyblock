@@ -204,10 +204,10 @@ Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK
 
 <img src="images/codeimage.png" width="30%" />
 
-Lightning KeySend:
+Lightning KeySend: 02d22df3b3013af15a2da1381bdd76266a9375040a5152b67999ad32a26e6b8a88
 
 <img src="images/keysend.png" width="30%" />
 
-Monero:
+Monero: 42jtb4dAfm6BQ8h6x56qGyAMMHVXGRwRMTSb2LwsBg1jVqD4TxfpD1pTK56tkrTMGhEKipZdDHfJrB1g8iQfvSyC7gZ9M8M
 
 <img src="images/qrcode.png" width="20%" />
