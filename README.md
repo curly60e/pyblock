@@ -196,7 +196,11 @@ A simple Python Block Clock to check the Blockchain information.
 
 DONATE PYBLOCK
 
-Samourai Wallet Paynym:
+Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
+
+<img src="images/bitcoin-donation.png" width="30%" />
+
+Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK61yE17N2vgvQvKYokXktt6D6GZFTmocvDJhaUJfHt7ehEMmthjsT3NQHseFM
 
 <img src="images/codeimage.png" width="30%" />
 
