@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.8.4"
+version = "0.9.8.5"
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
