@@ -14,7 +14,7 @@ def donationAddr():
     box_size=10,
     border=4,
     )
-    url = 'bc1qszlt485fn468h2ymqd2ks8wrfqdl08nsrg2kz3'
+    url = 'bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv'
     print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
