@@ -314,7 +314,7 @@ def locallistchaintxns():
             for item_ in n:
                 s = item_
 
-                print("Transaction Hash: " + s['tx_hash'])
+                print("Transaction Hash: " + s['tx_hash'] + " " + s['amount'] + " sats")
             nd = input("\nSelect RHash: ")
 
             for item in n:
@@ -1154,7 +1154,7 @@ def listonchaintxs():
             print("\n\tLIST ONCHAIN TRANSACTIONS\n")
             for r in range(len(n)):
                 s = n[r]
-                print("Transaction Hash: " + s['tx_hash'])
+                print("Transaction Hash: " + " " + s['tx_hash'] + " sats")
             nd = input("\nSelect RHash: ")
 
             for item in n:
