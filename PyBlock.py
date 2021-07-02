@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.8.7"
+version = "0.9.8.8"
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
@@ -579,37 +579,9 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mT.\033[0;37;40m Taproot
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def bitcoincoremenuLOCALTaproot():
-    clear()
-    blogo()
-    sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Index
-    \u001b[38;5;202mB.\033[0;37;40m Bash
-    \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
-    bitcoincoremenuLOCALcontrolT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCALOPRETURN():
     clear()
@@ -3276,8 +3248,6 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         pdfconvert()
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
-    elif bcore in ["T", "t"]:
-        bitcoincoremenuLOCALTaproot()
 
 def bitcoincoremenuLOCALcontrolO(oreturn):
     if oreturn in ["A", "a"]:
@@ -3288,18 +3258,6 @@ def bitcoincoremenuLOCALcontrolO(oreturn):
         clear()
         blogo()
         opreturn_view()
-
-def bitcoincoremenuLOCALcontrolT(tproot):
-    if tproot in ["A", "a"]:
-        clear()
-        blogo()
-        os.system("curl https://taproot.watch/index.txt")
-        input("\nContinue...")
-    elif tproot in ["B", "b"]:
-        clear()
-        blogo()
-        taproot()
-        input("\nContinue...")
 
 def miscellaneousLOCALmenu(misce):
     while True:
