@@ -32,7 +32,10 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.8.8"
+version = "0.9.8.9"
+
+def close():
+    print("<<< Back Control + C.\n\n")
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
@@ -66,12 +69,11 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             d = b
             print(d)
             clear()
-            print("\033[1;32;40m")
             blogo()
-            print("\033[0;37;40m")
-            print("<<< Back Control + C.\n\n")
-            print("\n------------------------------------------------------------------------------------------")
+            close()
             print("""
+            ----------------------------------------------------------------------------
+            \tGET BLOCKCHAIN INFORMATION
             Chain: {}
             Blocks: {}
             Best BlockHash: {}
@@ -79,8 +81,8 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             Verification Progress: {}
             Size on Disk: {}
             Pruned: {}
+            ----------------------------------------------------------------------------
             """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-            print("------------------------------------------------------------------------------------------\n")
             t.sleep(10)
         except:
             break
@@ -99,9 +101,6 @@ def clear(): # clear the screen
 def getgenesis(): # get and decode Genesis block
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path['bitcoincli'] + bitcoincli)
-
-def close():
-    print("<<< Back Control + C.\n\n")
 
 def readHexBlock(): # Hex Decoder using Hexyl on local node
     hexa = input("Add the Block Hash you want to decode: ")
