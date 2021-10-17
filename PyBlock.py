@@ -3152,6 +3152,8 @@ def menuWeather(menuWD):
         wttrDataV1()
     elif menuWD in ["B", "b"]:
         wttrDataV2()
+    elif menuWD in ["C", "c"]:
+        wttrDataV3()
 
 def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
