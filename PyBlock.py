@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.8.9"
+version = "0.9.8.10"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -970,6 +970,7 @@ def weatherMenu():
 
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
+    \033[1;32;40mC.\033[0;37;40m Version 3
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -3152,6 +3153,8 @@ def menuWeather(menuWD):
         wttrDataV1()
     elif menuWD in ["B", "b"]:
         wttrDataV2()
+    elif menuWD in ["C", "c"]:
+        wttrDataV3()
 
 def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
