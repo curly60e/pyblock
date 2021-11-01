@@ -242,10 +242,10 @@ def wttrDataV1():
         weatherList = """
         ------------------------------------------------------------------------------------
             \033[1;31;40m*\033[0;37;40m Uruguay                # city name
-            \033[1;31;40m*\033[0;37;40m Giza+pyramid          # any location (+ for spaces)
+            \033[1;31;40m*\033[0;37;40m Giza+pyramid           # any location (+ for spaces)
             \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
             \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
-            \033[1;31;40m*\033[0;37;40m @bitcoin.org     # domain name
+            \033[1;31;40m*\033[0;37;40m @bitcoin.org           # domain name
             \033[1;31;40m*\033[0;37;40m 94107                  # area codes
             \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
             \033[1;31;40m*\033[0;37;40m moon                   # Moon phase (add ,+US or ,+France for these cities)
@@ -291,10 +291,10 @@ def wttrDataV2():
         weatherList = """
         ------------------------------------------------------------------------------------
             \033[1;31;40m*\033[0;37;40m Uruguay                # city name
-            \033[1;31;40m*\033[0;37;40m Giza+pyramid          # any location (+ for spaces)
+            \033[1;31;40m*\033[0;37;40m Giza+pyramid           # any location (+ for spaces)
             \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
             \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
-            \033[1;31;40m*\033[0;37;40m @bitcoin.org     # domain name
+            \033[1;31;40m*\033[0;37;40m @bitcoin.org           # domain name
             \033[1;31;40m*\033[0;37;40m 94107                  # area codes
             \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
             PRESS \033[1;32;40mM\033[0;37;40m TO INSERT MORE DATA
@@ -338,10 +338,10 @@ def wttrDataV3():
         weatherList = """
         ------------------------------------------------------------------------------------
             \033[1;31;40m*\033[0;37;40m Uruguay                # city name
-            \033[1;31;40m*\033[0;37;40m Giza+pyramid          # any location (+ for spaces)
+            \033[1;31;40m*\033[0;37;40m Giza+pyramid           # any location (+ for spaces)
             \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
             \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
-            \033[1;31;40m*\033[0;37;40m @bitcoin.org     # domain name
+            \033[1;31;40m*\033[0;37;40m @bitcoin.org           # domain name
             \033[1;31;40m*\033[0;37;40m 94107                  # area codes
             \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
             PRESS \033[1;32;40mM\033[0;37;40m TO INSERT MORE DATA
