@@ -1246,6 +1246,7 @@ def APILnbit():
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \033[1;32;40mB.\033[0;37;40m Pay Invoice
+    \033[1;32;40mC.\033[0;37;40m Wallet Balance
     \033[1;32;40mC.\033[0;37;40m New PayWall
     \033[1;32;40mD.\033[0;37;40m Delete PayWall
     \033[1;32;40mE.\033[0;37;40m List PayWalls
