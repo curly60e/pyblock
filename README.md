@@ -189,6 +189,25 @@ A simple Python Block Clock to check the Blockchain information.
 [@Korynewton](https://github.com/korynewton)
 [@Joao S. O. Bueno](https://github.com/jsbueno/terminal_matrix)
 [@C-Otto](https://github.com/C-Otto/rebalance-lnd)
+@Tippin_Me
+@TallyCoinApp
+@MemPool
+@CoinGecko
+@Igor_Chubin
+@Shesek
+@LNBits
+@LNPAYco
+@OpenNodeCo
+@BlockStream
+@Gwidion
+@AlphaaZeta
+@Hampus_S
+@Mutatrum
+@RoboHash
+@C_Otto83
+@BashCo_
+@JamesOb
+@BenTheCarman
 
 ### Testers
 
