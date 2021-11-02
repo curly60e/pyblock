@@ -3155,6 +3155,14 @@ def menuWeather(menuWD):
         wttrDataV2()
     elif menuWD in ["C", "c"]:
         wttrDataV3()
+        
+def menuWhaleAlert(menuWD):
+    if menuWD in ["A", "a"]:
+        whalDataV1()
+    elif menuWD in ["B", "b"]:
+        whalDataV2()
+    elif menuWD in ["C", "c"]:
+        whalDataV3()        
 
 def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
