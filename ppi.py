@@ -263,21 +263,6 @@ def whalConn2():
         input("\a\nContinue...")
     except:
         pass
-def whalConn3():
-    try:
-        clear()
-        blogo()
-        closed()
-        conn = "curl -s https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&min_value=1000000&limit=7&currency=BTC"
-        a = os.popen(conn).read()
-        clear()
-        blogo()
-        closed()
-        print(a)
-        input("\a\nContinue...")
-    except:
-        pass
-    
 
 #-----------------------------END WhaleAlert--------------------------------
 
