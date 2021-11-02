@@ -789,6 +789,7 @@ def APIMenuLOCAL():
     \033[1;32;40mJ.\033[0;37;40m SatNode    FREE
     \033[1;32;40mK.\033[0;37;40m Weather    FREE
     \033[1;32;40mL.\033[0;37;40m Arcade     FREE
+    \033[1;32;40mM.\033[0;37;40m WhaleAlert FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
