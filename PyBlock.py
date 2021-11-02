@@ -3073,7 +3073,7 @@ def menuLNBPI(menuLNQ):
         clear()
         blogo()
         lnbitsLNURLwList()
-     elif menuLNQ in ["H", "h"]:
+    elif menuLNQ in ["H", "h"]:
         clear()
         blogo()
         lnbitsWalletBalance()
