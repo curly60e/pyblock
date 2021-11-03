@@ -790,6 +790,7 @@ def APIMenuLOCAL():
     \033[1;32;40mK.\033[0;37;40m Weather    FREE
     \033[1;32;40mL.\033[0;37;40m Arcade     FREE
     \033[1;32;40mM.\033[0;37;40m WhaleAlert FREE
+    \033[1;32;40mN.\033[0;37;40m Zebedee    FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1466,6 +1467,45 @@ def WhaleApi():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuWhaleA(input("\033[1;32;40mSelect option: \033[0;37;40m"))    
+    
+def ZebedeeApi():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+
+        lncli = " getinfo"
+        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd0 = str(lsd)
+        alias = json.loads(lsd0)
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[0;37;40mWhaleAlert
+    \033[1;32;40mA.\033[0;37;40m Wallet Balance
+    \033[1;32;40mB.\033[0;37;40m New invoice
+    \033[1;32;40mC.\033[0;37;40m Pay invoice
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    menuZebeD(input("\033[1;32;40mSelect option: \033[0;37;40m"))    
 #-------------------------------- SETTINGS -----------------------------------------------
 
 
@@ -3202,6 +3242,14 @@ def menuWhaleAlert(menuWD):
         whalDataV2()
     elif menuWD in ["C", "c"]:
         whalDataV3()        
+        
+def menuZebedee(menuWD):
+    if menuWD in ["A", "a"]:
+        zebeDataV1()
+    elif menuWD in ["B", "b"]:
+        zebeDataV2()
+    elif menuWD in ["C", "c"]:
+        zebeDataV3()   
 
 def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
