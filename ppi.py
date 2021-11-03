@@ -266,6 +266,71 @@ def whalConn2():
 
 #-----------------------------END WhaleAlert--------------------------------
 
+#-----------------------------Zebedee--------------------------------
+
+def zebeConn1():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request GET 'https://api.zebedee.io/v0/wallet' \
+--header 'Content-Type: application/json' \
+--header 'apikey: API_KEY'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def zebeConn2():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/charges' \
+--header 'Content-Type: application/json' \
+--header 'apikey: API_KEY' \
+--data-raw '{
+    "expiresIn": ,
+    "amount": "",
+    "description": "My Charge Description",
+    "internalId": "",
+    "callbackUrl": "https://your-website.com/callback"
+}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def zebeConn3():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/payments' \
+--header 'Content-Type: application/json' \
+--header 'apikey: API_KEY' \
+--data-raw '{
+    "description": "My Custom Payment Description",
+    "internalId": "",
+    "invoice": ""
+}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass    
+
+#-----------------------------END Zebedee--------------------------------
+
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
     try:
