@@ -273,9 +273,7 @@ def zebeConn1():
         clear()
         blogo()
         closed()
-        conn = "curl --location --request GET 'https://api.zebedee.io/v0/wallet' \
---header 'Content-Type: application/json' \
---header 'apikey: API_KEY'"
+        conn = "curl --location --request GET 'https://api.zebedee.io/v0/wallet' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -289,15 +287,7 @@ def zebeConn2():
         clear()
         blogo()
         closed()
-        conn = "curl --location --request POST 'https://api.zebedee.io/v0/charges' \
---header 'Content-Type: application/json' \
---header 'apikey: API_KEY' \
---data-raw '{
-    "expiresIn": ,
-    "amount": "",
-    "description": "My Charge Description",
-    "internalId": "",
-    "callbackUrl": "https://your-website.com/callback"
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/charges' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
 }'"
         a = os.popen(conn).read()
         clear()
@@ -312,12 +302,7 @@ def zebeConn3():
         clear()
         blogo()
         closed()
-        conn = "curl --location --request POST 'https://api.zebedee.io/v0/payments' \
---header 'Content-Type: application/json' \
---header 'apikey: API_KEY' \
---data-raw '{
-    "description": "My Custom Payment Description",
-    "internalId": "",
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/payments' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
     "invoice": ""
 }'"
         a = os.popen(conn).read()
