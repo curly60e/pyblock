@@ -856,6 +856,7 @@ def miscellaneousLOCAL():
 
     \u001b[38;5;202mA.\033[0;37;40m FunB
     \u001b[38;5;202mB.\033[0;37;40m Sysinfo
+    \u001b[38;5;202mC.\033[0;37;40m Bitcoin Fun
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
