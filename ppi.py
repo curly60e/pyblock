@@ -283,7 +283,52 @@ def whalConn2():
         pass
 
 #-----------------------------END WhaleAlert--------------------------------
+#-----------------------------LNMarkets--------------------------------
 
+def lnmaConn1():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --request POST \ --url https://api.lnmarkets.com/v1/login/token \ --header 'Accept: application/json' \ --header 'Content-Type: application/json' \ --data '{"type":"object","additionalProperties":false,"required":["token"],"properties":{"token":{"type":"string"}}}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def lnmaConn2():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --request GET \--url 'https://api.lnmarkets.com/v1/lnurl/withdraw/address?amount=100000&address=satoshinakamoto%40bitrefill.me'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def lnmaConn3():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --request POST \ --url https://api.lnmarkets.com/v1/user/deposit \ --header 'Accept: application/json' \ --header 'Authorization: Bearer {access-token}' \ --header 'Content-Type: application/json' \ --data '{"amount":10000,"unit":"sat"}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END LNMarkets--------------------------------
 #-----------------------------Zebedee--------------------------------
 
 def zebeConn1():
