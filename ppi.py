@@ -240,7 +240,7 @@ def bitfConn():
         clear()
         blogo()
         closed()
-        conn = "curl -v https://bitcoinexplorer.org/fun > page.html"
+        conn = "w3m https://bitcoinexplorer.org/fun"
         a = os.popen(conn).read()
         clear()
         blogo()
