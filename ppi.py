@@ -233,6 +233,24 @@ def bwtConn():
         pass
 
 #-----------------------------END bwt.dev--------------------------------
+#-----------------------------BitcoinFun--------------------------------
+
+def bitfConn():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl -v https://bitcoinexplorer.org/fun > page.html"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END BitcoinFun--------------------------------
 #-----------------------------WhaleAlert--------------------------------
 
 def whalConn1():
