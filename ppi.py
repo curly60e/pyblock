@@ -233,6 +233,24 @@ def bwtConn():
         pass
 
 #-----------------------------END bwt.dev--------------------------------
+#-----------------------------BitcoinFun--------------------------------
+
+def bitfConn():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "w3m https://bitcoinexplorer.org/fun"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END BitcoinFun--------------------------------
 #-----------------------------WhaleAlert--------------------------------
 
 def whalConn1():
@@ -265,6 +283,56 @@ def whalConn2():
         pass
 
 #-----------------------------END WhaleAlert--------------------------------
+
+#-----------------------------Zebedee--------------------------------
+
+def zebeConn1():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request GET 'https://api.zebedee.io/v0/wallet' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def zebeConn2():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/charges' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def zebeConn3():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/payments' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+    "invoice": ""
+}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass    
+
+#-----------------------------END Zebedee--------------------------------
 
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
