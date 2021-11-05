@@ -454,7 +454,7 @@ def callGitSatSale():
     if not os.path.isdir('satsale'):
         git = "git clone https://github.com/nickfarrow/SatSale.git"
         os.system(git)
-    os.system("cd satsale && python3 node_warden.py")
+    os.system("cd satsale && python3 satsale.py")
     
 
 #---------------------------------ColdCore-----------------------------------------
