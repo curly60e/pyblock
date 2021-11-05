@@ -233,6 +233,106 @@ def bwtConn():
         pass
 
 #-----------------------------END bwt.dev--------------------------------
+#-----------------------------BitcoinFun--------------------------------
+
+def bitfConn():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "w3m https://bitcoinexplorer.org/fun"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END BitcoinFun--------------------------------
+#-----------------------------WhaleAlert--------------------------------
+
+def whalConn1():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl -s https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&currency=BTC"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def whalConn2():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl -s https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&min_value=500000&limit=7&currency=BTC"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END WhaleAlert--------------------------------
+
+#-----------------------------Zebedee--------------------------------
+
+def zebeConn1():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request GET 'https://api.zebedee.io/v0/wallet' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def zebeConn2():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/charges' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+def zebeConn3():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl --location --request POST 'https://api.zebedee.io/v0/payments' ' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+    "invoice": ""
+}'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass    
+
+#-----------------------------END Zebedee--------------------------------
 
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
