@@ -448,6 +448,14 @@ def callGitWardenTerminal():
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
         os.system(git)
     os.system("cd warden_terminal && python3 node_warden.py")
+    
+#---------------------------------SatSale----------------------------------
+def callGitSatSale():
+    if not os.path.isdir('satsale'):
+        git = "git clone https://github.com/nickfarrow/SatSale.git"
+        os.system(git)
+    os.system("cd satsale && python3 satsale.py")
+    
 
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
@@ -792,6 +800,7 @@ def APIMenuLOCAL():
     \033[1;32;40mM.\033[0;37;40m WhaleAlert FREE
     \033[1;32;40mN.\033[0;37;40m Zebedee    FREE
     \033[1;32;40mO.\033[0;37;40m LNMarkets  FREE
+    \033[1;32;40mP.\033[0;37;40m SatSale    FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
