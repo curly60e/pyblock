@@ -233,6 +233,24 @@ def bwtConn():
         pass
 
 #-----------------------------END bwt.dev--------------------------------
+#-----------------------------BitcoinFun--------------------------------
+
+def bitfConn():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "w3m https://bitcoinexplorer.org/fun"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END BitcoinFun--------------------------------
 #-----------------------------WhaleAlert--------------------------------
 
 def whalConn1():
