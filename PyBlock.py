@@ -1303,6 +1303,7 @@ def APILnbit():
     \033[1;32;40mE.\033[0;37;40m List PayWalls
     \033[1;32;40mF.\033[0;37;40m Create LNURL
     \033[1;32;40mG.\033[0;37;40m List LNURL
+    \033[1;32;40mH.\033[0;37;40m Wallet Balance
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -3201,6 +3202,10 @@ def menuLNBPI(menuLNQ):
         clear()
         blogo()
         lnbitsLNURLwList()
+    elif menuLNQ in ["H", "h"]:
+        clear()
+        blogo()
+        lnbitsWalletBalance()
     elif menuLNQ in ["R", "r"]:
         menuSelection()
 
