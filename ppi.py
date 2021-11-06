@@ -69,12 +69,13 @@ def opreturn():
         message = input("Message: ")
         curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
         while True:
-            if len(message) <= 70:
+            if len(message) > 70:
+                clear()
+                blogo()
+                print("Error! Only 80 characters allowed!")
+                message = input("\nMessage: ")
+            else:
                 break
-            clear()
-            blogo()
-            print("Error! Only 80 characters allowed!")
-            message = input("\nMessage: ")
         a = os.popen(curl).read()
         b = str(a)
         node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
@@ -135,6 +136,13 @@ def opreturn():
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
+                response = requests.get(url)
+                responseB = str(response.text)
+                responseC = responseB
+                clear()
+                blogo()
+                print("\nTransaction ID: " + responseC)
+                input("\nContinue...")
             else:
                 cert_path = lndconnectload["tls"]
                 macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -144,13 +152,13 @@ def opreturn():
                 r = requests.get(url, headers=headers, verify=cert_path)
                 s = r.json()
                 url = 'http://opreturnbot.com/api/status/{}'.format(s['payment_hash'])
-            response = requests.get(url)
-            responseB = str(response.text)
-            responseC = responseB
-            clear()
-            blogo()
-            print("\nTransaction ID: " + responseC)
-            input("\nContinue...")
+                response = requests.get(url)
+                responseB = str(response.text)
+                responseC = responseB
+                clear()
+                blogo()
+                print("\nTransaction ID: " + responseC)
+                input("\nContinue...")
     except:
         pass
 
@@ -241,32 +249,43 @@ def wttrDataV1():
         blogo()
         weatherList = """
         ------------------------------------------------------------------------------------
-            \033[1;31;40m*\033[0;37;40m Uruguay                # city name
-            \033[1;31;40m*\033[0;37;40m Giza+pyramid           # any location (+ for spaces)
+
+
+
+            \033[1;31;40m*\033[0;37;40m uruguay                # city name
+            \033[1;31;40m*\033[0;37;40m ~Giza+pyramid          # any location (+ for spaces)
             \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
             \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
-            \033[1;31;40m*\033[0;37;40m @bitcoin.org           # domain name
+            \033[1;31;40m*\033[0;37;40m @lightninghood.com     # domain name
             \033[1;31;40m*\033[0;37;40m 94107                  # area codes
             \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
             \033[1;31;40m*\033[0;37;40m moon                   # Moon phase (add ,+US or ,+France for these cities)
-            \033[1;31;40m*\033[0;37;40m moon@2009-01-03        # Moon phase for the date (@2009-01-03)
+            \033[1;31;40m*\033[0;37;40m moon@2009-01-03        # Moon phase for the date (@2016-10-25)
+
             PRESS \033[1;32;40mM\033[0;37;40m TO INSERT MORE DATA
+
         ------------------------------------------------------------------------------------
+
         """
         print(weatherList)
         selectData = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
         if selectData in ['M', 'm']:
             moreData = """
+
         ------------------------------------------------------------------------------------
                                         Supported languages
+
                         ar af be ca da de el es et fr fa hi hu ia id it nb nl
                         oc pl pt-br ro ru tr th uk vi zh-cn zh-tw (supported)
+
         ------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------
                                              Units
+
                     m        # metric (SI) (used by default everywhere except US)
                     u        # USCS (used by default in US)
                     M        # show wind speed in m/s
+
         ------------------------------------------------------------------------------------
             """
             print(moreData)
@@ -290,30 +309,41 @@ def wttrDataV2():
         blogo()
         weatherList = """
         ------------------------------------------------------------------------------------
-            \033[1;31;40m*\033[0;37;40m Uruguay                # city name
-            \033[1;31;40m*\033[0;37;40m Giza+pyramid           # any location (+ for spaces)
+
+
+
+            \033[1;31;40m*\033[0;37;40m uruguay                # city name
+            \033[1;31;40m*\033[0;37;40m ~Giza+pyramid          # any location (+ for spaces)
             \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
             \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
-            \033[1;31;40m*\033[0;37;40m @bitcoin.org           # domain name
+            \033[1;31;40m*\033[0;37;40m @lightninghood.com     # domain name
             \033[1;31;40m*\033[0;37;40m 94107                  # area codes
             \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
+
             PRESS \033[1;32;40mM\033[0;37;40m TO INSERT MORE DATA
+
         ------------------------------------------------------------------------------------
+
         """
         print(weatherList)
         selectData = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
         if selectData in ['M', 'm']:
             moreData = """
+
         ------------------------------------------------------------------------------------
                                         Supported languages
+
                         ar af be ca da de el es et fr fa hi hu ia id it nb nl
                         oc pl pt-br ro ru tr th uk vi zh-cn zh-tw (supported)
+
         ------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------
                                              Units
+
                     m        # metric (SI) (used by default everywhere except US)
                     u        # USCS (used by default in US)
                     M        # show wind speed in m/s
+
         ------------------------------------------------------------------------------------
             """
             print(moreData)
@@ -331,55 +361,10 @@ def wttrDataV2():
         input("Continue...")
     except:
         pass
-def wttrDataV3():
-    try:
-        clear()
-        blogo()
-        weatherList = """
-        ------------------------------------------------------------------------------------
-            \033[1;31;40m*\033[0;37;40m Uruguay                # city name
-            \033[1;31;40m*\033[0;37;40m Giza+pyramid           # any location (+ for spaces)
-            \033[1;31;40m*\033[0;37;40m Москва                 # Unicode name of any location in any language
-            \033[1;31;40m*\033[0;37;40m muc                    # airport code (3 letters)
-            \033[1;31;40m*\033[0;37;40m @bitcoin.org           # domain name
-            \033[1;31;40m*\033[0;37;40m 94107                  # area codes
-            \033[1;31;40m*\033[0;37;40m -78.46,106.79          # GPS coordinates
-            PRESS \033[1;32;40mM\033[0;37;40m TO INSERT MORE DATA
-        ------------------------------------------------------------------------------------
-        """
-        print(weatherList)
-        selectData = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
-        if selectData in ['M', 'm']:
-            moreData = """
-        ------------------------------------------------------------------------------------
-                                        Supported languages
-                        ar af be ca da de el es et fr fa hi hu ia id it nb nl
-                        oc pl pt-br ro ru tr th uk vi zh-cn zh-tw (supported)
-        ------------------------------------------------------------------------------------
-        ------------------------------------------------------------------------------------
-                                             Units
-                    m        # metric (SI) (used by default everywhere except US)
-                    u        # USCS (used by default in US)
-                    M        # show wind speed in m/s
-        ------------------------------------------------------------------------------------
-            """
-            print(moreData)
-            selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
-            lang = input("Insert your language: ")
-            unit = input("Insert your metric units: ")
-            list = "curl '" + lang + "v3.wttr.in" + selectData2 + "?F&" + unit + "'"
-        else:
-            list = "curl v3.wttr.in/" + selectData + "?F"
-        a = os.popen(list).read()
-        clear()
-        blogo()
-        print(a)
-        input("Continue...")
-    except:
-        pass
 
 
 #-----------------------------END wttr.in--------------------------------
+
 #-----------------------------RATE.SX--------------------------------
 
 def rateSXList():
@@ -417,7 +402,6 @@ def rateSXList():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
-                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
@@ -469,7 +453,6 @@ def rateSXGraph():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
-                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
