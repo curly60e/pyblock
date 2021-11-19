@@ -26,20 +26,6 @@ def clear(): # clear the screen
 def closed():
     print("<<< Back Control + C.\n\n")
 
-if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-    lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-else:
-    clear()
-    blogo()
-    print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
-    lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
-    lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
-    lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
-    print("\n\tLocal Lightning Node connection.\n")
-    lndconnectload["ln"] = input("Insert the path to lncli: ")
-    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
-
 #-------------------------RPC BITCOIN NODE CONNECTION
 
 def rpc(method, params=[]):

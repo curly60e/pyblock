@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.8.9"
+version = "0.9.9"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -514,6 +514,30 @@ def MainMenuLOCAL(): #Main Menu
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def MainMenuLOCALChainONLY(): #Main Menu
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+
+    \u001b[31;1mA.\033[0;37;40m PyBLOCK
+    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
+    \u001b[38;5;40mP.\033[0;37;40m Platforms
+    \u001b[38;5;27mS.\033[0;37;40m Settings
+    \u001b[38;5;15mX.\033[0;37;40m Donate
+    \u001b[38;5;93mQ.\033[0;37;40m Exit
+    \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
+    mainmenuLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def MainMenuREMOTE(): #Main Menu
     clear()
     blogo()
@@ -581,6 +605,36 @@ def bitcoincoremenuLOCAL():
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def bitcoincoremenuLOCALOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
+    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
+    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
+    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
+    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
+    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
+    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
+    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
+    \u001b[38;5;202mI.\033[0;37;40m ColdCore
+    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[33;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
+    bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCALOPRETURN():
     clear()
@@ -792,6 +846,48 @@ def APIMenuLOCAL():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APIMenuLOCALOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m TippinMe   FREE
+    \033[1;32;40mB.\033[0;37;40m Tallycoin  FREE
+    \033[1;32;40mC.\033[0;37;40m Mempool    FREE
+    \033[1;32;40mD.\033[0;37;40m CoinGecko  FREE
+    \033[1;32;40mE.\033[0;37;40m Rate.sx    FREE
+    \033[1;32;40mF.\033[0;37;40m BWT        FREE
+    \033[1;32;40mG.\033[0;37;40m LNBits     \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mH.\033[0;37;40m LNPay      \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mI.\033[0;37;40m OpenNode   \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mJ.\033[0;37;40m SatNode    FREE
+    \033[1;32;40mK.\033[0;37;40m Weather    FREE
+    \033[1;32;40mL.\033[0;37;40m Arcade     FREE
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def decodeHex():
     clear()
@@ -1456,6 +1552,28 @@ def settings4Local():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     menuSettingsLocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def settings4LocalOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
+    \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
+    \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    menuSettingsLocalOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def settings4Remote():
     clear()
@@ -2146,10 +2264,25 @@ def menuSelection():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
-    if path['bitcoincli']:
-        MainMenuLOCAL()
+    chln = {"onchain":"", "offchain":""}
+    if os.path.isfile('selection.conf'):
+        chain = pickle.load(open("selection.conf", "rb"))
+        chln = chain
+        if path['bitcoincli']:
+            if chln ['onchain']:
+                MainMenuLOCALChainONLY()
+            else:
+                MainMenuLOCAL()
+        else:
+            MainMenuREMOTE()
     else:
-        MainMenuREMOTE()
+        if os.path.isfile('blndconnect.conf'):
+            chln['offchain'] = "offchain"
+            pickle.dump(chln, open("selection.conf", "wb"))
+        else:
+            chln['onchain'] = "onchain"
+            pickle.dump(chln, open("selection.conf", "wb"))
+
 
 def menuSelectionLN():
     lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
@@ -2433,6 +2566,20 @@ def testClock():
 #--------------------------------- Main Menu execution --------------------------------
 
 def menuSettingsLocal(menuSTT):
+    if menuSTT in ["A", "a"]:
+        clear()
+        blogo()
+        designQ()
+    elif menuSTT in ["B", "b"]:
+        clear()
+        blogo()
+        colors()
+    elif menuSTT in ["C", "c"]:
+        clear()
+        blogo()
+        colorsC()
+
+def menuSettingsLocalOnchainONLY(menuSTT):
     if menuSTT in ["A", "a"]:
         clear()
         blogo()
@@ -3203,7 +3350,100 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         blogo()
         callGitWardenTerminal()
 
+def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
+    if menuS in ["A", "a"]:
+        artist()
+    elif menuS in ["B", "b"]:
+        bitcoincoremenuLOCALOnchainONLY()
+    elif menuS in ["S", "s"]:
+        settings4LocalOnchainONLY()
+    elif menuS in ["P", "p"]:
+        APIMenuLOCALOnchainONLY()
+    elif menuS in ["X", "x"]:
+        dnt()
+    elif menuS in ["U", "u"]:
+        upgrade()
+    elif menuS in ["Q", "q"]:
+        os._exit(0)
+        apisnd.close()
+        donation.close()
+        clone.close()
+        logos.close()
+        feed.close()
+        sysinf.close()
+        nodeconnection.close()
+        exit()
+    elif menuS in ["T", "t"]:
+        clear()
+        delay_print("\033[1;32;40mWake up, Neo...")
+        t.sleep(2)
+        clear()
+        delay_print("The Matrix has you...")
+        t.sleep(2)
+        clear()
+        delay_print("Follow the white rabbit.")
+        t.sleep(3)
+        clear()
+        print("Knock, knock, Neo.\033[0;37;40m\n")
+        t.sleep(2)
+        clear()
+        t.sleep(3)
+        screensv()
+    elif menuS in ["nym", "Nym", "NYM", "nYm", "nyM", "NYm", "NyM", "nYM"]:
+        clear()
+        blogo()
+        robotNym()
+    elif menuS in ["wt", "WT", "Wt", "wT"]:
+        clear()
+        blogo()
+        callGitWardenTerminal()
+
 def bitcoincoremenuLOCALcontrolA(bcore):
+    if bcore in ["A", "a"]:
+        while True:
+            try:
+                clear()
+                blogo()
+                sysinfo()
+                close()
+                console()
+                t.sleep(5)
+            except:
+                break
+    elif bcore in ["B", "b"]:
+        clear()
+        blogo()
+        getgenesis()
+        input("Continue...")
+        menuSelection()
+    elif bcore in ["C", "c"]:
+        getblock()
+    elif bcore in ["D", "d"]:
+        runTheNumbersMenu()
+    elif bcore in ["E", "e"]:
+        decodeHex()
+    elif bcore in ["F", "f"]:
+        try:
+            clear()
+            blogo()
+            sysinfo()
+            close()
+            decodeQR()
+            input("Continue...")
+        except:
+            pass
+    elif bcore in ["G", "g"]:
+        getrawtx()
+    elif bcore in ["H", "h"]:
+        miscellaneousLOCAL()
+    elif bcore in ["I", "i"]:
+        callColdCore()
+    elif bcore in ["J", "j"]:
+        pdfconvert()
+    elif bcore in ["O", "o"]:
+        bitcoincoremenuLOCALOPRETURN()
+
+def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
         while True:
             try:
@@ -3403,6 +3643,36 @@ def lightningnetworkLOCALcontrol(lncore):
         menuSelection()
 
 def platfformsLOCALcontrol(platf):
+    if platf in ["A", "a"]:
+        aaccPPiTippinMe()
+    elif platf in ["B", "b"]:
+        aaccPPiTallyCo()
+    elif platf in ["C", "c"]:
+        mempoolmenu()
+    elif platf in ["D", "d"]:
+        clear()
+        blogo()
+        CoingeckoPP()
+    elif platf in ["E", "e"]:
+        rateSX()
+    elif platf in ["F", "f"]:
+        bwtConn()
+    elif platf in ["G", "g"]:
+        aaccPPiLNBits()
+    elif platf in ["H", "h"]:
+        aaccPPiLNPay()
+    elif platf in ["I", "i"]:
+        aaccPPiOpenNode()
+    elif platf in ["J", "j"]:
+        satnodeMenu()
+    elif platf in ["K", "k"]:
+        weatherMenu()
+    elif platf in ["L", "l"]:
+        gameroom()
+    elif platf in ["R", "r"]:
+        menuSelection()
+
+def platfformsLOCALcontrolOnchainONLY(platf):
     if platf in ["A", "a"]:
         aaccPPiTippinMe()
     elif platf in ["B", "b"]:
@@ -3719,7 +3989,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
@@ -3737,9 +4007,35 @@ while True: # Loop
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
             pickle.dump(path, open("bclock.conf", "wb"))
 
+        if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
+            lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+        else:
+            clear()
+            blogo()
+            if os.path.isfile('init.conf'):
+                pqr = pickle.load(open("init.conf", "rb"))
+                yesno = pqr
+                if yesno in ["NO", "no", "No", "nO"]:
+                    pass
+            else:
+                yesno = input("Do you want to connect your Lightning Node? yes/no: ")
+                pickle.dump(yesno, open("init.conf", "wb"))
+                if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
+                    print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
+                    lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
+                    lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
+                    lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
+                    print("\n\tLocal Lightning Node connection.\n")
+                    lndconnectload["ln"] = input("Insert the path to lncli: ")
+                    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+                elif yesno in ["NO", "no", "No", "nO"]:
+                    pass
+
+
         menuSelection()
 
 
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
