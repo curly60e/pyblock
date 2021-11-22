@@ -5043,7 +5043,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    #try:
+    try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
@@ -5090,6 +5090,6 @@ while True: # Loop
         menuSelection()
 
 
-    #except:
-    #    print("\n")
-    #    sys.exit(101)
+    except:
+        print("\n")
+        sys.exit(101)
