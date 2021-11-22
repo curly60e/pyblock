@@ -101,7 +101,7 @@ A simple Python Block Clock to check the Blockchain information.
 
     * You will need to have tls.cert and admin.macaroon already downloaded from your LND node.
 
-     - Open the Terminal.
+     - Open the Terminal
 
      - Type these commands:
 
@@ -186,15 +186,32 @@ A simple Python Block Clock to check the Blockchain information.
 
 [@Curly60e](https://twitter.com/royalfield370)
 [@SamouraiDev](https://twitter.com/SamouraiDev)
-[@Korynewton](https://github.com/korynewton)
-[@Joao S. O. Bueno](https://github.com/jsbueno/terminal_matrix)
-[@C-Otto](https://github.com/C-Otto/rebalance-lnd)
+[@Korynewton](https://twitter.com/kn3wt)
+[@Tippin_Me](https://twitter.com/tippin_me)
+[@TallyCoinApp](https://twitter.com/tallycoinapp)
+[@MemPool](https://twitter.com/mempool)
+[@CoinGecko](https://twitter.com/coingecko)
+[@Igor_Chubin](https://twitter.com/igor_chubin)
+[@Shesek](https://twitter.com/shesek)
+[@LNBits](https://twitter.com/lnbits)
+[@LNPAYco](https://twitter.com/LNPAYco)
+[@OpenNodeCo](https://twitter.com/OpenNodeCo)
+[@BlockStream](https://twitter.com/Blockstream)
+[@Gwidion](https://twitter.com/gwidion)
+[@AlphaaZeta](https://twitter.com/alphaazeta)
+[@Hampus_S](https://twitter.com/hampus_s)
+[@Mutatrum](https://twitter.com/mutatrum)
+[@RoboHash](https://twitter.com/Robohash)
+[@C_Otto83](https://twitter.com/c_otto83)
+[@BashCo_](https://twitter.com/BashCo_)
+[@JamesOb](https://twitter.com/jamesob)
+[@BenTheCarman](https://twitter.com/benthecarman)
 
 ### Testers
 
 [@__B__T__C__](https://twitter.com/__B__T__C__)
 
-DONATE PYBLOCK
+SUPPORT PYBLOCK
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
