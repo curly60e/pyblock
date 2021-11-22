@@ -26,20 +26,6 @@ def clear(): # clear the screen
 def closed():
     print("<<< Back Control + C.\n\n")
 
-if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-    lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-else:
-    clear()
-    blogo()
-    print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
-    lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
-    lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
-    lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
-    print("\n\tLocal Lightning Node connection.\n")
-    lndconnectload["ln"] = input("Insert the path to lncli: ")
-    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
-
 #-------------------------RPC BITCOIN NODE CONNECTION
 
 def rpc(method, params=[]):
@@ -171,13 +157,13 @@ def locallistpeersQQ():
     box_size=10,
     border=4,
     )
+    lncli = " listpeers"
     while True:
         clear()
         print("\033[1;32;40m")
         blogo()
         print("\033[0;37;40m")
         print("<<< Back to the Main Menu Press Control + C.\n\n")
-        lncli = " listpeers"
         lsd = os.popen(lndconnectload['ln'] + lncli).read()
         lsd0 = str(lsd)
         d = json.loads(lsd0)
@@ -262,8 +248,7 @@ def locallistpeersQQ():
 
             pp = input("\nDo you want to disconnect? Y/n: ")
             if pp in ["Y", "y"]:
-                lncli = " disconnect"
-                lsd = os.popen(lndconnectload['ln'] + lncli + " " + nd).read()
+                lsd = os.popen(lndconnectload['ln'] + " disconnect" + " " + nd).read()
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 print("\n\tDisconnected from peer " + nd)
