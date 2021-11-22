@@ -1216,7 +1216,7 @@ def dntDev(): # Dev Donation Menu
         lncli = " getinfo"
         lsd = os.popen(lndconnectload['ln'] + lncli).read()
         lsd0 = str(lsd)
-        alias = json.loads(lsd0), alias['alias']
+        alias = json.loads(lsd0)
     else:
         a = "Local" if path['bitcoincli'] else "Remote"
         blk = rpc('getblockchaininfo')
