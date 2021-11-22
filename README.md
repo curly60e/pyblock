@@ -25,26 +25,28 @@
 <img src="./resources/images/satnode.PNG" width="50%" />
 
 # PyBlock v0.9.9
-Dashboard Bitcoin information program
+A simple Python manager with Cypherpunk aesthetic.
 
-A simple Python Block Clock to check the Blockchain information.
+- This will fully work on a Node that has Bitcoin Core and LND installed.
+- We fully tested and worked perfect on [MyNodeBTC](https://twitter.com/_PyBlock_/status/1402516068959199233)
+- We fully tested and worked perfect on [RaspiBlitz](https://twitter.com/_PyBlock_/status/1405788110458441728)
+- We fully tested and worked perfect on [BitcoinMachines](https://twitter.com/_PyBlock_/status/1365757861217861632)
+- We fully tested and worked perfect on [Umbrel](https://twitter.com/_PyBlock_/status/1405574038320201733)
 
-- This will fully work on a node that has Bitcoin Core and LND installed
-- We fully tested and worked perfect on [MyNodeBTC](https://mynodebtc.com/)
-
-## First Start
+# First Start
 
 - You will need to find the path of the files tls.cert and admin.macaroon to do the REST connection to have access to LND.
 
-    ### From local node
+    ### From LOCAL Node
 
-    Open the Terminal
+    Open the Terminal.
 
     - Type these commands:
 
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
     * a@A:~> pip3 install -r requirements.txt
+    * a@A:~> sudo apt install hexyl
     * a@A:~> python3 PyBlock.py
 
     <br />
@@ -97,7 +99,7 @@ A simple Python Block Clock to check the Blockchain information.
 
     <br />
 
-    ### From remote computer with Bitcoin Core installed
+    ### From REMOTE Computer
 
     * You will need to have tls.cert and admin.macaroon already downloaded from your LND node.
 
@@ -163,7 +165,6 @@ A simple Python Block Clock to check the Blockchain information.
 
 ## Dependencies
 
-  - Install [Hexyl](https://github.com/sharkdp/hexyl)
   - Install Curl on Debian based type:
     - sudo apt install curl
 
@@ -171,18 +172,8 @@ A simple Python Block Clock to check the Blockchain information.
 
   - python3 PyBlock.py
 
-## How make it work
-  It will appear a place you can put your Bitcoin-cli path
 
-  - "Path to your Bitcoin-cli: " #Add the path and shoot Enter.
-  - Install Tor & TELNET on Debian based type [ONLY FOR HACKER ZONE CONNECTION]:
-    - sudo apt install tor
-      * To activate Tor on the shell type:
-        - source torsocks on
-    - sudo apt install telnet
-      * After this you can execute PyBlock and connect to the HACKER ZONE.
-
-### Contributors
+### Tools by
 
 [@Curly60e](https://twitter.com/royalfield370)
 [@SamouraiDev](https://twitter.com/SamouraiDev)
@@ -207,11 +198,11 @@ A simple Python Block Clock to check the Blockchain information.
 [@JamesOb](https://twitter.com/jamesob)
 [@BenTheCarman](https://twitter.com/benthecarman)
 
-### Testers
+### Revised by
 
 [@__B__T__C__](https://twitter.com/__B__T__C__)
 
-SUPPORT PYBLOCK
+SUPPORT PyBLØCK.
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
