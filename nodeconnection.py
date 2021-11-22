@@ -157,13 +157,13 @@ def locallistpeersQQ():
     box_size=10,
     border=4,
     )
+    lncli = " listpeers"
     while True:
         clear()
         print("\033[1;32;40m")
         blogo()
         print("\033[0;37;40m")
         print("<<< Back to the Main Menu Press Control + C.\n\n")
-        lncli = " listpeers"
         lsd = os.popen(lndconnectload['ln'] + lncli).read()
         lsd0 = str(lsd)
         d = json.loads(lsd0)
@@ -248,8 +248,7 @@ def locallistpeersQQ():
 
             pp = input("\nDo you want to disconnect? Y/n: ")
             if pp in ["Y", "y"]:
-                lncli = " disconnect"
-                lsd = os.popen(lndconnectload['ln'] + lncli + " " + nd).read()
+                lsd = os.popen(lndconnectload['ln'] + " disconnect" + " " + nd).read()
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 print("\n\tDisconnected from peer " + nd)
