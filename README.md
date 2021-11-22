@@ -29,7 +29,7 @@ Bitcoin Full-Node Dashboard.
 
 A simple Python manager with Cypherpunk aesthetic.
 
-- This will fully work on a Node that has Bitcoin Core and LND installed.
+- This will fully work on a node that has Bitcoin Core and LND installed
 - We fully tested and worked perfect on [MyNodeBTC](https://twitter.com/_PyBlock_/status/1402516068959199233)
 - We fully tested and worked perfect on [RaspiBlitz](https://twitter.com/_PyBlock_/status/1405788110458441728)
 - We fully tested and worked perfect on [BitcoinMachines](https://twitter.com/_PyBlock_/status/1365757861217861632)
@@ -41,7 +41,7 @@ A simple Python manager with Cypherpunk aesthetic.
 
     ### From LOCAL Node
 
-    Open the Terminal.
+    Open the Terminal
 
     - Type these commands:
 
@@ -253,6 +253,7 @@ A simple Python manager with Cypherpunk aesthetic.
 
   - python3 PyBlock.py
 
+
 ### Tools by
 
 [@Curly60e](https://twitter.com/royalfield370)
@@ -282,7 +283,7 @@ A simple Python manager with Cypherpunk aesthetic.
 
 [@__B__T__C__](https://twitter.com/__B__T__C__)
 
-SUPPORT PyBLØCK.
+SUPPORT PyBLØCK
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
