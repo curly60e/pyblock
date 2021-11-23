@@ -36,6 +36,7 @@ A simple Python manager with Cypherpunk aesthetic.
 # First Start
 
 - You will need to find the path of the files tls.cert and admin.macaroon to do the REST connection to have access to LND.
+- [Poetry](https://python-poetry.org/) is needed to ensure every user has the same python dependencies installed.
 
     ### From LOCAL Node
 
@@ -43,11 +44,11 @@ A simple Python manager with Cypherpunk aesthetic.
 
     - Type these commands:
 
+    * a@A:~> pip3 install poetry
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
-    * a@A:~> pip3 install -r requirements.txt
-    * a@A:~> sudo apt install hexyl
-    * a@A:~> python3 PyBlock.py
+    * a@A:~> poetry install
+    * a@A:~> poetry run python3 PyBlock.py
 
     <br />
 
@@ -102,15 +103,17 @@ A simple Python manager with Cypherpunk aesthetic.
     ### From REMOTE Computer
 
     * You will need to have tls.cert and admin.macaroon already downloaded from your LND node.
+    * [Poetry](https://python-poetry.org/) is needed to ensure every user has the same python dependencies installed.
 
      - Open the Terminal
 
      - Type these commands:
 
+        * a@A:~> pip3 install poetry
         * a@A:~> git clone https://github.com/curly60e/pyblock.git
         * a@A:~> cd pyblock
-        * a@A:~> pip3 install -r requirements.txt
-        * a@A:~> python3 PyBlock.py
+        * a@A:~> poetry install
+        * a@A:~> poetry run python3 PyBlock.py
 
         <br />
 
