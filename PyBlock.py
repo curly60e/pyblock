@@ -4156,8 +4156,6 @@ def menuPI(menuWN):
         aaccPPiLNPay()
     elif menuWN in ["I", "i"]:
         aaccPPiOpenNode()
-    elif menuWN in ["Z", "z"]:
-        stsConn()
 
 def mempoolmenuS(menuMem):
     if menuMem in ["A", "a"]:
@@ -4482,6 +4480,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         pdfconvert()
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
+    elif bcore in ["Z", "z"]:
+        statsconn()
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -4529,6 +4529,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["W", "w"]:
         walletmenuLOCALOnchainONLY()
+    elif bcore in ["Z", "z"]:
+        statsconn()
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
