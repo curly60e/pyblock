@@ -56,10 +56,6 @@ def rpc(method, params=[]):
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
-
-def taproot():
-    os.system("sh taproot.sh")
-
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
         try:
@@ -191,7 +187,7 @@ def gettransactionsOnchain():
             sort_order = sorted(d, key=lambda x:x['confirmations'])
             print("\t\t     --------- TRANSACIONS LIST ---------\n\n")
             for q in sort_order:
-                print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf:") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
+                print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf: ") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
 
             print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
             input("\nRefresh...")
@@ -228,7 +224,7 @@ def tmp():
     t.sleep(15)
 
 def console(): # get into the console from bitcoin-cli
-    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
+    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type 'help' for more information.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
         lsd = os.popen(path['bitcoincli'] + " " + cle)
@@ -713,7 +709,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mZ.\033[0;37;40m Stats  
+    \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -4553,7 +4549,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
         statsconn()
-        
+
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
         getnewaddressOnchain()
