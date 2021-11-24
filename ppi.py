@@ -241,7 +241,7 @@ def statsconn():
         clear()
         blogo()
         closed()
-        conn = "curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*'"
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*'"""
         a = os.popen(conn).read()
         clear()
         blogo()
