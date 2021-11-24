@@ -69,13 +69,12 @@ def opreturn():
         message = input("Message: ")
         curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
         while True:
-            if len(message) > 70:
-                clear()
-                blogo()
-                print("Error! Only 80 characters allowed!")
-                message = input("\nMessage: ")
-            else:
+            if len(message) <= 70:
                 break
+            clear()
+            blogo()
+            print("Error! Only 80 characters allowed!")
+            message = input("\nMessage: ")
         a = os.popen(curl).read()
         b = str(a)
         node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
@@ -136,13 +135,6 @@ def opreturn():
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
-                response = requests.get(url)
-                responseB = str(response.text)
-                responseC = responseB
-                clear()
-                blogo()
-                print("\nTransaction ID: " + responseC)
-                input("\nContinue...")
             else:
                 cert_path = lndconnectload["tls"]
                 macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -152,13 +144,13 @@ def opreturn():
                 r = requests.get(url, headers=headers, verify=cert_path)
                 s = r.json()
                 url = 'http://opreturnbot.com/api/status/{}'.format(s['payment_hash'])
-                response = requests.get(url)
-                responseB = str(response.text)
-                responseC = responseB
-                clear()
-                blogo()
-                print("\nTransaction ID: " + responseC)
-                input("\nContinue...")
+            response = requests.get(url)
+            responseB = str(response.text)
+            responseC = responseB
+            clear()
+            blogo()
+            print("\nTransaction ID: " + responseC)
+            input("\nContinue...")
     except:
         pass
 
