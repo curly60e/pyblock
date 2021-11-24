@@ -236,12 +236,12 @@ def bwtConn():
 
 #-----------------------------Stats--------------------------------
 
-def bwtConn():
+def statsconn():
     try:
         clear()
         blogo()
         closed()
-        conn = "curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 9  | grep -v -E "\--""
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 9  | grep -v -E "\--"""
         a = os.popen(conn).read()
         clear()
         blogo()
