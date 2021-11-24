@@ -242,6 +242,25 @@ def bwtConn():
 
 #-----------------------------END bwt.dev--------------------------------
 
+#-----------------------------Stats--------------------------------
+
+def bwtConn():
+    try:
+        clear()
+        blogo()
+        closed()
+        conn = "curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 9  | grep -v -E "\--""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Stats--------------------------------
+
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
     try:
@@ -402,6 +421,7 @@ def rateSXList():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
+                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
@@ -453,6 +473,7 @@ def rateSXGraph():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
+                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
