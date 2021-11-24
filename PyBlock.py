@@ -87,8 +87,8 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
         except:
             break
 
-def getnewaddress():
-    try:
+def getnewaddressOnchain():
+    #try:
         clear()
         blogo()
         close()
@@ -100,6 +100,7 @@ def getnewaddress():
         )
         getadd = " getnewaddress"
         getbal = " getbalance"
+        getfeemempool = " getmempoolinfo"
         gna = os.popen(path['bitcoincli'] + getadd)
         gnaa = gna.read()
         gna1 = str(gnaa)
@@ -124,6 +125,12 @@ def getnewaddress():
             gnb = os.popen(path['bitcoincli'] + getbal)
             gnbb= gnb.read()
             gnb1 = str(gnbb)
+            gnaq = os.popen(path['bitcoincli'] + getfeemempool)
+            gnaaq = gnaq.read()
+            gna1q = str(gnaaq)
+            d = json.loads(gna1q)
+            nn = d['total_fee'] / d['bytes'] * 100000000
+            print("\n\033[ALive Fee: ~{} sats/byte \033[A".format(str(nn)))
             if gnb1 > a:
                 clear()
                 blogo()
@@ -136,6 +143,12 @@ def getnewaddress():
                 print("""---------------------------------------------------------------
                 {}
 ---------------------------------------------------------------""".format(output))
+                getfeemempool = " getmempoolinfo"
+                gnaq = os.popen(path['bitcoincli'] + getfeemempool)
+                gnaaq = gnaq.read()
+                gna1q = str(gnaaq)
+                d = json.loads(gna1q)
+                print("Total Fee: " + str(d['total_fee']))
                 print("\033[1;30;47m")
                 qr.add_data(gna1)
                 qr.print_ascii()
@@ -144,8 +157,24 @@ def getnewaddress():
                 print("\x1b[?25l" + "Bitcoin Address: " + gna1)
                 gna.close()
                 a = gnb1
-    except:
-        pass
+    #except:
+    #    walletmenuLOCALOnchainONLY()
+
+def gettransactionsOnchain():
+    clear()
+    blogo()
+    close()
+    listtxs = " listunspent"
+    gna = os.popen(path['bitcoincli'] + listtxs)
+    gnaa = gna.read()
+    gna1 = str(gnaa)
+    d = json.loads(gna1)
+    sort_order = sorted(d, key=lambda x:x['confirmations'])
+    print("\t\t--------- TRANSACIONS LIST ---------\n\n")
+    for q in sort_order:
+        print(str("TxID: ") + str(q['txid']) + str(" | ") + str("Amount: ") + str(q['amount']) + str(" BTC") + str(" | ") + str("Conf:") + str(q['confirmations']))
+    input("\nContinue...")
+    walletmenuLOCALOnchainONLY()
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
@@ -696,6 +725,27 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def walletmenuLOCALOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Deposit
+    \u001b[38;5;202mB.\033[0;37;40m Show transactions
+    \u001b[33;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
+    walletmenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCALOPRETURN():
     clear()
@@ -4474,7 +4524,13 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["W", "w"]:
-        getnewaddress()
+        walletmenuLOCALOnchainONLY()
+
+def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
+    if walletmnu in ["A", "a"]:
+        getnewaddressOnchain()
+    elif walletmnu in ["B", "b"]:
+        gettransactionsOnchain()
 
 def bitcoincoremenuLOCALcontrolO(oreturn):
     if oreturn in ["A", "a"]:
@@ -5043,7 +5099,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
@@ -5090,6 +5146,6 @@ while True: # Loop
         menuSelection()
 
 
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
