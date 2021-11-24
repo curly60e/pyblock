@@ -88,93 +88,115 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             break
 
 def getnewaddressOnchain():
-    #try:
-    clear()
-    blogo()
-    close()
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    getadd = " getnewaddress"
-    getbal = " getbalance"
-    getfeemempool = " getmempoolinfo"
-    gna = os.popen(path['bitcoincli'] + getadd)
-    gnaa = gna.read()
-    gna1 = str(gnaa)
-    gnb = os.popen(path['bitcoincli'] + getbal)
-    gnbb= gnb.read()
-    gnb1 = str(gnbb)
-    output = render(str("BTC: " + gnb1), colors=['yellow'], align='left', font='tiny')
-    print("""---------------------------------------------------------------
-        {}
----------------------------------------------------------------""".format(output))
-    print("\033[1;30;47m")
-    qr.add_data(gna1)
-    qr.print_ascii()
-    print("\033[0;37;40m")
-    qr.clear()
-    print("\x1b[?25l" + "Bitcoin Address: " + gna1)
-    gna.close()
-    a = gnb1
-    getbal = " getbalance"
-    while True:
-        x = a
+    try:
+        clear()
+        blogo()
+        close()
+        qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+        )
+        getadd = " getnewaddress"
+        getbal = " getbalance"
+        getfeemempool = " getmempoolinfo"
+        getunconfirm = " getunconfirmedbalance"
+        gna = os.popen(path['bitcoincli'] + getadd)
+        gnaa = gna.read()
+        gna1 = str(gnaa)
         gnb = os.popen(path['bitcoincli'] + getbal)
         gnbb= gnb.read()
         gnb1 = str(gnbb)
-        gnaq = os.popen(path['bitcoincli'] + getfeemempool)
-        gnaaq = gnaq.read()
-        gna1q = str(gnaaq)
-        d = json.loads(gna1q)
-        nn = d['total_fee'] / d['bytes'] * 100000000
-        print("\n\033[ALive Fee: ~{} sats/byte \033[A".format(str(nn)))
-        if gnb1 > a:
-            clear()
-            blogo()
-            close()
-            getadd = " getnewaddress"
-            gna = os.popen(path['bitcoincli'] + getadd)
-            gnaa = gna.read()
-            gna1 = str(gnaa)
-            output = render(str("BTC: " + gnb1), colors=['yellow'], align='left', font='tiny')
-            print("""---------------------------------------------------------------
-                {}
+        gnu = os.popen(path['bitcoincli'] + getunconfirm)
+        gnua= gnu.read()
+        gnub = str(gnua)
+        output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
+        print("""---------------------------------------------------------------
+            {}
 ---------------------------------------------------------------""".format(output))
-            getfeemempool = " getmempoolinfo"
+        print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
+        print("---------------------------------------------------------------")
+        print("\033[1;30;47m")
+        qr.add_data(gna1.replace("\n",""))
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        qr.clear()
+        print("\x1b[?25l" + "Bitcoin Address: " + gna1)
+        gna.close()
+        a = gnub
+        b = gnb1
+        getbal = " getbalance"
+        while True:
+            x = a
+            z = b
+            gnb = os.popen(path['bitcoincli'] + getbal)
+            gnbb= gnb.read()
+            gnb1 = str(gnbb)
             gnaq = os.popen(path['bitcoincli'] + getfeemempool)
             gnaaq = gnaq.read()
             gna1q = str(gnaaq)
+            gnu = os.popen(path['bitcoincli'] + getunconfirm)
+            gnua= gnu.read()
+            gnub = str(gnua)
             d = json.loads(gna1q)
-            print("Total Fee: " + str(d['total_fee']))
-            print("\033[1;30;47m")
-            qr.add_data(gna1)
-            qr.print_ascii()
-            print("\033[0;37;40m")
-            qr.clear()
-            print("\x1b[?25l" + "Bitcoin Address: " + gna1)
-            gna.close()
-            a = gnb1
-    #except:
-    #    walletmenuLOCALOnchainONLY()
+            nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
+            print("\n\033[ALive Fee: ~{} sat/vB \033[A".format(nn))
+            if gnub > a or gnb1 > b:
+                clear()
+                blogo()
+                close()
+                getadd = " getnewaddress"
+                gna = os.popen(path['bitcoincli'] + getadd)
+                gnaa = gna.read()
+                gna1 = str(gnaa)
+                output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
+                print("""---------------------------------------------------------------
+                    {}
+---------------------------------------------------------------""".format(output))
+                print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
+                print("---------------------------------------------------------------")
+                getfeemempool = " getmempoolinfo"
+                gnaq = os.popen(path['bitcoincli'] + getfeemempool)
+                gnaaq = gnaq.read()
+                gna1q = str(gnaaq)
+                d = json.loads(gna1q)
+                print("\033[1;30;47m")
+                qr.add_data(gna1.replace("\n",""))
+                qr.print_ascii()
+                print("\033[0;37;40m")
+                qr.clear()
+                print("\x1b[?25l" + "Bitcoin Address: " + gna1)
+                gna.close()
+                a = gnub
+                b = gnb1
+    except:
+        walletmenuLOCALOnchainONLY()
 
 def gettransactionsOnchain():
-    clear()
-    blogo()
-    close()
-    listtxs = " listunspent"
-    gna = os.popen(path['bitcoincli'] + listtxs)
-    gnaa = gna.read()
-    gna1 = str(gnaa)
-    d = json.loads(gna1)
-    sort_order = sorted(d, key=lambda x:x['confirmations'])
-    print("\t\t--------- TRANSACIONS LIST ---------\n\n")
-    for q in sort_order:
-        print(str("TxID: ") + str(q['txid']) + str(" | ") + str("Amount: ") + str(q['amount']) + str(" BTC") + str(" | ") + str("Conf:") + str(q['confirmations']))
-    input("\nContinue...")
-    walletmenuLOCALOnchainONLY()
+    try:
+        while True:
+            clear()
+            blogo()
+            close()
+            listtxs = " listunspent"
+            gna = os.popen(path['bitcoincli'] + listtxs)
+            gnaa = gna.read()
+            gna1 = str(gnaa)
+            d = json.loads(gna1)
+            getbal = " getbalance"
+            gnb = os.popen(path['bitcoincli'] + getbal)
+            gnbb= gnb.read()
+            gnb1 = str(gnbb)
+            sort_order = sorted(d, key=lambda x:x['confirmations'])
+            print("\t\t     --------- TRANSACIONS LIST ---------\n\n")
+            for q in sort_order:
+                print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf:") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
+
+            print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
+            input("\nRefresh...")
+    except:
+        walletmenuLOCALOnchainONLY()
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
@@ -691,7 +713,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mZ.\033[0;37;40m Stats   
+    \u001b[38;5;202mZ.\033[0;37;40m Stats  
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -4531,7 +4553,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
         statsconn()
-
+        
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
         getnewaddressOnchain()
