@@ -4104,6 +4104,8 @@ def menuPI(menuWN):
         aaccPPiLNPay()
     elif menuWN in ["I", "i"]:
         aaccPPiOpenNode()
+     elif menuWN in ["Z", "z"]:
+        stsConn()
 
 def mempoolmenuS(menuMem):
     if menuMem in ["A", "a"]:
