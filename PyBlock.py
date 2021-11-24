@@ -691,6 +691,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[38;5;202mZ.\033[0;37;40m Stats   
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -722,6 +723,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
+    \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -4154,6 +4156,8 @@ def menuPI(menuWN):
         aaccPPiLNPay()
     elif menuWN in ["I", "i"]:
         aaccPPiOpenNode()
+    elif menuWN in ["Z", "z"]:
+        stsConn()
 
 def mempoolmenuS(menuMem):
     if menuMem in ["A", "a"]:
