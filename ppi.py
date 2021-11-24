@@ -244,7 +244,7 @@ def bwtConn():
 
 #-----------------------------Stats--------------------------------
 
-def bwtConn():
+def stsConn():
     try:
         clear()
         blogo()
