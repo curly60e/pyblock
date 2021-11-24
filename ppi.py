@@ -249,7 +249,7 @@ def bwtConn():
         clear()
         blogo()
         closed()
-        conn = "curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 9  | grep -v -E "\--""
+        conn = "curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 9  | grep -v -E "\--" | tr -d '*'"
         a = os.popen(conn).read()
         clear()
         blogo()
