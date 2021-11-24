@@ -118,9 +118,9 @@ def getnewaddress():
         print("\x1b[?25l" + "Bitcoin Address: " + gna1)
         gna.close()
         a = gnb1
+        getbal = " getbalance"
         while True:
             x = a
-            getbal = " getbalance"
             gnb = os.popen(path['bitcoincli'] + getbal)
             gnbb= gnb.read()
             gnb1 = str(gnbb)
@@ -2884,10 +2884,10 @@ def menuSelection():
     else:
         if os.path.isfile('blndconnect.conf'):
             chln['offchain'] = "offchain"
-            pickle.dump(chln, open("selection.conf", "wb"))
         else:
             chln['onchain'] = "onchain"
-            pickle.dump(chln, open("selection.conf", "wb"))
+
+        pickle.dump(chln, open("selection.conf", "wb"))
 
 
 def menuSelectionLN():
@@ -5072,8 +5072,6 @@ while True: # Loop
             if os.path.isfile('init.conf'):
                 pqr = pickle.load(open("init.conf", "rb"))
                 yesno = pqr
-                if yesno in ["NO", "no", "No", "nO"]:
-                    pass
             else:
                 yesno = input("Do you want to connect your Lightning Node? yes/no: ")
                 pickle.dump(yesno, open("init.conf", "wb"))
@@ -5085,10 +5083,6 @@ while True: # Loop
                     print("\n\tLocal Lightning Node connection.\n")
                     lndconnectload["ln"] = input("Insert the path to lncli: ")
                     pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
-                elif yesno in ["NO", "no", "No", "nO"]:
-                    pass
-
-
         menuSelection()
 
 
