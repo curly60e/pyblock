@@ -714,6 +714,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats  
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -746,6 +747,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs    
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -4553,7 +4555,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
         statsconn()
-        
+    elif bcore in ["U", "u"]:
+        untxsconn()        
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
         getnewaddressOnchain()
