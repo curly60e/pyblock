@@ -219,9 +219,6 @@ def trustednode():
 
 def bwtConn():
     try:
-        clear()
-        blogo()
-        closed()
         conn = "curl -s https://bwt.dev/banner.txt"
         a = os.popen(conn).read()
         clear()
@@ -238,10 +235,7 @@ def bwtConn():
 
 def statsconn():
     try:
-        clear()
-        blogo()
-        closed()
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 9  | grep -v -E "\--"""
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*'"""
         a = os.popen(conn).read()
         clear()
         blogo()
