@@ -4509,7 +4509,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["Z", "z"]:
         statsconn()
     elif bcore in ["U", "u"]:
-        untxsconn()      
+        untxsConn()      
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -4560,7 +4560,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["Z", "z"]:
         statsconn()
     elif bcore in ["U", "u"]:
-        untxsconn()  
+        untxsConn()  
         
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
