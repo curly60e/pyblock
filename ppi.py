@@ -231,11 +231,11 @@ def bwtConn():
 
 #-----------------------------END bwt.dev--------------------------------
 
-#-----------------------------Stats--------------------------------
+#-----------------------------untxs--------------------------------
 
-def statsconn():
+def untxsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*'"""
+        conn = """curl -s https://www.blockchain.com/btc/unconfirmed-transactions | html2text | grep -E "Hash" -A 11 | grep -v -E "Time|Amount|\--" | xargs -L 1"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -245,7 +245,7 @@ def statsconn():
     except:
         pass
 
-#-----------------------------END Stats--------------------------------
+#-----------------------------END untxs--------------------------------
 
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
@@ -407,7 +407,6 @@ def rateSXList():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
-                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
@@ -459,7 +458,6 @@ def rateSXGraph():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
-                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
