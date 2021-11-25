@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.9"
+version = "1.0"
 
 def close():
     print("<<< Back Control + C.\n\n")
