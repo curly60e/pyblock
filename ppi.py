@@ -69,12 +69,13 @@ def opreturn():
         message = input("Message: ")
         curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
         while True:
-            if len(message) <= 70:
+            if len(message) > 70:
+                clear()
+                blogo()
+                print("Error! Only 80 characters allowed!")
+                message = input("\nMessage: ")
+            else:
                 break
-            clear()
-            blogo()
-            print("Error! Only 80 characters allowed!")
-            message = input("\nMessage: ")
         a = os.popen(curl).read()
         b = str(a)
         node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
@@ -135,6 +136,13 @@ def opreturn():
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
+                response = requests.get(url)
+                responseB = str(response.text)
+                responseC = responseB
+                clear()
+                blogo()
+                print("\nTransaction ID: " + responseC)
+                input("\nContinue...")
             else:
                 cert_path = lndconnectload["tls"]
                 macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -144,13 +152,13 @@ def opreturn():
                 r = requests.get(url, headers=headers, verify=cert_path)
                 s = r.json()
                 url = 'http://opreturnbot.com/api/status/{}'.format(s['payment_hash'])
-            response = requests.get(url)
-            responseB = str(response.text)
-            responseC = responseB
-            clear()
-            blogo()
-            print("\nTransaction ID: " + responseC)
-            input("\nContinue...")
+                response = requests.get(url)
+                responseB = str(response.text)
+                responseC = responseB
+                clear()
+                blogo()
+                print("\nTransaction ID: " + responseC)
+                input("\nContinue...")
     except:
         pass
 
@@ -219,6 +227,9 @@ def trustednode():
 
 def bwtConn():
     try:
+        clear()
+        blogo()
+        closed()
         conn = "curl -s https://bwt.dev/banner.txt"
         a = os.popen(conn).read()
         clear()
@@ -231,11 +242,14 @@ def bwtConn():
 
 #-----------------------------END bwt.dev--------------------------------
 
-#-----------------------------Stats--------------------------------
+#-----------------------------untxs--------------------------------
 
-def statsconn():
+def untxsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*'"""
+        clear()
+        blogo()
+        closed()
+        conn = """curl -s https://www.blockchain.com/btc/unconfirmed-transactions | html2text | grep -E "Hash" -A 11 | grep -v -E "Time|Amount|\--" | xargs -L 1"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -245,7 +259,7 @@ def statsconn():
     except:
         pass
 
-#-----------------------------END Stats--------------------------------
+#-----------------------------END untxs--------------------------------
 
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
@@ -407,7 +421,6 @@ def rateSXList():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
-                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
@@ -459,7 +472,6 @@ def rateSXGraph():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
-                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
