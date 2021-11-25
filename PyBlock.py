@@ -184,7 +184,7 @@ def gettransactionsOnchain():
             gnb = os.popen(path['bitcoincli'] + getbal)
             gnbb= gnb.read()
             gnb1 = str(gnbb)
-            sort_order = sorted(d, key=lambda x:x['confirmations'])
+            sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
             print("\t\t     --------- TRANSACIONS LIST ---------\n\n")
             for q in sort_order:
                 print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf: ") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
@@ -227,6 +227,12 @@ def console(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type 'help' for more information.\n\n")
     while True:
         cle = input("\u001b[38;5;202m₿ console >: \033[0;37;40m")
+        if cle == "clear":
+            clear()
+            blogo()
+            sysinfo()
+            close()
+            console()
         lsd = os.popen(path['bitcoincli'] + " " + cle)
         lsd0 = lsd.read()
         lsd1 = str(lsd0)
