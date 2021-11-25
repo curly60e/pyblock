@@ -226,7 +226,7 @@ def tmp():
 def console(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type 'help' for more information.\n\n")
     while True:
-        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
+        cle = input("\u001b[38;5;202m₿ console >: \033[0;37;40m")
         lsd = os.popen(path['bitcoincli'] + " " + cle)
         lsd0 = lsd.read()
         lsd1 = str(lsd0)
