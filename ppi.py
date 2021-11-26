@@ -193,6 +193,22 @@ def gameroom():
         pass
 #----------------------------------------------------------------------
 
+#-----------------------------Stats--------------------------------
+
+def statsconn():
+    try:
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*'"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Stats--------------------------------
+
 def trustednode():
     try:
         clear()
