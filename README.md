@@ -24,7 +24,7 @@
 
 <img src="./resources/images/satnode.PNG" width="50%" />
 
-# PyBlock v0.9.9
+# PyBlock v1.0
 A simple Python manager with Cypherpunk aesthetic.
 
 - This will fully work on a Node that has Bitcoin Core and LND installed.
