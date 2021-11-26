@@ -231,22 +231,6 @@ def bwtConn():
 
 #-----------------------------END bwt.dev--------------------------------
 
-#-----------------------------untxs--------------------------------
-
-def untxsConn():
-    try:
-        conn = """curl -s https://www.blockchain.com/btc/unconfirmed-transactions | html2text | grep -E "Hash" -A 11 | grep -v -E "Time|Amount|\--" | xargs -L 1"""
-        a = os.popen(conn).read()
-        clear()
-        blogo()
-        closed()
-        print(a)
-        input("\a\nContinue...")
-    except:
-        pass
-
-#-----------------------------END untxs--------------------------------
-
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
     try:
