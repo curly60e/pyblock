@@ -96,8 +96,8 @@ def untxsConn():
             gnaa = gna.read()
             gna1 = str(gnaa)
             d = json.loads(gna1)
+            getrawtrans = " getrawtransaction "
             for b in d:
-                getrawtrans = " getrawtransaction "
                 n = "".join(map(str, b))
                 m = getrawtrans + n + " 1"
                 gnb = os.popen(path['bitcoincli'] + m)
@@ -108,7 +108,6 @@ def untxsConn():
                 for key, value in enumerate(ab):
                     knx = value['scriptPubKey']
                     print("TxID: \u001b[38;5;40m{} \u001b[31;1m| Amount: \u001b[38;5;202m{} BTC \u001b[31;1m| Address: \u001b[33;1m{}\u001b[31;1m | Type: \u001b[31;1m{}".format(b,value['value'],knx['address'],knx['type']))
-                    pass
                 input("\n\033[?25l\033[0;37;40m\a\n\033[AContinue...\033[A")
     except:
         pass
