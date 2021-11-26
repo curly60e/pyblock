@@ -1090,6 +1090,27 @@ def decodeHex():
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     decodeHexLOCAL(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def decodeHexOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Decode Blocks in HEX
+    \u001b[38;5;202mB.\033[0;37;40m Decode Transactions in HEX
+    \u001b[31;1mQ.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    decodeHexLOCALOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def miscellaneousLOCAL():
     clear()
     blogo()
@@ -1127,6 +1148,38 @@ def miscellaneousLOCAL():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def miscellaneousLOCALOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m FunB
+    \u001b[38;5;202mB.\033[0;37;40m Sysinfo
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenu():
     clear()
@@ -1167,6 +1220,39 @@ def runTheNumbersMenu():
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def runTheNumbersMenuOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Countdown Block
+    \033[1;32;40mB.\033[0;37;40m Countdown Halving
+    \033[1;32;40mC.\033[0;37;40m Audit
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    runTheNumbersControlOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def runTheNumbersMenuConn():
     clear()
     blogo()
@@ -1205,6 +1291,38 @@ def runTheNumbersMenuConn():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def weatherMenuOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Version 1
+    \033[1;32;40mB.\033[0;37;40m Version 2
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    menuWeatherOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def weatherMenu():
     clear()
@@ -1498,6 +1616,40 @@ def satnodeMenu(): # Satnode Menu
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def satnodeMenuOnchainONLY(): # Satnode Menu
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Start SatNode
+    \033[1;32;40mB.\033[0;37;40m Feed
+    \033[1;32;40mC.\033[0;37;40m Setup
+    \033[1;34;40mS.\033[0;37;40m Send a Message to Space
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def rateSX():
     clear()
     blogo()
@@ -1536,6 +1688,38 @@ def rateSX():
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     rateSXMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def rateSXOncainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Rate
+    \033[1;32;40mB.\033[0;37;40m Chart
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    rateSXMenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def mempoolmenu():
     clear()
     blogo()
@@ -1573,6 +1757,39 @@ def mempoolmenu():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def mempoolmenuOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Blocks
+    \033[1;32;40mB.\033[0;37;40m Recommended Fee
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    mempoolmenuSOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 
 def APILnbit():
     bitLN = {"NN":"","pd":""}
@@ -1623,6 +1840,49 @@ def APILnbit():
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def APILnbitOnchainONLY():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[0;37;40mLNBits SN:{} \033[1;34;40mPremium\033[0;37;40m
+
+    \033[1;32;40mA.\033[0;37;40m New Invoice
+    \033[1;32;40mB.\033[0;37;40m Pay Invoice
+    \033[1;32;40mC.\033[0;37;40m New PayWall
+    \033[1;32;40mD.\033[0;37;40m Delete PayWall
+    \033[1;32;40mE.\033[0;37;40m List PayWalls
+    \033[1;32;40mF.\033[0;37;40m Create LNURL
+    \033[1;32;40mG.\033[0;37;40m List LNURL
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, bitLN['NN'], checkupdate()))
+    menuLNBPIOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def APILnPay():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
@@ -1669,6 +1929,47 @@ def APILnPay():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APILnPayOnchainONLY():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[0;37;40mLNPay SN:{} \033[1;34;40mPremium\033[0;37;40m
+
+    \033[1;32;40mA.\033[0;37;40m New Invoice
+    \033[1;32;40mB.\033[0;37;40m Pay Invoice
+    \033[1;32;40mC.\033[0;37;40m Wallet Balance
+    \033[1;32;40mD.\033[0;37;40m List Invoices
+    \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, bitLN['NN'], checkupdate()))
+    menuLNPAYOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNode():
     bitLN = {"NN":"","pd":""}
@@ -1717,6 +2018,47 @@ def APIOpenNode():
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def APIOpenNodeOnchainONLY():
+    bitLN = {"NN":"","pd":""}
+    if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+        bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitLN = bitData # Copy the variable pathv to 'path'
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[0;37;40mOpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m
+
+    \033[1;32;40mA.\033[0;37;40m New Invoice
+    \033[1;32;40mB.\033[0;37;40m Pay Invoice
+    \033[1;32;40mC.\033[0;37;40m Wallet Balance
+    \033[1;32;40mD.\033[0;37;40m List Payments
+    \033[1;32;40mS.\033[0;37;40m Status
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, bitLN['NN'], checkupdate()))
+    menuOpenNodeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def APITippinMe():
     clear()
     blogo()
@@ -1755,6 +2097,39 @@ def APITippinMe():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APITippinMeOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[0;37;40mTippinMe
+
+    \033[1;32;40mA.\033[0;37;40m New Invoice
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    menuTippinMeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITallyCo():
     clear()
@@ -1795,6 +2170,40 @@ def APITallyCo():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def APITallyCoOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[0;37;40mTallyCoin
+
+    \033[1;32;40mA.\033[0;37;40m Get Payment
+    \033[1;32;40mB.\033[0;37;40m Tip User
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, checkupdate()))
+    menuTallyCoOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 #-------------------------------- SETTINGS -----------------------------------------------
 
 
@@ -4196,29 +4605,15 @@ def menuDesignOnchainONLY(menuDSN):
 
 #------------API---------------------
 
-def menuPI(menuWN):
-    if menuWN in ["A", "a"]:
-        aaccPPiTippinMe()
-    elif menuWN in ["B", "b"]:
-        aaccPPiTallyCo()
-    elif menuWN in ["C", "c"]:
-        mempoolmenu()
-    elif menuWN in ["D", "d"]:
-        clear()
-        blogo()
-        CoingeckoPP()
-    elif menuWN in ["E", "e"]:
-        rateSX()
-    elif menuWN in ["F", "f"]:
-        bwtConn()
-    elif menuWN in ["G", "g"]:
-        aaccPPiLNBits()
-    elif menuWN in ["H", "h"]:
-        aaccPPiLNPay()
-    elif menuWN in ["I", "i"]:
-        aaccPPiOpenNode()
-
 def mempoolmenuS(menuMem):
+    if menuMem in ["A", "a"]:
+        blocks()
+    elif menuMem in ["B", "b"]:
+        fee()
+    elif menuMem in ["R", "r"]:
+        menuSelection()
+
+def mempoolmenuSOnchainONLY(menuMem):
     if menuMem in ["A", "a"]:
         blocks()
     elif menuMem in ["B", "b"]:
@@ -4234,7 +4629,21 @@ def menuTallyCo(menuTLC):
     elif menuTLC in ["R", "r"]:
         menuSelection()
 
+def menuTallyCoOnchainONLY(menuTLC):
+    if menuTLC in ["A", "a"]:
+        tallycoGetPayment()
+    elif menuTLC in ["B", "b"]:
+        tallycoDonateid()
+    elif menuTLC in ["R", "r"]:
+        menuSelection()
+
 def menuTippinMe(menuTM):
+    if menuTM in ["A", "a"]:
+        tippinmeGetInvoice()
+    elif menuTM in ["R", "r"]:
+        menuSelection()
+
+def menuTippinMeOnchainONLY(menuTM):
     if menuTM in ["A", "a"]:
         tippinmeGetInvoice()
     elif menuTM in ["R", "r"]:
@@ -4264,7 +4673,55 @@ def menuOpenNode(menuOP):
     elif menuOP in ["R", "r"]:
         menuSelection()
 
+def menuOpenNodeOnchainONLY(menuOP):
+    if menuOP in ["A", "a"]:
+        clear()
+        blogo()
+        OpenNodecreatecharge()
+    elif menuOP in ["B", "b"]:
+        clear()
+        blogo()
+        OpenNodeiniciatewithdrawal()
+    elif menuOP in ["C", "c"]:
+        clear()
+        blogo()
+        OpenNodelistfunds()
+    elif menuOP in ["D", "d"]:
+        clear()
+        blogo()
+        OpenNodeListPayments()
+    elif menuOP in ["S", "s"]:
+        clear()
+        blogo()
+        OpenNodeCheckStatus()
+    elif menuOP in ["R", "r"]:
+        menuSelection()
+
 def menuLNPAY(menuNW):
+    if menuNW in ["A", "a"]:
+        clear()
+        blogo()
+        lnpayCreateInvoice()
+    elif menuNW in ["B", "b"]:
+        clear()
+        blogo()
+        lnpayPayInvoice()
+    elif menuNW in ["C", "c"]:
+        clear()
+        blogo()
+        lnpayGetBalance()
+    elif menuNW in ["D", "d"]:
+        clear()
+        blogo()
+        lnpayGetTransactions()
+    elif menuNW in ["E", "e"]:
+        clear()
+        blogo()
+        lnpayTransBWallets()
+    elif menuNW in ["R", "r"]:
+        menuSelection()
+
+def menuLNPAYOnchainONLY(menuNW):
     if menuNW in ["A", "a"]:
         clear()
         blogo()
@@ -4320,7 +4777,51 @@ def menuLNBPI(menuLNQ):
     elif menuLNQ in ["R", "r"]:
         menuSelection()
 
+def menuLNBPIOnchainONLY(menuLNQ):
+    if menuLNQ in ["A", "a"]:
+        clear()
+        blogo()
+        lnbitCreateNewInvoice()
+    elif menuLNQ in ["B", "b"]:
+        clear()
+        blogo()
+        lnbitPayInvoice()
+    elif menuLNQ in ["C", "c"]:
+        clear()
+        blogo()
+        lnbitCreatePayWall()
+    elif menuLNQ in ["D", "d"]:
+        clear()
+        blogo()
+        lnbitDeletePayWall()
+    elif menuLNQ in ["E", "e"]:
+        clear()
+        blogo()
+        lnbitListPawWall()
+    elif menuLNQ in ["F", "f"]:
+        clear()
+        blogo()
+        lnbitsLNURLw()
+    elif menuLNQ in ["G", "g"]:
+        clear()
+        blogo()
+        lnbitsLNURLwList()
+    elif menuLNQ in ["R", "r"]:
+        menuSelection()
+
 def rateSXMenu(menuSX):
+    if menuSX in ["A", "a"]:
+        clear()
+        blogo()
+        rateSXList()
+    elif menuSX in ["B", "b"]:
+        clear()
+        blogo()
+        rateSXGraph()
+    elif menuSX in ["R", "r"]:
+        menuSelection()
+
+def rateSXMenuOnchainONLY(menuSX):
     if menuSX in ["A", "a"]:
         clear()
         blogo()
@@ -4336,6 +4837,35 @@ def rateSXMenu(menuSX):
 
 
 def runTheNumbersControl(menuNumbers):
+    if menuNumbers in ["A", "a"]:
+        clear()
+        blogo()
+        countdownblock()
+    elif menuNumbers in ["B", "b"]:
+        clear()
+        blogo()
+        localHalving()
+    elif menuNumbers in ["C", "c"]:
+        clear()
+        blogo()
+        calc = """
+                    ----------------------------
+                             PROCESSING
+                            THE  NUMBERS
+                    ----------------------------
+         """
+        comeback = """
+                    ----------------------------
+                       MAKE YOURSELF A COFFEE
+                         AND COME BACK IN A
+                               MOMENT
+                    ----------------------------
+        """
+        cprint(comeback, 'yellow')
+        cprint(calc, 'red', attrs=['blink'])
+        runthenumbers()
+
+def runTheNumbersControlOnchainONLY(menuNumbers):
     if menuNumbers in ["A", "a"]:
         clear()
         blogo()
@@ -4394,6 +4924,12 @@ def runTheNumbersControlConn(menuNumbersconn):
         runthenumbersConn()
 
 def menuWeather(menuWD):
+    if menuWD in ["A", "a"]:
+        wttrDataV1()
+    elif menuWD in ["B", "b"]:
+        wttrDataV2()
+
+def menuWeatherOnchainONLY(menuWD):
     if menuWD in ["A", "a"]:
         wttrDataV1()
     elif menuWD in ["B", "b"]:
@@ -4567,9 +5103,9 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["C", "c"]:
         getblock()
     elif bcore in ["D", "d"]:
-        runTheNumbersMenu()
+        runTheNumbersMenuOnchainONLY()
     elif bcore in ["E", "e"]:
-        decodeHex()
+        decodeHexOnchainONLY()
     elif bcore in ["F", "f"]:
         try:
             clear()
@@ -4583,7 +5119,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
-        miscellaneousLOCAL()
+        miscellaneousLOCALOnchainONLY()
     elif bcore in ["I", "i"]:
         callColdCore()
     elif bcore in ["J", "j"]:
@@ -4614,6 +5150,40 @@ def bitcoincoremenuLOCALcontrolO(oreturn):
         opreturn_view()
 
 def miscellaneousLOCALmenu(misce):
+    while True:
+        if misce in ["A", "a"]:
+            try:
+                clear()
+                blogo()
+                close()
+                logoA()
+                tmp()
+                clear()
+                blogo()
+                close()
+                logoB()
+                tmp()
+                clear()
+                blogo()
+                close()
+                logoC()
+                tmp()
+            except:
+                break
+        elif misce in ["B", "b"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    close()
+                    sysinfoDetail()
+                    t.sleep(1)
+                except:
+                    break
+        elif misce in ["R", "r"]:
+            menuSelection()
+
+def miscellaneousLOCALmenuOnchainONLY(misce):
     while True:
         if misce in ["A", "a"]:
             try:
@@ -4680,6 +5250,41 @@ def decodeHexLOCAL(hexloc):
                 readHexTx()
         except:
             pass
+
+def decodeHexLOCALOnchainONLY(hexloc):
+    if hexloc in ["A", "a"]:
+        clear()
+        blogo()
+        close()
+        try:
+            readHexBlock()
+            while True:
+                r = input("Do you want to continue decoding? Y/n: ")
+                if r in ["Y", "y"]:
+                    clear()
+                    blogo()
+                    readHexBlock()
+                else:
+                    break
+        except:
+            pass
+    elif hexloc in ["B", "b"]:
+        clear()
+        blogo()
+        close()
+        try:
+            readHexTx()
+            while True:
+                r = input("Do you want to continue decoding? Y/n: ")
+                if r not in ["Y", "y"]:
+                    break
+                clear()
+                blogo()
+                sysinfo()
+                readHexTx()
+        except:
+            pass
+
 def lightningnetworkLOCALcontrol(lncore):
     if lncore in ["A", "a"]:
         while True:
@@ -4789,17 +5394,17 @@ def platfformsLOCALcontrol(platf):
 
 def platfformsLOCALcontrolOnchainONLY(platf):
     if platf in ["A", "a"]:
-        aaccPPiTippinMe()
+        aaccPPiTippin()
     elif platf in ["B", "b"]:
         aaccPPiTallyCo()
     elif platf in ["C", "c"]:
-        mempoolmenu()
+        mempoolmenuOnchainONLY()
     elif platf in ["D", "d"]:
         clear()
         blogo()
         CoingeckoPP()
     elif platf in ["E", "e"]:
-        rateSX()
+        rateSXOncainONLY()
     elif platf in ["F", "f"]:
         bwtConn()
     elif platf in ["G", "g"]:
@@ -4809,9 +5414,9 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["I", "i"]:
         aaccPPiOpenNode()
     elif platf in ["J", "j"]:
-        satnodeMenu()
+        satnodeMenuOnchainONLY()
     elif platf in ["K", "k"]:
-        weatherMenu()
+        weatherMenuOnchainONLY()
     elif platf in ["L", "l"]:
         gameroom()
     elif platf in ["R", "r"]:
