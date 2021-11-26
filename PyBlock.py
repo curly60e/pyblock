@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.0"
+version = "1.1"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -89,6 +89,8 @@ def untxsConn():
             clear()
             blogo()
             closed()
+            output = render(str("unconfirmed txs"), colors=['yellow'], align='left', font='tiny')
+            print(output)
             getrawmempool = " getrawmempool"
             gna = os.popen(path['bitcoincli'] + getrawmempool)
             gnaa = gna.read()
@@ -98,16 +100,16 @@ def untxsConn():
                 getrawtrans = " getrawtransaction "
                 n = "".join(map(str, b))
                 m = getrawtrans + n + " 1"
-                print("\u001b[38;5;40m-------------------------------------------------------------------------------------\033[0;37;40m\n")
-                print("TxID: \u001b[38;5;40m{}: \u001b[38;5;202m\n".format(b))
-                print("-------------------------------------------------------------------------------------")
                 gnb = os.popen(path['bitcoincli'] + m)
                 gnba = gnb.read()
                 gnb1 = str(gnba)
-                k = "".join(map(str, gnb1))
-                print(k)
-                print("-------------------------------------------------------------------------------------")
-                input("\033[?25l\033[0;37;40m\a\n\033[AContinue...\033[A")
+                abc = json.loads(gnb1)
+                ab = abc['vout']
+                for key, value in enumerate(ab):
+                    knx = value['scriptPubKey']
+                    print("TxID: \u001b[38;5;40m{} \u001b[31;1m| Amount: \u001b[38;5;202m{} BTC \u001b[31;1m| Address: \u001b[33;1m{}\u001b[31;1m | Type: \u001b[31;1m{}".format(b,value['value'],knx['address'],knx['type']))
+                    pass
+                input("\n\033[?25l\033[0;37;40m\a\n\033[AContinue...\033[A")
     except:
         pass
 
@@ -214,7 +216,8 @@ def gettransactionsOnchain():
             gnbb= gnb.read()
             gnb1 = str(gnbb)
             sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
-            print("\t\t     --------- TRANSACIONS LIST ---------\n\n")
+            output = render(str("transactions"), colors=['yellow'], align='left', font='tiny')
+            print(output)
             for q in sort_order:
                 print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf: ") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
 
