@@ -112,14 +112,13 @@ def untxsConn():
                 gnb1 = str(gnba)
                 abc = json.loads(gnb1)
                 ab = abc['vout']
+                knz = 'address'
                 for key, value in enumerate(ab):
                     knx = value['scriptPubKey']
-                    knz = 'address'
                     if knz in knx:
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
                     else:
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['asm'],knx['type']))
-                    pass
                 input("\n\033[?25l\033[0;37;40m\a\n\033[AContinue...\033[A")
     except:
         pass
