@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "0.9.9"
+version = "1.0"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -55,10 +55,6 @@ def rpc(method, params=[]):
         pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
-
-
-def taproot():
-    os.system("sh taproot.sh")
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
@@ -87,7 +83,36 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
         except:
             break
 
-def getnewaddress():
+def untxsConn():
+    try:
+        while True:
+            clear()
+            blogo()
+            closed()
+            getrawmempool = " getrawmempool"
+            gna = os.popen(path['bitcoincli'] + getrawmempool)
+            gnaa = gna.read()
+            gna1 = str(gnaa)
+            d = json.loads(gna1)
+            for b in d:
+                getrawtrans = " getrawtransaction "
+                n = "".join(map(str, b))
+                m = getrawtrans + n + " 1"
+                print("\u001b[38;5;40m-------------------------------------------------------------------------------------\033[0;37;40m\n")
+                print("TxID: \u001b[38;5;40m{}: \u001b[38;5;202m\n".format(b))
+                print("-------------------------------------------------------------------------------------")
+                gnb = os.popen(path['bitcoincli'] + m)
+                gnba = gnb.read()
+                gnb1 = str(gnba)
+                k = "".join(map(str, gnb1))
+                print(k)
+                print("-------------------------------------------------------------------------------------")
+                input("\033[?25l\033[0;37;40m\a\n\033[AContinue...\033[A")
+    except:
+        pass
+
+
+def getnewaddressOnchain():
     try:
         clear()
         blogo()
@@ -100,31 +125,49 @@ def getnewaddress():
         )
         getadd = " getnewaddress"
         getbal = " getbalance"
+        getfeemempool = " getmempoolinfo"
+        getunconfirm = " getunconfirmedbalance"
         gna = os.popen(path['bitcoincli'] + getadd)
         gnaa = gna.read()
         gna1 = str(gnaa)
         gnb = os.popen(path['bitcoincli'] + getbal)
         gnbb= gnb.read()
         gnb1 = str(gnbb)
-        output = render(str("BTC: " + gnb1), colors=['yellow'], align='left', font='tiny')
+        gnu = os.popen(path['bitcoincli'] + getunconfirm)
+        gnua= gnu.read()
+        gnub = str(gnua)
+        output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
         print("""---------------------------------------------------------------
-        {}
+            {}
 ---------------------------------------------------------------""".format(output))
+        print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
+        print("---------------------------------------------------------------")
         print("\033[1;30;47m")
-        qr.add_data(gna1)
+        qr.add_data(gna1.replace("\n",""))
         qr.print_ascii()
         print("\033[0;37;40m")
         qr.clear()
         print("\x1b[?25l" + "Bitcoin Address: " + gna1)
         gna.close()
-        a = gnb1
+        a = gnub
+        b = gnb1
+        getbal = " getbalance"
         while True:
             x = a
-            getbal = " getbalance"
+            z = b
             gnb = os.popen(path['bitcoincli'] + getbal)
             gnbb= gnb.read()
             gnb1 = str(gnbb)
-            if gnb1 > a:
+            gnaq = os.popen(path['bitcoincli'] + getfeemempool)
+            gnaaq = gnaq.read()
+            gna1q = str(gnaaq)
+            gnu = os.popen(path['bitcoincli'] + getunconfirm)
+            gnua= gnu.read()
+            gnub = str(gnua)
+            d = json.loads(gna1q)
+            nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
+            print("\n\033[ALive Fee: ~{} sat/vB \033[A".format(nn))
+            if gnub > a or gnb1 > b:
                 clear()
                 blogo()
                 close()
@@ -132,20 +175,53 @@ def getnewaddress():
                 gna = os.popen(path['bitcoincli'] + getadd)
                 gnaa = gna.read()
                 gna1 = str(gnaa)
-                output = render(str("BTC: " + gnb1), colors=['yellow'], align='left', font='tiny')
+                output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
                 print("""---------------------------------------------------------------
-                {}
+                    {}
 ---------------------------------------------------------------""".format(output))
+                print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
+                print("---------------------------------------------------------------")
+                getfeemempool = " getmempoolinfo"
+                gnaq = os.popen(path['bitcoincli'] + getfeemempool)
+                gnaaq = gnaq.read()
+                gna1q = str(gnaaq)
+                d = json.loads(gna1q)
                 print("\033[1;30;47m")
-                qr.add_data(gna1)
+                qr.add_data(gna1.replace("\n",""))
                 qr.print_ascii()
                 print("\033[0;37;40m")
                 qr.clear()
                 print("\x1b[?25l" + "Bitcoin Address: " + gna1)
                 gna.close()
-                a = gnb1
+                a = gnub
+                b = gnb1
     except:
-        pass
+        walletmenuLOCALOnchainONLY()
+
+def gettransactionsOnchain():
+    try:
+        while True:
+            clear()
+            blogo()
+            close()
+            listtxs = " listunspent"
+            gna = os.popen(path['bitcoincli'] + listtxs)
+            gnaa = gna.read()
+            gna1 = str(gnaa)
+            d = json.loads(gna1)
+            getbal = " getbalance"
+            gnb = os.popen(path['bitcoincli'] + getbal)
+            gnbb= gnb.read()
+            gnb1 = str(gnbb)
+            sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
+            print("\t\t     --------- TRANSACIONS LIST ---------\n\n")
+            for q in sort_order:
+                print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf: ") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
+
+            print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
+            input("\nRefresh...")
+    except:
+        walletmenuLOCALOnchainONLY()
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
@@ -177,9 +253,15 @@ def tmp():
     t.sleep(15)
 
 def console(): # get into the console from bitcoin-cli
-    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
+    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type 'help' for more information.\n\n")
     while True:
-        cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
+        cle = input("\u001b[38;5;202m₿ console >: \033[0;37;40m")
+        if cle == "clear":
+            clear()
+            blogo()
+            sysinfo()
+            close()
+            console()
         lsd = os.popen(path['bitcoincli'] + " " + cle)
         lsd0 = lsd.read()
         lsd1 = str(lsd0)
@@ -662,6 +744,8 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[38;5;202mZ.\033[0;37;40m Stats
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -693,9 +777,32 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
+    \u001b[38;5;202mZ.\033[0;37;40m Stats
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def walletmenuLOCALOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Deposit
+    \u001b[38;5;202mB.\033[0;37;40m Show transactions
+    \u001b[33;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
+    walletmenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCALOPRETURN():
     clear()
@@ -2882,10 +2989,10 @@ def menuSelection():
     else:
         if os.path.isfile('blndconnect.conf'):
             chln['offchain'] = "offchain"
-            pickle.dump(chln, open("selection.conf", "wb"))
         else:
             chln['onchain'] = "onchain"
-            pickle.dump(chln, open("selection.conf", "wb"))
+
+        pickle.dump(chln, open("selection.conf", "wb"))
 
 
 def menuSelectionLN():
@@ -4428,6 +4535,10 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         pdfconvert()
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
+    elif bcore in ["Z", "z"]:
+        statsconn()
+    elif bcore in ["U", "u"]:
+        untxsConn()
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -4474,7 +4585,17 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["W", "w"]:
-        getnewaddress()
+        walletmenuLOCALOnchainONLY()
+    elif bcore in ["Z", "z"]:
+        statsconn()
+    elif bcore in ["U", "u"]:
+        untxsConn()
+
+def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
+    if walletmnu in ["A", "a"]:
+        getnewaddressOnchain()
+    elif walletmnu in ["B", "b"]:
+        gettransactionsOnchain()
 
 def bitcoincoremenuLOCALcontrolO(oreturn):
     if oreturn in ["A", "a"]:
@@ -5070,8 +5191,6 @@ while True: # Loop
             if os.path.isfile('init.conf'):
                 pqr = pickle.load(open("init.conf", "rb"))
                 yesno = pqr
-                if yesno in ["NO", "no", "No", "nO"]:
-                    pass
             else:
                 yesno = input("Do you want to connect your Lightning Node? yes/no: ")
                 pickle.dump(yesno, open("init.conf", "wb"))
@@ -5083,10 +5202,6 @@ while True: # Loop
                     print("\n\tLocal Lightning Node connection.\n")
                     lndconnectload["ln"] = input("Insert the path to lncli: ")
                     pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
-                elif yesno in ["NO", "no", "No", "nO"]:
-                    pass
-
-
         menuSelection()
 
 
