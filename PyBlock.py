@@ -5391,6 +5391,8 @@ def platfformsLOCALcontrol(platf):
         weatherMenu()
     elif platf in ["L", "l"]:
         gameroom()
+    elif platf in ["M", "m"]:
+        whalalConn()
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -5421,6 +5423,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         weatherMenuOnchainONLY()
     elif platf in ["L", "l"]:
         gameroom()
+    elif platf in ["M", "m"]:
+        whalalConn()
     elif platf in ["R", "r"]:
         menuSelection()
 
