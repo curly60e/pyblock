@@ -202,6 +202,8 @@ def statsConn():
         clear()
         blogo()
         closed()
+        output = render(str("stats"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:
@@ -217,6 +219,8 @@ def whalalConn():
         clear()
         blogo()
         closed()
+        output = render(str("whale alert"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:
@@ -255,6 +259,8 @@ def bwtConn():
         clear()
         blogo()
         closed()
+        output = render(str("BWT"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:
