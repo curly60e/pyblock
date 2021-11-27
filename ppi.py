@@ -13,6 +13,7 @@ import xmltodict
 import time as t
 import simplejson as json
 from art import *
+from cfonts import render, say
 from nodeconnection import *
 from pblogo import *
 from logos import *
@@ -202,8 +203,6 @@ def statsConn():
         clear()
         blogo()
         closed()
-        output = render(str("stats"), colors=['yellow'], align='left', font='tiny')
-        print(output)
         print(a)
         input("\a\nContinue...")
     except:
@@ -228,6 +227,7 @@ def whalalConn():
 
 #-----------------------------END Whale Alert--------------------------------
 
+
 def trustednode():
     try:
         clear()
@@ -250,23 +250,6 @@ def trustednode():
     except:
         pass
 #-----------------------------END GAMES--------------------------------
-#-----------------------------bwt.dev--------------------------------
-
-def bwtConn():
-    try:
-        conn = "curl -s https://bwt.dev/banner.txt"
-        a = os.popen(conn).read()
-        clear()
-        blogo()
-        closed()
-        output = render(str("BWT"), colors=['yellow'], align='left', font='tiny')
-        print(output)
-        print(a)
-        input("\a\nContinue...")
-    except:
-        pass
-
-#-----------------------------END bwt.dev--------------------------------
 
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
