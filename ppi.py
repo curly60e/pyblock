@@ -208,6 +208,21 @@ def statsConn():
         pass
 
 #-----------------------------END Stats--------------------------------
+#-----------------------------Whale Alert--------------------------------
+
+def whalalConn():
+    try:
+        conn = "curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&currency=btc' | jq  -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g' | sed 's/amount/₿/g' | sed 's/_usd/=$/g'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Whale Alert--------------------------------
 
 def trustednode():
     try:
