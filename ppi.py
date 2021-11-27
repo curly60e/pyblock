@@ -203,6 +203,8 @@ def statsConn():
         clear()
         blogo()
         closed()
+        output = render(str("stats"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:

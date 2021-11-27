@@ -32,7 +32,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.2"
+version = "1.1.3"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -67,9 +67,10 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             clear()
             blogo()
             close()
+            output = render(str("BLOCKCHAIN INFORMATION"), colors=['yellow'], align='left', font='tiny')
+            print(output)
             print("""
             ----------------------------------------------------------------------------
-            \tGET BLOCKCHAIN INFORMATION
             Chain: {}
             Blocks: {}
             Best BlockHash: {}
