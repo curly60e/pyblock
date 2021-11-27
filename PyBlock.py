@@ -1053,7 +1053,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mD.\033[0;37;40m CoinGecko   FREE
     \033[1;32;40mE.\033[0;37;40m Rate.sx     FREE
     \033[1;32;40mG.\033[0;37;40m LNBits      \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mH.\033[0;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mH.\033[0API;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
     \033[1;32;40mI.\033[0;37;40m OpenNode    \033[3;35;40m{opennodepaid}\033[0;37;40m
     \033[1;32;40mJ.\033[0;37;40m SatNode     FREE
     \033[1;32;40mK.\033[0;37;40m Weather     FREE
@@ -5375,8 +5375,6 @@ def platfformsLOCALcontrol(platf):
         CoingeckoPP()
     elif platf in ["E", "e"]:
         rateSX()
-    elif platf in ["F", "f"]:
-        bwtConn()
     elif platf in ["G", "g"]:
         aaccPPiLNBits()
     elif platf in ["H", "h"]:
@@ -5407,8 +5405,6 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         CoingeckoPP()
     elif platf in ["E", "e"]:
         rateSXOncainONLY()
-    elif platf in ["F", "f"]:
-        bwtConn()
     elif platf in ["G", "g"]:
         aaccPPiLNBits()
     elif platf in ["H", "h"]:
