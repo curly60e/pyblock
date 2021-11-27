@@ -215,7 +215,7 @@ def statsConn():
 
 def whalalConn():
     try:
-        conn = """curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&currency=btc' | jq  -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g' | sed 's/amount/₿/g' | sed 's/_usd/=$/g'"""
+        conn = """curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&currency=btc' | jq -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to|id" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g'"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -424,6 +424,8 @@ def rateSXList():
             clear()
             blogo()
             closed()
+            output = render(str("rate.sx"), colors=['yellow'], align='left', font='tiny')
+            print(output)
             print(a)
             t.sleep(20)
         except:
