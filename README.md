@@ -204,7 +204,8 @@ A simple Python manager with Cypherpunk aesthetic.
 
 ### Revised by
 
-[@__B__T__C__](https://twitter.com/__B__T__C__) ⚡️ satoshinakamoto@bitrefill.me
+[@__B__T__C__](https://twitter.com/__B__T__C__) 
+⚡️ satoshinakamoto@bitrefill.me
 
 SUPPORT PyBLØCK.
 
