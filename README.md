@@ -1,30 +1,52 @@
 <img src="./resources/images/Logo.PNG" width="80%" />
 
+   
+    ----------------------
+    CPU Usage: X% 
+    Memory Usage: X% 
+    ----------------------
+	
+    Local: PyBLOCK
+    Node:  XxXxXxX
+    Block: XxXxXxX
+    Version: X.x.X
+    
+    A. PyBLOCK
+    B. Bitcoin Core
+    L. Lightning Network
+    P. Platforms
+    S. Settings
+    X. Donate
+    Q. Exit
+    
+    Select option:     
+
+
 <br />
 
-<img src="./resources/images/main.PNG" width="50%" />
+<img src="https://pbs.twimg.com/media/Entgg9HXEAI6yea.jpg" width="50%" />
 
 <br />
 
-<img src="./resources/images/design1.PNG" width="50%" />
+<img src="https://pbs.twimg.com/media/EpYxp_oWEAE88s-.jpg" width="50%" />
 
 <br />
 
-<img src="./resources/images/image.png" width="50%" />
+<img src="https://pbs.twimg.com/media/E5VnuZYXIAAVlVh.jpg" width="50%" />
 
 <br />
 
-<img src="./resources/images/sysinfo.PNG" width="50%" />
+<img src="https://pbs.twimg.com/media/FDBefZPWQAQDEVo.jpg" width="50%" />
 
 <br />
 
-<img src="./resources/images/funb.PNG" width="50%" />
+<img src="https://pbs.twimg.com/media/FAskRpLXIAgC-fC.jpg" width="50%" />
 
 <br />
 
-<img src="./resources/images/satnode.PNG" width="50%" />
+<img src="https://pbs.twimg.com/media/FADnL4DXoAIlkwR.jpg" width="50%" />
 
-# PyBlock v1.0
+# PyBlock v1.1
 A simple Python manager with Cypherpunk aesthetic.
 
 - This will fully work on a Node that has Bitcoin Core and LND installed.
