@@ -1,5 +1,7 @@
 #Developer: Curly60e
 #PyBLOCK its a clock of the Bitcoin blockchain.
+#Tester: __B__T__C__
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
 import base64, codecs, json, requests
@@ -243,6 +245,38 @@ def bwtConn():
         pass
 
 #-----------------------------END bwt.dev--------------------------------
+#-----------------------------StatsLN--------------------------------
+
+def stalnConn():
+    try:
+        conn = """curl -s https://1ml.com | html2text | xargs -L 1 | grep -E "Number" -A 8 | tr -d '#'"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("lightning stats"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END StatsLN--------------------------------
+#-----------------------------StatRanking--------------------------------
+def ranConn():
+    try:
+        conn = """curl -s https://1ml.com/node?order=capacity | html2text | xargs -L 1  | grep -E "CAP" -A 7 | grep -v -E "CAP" | tr -d '*|\--'"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("ranking"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+#-----------------------------END Ranking--------------------------------
 
 def trustednode():
     try:
@@ -427,6 +461,7 @@ def rateSXList():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
+                    USD    Dollars
             -------------------------------------------
     """
     print(fiat)
@@ -480,6 +515,7 @@ def rateSXGraph():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
+                    USD    Dollars
             -------------------------------------------
     """
     print(fiat)
