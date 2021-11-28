@@ -1,4 +1,4 @@
-[<img src="./resources/images/Logo.PNG" width="80%" />](http://pyblockloq35qjlpsiff7cnwob2psxy3hvf67ho422ks2g4flfqcgkyd.onion)
+<img src="./resources/images/Logo.PNG" width="80%" />
 
 <br />
 
