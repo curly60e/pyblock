@@ -935,6 +935,8 @@ def lightningnetworkLOCAL():
     \u001b[33;1mM.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mN.\033[0;37;40m Get Node Info
     \u001b[33;1mO.\033[0;37;40m Get Network Information
+    \u001b[33;1mZ.\033[0;37;40m Stats
+    \u001b[33;1mT.\033[0;37;40m Ranking
     \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[31;1mR.\033[0;37;40m Return
@@ -971,6 +973,8 @@ def lightningnetworkREMOTE():
     \u001b[33;1mG.\033[0;37;40m Onchain Balance
     \u001b[33;1mH.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mI.\033[0;37;40m Get Node Info
+    \u001b[33;1mZ.\033[0;37;40m Stats
+    \u001b[33;1mT.\033[0;37;40m Ranking
     \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[31;1mR.\033[0;37;40m Return
@@ -5359,6 +5363,14 @@ def lightningnetworkLOCALcontrol(lncore):
         clear()
         blogo()
         localgetnetworkinfo()
+    elif lncore in ["Z", "z"]:
+        clear()
+        blogo()
+        stalnConn()
+    elif lncore in ["T", "t"]:
+        clear()
+        blogo()
+        ranConn()
     elif lncore in ["Q", "q"]:
         if os.path.isfile("lnbitSN.conf"):
             lnbitsLNURLwList()
@@ -5569,6 +5581,14 @@ def lightningnetworkREMOTEcontrol(lncore):
         clear()
         blogo()
         getinfo()
+    elif lncore in ["Z", "z"]:
+        clear()
+        blogo()
+        stalnConn()
+    elif lncore in ["T", "t"]:
+        clear()
+        blogo()
+        ranConn()
     elif lncore in ["Q", "q"]:
         if os.path.isfile("lnbitSN.conf"):
             lnbitsLNURLwList()
