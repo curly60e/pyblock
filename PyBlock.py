@@ -5367,7 +5367,7 @@ def lightningnetworkLOCALcontrol(lncore):
     elif lncore in ["T", "t"]:
         clear()
         blogo()
-        RanConn()
+        ranConn()
     elif lncore in ["Q", "q"]:
         if os.path.isfile("lnbitSN.conf"):
             lnbitsLNURLwList()
@@ -5578,6 +5578,14 @@ def lightningnetworkREMOTEcontrol(lncore):
         clear()
         blogo()
         getinfo()
+    elif lncore in ["Z", "z"]:
+        clear()
+        blogo()
+        stalnConn()
+    elif lncore in ["T", "t"]:
+        clear()
+        blogo()
+        ranConn()
     elif lncore in ["Q", "q"]:
         if os.path.isfile("lnbitSN.conf"):
             lnbitsLNURLwList()
