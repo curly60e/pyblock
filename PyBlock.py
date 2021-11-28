@@ -1,5 +1,6 @@
 #Developer: Curly60e
-#PyBLOCK its a clock of the Bitcoin blockchain.
+#Tester: __B__T__C__
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 import os
 import os.path
@@ -67,7 +68,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             clear()
             blogo()
             close()
-            output = render(str("BLOCKCHAIN INFORMATION"), colors=['yellow'], align='left', font='tiny')
+            output = render(str("CHAIN INFO"), colors=['yellow'], align='left', font='tiny')
             print(output)
             print("""
             ----------------------------------------------------------------------------
@@ -242,6 +243,8 @@ def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
 def getgenesis(): # get and decode Genesis block
+    output = render(str("satoshis 0 block"), colors=['yellow'], align='left', font='tiny')
+    print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path['bitcoincli'] + bitcoincli)
 
@@ -1011,6 +1014,7 @@ def APIMenuLOCAL():
     \033[1;32;40mC.\033[0;37;40m Mempool     FREE
     \033[1;32;40mD.\033[0;37;40m CoinGecko   FREE
     \033[1;32;40mE.\033[0;37;40m Rate.sx     FREE
+    \033[1;32;40mF.\033[0;37;40m BWT         FREE
     \033[1;32;40mG.\033[0;37;40m LNBits      \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \033[1;32;40mH.\033[0;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
     \033[1;32;40mI.\033[0;37;40m OpenNode    \033[3;35;40m{opennodepaid}\033[0;37;40m
@@ -1053,6 +1057,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mC.\033[0;37;40m Mempool     FREE
     \033[1;32;40mD.\033[0;37;40m CoinGecko   FREE
     \033[1;32;40mE.\033[0;37;40m Rate.sx     FREE
+    \033[1;32;40mF.\033[0;37;40m BWT         FREE
     \033[1;32;40mG.\033[0;37;40m LNBits      \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \033[1;32;40mH.\033[0;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
     \033[1;32;40mI.\033[0;37;40m OpenNode    \033[3;35;40m{opennodepaid}\033[0;37;40m
@@ -5376,6 +5381,8 @@ def platfformsLOCALcontrol(platf):
         CoingeckoPP()
     elif platf in ["E", "e"]:
         rateSX()
+    elif platf in ["F", "f"]:
+        bwtConn()
     elif platf in ["G", "g"]:
         aaccPPiLNBits()
     elif platf in ["H", "h"]:
@@ -5406,6 +5413,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         CoingeckoPP()
     elif platf in ["E", "e"]:
         rateSXOncainONLY()
+    elif platf in ["F", "f"]:
+        bwtConn()
     elif platf in ["G", "g"]:
         aaccPPiLNBits()
     elif platf in ["H", "h"]:
