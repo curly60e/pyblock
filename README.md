@@ -200,6 +200,7 @@ A simple Python manager with Cypherpunk aesthetic.
 [@BashCo_](https://twitter.com/BashCo_)
 [@JamesOb](https://twitter.com/jamesob)
 [@BenTheCarman](https://twitter.com/benthecarman)
+[@Whale_Alert](https://twitter.com/whale_alert)
 
 ### Revised by
 
