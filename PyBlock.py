@@ -1,5 +1,6 @@
 #Developer: Curly60e
-#PyBLOCK its a clock of the Bitcoin blockchain.
+#Tester: __B__T__C__
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 import os
 import os.path
@@ -1010,6 +1011,7 @@ def APIMenuLOCAL():
     \033[1;32;40mC.\033[0;37;40m Mempool     FREE
     \033[1;32;40mD.\033[0;37;40m CoinGecko   FREE
     \033[1;32;40mE.\033[0;37;40m Rate.sx     FREE
+    \033[1;32;40mF.\033[0;37;40m BWT         FREE
     \033[1;32;40mG.\033[0;37;40m LNBits      \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \033[1;32;40mH.\033[0;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
     \033[1;32;40mI.\033[0;37;40m OpenNode    \033[3;35;40m{opennodepaid}\033[0;37;40m
@@ -1052,6 +1054,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mC.\033[0;37;40m Mempool     FREE
     \033[1;32;40mD.\033[0;37;40m CoinGecko   FREE
     \033[1;32;40mE.\033[0;37;40m Rate.sx     FREE
+    \033[1;32;40mF.\033[0;37;40m BWT         FREE
     \033[1;32;40mG.\033[0;37;40m LNBits      \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \033[1;32;40mH.\033[0;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
     \033[1;32;40mI.\033[0;37;40m OpenNode    \033[3;35;40m{opennodepaid}\033[0;37;40m
@@ -5375,6 +5378,8 @@ def platfformsLOCALcontrol(platf):
         CoingeckoPP()
     elif platf in ["E", "e"]:
         rateSX()
+    elif platf in ["F", "f"]:
+        bwtConn()
     elif platf in ["G", "g"]:
         aaccPPiLNBits()
     elif platf in ["H", "h"]:
@@ -5405,6 +5410,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         CoingeckoPP()
     elif platf in ["E", "e"]:
         rateSXOncainONLY()
+    elif platf in ["F", "f"]:
+        bwtConn()
     elif platf in ["G", "g"]:
         aaccPPiLNBits()
     elif platf in ["H", "h"]:
