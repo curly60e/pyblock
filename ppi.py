@@ -1,5 +1,6 @@
 #Developer: Curly60e
-#PyBLOCK its a clock of the Bitcoin blockchain.
+#Tester: __B__T__C__
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
 import base64, codecs, json, requests
@@ -193,7 +194,6 @@ def gameroom():
     except:
         pass
 #----------------------------------------------------------------------
-
 #-----------------------------Stats--------------------------------
 
 def statsConn():
@@ -203,6 +203,8 @@ def statsConn():
         clear()
         blogo()
         closed()
+        output = render(str("bitcoin stats"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:
@@ -213,7 +215,7 @@ def statsConn():
 
 def whalalConn():
     try:
-        conn = """curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&currency=btc' | jq  -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g' | sed 's/amount/₿/g' | sed 's/_usd/=$/g'"""
+        conn = """curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&currency=btc' | jq  -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to|id" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g' | sed 's/amount/₿/g' | sed 's/_usd/=$/g'"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -250,7 +252,38 @@ def trustednode():
     except:
         pass
 #-----------------------------END GAMES--------------------------------
+#-----------------------------bwt.dev--------------------------------
 
+def bwtConn():
+    try:
+        conn = "curl -s https://bwt.dev/banner.txt"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END bwt.dev--------------------------------
+#-----------------------------StatsLN--------------------------------
+
+def stalnConn():
+    try:
+        conn = """curl -s https://1ml.com | html2text | xargs -L 1 | grep -E "Number" -A 8 | tr -d '#'"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("lightning stats"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END StatsLN--------------------------------
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
     try:
@@ -411,6 +444,7 @@ def rateSXList():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
+                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
@@ -462,6 +496,7 @@ def rateSXGraph():
                     THB    Thai baht
                     TRY    Turkish lira
                     TWD    New Taiwan dollar
+                    USD    Dollar
             -------------------------------------------
     """
     print(fiat)
