@@ -5156,16 +5156,6 @@ def bitcoincoremenuLOCALcontrolO(oreturn):
         blogo()
         opreturn_view()
 
-def bitcoincoremenuLOCALcontrolOOnchainONLY(oreturn):
-    if oreturn in ["A", "a"]:
-        clear()
-        blogo()
-        opreturn()
-    elif oreturn in ["B", "b"]:
-        clear()
-        blogo()
-        opreturn_view()
-
 def miscellaneousLOCALmenu(misce):
     while True:
         if misce in ["A", "a"]:
