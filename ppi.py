@@ -265,7 +265,7 @@ def stalnConn():
 #-----------------------------StatRanking--------------------------------
 def ranConn():
     try:
-        conn = """curl -s https://1ml.com/node?order=capacity | html2text | xargs -L 1  | grep -E "CAP" -A 7 | grep -v -E "CAP" | tr -d '*|\--'"""
+        conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g'"""
         a = os.popen(conn).read()
         clear()
         blogo()
