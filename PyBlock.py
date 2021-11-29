@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.3"
+version = "1.1.4"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -785,7 +785,6 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
@@ -5134,8 +5133,6 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
-    elif bcore in ["O", "o"]:
-        bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["W", "w"]:
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
@@ -5150,6 +5147,16 @@ def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
         gettransactionsOnchain()
 
 def bitcoincoremenuLOCALcontrolO(oreturn):
+    if oreturn in ["A", "a"]:
+        clear()
+        blogo()
+        opreturn()
+    elif oreturn in ["B", "b"]:
+        clear()
+        blogo()
+        opreturn_view()
+
+def bitcoincoremenuLOCALcontrolOOnchainONLY(oreturn):
     if oreturn in ["A", "a"]:
         clear()
         blogo()
