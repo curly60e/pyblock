@@ -200,7 +200,8 @@
 
 ### Tools by
 
-[@Curly60e,](https://twitter.com/royalfield370) [Support ⚡️,](curly60e@bitrefill.com)
+[@Curly60e,](https://twitter.com/royalfield370) ⚡️ curly60e@bitrefill.com
+
 [@SamouraiDev,](https://twitter.com/SamouraiDev)
 [@Korynewton,](https://twitter.com/kn3wt)
 [@Tippin_Me,](https://twitter.com/tippin_me)
