@@ -46,7 +46,7 @@
 
 <img src="https://pbs.twimg.com/media/FADnL4DXoAIlkwR.jpg" width="50%" />
 
-# PyBlock v1.1
+# PyBlock v1.1.4
 ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 - This will fully work on a Node that has Bitcoin Core and LND installed.
@@ -200,7 +200,7 @@
 
 ### Tools by
 
-[@Curly60e,](https://twitter.com/royalfield370)
+[@Curly60e,](https://twitter.com/royalfield370) [Support ⚡️,](curly60e@bitrefill.com)
 [@SamouraiDev,](https://twitter.com/SamouraiDev)
 [@Korynewton,](https://twitter.com/kn3wt)
 [@Tippin_Me,](https://twitter.com/tippin_me)
@@ -239,10 +239,6 @@ Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK61yE17N2vgvQvKYokXktt6D6GZFTmocvDJhaUJfHt7ehEMmthjsT3NQHseFM
 
 <img src="images/codeimage.png" width="30%" />
-
-Lightning KeySend: 02d22df3b3013af15a2da1381bdd76266a9375040a5152b67999ad32a26e6b8a88
-
-<img src="images/keysend.png" width="30%" />
 
 Monero: 42jtb4dAfm6BQ8h6x56qGyAMMHVXGRwRMTSb2LwsBg1jVqD4TxfpD1pTK56tkrTMGhEKipZdDHfJrB1g8iQfvSyC7gZ9M8M
 
