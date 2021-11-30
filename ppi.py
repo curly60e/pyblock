@@ -249,7 +249,7 @@ def bwtConn():
 
 def stalnConn():
     try:
-        conn = """curl -s https://1ml.com | html2text | xargs -L 1 | grep -E "Number" -A 8 | tr -d '#'"""
+        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -265,7 +265,8 @@ def stalnConn():
 #-----------------------------StatRanking--------------------------------
 def ranConn():
     try:
-        conn = """curl -s https://1ml.com/node?order=capacity | html2text | xargs -L 1  | grep -E "CAP" -A 7 | grep -v -E "CAP" | tr -d '*|\--'"""
+        conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g' 
+"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -468,7 +469,7 @@ def rateSXList():
     selectFiat = input("Insert a Fiat currency: ")
     while True:
         try:
-            list = "curl '" + selectFiat + ".rate.sx/?F&n=1'"
+            list = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
             a = os.popen(list).read()
             clear()
             blogo()
@@ -522,7 +523,7 @@ def rateSXGraph():
     selectFiat = input("Insert a Fiat currency: ")
     while True:
         try:
-            list = "curl " + selectFiat + ".rate.sx/btc"
+            list = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
             a = os.popen(list).read()
             clear()
             blogo()
