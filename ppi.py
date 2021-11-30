@@ -249,7 +249,7 @@ def bwtConn():
 
 def stalnConn():
     try:
-        conn = """curl -s https://1ml.com | html2text | xargs -L 1 | grep -E "Number" -A 8 | tr -d '#'"""
+        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
         a = os.popen(conn).read()
         clear()
         blogo()
