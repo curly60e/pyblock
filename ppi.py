@@ -523,7 +523,7 @@ def rateSXGraph():
     selectFiat = input("Insert a Fiat currency: ")
     while True:
         try:
-            list = "curl -s '" + selectFiat + ".rate.sx/btc | grep -v -E "Use"'"
+            list = "curl -s '" + selectFiat + """.rate.sx/btc | grep -v -E "Use"'"""
             a = os.popen(list).read()
             clear()
             blogo()
