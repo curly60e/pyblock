@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.4"
+version = "1.1.5"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -114,7 +114,10 @@ def untxsConn():
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
                     else:
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['asm'],knx['type']))
-                input("\n\033[?25l\033[0;37;40m\a\n\033[AContinue...\033[A")
+                        decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(b) + " | xxd -r -p | hexyl -n 256"
+                        print("OP_RETURN Hex: ")
+                        os.system(decodeTX)
+                input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
     except:
         pass
 
