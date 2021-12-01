@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.5"
+version = "1.1.5.1"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -108,6 +108,7 @@ def untxsConn():
                 abc = json.loads(gnb1)
                 ab = abc['vout']
                 knz = 'address'
+                bnz = '-5'
                 for key, value in enumerate(ab):
                     knx = value['scriptPubKey']
                     if knz in knx:
@@ -117,6 +118,8 @@ def untxsConn():
                         decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(b) + " | xxd -r -p | hexyl -n 256"
                         print("OP_RETURN Hex: ")
                         os.system(decodeTX)
+                    if bnz in b:
+                        input("Refreshing list...")
                 input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
     except:
         pass
@@ -5805,7 +5808,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
@@ -5846,6 +5849,6 @@ while True: # Loop
         menuSelection()
 
 
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
