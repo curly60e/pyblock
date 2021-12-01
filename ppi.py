@@ -28,6 +28,64 @@ def clear(): # clear the screen
 def closed():
     print("<<< Back Control + C.\n\n")
 
+def opreturnOnchainONLY():
+    qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+    )
+    try:
+        clear()
+        blogo()
+        output = render(str("OP_RETURN Message"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        message = input("Message: ")
+        curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
+        while True:
+            if len(message) <= 70:
+                break
+            clear()
+            blogo()
+            print("Error! Only 80 characters allowed!")
+            message = input("\nMessage: ")
+        a = os.popen(curl).read()
+        b = str(a)
+        clear()
+        blogo()
+        print("\033[1;30;47m")
+        qr.add_data(b)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print("LND Invoice: " + b)
+        qr.clear()
+        input("\nContinue...")
+        if lndconnectload['ln']:
+            invoiceN = b
+            invoice = invoiceN.lower()
+            lncli = " payinvoice "
+            lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
+            lsd0 = str(lsd)
+            d = json.loads(lsd0)
+            url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
+        else:
+            cert_path = lndconnectload["tls"]
+            macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+            headers = {'Grpc-Metadata-macaroon': macaroon}
+            bolt11N = b
+            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
+            r = requests.get(url, headers=headers, verify=cert_path)
+            s = r.json()
+            url = 'http://opreturnbot.com/api/status/{}'.format(s['payment_hash'])
+        response = requests.get(url)
+        responseB = str(response.text)
+        responseC = responseB
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        input("\nContinue...")
+    except:
+        pass
 
 def opreturn():
     qr = qrcode.QRCode(
@@ -68,7 +126,8 @@ def opreturn():
             pickle.dump(path, open("bclock.conf", "wb"))
         clear()
         blogo()
-        print("\n\tOP_RETURN Message\n")
+        output = render(str("OP_RETURN Message"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         message = input("Message: ")
         curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
         while True:
@@ -161,7 +220,8 @@ def opreturn_view():
     try:
         clear()
         blogo()
-        print("\n\tOP_RETURN Message\n")
+        output = render(str("OP_RETURN Message"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         responseC = input("TX ID: ")
         url2 = 'http://opreturnbot.com/api/view/{}'.format(responseC)
         r = requests.get(url2)
@@ -172,6 +232,20 @@ def opreturn_view():
         print("\nTransaction ID: " + responseC)
         print("OP_RETURN Message: " + r3)
         input("\nContinue...")
+    except:
+        pass
+
+def opretminer():
+    try:
+        conn = """curl -s 'https://bitcointicker.co/latestblocks/' | xargs --null | html2text | grep "Coinbase" -A 70 | tr -d '|' | grep -v "Coinbase" | grep '6.25'"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("decoded coinbase"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("")
     except:
         pass
 
@@ -265,7 +339,7 @@ def stalnConn():
 #-----------------------------StatRanking--------------------------------
 def ranConn():
     try:
-        conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g' 
+        conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g'
 """
         a = os.popen(conn).read()
         clear()
