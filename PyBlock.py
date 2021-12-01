@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.5.1"
+version = "1.1.6"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -108,7 +108,6 @@ def untxsConn():
                 abc = json.loads(gnb1)
                 ab = abc['vout']
                 knz = 'address'
-                bnz = '-5'
                 for key, value in enumerate(ab):
                     knx = value['scriptPubKey']
                     if knz in knx:
@@ -118,12 +117,9 @@ def untxsConn():
                         decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(b) + " | xxd -r -p | hexyl -n 256"
                         print("OP_RETURN Hex: ")
                         os.system(decodeTX)
-                    if bnz in b:
-                        input("Refreshing list...")
                 input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
     except:
         pass
-
 
 def getnewaddressOnchain():
     try:
@@ -791,6 +787,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
@@ -845,6 +842,29 @@ def bitcoincoremenuLOCALOPRETURN():
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def bitcoincoremenuLOCALOPRETURNOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Send OP_RETURN
+    \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
+    \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
+    \u001b[33;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    bitcoincoremenuLOCALcontrolOOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuREMOTE():
     clear()
@@ -5139,6 +5159,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
+    elif bcore in ["O", "o"]:
+        bitcoincoremenuLOCALOPRETURNOnchainONLY()
     elif bcore in ["W", "w"]:
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
@@ -5161,6 +5183,20 @@ def bitcoincoremenuLOCALcontrolO(oreturn):
         clear()
         blogo()
         opreturn_view()
+
+def bitcoincoremenuLOCALcontrolOOnchainONLY(oreturn):
+    if oreturn in ["A", "a"]:
+        clear()
+        blogo()
+        opreturnOnchainONLY()
+    elif oreturn in ["B", "b"]:
+        clear()
+        blogo()
+        opreturn_view()
+    elif oreturn in ["C", "c"]:
+        clear()
+        blogo()
+        opretminer()
 
 def miscellaneousLOCALmenu(misce):
     while True:
