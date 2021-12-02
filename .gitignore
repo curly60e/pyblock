@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+**/__pycache__
+**/*.pyc
 
 # pyblock stuff
 pyblocksettings.conf
