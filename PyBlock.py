@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.6"
+version = "1.1.7"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -174,8 +174,6 @@ def getnewaddressOnchain():
             gnua= gnu.read()
             gnub = str(gnua)
             d = json.loads(gna1q)
-            nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
-            print("\n\033[ALive Fee: ~{} sat/vB \033[A".format(nn))
             if gnub > a or gnb1 > b:
                 clear()
                 blogo()
@@ -204,6 +202,9 @@ def getnewaddressOnchain():
                 gna.close()
                 a = gnub
                 b = gnb1
+            nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
+            print("\n\033[ALive Fee: ~{} sat/vB \033[A".format(nn))
+            t.sleep(10)
     except:
         walletmenuLOCALOnchainONLY()
 
