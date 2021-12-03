@@ -206,8 +206,6 @@
 ### Tools by
 
 [@Curly60e](https://twitter.com/royalfield370) ⚡️ curly60e@bitrefill.com
-[@__B__T__C__](https://twitter.com/__B__T__C__) ⚡️ satoshinakamoto@bitrefill.me
-[@Danvergara](https://twitter.com/__danvergara__)
 
 [@SamouraiDev,](https://twitter.com/SamouraiDev)
 [@Korynewton,](https://twitter.com/kn3wt)
@@ -230,8 +228,8 @@
 [@BashCo_,](https://twitter.com/BashCo_)
 [@JamesOb,](https://twitter.com/jamesob)
 [@BenTheCarman,](https://twitter.com/benthecarman)
-[@Whale_Alert...](https://twitter.com/whale_alert)
-
+[@Whale_Alert,](https://twitter.com/whale_alert)
+[@Danvergara...](https://twitter.com/__danvergara__)
 
 SUPPORT PyBLØCK.
 
