@@ -232,12 +232,12 @@ SUPPORT PyBLØCK.
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
-<img src="/pyblock/images/bitcoin-donation.png" width="30%" />
+<img src="/pybitblock/images/bitcoin-donation.png" width="30%" />
 
 Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK61yE17N2vgvQvKYokXktt6D6GZFTmocvDJhaUJfHt7ehEMmthjsT3NQHseFM
 
-<img src="/pyblock/images/codeimage.png" width="30%" />
+<img src="/pybitblock/images/codeimage.png" width="30%" />
 
 Monero: 42jtb4dAfm6BQ8h6x56qGyAMMHVXGRwRMTSb2LwsBg1jVqD4TxfpD1pTK56tkrTMGhEKipZdDHfJrB1g8iQfvSyC7gZ9M8M
 
-<img src="/pyblock/images/qrcode.png" width="20%" />
+<img src="/pybitblock/images/qrcode.png" width="20%" />
