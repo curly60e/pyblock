@@ -130,8 +130,11 @@
     * [Poetry](https://python-poetry.org/) is needed to ensure every user has the same python dependencies installed.
 
      - Open the Terminal
+     
+        -- Easy mode:
+        * a@A:~> pip3 install pybitblock
 
-     - Type these commands:
+        -- Manual mode:
 
         * a@A:~> pip3 install poetry
         * a@A:~> git clone https://github.com/curly60e/pyblock.git
