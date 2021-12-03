@@ -3648,18 +3648,18 @@ def checkupdate():
         print("    ------------------------------------------")
 
 def upgrade():
-    gitfetch = "git fetch"
-    gitchekcout = "git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py requirements.txt clockscript.py clockscriptREMOTE.py"
+    #gitfetch = "git fetch"
+    gitchekcout = "pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U " #"git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py requirements.txt clockscript.py clockscriptREMOTE.py"
     clear()
     blogo()
-    b = os.popen(gitfetch).read()
+    #b = os.popen(gitfetch).read()
     a = os.popen(gitchekcout).read()
     print(b)
     print(a)
     print("\n---------------------------------------------------")
     print("\n\t\033[1;31;40mYou'll need to restart PyBLOCK\033[0;37;40m\n")
     print("---------------------------------------------------\n")
-    os.system("pip3 install -r requirements.txt")
+    #os.system("pip3 install -r requirements.txt")
     input("Continue...")
 
 def testlogo():
