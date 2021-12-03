@@ -1,4 +1,4 @@
-<img src="./resources/images/Logo.PNG" width="80%" />
+<img src="./pyblock/resources/images/Logo.PNG" width="80%" />
 
    
     ----------------------
@@ -78,7 +78,7 @@
 
     <br />
 
-    <img src="./resources/images/REST1.PNG" width="30%" />
+    <img src="./pyblock/resources/images/REST1.PNG" width="30%" />
 
     <br />
 
@@ -86,7 +86,7 @@
 
     <br />
 
-    <img src="./resources/images/REST2.PNG" width="30%" />
+    <img src="./pyblock/resources/images/REST2.PNG" width="30%" />
 
     <br />
 
@@ -94,7 +94,7 @@
 
     <br />
 
-    <img src="./resources/images/REST3.PNG" width="30%" />
+    <img src="./pyblock/resources/images/REST3.PNG" width="30%" />
 
     <br />
 
@@ -102,7 +102,7 @@
 
     <br />
 
-    <img src="./resources/images/REST4.PNG" width="30%" />
+    <img src="./pyblock/resources/images/REST4.PNG" width="30%" />
 
     <br />  
 
@@ -110,7 +110,7 @@
 
     <br />
 
-    <img src="./resources/images/bitcoin-cli.PNG" width="30%" />
+    <img src="./pyblock/resources/images/bitcoin-cli.PNG" width="30%" />
 
     <br />
 
@@ -118,7 +118,7 @@
 
     <br />
 
-    <img src="./resources/images/main.PNG" width="30%" />
+    <img src="./pyblock/resources/images/main.PNG" width="30%" />
 
     <br />
 
@@ -143,7 +143,7 @@
 
         <br />
 
-        <img src="./resources/images/REST1.PNG" width="30%" />
+        <img src="./pyblock/resources/images/REST1.PNG" width="30%" />
 
         <br />
 
@@ -151,7 +151,7 @@
 
         <br />
 
-        <img src="./resources/images/REST1REMOTE.PNG" width="30%" />
+        <img src="./pyblock/resources/images/REST1REMOTE.PNG" width="30%" />
 
         <br />
 
@@ -159,7 +159,7 @@
 
         <br />
 
-        <img src="./resources/images/REST2REMOTE.PNG" width="30%" />
+        <img src="./pyblock/resources/images/REST2REMOTE.PNG" width="30%" />
 
         <br />
 
@@ -167,7 +167,7 @@
 
         <br />
 
-        <img src="./resources/images/REST3REMOTE.PNG" width="30%" />
+        <img src="./pyblock/resources/images/REST3REMOTE.PNG" width="30%" />
 
         <br />  
 
@@ -175,7 +175,7 @@
 
         <br />
 
-        <img src="./resources/images/bitcoin-cli.PNG" width="30%" />
+        <img src="./pyblock/resources/images/bitcoin-cli.PNG" width="30%" />
 
         <br />
 
@@ -183,7 +183,7 @@
 
         <br />
 
-        <img src="./resources/images/main.PNG" width="30%" />
+        <img src="./pyblock/resources/images/main.PNG" width="30%" />
 
         <br />
 
@@ -201,6 +201,8 @@
 ### Tools by
 
 [@Curly60e](https://twitter.com/royalfield370) ⚡️ curly60e@bitrefill.com
+[@__B__T__C__](https://twitter.com/__B__T__C__) ⚡️ satoshinakamoto@bitrefill.me
+[@Danvergara](https://twitter.com/__danvergara__)
 
 [@SamouraiDev,](https://twitter.com/SamouraiDev)
 [@Korynewton,](https://twitter.com/kn3wt)
@@ -225,20 +227,17 @@
 [@BenTheCarman,](https://twitter.com/benthecarman)
 [@Whale_Alert...](https://twitter.com/whale_alert)
 
-### Revised by
-
-[@__B__T__C__](https://twitter.com/__B__T__C__) ⚡️ satoshinakamoto@bitrefill.me
 
 SUPPORT PyBLØCK.
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
-<img src="images/bitcoin-donation.png" width="30%" />
+<img src="/pyblock/images/bitcoin-donation.png" width="30%" />
 
 Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK61yE17N2vgvQvKYokXktt6D6GZFTmocvDJhaUJfHt7ehEMmthjsT3NQHseFM
 
-<img src="images/codeimage.png" width="30%" />
+<img src="/pyblock/images/codeimage.png" width="30%" />
 
 Monero: 42jtb4dAfm6BQ8h6x56qGyAMMHVXGRwRMTSb2LwsBg1jVqD4TxfpD1pTK56tkrTMGhEKipZdDHfJrB1g8iQfvSyC7gZ9M8M
 
-<img src="images/qrcode.png" width="20%" />
+<img src="/pyblock/images/qrcode.png" width="20%" />
