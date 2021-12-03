@@ -1,4 +1,4 @@
-<img src="./pyblock/resources/images/Logo.PNG" width="80%" />
+<img src="./pybitblock/resources/images/Logo.PNG" width="80%" />
 
    
     ----------------------
@@ -78,7 +78,7 @@
 
     <br />
 
-    <img src="./pyblock/resources/images/REST1.PNG" width="30%" />
+    <img src="./pybitblock/resources/images/REST1.PNG" width="30%" />
 
     <br />
 
@@ -86,7 +86,7 @@
 
     <br />
 
-    <img src="./pyblock/resources/images/REST2.PNG" width="30%" />
+    <img src="./pybitblock/resources/images/REST2.PNG" width="30%" />
 
     <br />
 
@@ -94,7 +94,7 @@
 
     <br />
 
-    <img src="./pyblock/resources/images/REST3.PNG" width="30%" />
+    <img src="./pybitblock/resources/images/REST3.PNG" width="30%" />
 
     <br />
 
@@ -102,7 +102,7 @@
 
     <br />
 
-    <img src="./pyblock/resources/images/REST4.PNG" width="30%" />
+    <img src="./pybitblock/resources/images/REST4.PNG" width="30%" />
 
     <br />  
 
@@ -110,7 +110,7 @@
 
     <br />
 
-    <img src="./pyblock/resources/images/bitcoin-cli.PNG" width="30%" />
+    <img src="./pybitblock/resources/images/bitcoin-cli.PNG" width="30%" />
 
     <br />
 
@@ -118,7 +118,7 @@
 
     <br />
 
-    <img src="./pyblock/resources/images/main.PNG" width="30%" />
+    <img src="./pybitblock/resources/images/main.PNG" width="30%" />
 
     <br />
 
@@ -143,7 +143,7 @@
 
         <br />
 
-        <img src="./pyblock/resources/images/REST1.PNG" width="30%" />
+        <img src="./pybitblock/resources/images/REST1.PNG" width="30%" />
 
         <br />
 
@@ -151,7 +151,7 @@
 
         <br />
 
-        <img src="./pyblock/resources/images/REST1REMOTE.PNG" width="30%" />
+        <img src="./pybitblock/resources/images/REST1REMOTE.PNG" width="30%" />
 
         <br />
 
@@ -159,7 +159,7 @@
 
         <br />
 
-        <img src="./pyblock/resources/images/REST2REMOTE.PNG" width="30%" />
+        <img src="./pybitblock/resources/images/REST2REMOTE.PNG" width="30%" />
 
         <br />
 
@@ -167,7 +167,7 @@
 
         <br />
 
-        <img src="./pyblock/resources/images/REST3REMOTE.PNG" width="30%" />
+        <img src="./pybitblock/resources/images/REST3REMOTE.PNG" width="30%" />
 
         <br />  
 
@@ -175,7 +175,7 @@
 
         <br />
 
-        <img src="./pyblock/resources/images/bitcoin-cli.PNG" width="30%" />
+        <img src="./pybitblock/resources/images/bitcoin-cli.PNG" width="30%" />
 
         <br />
 
@@ -183,7 +183,7 @@
 
         <br />
 
-        <img src="./pyblock/resources/images/main.PNG" width="30%" />
+        <img src="./pybitblock/resources/images/main.PNG" width="30%" />
 
         <br />
 
