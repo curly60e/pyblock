@@ -1,8 +1,12 @@
 [tool.poetry]
-name = "pyblock"
+name = "pybitblock"
 version = "0.9.8.9"
 description = "Python Bitcoin block dashboard, transactions, send message to Space and more"
+license="MIT"
 authors = ["curly60e <curly60e@piserver.xyz>", "SatoshiNakamotoBitcoin"]
+readme="README.md"
+repository="https://github.com/curly60e/pyblock"
+homepage="https://github.com/curly60e/pyblock"
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
