@@ -66,6 +66,7 @@
 
     -- Easy mode:
     * a@A:~> pip3 install pybitblock
+    * a@A:~> pyblock
     
     -- Manual mode:
     * a@A:~> pip3 install poetry
@@ -73,6 +74,9 @@
     * a@A:~> cd pyblock
     * a@A:~> poetry install
     * a@A:~> poetry run python3 PyBlock.py
+
+    -- Upgrade:
+    * a@A:~> pip3 install pybitblock -U
 
     <br />
 
