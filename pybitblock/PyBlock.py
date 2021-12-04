@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.7"
+version = "1.1.8.1"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -3649,7 +3649,7 @@ def checkupdate():
 
 def upgrade():
     #gitfetch = "git fetch"
-    gitchekcout = "pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U " #"git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py requirements.txt clockscript.py clockscriptREMOTE.py"
+    gitchekcout = "pip3 install pybitblock -U " #"git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py requirements.txt clockscript.py clockscriptREMOTE.py"
     clear()
     blogo()
     #b = os.popen(gitfetch).read()
