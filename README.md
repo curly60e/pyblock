@@ -77,6 +77,7 @@
 
     -- Upgrade:
     * a@A:~> pip3 install pybitblock -U
+    * a@A:~> pyblock
 
     <br />
 
