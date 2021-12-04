@@ -7,12 +7,12 @@ from cfonts import render, say
 
 def blogo():
 
-    if os.path.isfile('pyblocksettings.conf') or os.path.isfile('pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("pyblocksettings.conf", "rb")) # Load the file 'bclock.conf'
+    if os.path.isfile('config/pyblocksettinconfig/gs.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("config/pyblocksettings.conf", "rb")) # Load the file 'bclock.conf'
         settings = settingsv # Copy the variable pathv to 'path'
     else:
         settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settings, open("pyblocksettings.conf", "wb"))
+        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
 
     if settings["gradient"] == "grd":
         output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])

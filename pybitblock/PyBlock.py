@@ -52,8 +52,8 @@ def rpc(method, params=[]):
         "params": params
     })
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+    if os.path.isfile('$HOME/.pyblock/bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        pathv = pickle.load(open("$HOME/.pyblock/bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
@@ -307,12 +307,12 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             break
 
 def design():
-    if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+    if os.path.isfile('$HOME/.pyblock/pyblocksettingsClock.conf') or os.path.isfile('$HOME/.pyblock/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("$HOME/.pyblock/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
         settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+        pickle.dump(settingsClock, open("$HOME/.pyblock/pyblocksettingsClock.conf", "wb"))
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
@@ -487,9 +487,9 @@ def localHalving():
 
 def pdfconvert():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+    pathv = pickle.load(open("$HOME/.pyblock/bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
-    if not os.path.isfile(str("bitcoin.pdf")):
+    if not os.path.isfile(str("$HOME/.pyblock/bitcoin.pdf")):
         clear()
         blogo()
         close()
@@ -610,7 +610,7 @@ def callColdCore():
     blogo()
     close()
     try:
-        if not os.path.isfile('public.txt'):
+        if not os.path.isfile('$HOME/.pyblock/public.txt'):
             msg = """
             \033[0;37;40m-------------------------\a\u001b[31;1mFILE NOT FOUND\033[0;37;40m----------------------------
                     To ColdCore works it needs to import your wallet's
@@ -627,7 +627,7 @@ def callColdCore():
             print(msg)
             input("\nContinue...")
         else:
-            if not os.path.isdir('coldcore'):
+            if not os.path.isdir('$HOME/.pyblock/coldcore'):
                 git = "git clone https://github.com/jamesob/coldcore.git"
                 install = "cd coldcore && chmod +x coldcore && cp coldcore ~/.local/bin/coldcore"
                 os.system(git)
@@ -3424,11 +3424,11 @@ def colorsSelectRainbowEndOnchainONLY():
 
 def menuSelection():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
     chln = {"onchain":"", "offchain":""}
-    if os.path.isfile('selection.conf'):
-        chain = pickle.load(open("selection.conf", "rb"))
+    if os.path.isfile('config/selection.conf'):
+        chain = pickle.load(open("config/selection.conf", "rb"))
         chln = chain
         if path['bitcoincli']:
             if chln ['onchain']:
@@ -3438,17 +3438,17 @@ def menuSelection():
         else:
             MainMenuREMOTE()
     else:
-        if os.path.isfile('blndconnect.conf'):
+        if os.path.isfile('config/blndconnect.conf'):
             chln['offchain'] = "offchain"
         else:
             chln['onchain'] = "onchain"
 
-        pickle.dump(chln, open("selection.conf", "wb"))
+        pickle.dump(chln, open("config/selection.conf", "wb"))
 
 
 def menuSelectionLN():
     lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
-    lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     if lndconnectload['ln']:
         menuLNDLOCAL()
@@ -3458,8 +3458,8 @@ def menuSelectionLN():
 def aaccPPiLNBits():
     try:
         bitLN = {"NN":"","pd":""}
-        if os.path.isfile('lnbitSN.conf'):
-            bitData= pickle.load(open("lnbitSN.conf", "rb"))
+        if os.path.isfile('config/lnbitSN.conf'):
+            bitData= pickle.load(open("config/lnbitSN.conf", "rb"))
             bitLN = bitData
             APILnbit()
         else:
@@ -3501,7 +3501,7 @@ def aaccPPiLNBits():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("lnbitSN.conf", "wb"))
+                pickle.dump(bitLN, open("config/lnbitSN.conf", "wb"))
                 createFileConnLNBits()
                 break
     except:
@@ -3513,8 +3513,8 @@ def aaccPPiLNBits():
 def aaccPPiLNPay():
     try:
         bitLN = {"NN":"","pd":""}
-        if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+        if os.path.isfile('config/lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
+            bitData= pickle.load(open("config/lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
             APILnPay()
         else:
@@ -3556,7 +3556,7 @@ def aaccPPiLNPay():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("lnpaySN.conf", "wb"))
+                pickle.dump(bitLN, open("config/lnpaySN.conf", "wb"))
                 createFileConnLNPay()
                 break
 
@@ -3569,8 +3569,8 @@ def aaccPPiLNPay():
 def aaccPPiOpenNode():
     try:
         bitLN = {"NN":"","pd":""}
-        if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+        if os.path.isfile('config/opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
+            bitData= pickle.load(open("config/opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
             APIOpenNode()
         else:
@@ -3612,7 +3612,7 @@ def aaccPPiOpenNode():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("opennodeSN.conf", "wb"))
+                pickle.dump(bitLN, open("config/opennodeSN.conf", "wb"))
                 createFileConnOpenNode()
                 break
 
@@ -3624,13 +3624,13 @@ def aaccPPiOpenNode():
 
 
 def aaccPPiTippinMe():
-    if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
+    if os.path.isfile('config/tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
         APITippinMe()
     else:
         createFileTippinMe()
 
 def aaccPPiTallyCo():
-    if os.path.isfile('tallyco.conf'): # Check if the file 'bclock.conf' is in the same folder
+    if os.path.isfile('config/tallyco.conf'): # Check if the file 'bclock.conf' is in the same folder
         APITallyCo()
     else:
         createFileConnTallyCo()
@@ -3678,7 +3678,7 @@ def testlogo():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settings["gradient"] = "color"
-        pickle.dump(settings, open("pyblocksettings.conf", "wb"))
+        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
     except:
         pass
 
@@ -3698,7 +3698,7 @@ def testlogoRB():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settings["gradient"] = "grd"
-        pickle.dump(settings, open("pyblocksettings.conf", "wb"))
+        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
     except:
         pass
 
@@ -3720,7 +3720,7 @@ def testClock():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settingsClock["gradient"] = "color"
-        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
     except:
         pass
 
@@ -5848,9 +5848,12 @@ while True: # Loop
     try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+        if not os.path.isdir("$HOME"):
+            dir = 'mkdir config'
+            os.system(dir)
 
-        if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+        if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
             path = pathv # Copy the variable pathv to 'path'
         else:
             blogo()
@@ -5861,20 +5864,20 @@ while True: # Loop
             path['rpcpass'] = input("RPC Password: ")
             print("\n\tLocal Bitcoin Core Node connection.\n")
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-            pickle.dump(path, open("bclock.conf", "wb"))
+            pickle.dump(path, open("config/bclock.conf", "wb"))
 
-        if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-            lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+        if os.path.isfile('config/blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
+            lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
         else:
             clear()
             blogo()
-            if os.path.isfile('init.conf'):
-                pqr = pickle.load(open("init.conf", "rb"))
+            if os.path.isfile('config/init.conf'):
+                pqr = pickle.load(open("config/init.conf", "rb"))
                 yesno = pqr
             else:
                 yesno = input("Do you want to connect your Lightning Node? yes/no: ")
-                pickle.dump(yesno, open("init.conf", "wb"))
+                pickle.dump(yesno, open("config/init.conf", "wb"))
                 if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
                     print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
                     lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
@@ -5882,7 +5885,7 @@ while True: # Loop
                     lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
                     print("\n\tLocal Lightning Node connection.\n")
                     lndconnectload["ln"] = input("Insert the path to lncli: ")
-                    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+                    pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb")) # Save the file 'bclock.conf'
         menuSelection()
 
 
