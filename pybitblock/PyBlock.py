@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.8.1"
+version = "1.1.8.2"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -3644,23 +3644,8 @@ def checkupdate():
         q = print(" ")
     else:
         print("\n    ------------------------------------------")
-        q = print("    \033[1;31;40mNew version available\033[0;37;40m > Press U to Upgrade")
+        q = print("    \033[1;31;40mNew version available\033[0;37;40m > Exit and $pip3 install pybitblock -U ")
         print("    ------------------------------------------")
-
-def upgrade():
-    #gitfetch = "git fetch"
-    gitchekcout = "pip3 install pybitblock -U " #"git checkout origin/master -- PyBlock.py ppi.py pblogo.py sysinf.py apisnd.py clone.py donation.py feed.py logos.py nodeconnection.py lnd.py logic.py rebalance.py routes.py grpc_generated/router_pb2.py grpc_generated/router_pb2_grpc.py grpc_generated/rpc_pb2.py grpc_generated/rpc_pb2_grpc.py requirements.txt clockscript.py clockscriptREMOTE.py"
-    clear()
-    blogo()
-    #b = os.popen(gitfetch).read()
-    a = os.popen(gitchekcout).read()
-    print(b)
-    print(a)
-    print("\n---------------------------------------------------")
-    print("\n\t\033[1;31;40mYou'll need to restart PyBLOCK\033[0;37;40m\n")
-    print("---------------------------------------------------\n")
-    #os.system("pip3 install -r requirements.txt")
-    input("Continue...")
 
 def testlogo():
     output = render('PyBLOCK', colors=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -4984,8 +4969,6 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         APIMenuLOCAL()
     elif menuS in ["X", "x"]:
         dnt()
-    elif menuS in ["U", "u"]:
-        upgrade()
     elif menuS in ["Q", "q"]:
         os._exit(0)
         apisnd.close()
@@ -5032,8 +5015,6 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         APIMenuLOCALOnchainONLY()
     elif menuS in ["X", "x"]:
         dntOnchainONLY()
-    elif menuS in ["U", "u"]:
-        upgrade()
     elif menuS in ["Q", "q"]:
         os._exit(0)
         apisnd.close()
@@ -5504,8 +5485,6 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         APIMenuLOCAL()
     elif menuS in ["X", "x"]:
         dnt()
-    elif menuS in ["U", "u"]:
-        upgrade()
     elif menuS in ["S", "s"]:
         settings4Remote()
     elif menuS in ["Q", "q"]:
