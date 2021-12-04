@@ -136,16 +136,20 @@
 
      - Open the Terminal
      
-        -- Easy mode:
-        * a@A:~> pip3 install pybitblock
+	    -- Easy mode:
+	    * a@A:~> pip3 install pybitblock
+	    * a@A:~> pyblock
 
-        -- Manual mode:
+	    -- Manual mode:
+	    * a@A:~> pip3 install poetry
+	    * a@A:~> git clone https://github.com/curly60e/pyblock.git
+	    * a@A:~> cd pyblock
+	    * a@A:~> poetry install
+	    * a@A:~> poetry run python3 PyBlock.py
 
-        * a@A:~> pip3 install poetry
-        * a@A:~> git clone https://github.com/curly60e/pyblock.git
-        * a@A:~> cd pyblock
-        * a@A:~> poetry install
-        * a@A:~> poetry run python3 PyBlock.py
+	    -- Upgrade:
+	    * a@A:~> pip3 install pybitblock -U
+	    * a@A:~> pyblock
 
         <br />
 
