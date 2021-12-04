@@ -46,7 +46,7 @@
 
 <img src="https://pbs.twimg.com/media/FADnL4DXoAIlkwR.jpg" width="50%" />
 
-# PyBlock v1.1.7
+# PyBlock v1.1.8.2
 ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 - This will fully work on a Node that has Bitcoin Core and LND installed.
@@ -65,10 +65,12 @@
     Open the Terminal.
 
     -- Easy mode:
+    * a@A:~> sudo apt install hexyl
     * a@A:~> pip3 install pybitblock
     * a@A:~> pyblock
     
     -- Manual mode:
+    * a@A:~> sudo apt install hexyl
     * a@A:~> pip3 install poetry
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
@@ -137,10 +139,12 @@
      - Open the Terminal
      
 	    -- Easy mode:
+	    * a@A:~> sudo apt install hexyl
 	    * a@A:~> pip3 install pybitblock
 	    * a@A:~> pyblock
 
 	    -- Manual mode:
+	    * a@A:~> sudo apt install hexyl
 	    * a@A:~> pip3 install poetry
 	    * a@A:~> git clone https://github.com/curly60e/pyblock.git
 	    * a@A:~> cd pyblock
