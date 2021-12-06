@@ -327,6 +327,8 @@ def datesConn():
         clear()
         blogo()
         closed()
+        output = render(str("dates"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:
@@ -342,6 +344,8 @@ def quotesConn():
         clear()
         blogo()
         closed()
+        output = render(str("quotes"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:
@@ -356,6 +360,8 @@ def miningConn():
         clear()
         blogo()
         closed()
+        output = render(str("hashrate"), colors=['yellow'], align='left', font='tiny')
+        print(output)
         print(a)
         input("\a\nContinue...")
     except:
