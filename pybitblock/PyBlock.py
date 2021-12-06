@@ -108,7 +108,7 @@ def untxsConn():
                 abc = json.loads(gnb1)
                 ab = abc['vout']
                 knz = 'address'
-                for key, value in enumerate(ab):
+                for value in ab:
                     knx = value['scriptPubKey']
                     if knz in knx:
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
