@@ -335,7 +335,7 @@ def datesConn():
 #-----------------------------END Dates--------------------------------
 #-----------------------------Quotes--------------------------------
 
-def datesConn():
+def quotesConn():
     try:
         conn = "curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"
         a = os.popen(conn).read()
