@@ -322,7 +322,7 @@ def bwtConn():
 
 def datesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/fun#JSON" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 45 | tr -d '[' | tr -d ','"""
+        conn = """curl -s "https://bitcoinexplorer.org/fun#JSON" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ','"""
         a = os.popen(conn).read()
         clear()
         blogo()
