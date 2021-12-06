@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.8.2"
+version = "1.1.8.3"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -108,7 +108,7 @@ def untxsConn():
                 abc = json.loads(gnb1)
                 ab = abc['vout']
                 knz = 'address'
-                for key, value in enumerate(ab):
+                for value in ab:
                     knx = value['scriptPubKey']
                     if knz in knx:
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
@@ -758,6 +758,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats
+    \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
@@ -791,6 +792,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
+    \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
@@ -840,6 +842,7 @@ def bitcoincoremenuLOCALOPRETURN():
 
     \u001b[38;5;202mA.\033[0;37;40m Send OP_RETURN
     \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
+    \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -894,6 +897,7 @@ def bitcoincoremenuREMOTE():
     \u001b[38;5;202mD.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mE.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -921,6 +925,7 @@ def bitcoincoremenuREMOTEOPRETURN():
 
     \u001b[38;5;202mA.\033[0;37;40m Send OP_RETURN
     \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
+    \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuREMOTEcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1179,8 +1184,10 @@ def miscellaneousLOCAL():
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
-    \u001b[38;5;202mA.\033[0;37;40m FunB
-    \u001b[38;5;202mB.\033[0;37;40m Sysinfo
+    \u001b[38;5;202mA.\033[0;37;40m Ascii ₿
+    \u001b[38;5;202mB.\033[0;37;40m System
+    \u001b[38;5;202mC.\033[0;37;40m Dates
+    \u001b[38;5;202mD.\033[0;37;40m Quotes
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1211,8 +1218,10 @@ def miscellaneousLOCALOnchainONLY():
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
-    \u001b[38;5;202mA.\033[0;37;40m FunB
-    \u001b[38;5;202mB.\033[0;37;40m Sysinfo
+    \u001b[38;5;202mA.\033[0;37;40m Ascii ₿
+    \u001b[38;5;202mB.\033[0;37;40m System
+    \u001b[38;5;202mC.\033[0;37;40m Dates
+    \u001b[38;5;202mD.\033[0;37;40m Quotes
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5096,6 +5105,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["Z", "z"]:
         statsConn()
+    elif bcore in ["M", "m"]:
+        miningConn()    
     elif bcore in ["U", "u"]:
         untxsConn()
 
@@ -5147,6 +5158,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
         statsConn()
+    elif bcore in ["M", "m"]:
+        miningConn()       
     elif bcore in ["U", "u"]:
         untxsConn()
 
@@ -5165,6 +5178,10 @@ def bitcoincoremenuLOCALcontrolO(oreturn):
         clear()
         blogo()
         opreturn_view()
+    elif oreturn in ["C", "c"]:
+        clear()
+        blogo()
+        opretminer()    
 
 def bitcoincoremenuLOCALcontrolOOnchainONLY(oreturn):
     if oreturn in ["A", "a"]:
@@ -5211,6 +5228,20 @@ def miscellaneousLOCALmenu(misce):
                     t.sleep(1)
                 except:
                     break
+        elif misce in ["C", "c"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    datesConn()
+                    input("Continue...") 
+        elif misce in ["D", "d"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    quotesConn()
+                    input("Continue...")             
         elif misce in ["R", "r"]:
             menuSelection()
 
@@ -5245,6 +5276,20 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
                     t.sleep(1)
                 except:
                     break
+        elif misce in ["C", "c"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    datesConn()
+                    input("Continue...")
+        elif misce in ["D", "d"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    quotesConn()
+                    input("Continue...")            
         elif misce in ["R", "r"]:
             menuSelection()
 
@@ -5552,6 +5597,12 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         miscellaneousLOCAL()
     elif bcore in ["O", "o"]:
         bitcoincoremenuREMOTEOPRETURN()
+    elif bcore in ["Z", "z"]:
+        statsConn()
+    elif bcore in ["M", "m"]:
+        miningConn()       
+    elif bcore in ["U", "u"]:
+        untxsConn()    
 
 def bitcoincoremenuREMOTEcontrolO(oreturn):
     if oreturn in ["A", "a"]:
@@ -5562,6 +5613,10 @@ def bitcoincoremenuREMOTEcontrolO(oreturn):
         clear()
         blogo()
         opreturn_view()
+    elif oreturn in ["C", "c"]:
+        clear()
+        blogo()
+        opretminer()    
 
 def lightningnetworkREMOTEcontrol(lncore):
     if lncore in ["A", "a"]:
