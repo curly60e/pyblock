@@ -322,7 +322,7 @@ def bwtConn():
 
 def datesConn():
     try:
-        conn = "curl -s "https://bitcoinexplorer.org/fun#JSON" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 45 | tr -d '[' | tr -d ','"
+        conn = """curl -s "https://bitcoinexplorer.org/fun#JSON" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 45 | tr -d '[' | tr -d ','"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -339,7 +339,7 @@ def datesConn():
 
 def quotesConn():
     try:
-        conn = "curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"
+        conn = """curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -355,7 +355,7 @@ def quotesConn():
 
 def miningConn():
     try:
-        conn = "curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,'"
+        conn = """curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,'"""
         a = os.popen(conn).read()
         clear()
         blogo()

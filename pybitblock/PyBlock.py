@@ -5106,7 +5106,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["Z", "z"]:
         statsConn()
     elif bcore in ["M", "m"]:
-        miningConn()    
+        miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
 
@@ -5159,7 +5159,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["Z", "z"]:
         statsConn()
     elif bcore in ["M", "m"]:
-        miningConn()       
+        miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
 
@@ -5181,7 +5181,7 @@ def bitcoincoremenuLOCALcontrolO(oreturn):
     elif oreturn in ["C", "c"]:
         clear()
         blogo()
-        opretminer()    
+        opretminer()
 
 def bitcoincoremenuLOCALcontrolOOnchainONLY(oreturn):
     if oreturn in ["A", "a"]:
@@ -5234,20 +5234,24 @@ def miscellaneousLOCALmenu(misce):
                     clear()
                     blogo()
                     datesConn()
-                    input("Continue...") 
+                    input("Continue...")
+
+                except:
+                    break
         elif misce in ["D", "d"]:
             while True:
                 try:
                     clear()
                     blogo()
                     quotesConn()
-                    input("Continue...")             
+                    input("Continue...")
+                except:
+                    break
         elif misce in ["R", "r"]:
             menuSelection()
-
 def miscellaneousLOCALmenuOnchainONLY(misce):
-    while True:
-        if misce in ["A", "a"]:
+    if misce in ["A", "a"]:
+        while True:
             try:
                 clear()
                 blogo()
@@ -5265,33 +5269,35 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
                 logoC()
                 tmp()
             except:
+                pass
+    elif misce in ["B", "b"]:
+        while True:
+            try:
+                clear()
+                blogo()
+                close()
+                sysinfoDetail()
+                t.sleep(1)
+            except:
                 break
-        elif misce in ["B", "b"]:
-            while True:
-                try:
-                    clear()
-                    blogo()
-                    close()
-                    sysinfoDetail()
-                    t.sleep(1)
-                except:
-                    break
-        elif misce in ["C", "c"]:
-            while True:
-                try:
-                    clear()
-                    blogo()
-                    datesConn()
-                    input("Continue...")
-        elif misce in ["D", "d"]:
-            while True:
-                try:
-                    clear()
-                    blogo()
-                    quotesConn()
-                    input("Continue...")            
-        elif misce in ["R", "r"]:
-            menuSelection()
+    elif misce in ["D", "d"]:
+        try:
+            clear()
+            blogo()
+            quotesConn()
+            input("Continue...")
+        except:
+            pass
+    elif misce in ["C", "c"]:
+        try:
+            clear()
+            blogo()
+            datesConn()
+            input("Continue...")
+        except:
+            pass
+    elif misce in ["R", "r"]:
+        menuSelection()
 
 def decodeHexLOCAL(hexloc):
     if hexloc in ["A", "a"]:
@@ -5600,9 +5606,9 @@ def bitcoincoremenuREMOTEcontrol(bcore):
     elif bcore in ["Z", "z"]:
         statsConn()
     elif bcore in ["M", "m"]:
-        miningConn()       
+        miningConn()
     elif bcore in ["U", "u"]:
-        untxsConn()    
+        untxsConn()
 
 def bitcoincoremenuREMOTEcontrolO(oreturn):
     if oreturn in ["A", "a"]:
@@ -5616,7 +5622,7 @@ def bitcoincoremenuREMOTEcontrolO(oreturn):
     elif oreturn in ["C", "c"]:
         clear()
         blogo()
-        opretminer()    
+        opretminer()
 
 def lightningnetworkREMOTEcontrol(lncore):
     if lncore in ["A", "a"]:
