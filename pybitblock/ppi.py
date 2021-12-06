@@ -1,5 +1,4 @@
 #Developer: Curly60e
-#PyBLOCK its a clock of the Bitcoin blockchain.
 #Tester: __B__T__C__
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
@@ -319,6 +318,56 @@ def bwtConn():
         pass
 
 #-----------------------------END bwt.dev--------------------------------
+#-----------------------------Dates--------------------------------
+
+def datesConn():
+    try:
+        conn = "curl -s "https://bitcoinexplorer.org/fun#JSON" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 45 | tr -d '[' | tr -d ','"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("dates"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Dates--------------------------------
+#-----------------------------Quotes--------------------------------
+
+def quotesConn():
+    try:
+        conn = "curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("quotes"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+#-----------------------------END Quotes--------------------------------
+#-----------------------------Hashrate--------------------------------
+
+def miningConn():
+    try:
+        conn = "curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,'"
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("hashrate"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Hashrate--------------------------------
 #-----------------------------StatsLN--------------------------------
 
 def stalnConn():
