@@ -596,8 +596,6 @@ def rateSXList():
             clear()
             blogo()
             closed()
-            output = render(str("rate.sx"), colors=['yellow'], align='left', font='tiny')
-            print(output)
             print(a)
             t.sleep(20)
         except:
