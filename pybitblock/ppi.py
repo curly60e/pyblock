@@ -371,7 +371,7 @@ def miningConn():
 
 def stalnConn():
     try:
-        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
+        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8 | jq -R"""
         a = os.popen(conn).read()
         clear()
         blogo()
