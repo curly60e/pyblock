@@ -216,9 +216,19 @@
   - python3 PyBlock.py
 
 
-### Tools by
+### Created by
 
 [@Curly60e](https://twitter.com/royalfield370) ⚡️ curly60e@bitrefill.com
+
+### Tested and contribution by
+
+[@SatoshiNakamoto](https://twitter.com/__B__T__C__)
+
+### Contributor
+
+[@Danvergara...](https://twitter.com/__danvergara__)
+
+### Tools by
 
 [@SamouraiDev,](https://twitter.com/SamouraiDev)
 [@Korynewton,](https://twitter.com/kn3wt)
@@ -245,7 +255,6 @@
 [@Whale_Alert,](https://twitter.com/whale_alert)
 [@BitcoinExplorer,](https://twitter.com/BitcoinExplorer)
 [@JanoSide,](https://twitter.com/janoside)
-[@Danvergara...](https://twitter.com/__danvergara__)
 
 SUPPORT PyBLØCK.
 
