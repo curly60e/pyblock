@@ -224,6 +224,7 @@
 [@Korynewton,](https://twitter.com/kn3wt)
 [@Tippin_Me,](https://twitter.com/tippin_me)
 [@TallyCoinApp,](https://twitter.com/tallycoinapp)
+[@DJBooth007,](https://twitter.com/djbooth007)
 [@MemPool,](https://twitter.com/mempool)
 [@CoinGecko,](https://twitter.com/coingecko)
 [@Igor_Chubin,](https://twitter.com/igor_chubin)
@@ -242,6 +243,8 @@
 [@JamesOb,](https://twitter.com/jamesob)
 [@BenTheCarman,](https://twitter.com/benthecarman)
 [@Whale_Alert,](https://twitter.com/whale_alert)
+[@BitcoinExplorer,](https://twitter.com/BitcoinExplorer)
+[@JanoSide,](https://twitter.com/janoside)
 [@Danvergara...](https://twitter.com/__danvergara__)
 
 SUPPORT PyBLØCK.
