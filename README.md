@@ -220,7 +220,7 @@
 
 [@Curly60e](https://twitter.com/royalfield370) ⚡️ curly60e@bitrefill.com
 
-### Tested and contribution by
+### Testing and contribution by
 
 [@SatoshiNakamoto](https://twitter.com/__B__T__C__)
 
