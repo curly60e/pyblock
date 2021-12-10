@@ -216,14 +216,25 @@
   - python3 PyBlock.py
 
 
-### Tools by
+### Created by
 
-[@Curly60e](https://twitter.com/royalfield370) ⚡️ curly60e@bitrefill.com
+[@Curly60e](https://twitter.com/curly60e) ⚡️ curly60e@bitrefill.com
+
+### Testing and contribution by
+
+[@SatoshiNakamoto](https://twitter.com/__B__T__C__)
+
+### Contributor
+
+[@Danvergara...](https://twitter.com/__danvergara__)
+
+### Tools by
 
 [@SamouraiDev,](https://twitter.com/SamouraiDev)
 [@Korynewton,](https://twitter.com/kn3wt)
 [@Tippin_Me,](https://twitter.com/tippin_me)
 [@TallyCoinApp,](https://twitter.com/tallycoinapp)
+[@DJBooth007,](https://twitter.com/djbooth007)
 [@MemPool,](https://twitter.com/mempool)
 [@CoinGecko,](https://twitter.com/coingecko)
 [@Igor_Chubin,](https://twitter.com/igor_chubin)
@@ -242,7 +253,8 @@
 [@JamesOb,](https://twitter.com/jamesob)
 [@BenTheCarman,](https://twitter.com/benthecarman)
 [@Whale_Alert,](https://twitter.com/whale_alert)
-[@Danvergara...](https://twitter.com/__danvergara__)
+[@BitcoinExplorer,](https://twitter.com/BitcoinExplorer)
+[@JanoSide,](https://twitter.com/janoside)
 
 SUPPORT PyBLØCK.
 
