@@ -273,7 +273,7 @@ def gameroom():
 
 def statsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*'"""
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | jq -R | tr -d '"' """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -322,7 +322,7 @@ def bwtConn():
 
 def datesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/fun#JSON" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 45 | tr -d '[' | tr -d ','"""
+        conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ',' | jq -R"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -372,7 +372,7 @@ def miningConn():
 
 def stalnConn():
     try:
-        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
+        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8 | jq -R"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -551,45 +551,48 @@ def wttrDataV2():
 #-----------------------------RATE.SX--------------------------------
 
 def rateSXList():
-    clear()
-    blogo()
-    fiat = """
-            -------------------------------------------
-                    AUD    Australian dollar
-                    BRL    Brazilian real
-                    CAD    Canadian dollar
-                    CHF    Swiss franc
-                    CLP    Chilean peso
-                    CNY    Chinese yuan
-                    CZK    Czech koruna
-                    DKK    Danish krone
-                    EUR    Euro
-                    GBP    Pound sterling
-                    HKD    Hong Kong dollar
-                    HUF    Hungarian forint
-                    IDR    Indonesian rupiah
-                    ILS    Israeli shekel
-                    INR    Indian rupee
-                    JPY    Japanese yen
-                    KRW    South Korean won
-                    MXN    Mexican peso
-                    MYR    Malaysian ringgit
-                    NOK    Norwegian krone
-                    NZD    New Zealand dollar
-                    PHP    Philippine peso
-                    PKR    Pakistani rupee
-                    PLN    Polish zloty
-                    RUB    Russian ruble
-                    SEK    Swedish krona
-                    SGD    Singapore dollar
-                    THB    Thai baht
-                    TRY    Turkish lira
-                    TWD    New Taiwan dollar
-                    USD    Dollars
-            -------------------------------------------
-    """
-    print(fiat)
-    selectFiat = input("Insert a Fiat currency: ")
+    try:
+        clear()
+        blogo()
+        fiat = """
+                -------------------------------------------
+                        AUD    Australian dollar
+                        BRL    Brazilian real
+                        CAD    Canadian dollar
+                        CHF    Swiss franc
+                        CLP    Chilean peso
+                        CNY    Chinese yuan
+                        CZK    Czech koruna
+                        DKK    Danish krone
+                        EUR    Euro
+                        GBP    Pound sterling
+                        HKD    Hong Kong dollar
+                        HUF    Hungarian forint
+                        IDR    Indonesian rupiah
+                        ILS    Israeli shekel
+                        INR    Indian rupee
+                        JPY    Japanese yen
+                        KRW    South Korean won
+                        MXN    Mexican peso
+                        MYR    Malaysian ringgit
+                        NOK    Norwegian krone
+                        NZD    New Zealand dollar
+                        PHP    Philippine peso
+                        PKR    Pakistani rupee
+                        PLN    Polish zloty
+                        RUB    Russian ruble
+                        SEK    Swedish krona
+                        SGD    Singapore dollar
+                        THB    Thai baht
+                        TRY    Turkish lira
+                        TWD    New Taiwan dollar
+                        USD    Dollars
+                -------------------------------------------
+        """
+        print(fiat)
+        selectFiat = input("Insert a Fiat currency: ")
+    except:
+        pass
     while True:
         try:
             list = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
@@ -597,53 +600,54 @@ def rateSXList():
             clear()
             blogo()
             closed()
-            output = render(str("rate.sx"), colors=['yellow'], align='left', font='tiny')
-            print(output)
             print(a)
             t.sleep(20)
         except:
             break
 
 def rateSXGraph():
-    clear()
-    blogo()
-    fiat = """
-            -------------------------------------------
-                    AUD    Australian dollar
-                    BRL    Brazilian real
-                    CAD    Canadian dollar
-                    CHF    Swiss franc
-                    CLP    Chilean peso
-                    CNY    Chinese yuan
-                    CZK    Czech koruna
-                    DKK    Danish krone
-                    EUR    Euro
-                    GBP    Pound sterling
-                    HKD    Hong Kong dollar
-                    HUF    Hungarian forint
-                    IDR    Indonesian rupiah
-                    ILS    Israeli shekel
-                    INR    Indian rupee
-                    JPY    Japanese yen
-                    KRW    South Korean won
-                    MXN    Mexican peso
-                    MYR    Malaysian ringgit
-                    NOK    Norwegian krone
-                    NZD    New Zealand dollar
-                    PHP    Philippine peso
-                    PKR    Pakistani rupee
-                    PLN    Polish zloty
-                    RUB    Russian ruble
-                    SEK    Swedish krona
-                    SGD    Singapore dollar
-                    THB    Thai baht
-                    TRY    Turkish lira
-                    TWD    New Taiwan dollar
-                    USD    Dollars
-            -------------------------------------------
-    """
-    print(fiat)
-    selectFiat = input("Insert a Fiat currency: ")
+    try:
+        clear()
+        blogo()
+        fiat = """
+                -------------------------------------------
+                        AUD    Australian dollar
+                        BRL    Brazilian real
+                        CAD    Canadian dollar
+                        CHF    Swiss franc
+                        CLP    Chilean peso
+                        CNY    Chinese yuan
+                        CZK    Czech koruna
+                        DKK    Danish krone
+                        EUR    Euro
+                        GBP    Pound sterling
+                        HKD    Hong Kong dollar
+                        HUF    Hungarian forint
+                        IDR    Indonesian rupiah
+                        ILS    Israeli shekel
+                        INR    Indian rupee
+                        JPY    Japanese yen
+                        KRW    South Korean won
+                        MXN    Mexican peso
+                        MYR    Malaysian ringgit
+                        NOK    Norwegian krone
+                        NZD    New Zealand dollar
+                        PHP    Philippine peso
+                        PKR    Pakistani rupee
+                        PLN    Polish zloty
+                        RUB    Russian ruble
+                        SEK    Swedish krona
+                        SGD    Singapore dollar
+                        THB    Thai baht
+                        TRY    Turkish lira
+                        TWD    New Taiwan dollar
+                        USD    Dollars
+                -------------------------------------------
+        """
+        print(fiat)
+        selectFiat = input("Insert a Fiat currency: ")
+    except:
+        pass
     while True:
         try:
             list = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
@@ -663,34 +667,37 @@ def rateSXGraph():
 #-----------------------------COINGECKO--------------------------------
 
 def CoingeckoPP():
-    btcInfo = CoinGeckoAPI()
-    n = btcInfo.get_price(ids='bitcoin', vs_currencies='usd,eur,gbp,jpy,aud')
-    q = n['bitcoin']
-    usd = q['usd']
-    eur = q['eur']
-    gbp = q['gbp']
-    jpy = q['jpy']
-    aud = q['aud']
+    try:
+        btcInfo = CoinGeckoAPI()
+        n = btcInfo.get_price(ids='bitcoin', vs_currencies='usd,eur,gbp,jpy,aud')
+        q = n['bitcoin']
+        usd = q['usd']
+        eur = q['eur']
+        gbp = q['gbp']
+        jpy = q['jpy']
+        aud = q['aud']
 
 
-    print("""
-    --------------------COINGECKO BITCOIN PRICE-----------------------
+        print("""
+        --------------------COINGECKO BITCOIN PRICE-----------------------
 
-                          1 BTC = {} USD
-                          1 BTC = {} EUR
-                          1 BTC = {} GBP
-                          1 BTC = {} JPY
-                          1 BTC = {} AUD
+                              1 BTC = {} USD
+                              1 BTC = {} EUR
+                              1 BTC = {} GBP
+                              1 BTC = {} JPY
+                              1 BTC = {} AUD
 
-    ------------------------------------------------------------------
+        ------------------------------------------------------------------
 
-                              ...BUT...
+                                  ...BUT...
 
-                            1 BTC = 1 BTC
+                                1 BTC = 1 BTC
 
-    ------------------------------------------------------------------
-    """.format(usd,eur,gbp,jpy,aud))
-    input("Continue...")
+        ------------------------------------------------------------------
+        """.format(usd,eur,gbp,jpy,aud))
+        input("Continue...")
+    except:
+        pass
 
 #-----------------------------END COINGECKO--------------------------------
 
