@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.8.3"
+version = "1.1.8.4"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -84,6 +84,50 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             t.sleep(10)
         except:
             break
+
+def searchTXS():
+    #try:
+        while True:
+            clear()
+            blogo()
+            closed()
+            output = render(str("search txs"), colors=['yellow'], align='left', font='tiny')
+            print(output)
+            tx = input("Search Tx ID: ")
+            getrawtrans = " getrawtransaction "
+            decodetxn = " decoderawtransaction "
+            gna = os.popen(path['bitcoincli'] + getrawtrans + tx)
+            gnaa = gna.read()
+            gna1 = str(gnaa)
+            gna2 = gna1.replace("\n", "")
+            print(gna2)
+            gnd = os.popen(path['bitcoincli'] + decodetxn + gna2)
+            gnda = gnd.read()
+            gnd1 = str(gnda)
+            gnd2 = gnd1.replace("\n", "")
+            print(gnd2)
+            input("continue")
+            for b in gnd2:
+                n = "".join(map(str, b))
+                #m = getrawtrans + n + " 1"
+                gnb = os.popen(path['bitcoincli'] + m)
+                gnba = gnb.read()
+                gnb1 = str(gnba)
+                abc = json.loads(gnb1)
+                ab = abc['vout']
+                knz = 'address'
+                for value in ab:
+                    knx = value['scriptPubKey']
+                    if knz in knx:
+                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
+                    else:
+                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['asm'],knx['type']))
+                        decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(b) + " | xxd -r -p | hexyl -n 256"
+                        print("OP_RETURN Hex: ")
+                        os.system(decodeTX)
+                input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
+    #except:
+    #    pass
 
 def untxsConn():
     try:
@@ -307,12 +351,12 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             break
 
 def design():
-    if os.path.isfile('$HOME/.pyblock/pyblocksettingsClock.conf') or os.path.isfile('$HOME/.pyblock/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("$HOME/.pyblock/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+    if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
         settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("$HOME/.pyblock/pyblocksettingsClock.conf", "wb"))
+        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
@@ -5162,6 +5206,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
+    elif bcore in ["S", "s"]:
+        searchTXS()
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
