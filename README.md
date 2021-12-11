@@ -1,5 +1,4 @@
 <img src="./pybitblock/resources/images/Logo.PNG" width="80%" />
-
    
     ----------------------
     CPU Usage: X% 
@@ -65,6 +64,8 @@
     Open the Terminal.
 
     -- Easy mode:
+    * a@A:~> mkdir PyBLOCK
+    * a@A:~> cd PyBLOCK
     * a@A:~> sudo apt install hexyl
     * a@A:~> pip3 install pybitblock
     * a@A:~> pyblock
@@ -74,6 +75,7 @@
     * a@A:~> pip3 install poetry
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
+    * a@A:~> cd pybitblock
     * a@A:~> poetry install
     * a@A:~> poetry run python3 PyBlock.py
 
@@ -139,6 +141,8 @@
      - Open the Terminal
      
 	    -- Easy mode:
+	    * a@A:~> mkdir PyBLOCK
+	    * a@A:~> cd PyBLOCK
 	    * a@A:~> sudo apt install hexyl
 	    * a@A:~> pip3 install pybitblock
 	    * a@A:~> pyblock
@@ -148,6 +152,7 @@
 	    * a@A:~> pip3 install poetry
 	    * a@A:~> git clone https://github.com/curly60e/pyblock.git
 	    * a@A:~> cd pyblock
+	    * a@A:~> cd pybitblock	    
 	    * a@A:~> poetry install
 	    * a@A:~> poetry run python3 PyBlock.py
 
@@ -206,14 +211,10 @@
         <br />
 
 
-## Dependencies
-
-  - Install Curl on Debian based type:
-    - sudo apt install curl
 
 ## How to execute
 
-  - python3 PyBlock.py
+  - pyblock
 
 
 ### Created by
@@ -222,11 +223,11 @@
 
 ### Testing and contribution by
 
-[@SatoshiNakamoto](https://twitter.com/__B__T__C__)
+[@SatoshiNakamoto](https://twitter.com/__B__T__C__) ⚡️ satoshinakamoto@bitrefill.com
 
 ### Contributor
 
-[@Danvergara...](https://twitter.com/__danvergara__)
+[@Danvergara](https://twitter.com/__danvergara__)
 
 ### Tools by
 
@@ -254,9 +255,9 @@
 [@BenTheCarman,](https://twitter.com/benthecarman)
 [@Whale_Alert,](https://twitter.com/whale_alert)
 [@BitcoinExplorer,](https://twitter.com/BitcoinExplorer)
-[@JanoSide,](https://twitter.com/janoside)
+[@JanoSide...](https://twitter.com/janoside)
 
-SUPPORT PyBLØCK.
+SUPPORT PyBLØCK. ⚡️ https://tippin.me/@_PyBlock_
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
