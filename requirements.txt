@@ -25,7 +25,6 @@ robohash
 pillow
 numpy
 googleapis-common-protos==1.52.0
-grpcio
 pdfminer
 html2text
 #
