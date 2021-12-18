@@ -32,7 +32,6 @@ robohash = "^1.1"
 Pillow = "^8.4.0"
 numpy = "^1.21.4"
 googleapis-common-protos = "1.52.0"
-grpcio = "^1.42.0"
 pdfminer = "^20191125"
 typer = "^0.4.0"
 
