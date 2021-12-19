@@ -13,4 +13,4 @@ jobs:
         architecture: 'x64'
     - run: pip install poetry==1.1.12
     - run: poetry build
-    - run: poetry publish --username=__token__ --password=${{ pypi-AgEIcHlwaS5vcmcCJDQwMzMxMjdmLTBmMTctNDBlYS1iOWFmLWIwM2Y2NzQ2ZGI0NwACO3sicGVybWlzc2lvbnMiOiB7InByb2plY3RzIjogWyJweWJpdGJsb2NrIl19LCAidmVyc2lvbiI6IDF9AAAGIKCZjHVuDJBvYqr1bFeyzeVd4BCxXpasFbcuCAf8qd8T }}
+    - run: poetry publish --username=__token__ --password=pypi-AgEIcHlwaS5vcmcCJDQwMzMxMjdmLTBmMTctNDBlYS1iOWFmLWIwM2Y2NzQ2ZGI0NwACO3sicGVybWlzc2lvbnMiOiB7InByb2plY3RzIjogWyJweWJpdGJsb2NrIl19LCAidmVyc2lvbiI6IDF9AAAGIKCZjHVuDJBvYqr1bFeyzeVd4BCxXpasFbcuCAf8qd8T
