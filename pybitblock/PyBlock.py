@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.8.6"
+version = "1.1.9"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -86,7 +86,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             break
 
 def searchTXS():
-    #try:
+    try:
         while True:
             clear()
             blogo()
@@ -94,40 +94,35 @@ def searchTXS():
             output = render(str("search txs"), colors=['yellow'], align='left', font='tiny')
             print(output)
             tx = input("Search Tx ID: ")
-            getrawtrans = " getrawtransaction "
-            decodetxn = " decoderawtransaction "
-            gna = os.popen(path['bitcoincli'] + getrawtrans + tx)
-            gnaa = gna.read()
-            gna1 = str(gnaa)
-            gna2 = gna1.replace("\n", "")
-            print(gna2)
-            gnd = os.popen(path['bitcoincli'] + decodetxn + gna2)
-            gnda = gnd.read()
-            gnd1 = str(gnda)
-            gnd2 = gnd1.replace("\n", "")
-            print(gnd2)
-            input("continue")
-            for b in gnd2:
-                n = "".join(map(str, b))
-                #m = getrawtrans + n + " 1"
-                gnb = os.popen(path['bitcoincli'] + m)
-                gnba = gnb.read()
-                gnb1 = str(gnba)
-                abc = json.loads(gnb1)
-                ab = abc['vout']
-                knz = 'address'
-                for value in ab:
-                    knx = value['scriptPubKey']
-                    if knz in knx:
-                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
-                    else:
-                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['asm'],knx['type']))
-                        decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(b) + " | xxd -r -p | hexyl -n 256"
-                        print("OP_RETURN Hex: ")
-                        os.system(decodeTX)
-                input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
-    #except:
-    #    pass
+            gettxout = " gettxout "
+
+            gnt = os.popen(path['bitcoincli'] + gettxout + tx + " 1")
+            gnta = gnt.read()
+            gnt1 = str(gnta)
+            gnt2 = json.loads(gnt1)
+            scriptPubKey = gnt2['scriptPubKey']
+            if gnt2['bestblock']:
+                clear()
+                blogo()
+                closed()
+                output = render(str("search txs"), colors=['yellow'], align='left', font='tiny')
+                print(output)
+                print("""
+    -------------------------------------------------------------------------------
+    Tx: \u001b[38;5;40m{} \033[0;37;40m
+    -------------------------------------------------------------------------------
+    \u001b[31;1mBestblockhash: \u001b[31;1m{}
+    \u001b[31;1mConfirmations: \u001b[38;5;27m{}
+    \u001b[31;1mAmount: \u001b[38;5;202m{} BTC
+    \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m
+    -------------------------------------------------------------------------------
+                    """.format(tx, gnt2['bestblock'], gnt2['confirmations'], gnt2['value'], scriptPubKey['address']))
+            else:
+                print("Is this a \u001b[38;5;40m Coinbase\033[0;37;40m tx?")
+
+            input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
+    except:
+        pass
 
 def untxsConn():
     try:
