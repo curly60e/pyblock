@@ -285,7 +285,7 @@ def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
 def getgenesis(): # get and decode Genesis block
-    output = render(str("satoshis 0 block"), colors=['yellow'], align='left', font='tiny')
+    output = render(str("genesis"), colors=['yellow'], align='left', font='tiny')
     print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path['bitcoincli'] + bitcoincli)
