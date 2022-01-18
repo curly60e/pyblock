@@ -1,3 +1,6 @@
+<meta name="lightning" content="curly60e@bitrefill.com" />
+<meta property="og:image" content="./pybitblock/resources/images/Logo.PNG" />
+
 <img src="./pybitblock/resources/images/Logo.PNG" width="80%" />
 
    
