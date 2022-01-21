@@ -1,3 +1,6 @@
+<meta name="lightning" content="pyblock@zbd.gg" />
+<meta property="og:image" content="./pybitblock/resources/images/Logo.PNG" />
+
 <img src="./pybitblock/resources/images/Logo.PNG" width="80%" />
 
    
@@ -220,13 +223,13 @@
 
 [@Curly60e](https://twitter.com/curly60e) ⚡️ curly60e@bitrefill.com
 
-### Testing and contribution by
+### Pentester and contribution by
 
-[@SatoshiNakamoto](https://twitter.com/__B__T__C__)
+[@SN](https://twitter.com/__B__T__C__) ⚡️ sn@getalby.com
 
 ### Contributor
 
-[@Danvergara...](https://twitter.com/__danvergara__)
+[@Danvergara](https://twitter.com/__danvergara__)
 
 ### Tools by
 
@@ -255,6 +258,8 @@
 [@Whale_Alert,](https://twitter.com/whale_alert)
 [@BitcoinExplorer,](https://twitter.com/BitcoinExplorer)
 [@JanoSide,](https://twitter.com/janoside)
+[@LNstats](https://twitter.com/LNstats)
+...
 
 SUPPORT PyBLØCK.
 
