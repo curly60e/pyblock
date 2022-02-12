@@ -56,14 +56,14 @@ def opreturnOnchainONLY():
         qr.add_data(b)
         qr.print_ascii()
         print("\033[0;37;40m")
-        print("LND Invoice: " + b)
+        print(f'LND Invoice: {b}')
         qr.clear()
         input("\nContinue...")
         if lndconnectload['ln']:
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
+            lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
@@ -167,7 +167,7 @@ def opreturn():
                 invoiceN = b
                 invoice = invoiceN.lower()
                 lncli = " payinvoice "
-                lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
+                lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
@@ -185,14 +185,14 @@ def opreturn():
             qr.add_data(b)
             qr.print_ascii()
             print("\033[0;37;40m")
-            print("LND Invoice: " + b)
+            print(f'LND Invoice: {b}')
             qr.clear()
             input("\nContinue...")
             if lndconnectload['ln']:
                 invoiceN = b
                 invoice = invoiceN.lower()
                 lncli = " payinvoice "
-                lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
+                lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
@@ -229,7 +229,7 @@ def opreturn_view():
         clear()
         blogo()
         print("\nTransaction ID: " + responseC)
-        print("OP_RETURN Message: " + r3)
+        print(f'OP_RETURN Message: {r3}')
         input("\nContinue...")
     except:
         pass
@@ -477,7 +477,7 @@ def wttrDataV1():
             unit = input("Insert your metric units: ")
             list = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
         else:
-            list = "curl wttr.in/" + selectData + "?F"
+            list = f'curl wttr.in/{selectData}?F'
         a = os.popen(list).read()
         clear()
         blogo()
@@ -536,7 +536,7 @@ def wttrDataV2():
             list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
 
         else:
-            list = "curl v2.wttr.in/" + selectData + "?F"
+            list = f'curl v2.wttr.in/{selectData}?F'
         a = os.popen(list).read()
         clear()
         blogo()
@@ -726,8 +726,6 @@ def loadFileConnLNBits(lnbitLoad):
     return lnbitLoad
 
 def createFileConnLNBits():
-    lnbitLoad = {"wallet_name":"", "wallet_id":"", "admin_key":"", "invoice_read_key":""}
-
     clear()
     blogo()
     print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO LNBITS.COM.
@@ -735,7 +733,13 @@ def createFileConnLNBits():
                       IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
                                        SAVE THE FILE '\033[1;33;40mlnbitSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
     """)
-    lnbitLoad["wallet_name"] = input("Wallet name: ") # path to the bitcoin-cli
+    lnbitLoad = {
+        'wallet_id': '',
+        'admin_key': '',
+        'invoice_read_key': '',
+        'wallet_name': input("Wallet name: "),
+    }
+
     lnbitLoad["wallet_id"] = input("Wallet ID: ")
     lnbitLoad["admin_key"] = input("Admin key: ")
     lnbitLoad["invoice_read_key"] = input("Invoice/read key: ")
@@ -782,10 +786,16 @@ def lnbitCreateNewInvoice():
                 qr.print_ascii()
                 print("\033[0;37;40m")
                 qr.clear()
-                print("Lightning Invoice: " + c)
+                print(f'Lightning Invoice: {c}')
                 t.sleep(10)
                 dn = str(d['checking_id'])
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
+                checkcurl = (
+                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(
+                        b
+                    )
+                )
+
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -815,7 +825,13 @@ def lnbitPayInvoice():
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
         while True:
-            checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
+            checkcurl = (
+                f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(
+                    b
+                )
+            )
+
             rsh = os.popen(checkcurl).read()
             clear()
             blogo()
@@ -865,7 +881,7 @@ def lnbitCreatePayWall():
                 print("\n\tLNBITS PAYWALL LIST\n")
                 for item_ in d:
                     s = item_
-                    print("ID: " + s['id'])
+                    print(f'ID: {s["id"]}')
                 nd = input("\nSelect ID: ")
                 for item in d:
                     s = item
@@ -905,7 +921,7 @@ def lnbitListPawWall():
         try:
             for item_ in d:
                 s = item_
-                print("ID: " + s['id'])
+                print(f'ID: {s["id"]}')
             nd = input("\nSelect ID: ")
             for item in d:
                 s = item
@@ -947,7 +963,7 @@ def lnbitDeletePayWall():
                 try:
                     for item_ in d:
                         s = item_
-                        print("ID: " + s['id'])
+                        print(f'ID: {s["id"]}')
                     nd = input("\nSelect ID: ")
                     for item in d:
                         s = item
@@ -1021,7 +1037,7 @@ def lnbitsLNURLw():
                 print("\n\tLNBITS LNURLW LIST\n")
                 for item_ in d:
                     s = item_
-                    print("ID: " + s['id'] + " Uses: " + str(s['uses']) + " Used: " + str(s['used']))
+                    print(f'ID: {s["id"]} Uses: ' + str(s['uses']) + " Used: " + str(s['used']))
                 nd = input("\nSelect ID: ")
                 for item in d:
                     s = item
@@ -1060,7 +1076,7 @@ def lnbitsLNURLwList():
             print("\n\tLNBITS LNURLW LIST\n")
             for item_ in d:
                 s = item_
-                print("ID: " + s['id'] + " Uses: " + str(s['uses']) + " Used: " + str(s['used']))
+                print(f'ID: {s["id"]} Uses: ' + str(s['uses']) + " Used: " + str(s['used']))
             nd = input("\nSelect ID: ")
             for item in d:
                 s = item
@@ -1159,10 +1175,7 @@ def lnpayCreateInvoice():
     my_wallet = LNPayWallet(q)
     amt = input("\nAmount in Sats: ")
     memo = input("Memo: ")
-    invoice_params = {
-        'num_satoshis': amt,
-        'memo': memo + ' -PyBLOCK'
-    }
+    invoice_params = {'num_satoshis': amt, 'memo': f'{memo} -PyBLOCK'}
     try:
         invoice = my_wallet.create_invoice(invoice_params)
         clear()
@@ -1185,9 +1198,10 @@ def lnpayCreateInvoice():
                 qr.print_ascii()
                 print("\033[0;37;40m")
                 qr.clear()
-                print("Lightning Invoice: " + invoice['payment_request'])
+                print(f'Lightning Invoice: {invoice["payment_request"]}')
                 t.sleep(10)
-                curl = 'curl -u ' + b + ': https://api.lnpay.co/v1/lntx/' + invoice['id'] + '?fields=settled,num_satoshis'
+                curl = f'curl -u {b}: https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis'
+
                 rsh = os.popen(curl).read()
                 clear()
                 blogo()
@@ -1228,7 +1242,7 @@ def lnpayGetTransactions():
                 s = transaction_
                 q = s['lnTx']
 
-                print("ID: " + s['id'])
+                print(f'ID: {s["id"]}')
             nd = input("\nSelect ID: ")
             for transaction in transactions:
                 s = transaction
@@ -1271,7 +1285,8 @@ def lnpayPayInvoice():
     try:
         print("\n\tLNPAY PAY INVOICE\n")
         inv = input("\nInvoice: ")
-        curl = 'curl -u' + b +': https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request=' + inv
+        curl = f'curl -u{b}: https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}'
+
         clear()
         rsh = os.popen(curl).read()
         nn = str(rsh)
@@ -1364,8 +1379,6 @@ def loadFileConnOpenNode(opennodeLoad):
     return opennodeLoad
 
 def createFileConnOpenNode():
-    opennodeLoad = {"key":"","wdr":"","inv":""}
-
     clear()
     blogo()
     print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO OPENNODE.COM.
@@ -1373,7 +1386,7 @@ def createFileConnOpenNode():
                       IF YOU DELETE THIS FILE YOU WILL NEED TO PAY AGAIN TO GET ACCESS FROM PyBLOCK.
                                        SAVE THE FILE '\033[1;33;40mopennodeSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
     """)
-    opennodeLoad["key"] = input("API Read Only Key: ")
+    opennodeLoad = {'wdr': '', 'inv': '', 'key': input("API Read Only Key: ")}
     opennodeLoad["wdr"] = input("API Withdrawall Key: ")
     opennodeLoad["inv"] = input("API Invoices Key: ")
     pickle.dump(opennodeLoad, open("opennode.conf", "wb"))
@@ -1689,7 +1702,7 @@ def OpenNodeListPayments():
                 s = item_
                 n = s['status']
                 q = str(n)
-                print("ID: " + s['id'] + " " + q)
+                print(f'ID: {s["id"]} {q}')
             nd = input("\nSelect ID: ")
             for item in da:
                 s = item
@@ -1739,13 +1752,12 @@ def loadFileTippinMe(tippinmeLoad):
     return tippinmeLoad
 
 def createFileTippinMe():
-    tippinmeLoad = {"key":""}
     clear()
     blogo()
     print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOUR CONFIGURATION INFORMATION WILL BE SAVE IN '\033[1;33;40mtippinme.conf\033[0;37;40m'
                                                                 IF YOU NEED TO START AGAIN, DELETE IT.\n
     """)
-    tippinmeLoad["key"] = input("Twitter @user: ")
+    tippinmeLoad = {'key': input("Twitter @user: ")}
     pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
 
 def tippinmeGetInvoice():
@@ -1789,7 +1801,7 @@ def tippinmeGetInvoice():
             qr.add_data(ln1)
             qr.print_ascii()
             print("\033[0;37;40m")
-            print("LND Invoice: " + ln1)
+            print(f'LND Invoice: {ln1}')
             response.close()
             input("Continue...")
     except:
@@ -1819,8 +1831,6 @@ def loadFileConnTallyCo(tallycoLoad):
     return tallycoLoad
 
 def createFileConnTallyCo():
-    tallycoLoad = {"fundraiser_id":"","id":""}
-
     clear()
     blogo()
     print("""\n\t   \033[1;33;40mATENTION\033[0;37;40m: YOU ARE GOING TO CREATE A FILE WITH YOUR INFORMATION OF CONNECTION TO TALLYCO.IN.
@@ -1829,7 +1839,7 @@ def createFileConnTallyCo():
                                        SAVE THE FILE '\033[1;33;40mtallycoSN.conf\033[0;37;40m' IN A SAFE PLACE.\n
     """)
     print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
-    tallycoLoad["id"] = input("User ID or Twitter @USER: ")
+    tallycoLoad = {'fundraiser_id': '', 'id': input("User ID or Twitter @USER: ")}
     pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
 
 def tallycoGetPayment():
@@ -1861,7 +1871,7 @@ def tallycoGetPayment():
             qr.add_data(f)
             qr.print_ascii()
             print("\033[0;37;40m")
-            print("LND Invoice: " + f)
+            print(f'LND Invoice: {f}')
             qr.clear()
             input("\nContinue...")
         elif lnd_onchain == "btc":
@@ -1870,8 +1880,8 @@ def tallycoGetPayment():
             qr.add_data(e)
             qr.print_ascii()
             print("\033[0;37;40m")
-            print("Amount: " + d['cost'])
-            print("Bitcoin Address: " + e)
+            print(f'Amount: {d["cost"]}')
+            print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
     except:
