@@ -224,7 +224,13 @@ def getnewaddressOnchain():
                 gna = os.popen(path['bitcoincli'] + getadd)
                 gnaa = gna.read()
                 gna1 = str(gnaa)
-                output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
+                output = render(
+                    str(f'{gnb1} BTC'),
+                    colors=['yellow'],
+                    align='left',
+                    font='tiny',
+                )
+
                 print("""---------------------------------------------------------------
                     {}
 ---------------------------------------------------------------""".format(output))
@@ -363,7 +369,7 @@ def design():
     print("\x1b[?25l" + output)
     while True:
         x = a
-        bitcoinclient = path['bitcoincli'] + " getblockcount"
+        bitcoinclient = f'{path["bitcoincli"]} getblockcount'
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         if b > a:
@@ -423,7 +429,7 @@ def runthenumbers():
     input("\nContinue...")
 
 def countdownblock():
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     try:
