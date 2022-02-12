@@ -1934,7 +1934,7 @@ def tallycoDonateid():
                 qr.add_data(f)
                 qr.print_ascii()
                 print("\033[0;37;40m")
-                print("LND Invoice: " + f)
+                print(f'LND Invoice: {f}')
                 qr.clear()
                 input("\nContinue...")
         elif lnd_onchain in ["btc", "bTC", "BtC", "BTC", "BTc", "btC"]:
@@ -1943,8 +1943,8 @@ def tallycoDonateid():
             qr.add_data(e)
             qr.print_ascii()
             print("\033[0;37;40m")
-            print("Amount: " + d['cost'])
-            print("Bitcoin Address: " + e)
+            print(f'Amount: {d["cost"]}')
+            print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
     except:
