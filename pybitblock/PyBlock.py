@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #Tester: __B__T__C__
-#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 import os
 import os.path
@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.9.1"
+version = "1.1.9"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -285,7 +285,7 @@ def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
 def getgenesis(): # get and decode Genesis block
-    output = render(str("satoshis 0 block"), colors=['yellow'], align='left', font='tiny')
+    output = render(str("genesis"), colors=['yellow'], align='left', font='tiny')
     print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path['bitcoincli'] + bitcoincli)

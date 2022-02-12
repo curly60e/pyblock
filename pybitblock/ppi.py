@@ -273,7 +273,7 @@ def gameroom():
 
 def statsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | jq -R | tr -d '"' """
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -322,7 +322,7 @@ def bwtConn():
 
 def datesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ',' | jq -R"""
+        conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ','"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -372,7 +372,7 @@ def miningConn():
 
 def stalnConn():
     try:
-        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8 | jq -R"""
+        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
         a = os.popen(conn).read()
         clear()
         blogo()
