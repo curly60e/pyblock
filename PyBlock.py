@@ -184,7 +184,10 @@ def getnewaddressOnchain():
         gnu = os.popen(path['bitcoincli'] + getunconfirm)
         gnua= gnu.read()
         gnub = str(gnua)
-        output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
+        output = render(
+            str(f'{gnb1} BTC'), colors=['yellow'], align='left', font='tiny'
+        )
+
         print("""---------------------------------------------------------------
             {}
 ---------------------------------------------------------------""".format(output))
@@ -314,7 +317,7 @@ def console(): # get into the console from bitcoin-cli
             sysinfo()
             close()
             console()
-        lsd = os.popen(path['bitcoincli'] + " " + cle)
+        lsd = os.popen(f'{path["bitcoincli"]} {cle}')
         lsd0 = lsd.read()
         lsd1 = str(lsd0)
         print(lsd1)
@@ -352,7 +355,7 @@ def design():
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     a = b
@@ -368,10 +371,10 @@ def design():
             close()
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a\x1b[?25l" + output)
-            bitcoinclient = path['bitcoincli'] + " getbestblockhash"
+            bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
             bb = os.popen(str(bitcoinclient)).read()
             ll = bb
-            bitcoinclientgetblock = path['bitcoincli'] + " getblock " + ll
+            bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
             qq = os.popen(bitcoinclientgetblock).read()
             yy = json.loads(qq)
             mm = yy
@@ -437,7 +440,7 @@ def countdownblock():
         print("Remaining: " + str(q) + " Blocks\n")
         while a > b:
             try:
-                bitcoinclient = path['bitcoincli'] + " getblockcount"
+                bitcoinclient = f'{path["bitcoincli"]} getblockcount'
                 block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
                 b = block
                 if a == b:
@@ -489,7 +492,7 @@ def countdownblockConn():
 
 
 def localHalving():
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     c = b
@@ -580,7 +583,7 @@ def pdfconvert():
 #--------------------------------- NYMs -----------------------------------
 
 def get_ansi_color_code(r, g, b):
-    if r == g and g == b:
+    if r == g == b:
         if r < 8:
             return 16
         if r > 248:
