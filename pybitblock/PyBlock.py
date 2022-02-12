@@ -1,6 +1,6 @@
 #Developer: Curly60e
 #Tester: __B__T__C__
-#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 import os
 import os.path
@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.9.1"
+version = "1.1.9.2"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -184,7 +184,10 @@ def getnewaddressOnchain():
         gnu = os.popen(path['bitcoincli'] + getunconfirm)
         gnua= gnu.read()
         gnub = str(gnua)
-        output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
+        output = render(
+            str(f'{gnb1} BTC'), colors=['yellow'], align='left', font='tiny'
+        )
+
         print("""---------------------------------------------------------------
             {}
 ---------------------------------------------------------------""".format(output))
@@ -221,7 +224,13 @@ def getnewaddressOnchain():
                 gna = os.popen(path['bitcoincli'] + getadd)
                 gnaa = gna.read()
                 gna1 = str(gnaa)
-                output = render(str(gnb1 + " BTC"), colors=['yellow'], align='left', font='tiny')
+                output = render(
+                    str(f'{gnb1} BTC'),
+                    colors=['yellow'],
+                    align='left',
+                    font='tiny',
+                )
+
                 print("""---------------------------------------------------------------
                     {}
 ---------------------------------------------------------------""".format(output))
@@ -285,7 +294,7 @@ def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
 def getgenesis(): # get and decode Genesis block
-    output = render(str("satoshis 0 block"), colors=['yellow'], align='left', font='tiny')
+    output = render(str("genesis"), colors=['yellow'], align='left', font='tiny')
     print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path['bitcoincli'] + bitcoincli)
@@ -314,7 +323,7 @@ def console(): # get into the console from bitcoin-cli
             sysinfo()
             close()
             console()
-        lsd = os.popen(path['bitcoincli'] + " " + cle)
+        lsd = os.popen(f'{path["bitcoincli"]} {cle}')
         lsd0 = lsd.read()
         lsd1 = str(lsd0)
         print(lsd1)
@@ -352,7 +361,7 @@ def design():
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     a = b
@@ -360,7 +369,7 @@ def design():
     print("\x1b[?25l" + output)
     while True:
         x = a
-        bitcoinclient = path['bitcoincli'] + " getblockcount"
+        bitcoinclient = f'{path["bitcoincli"]} getblockcount'
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         if b > a:
@@ -368,10 +377,10 @@ def design():
             close()
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a\x1b[?25l" + output)
-            bitcoinclient = path['bitcoincli'] + " getbestblockhash"
+            bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
             bb = os.popen(str(bitcoinclient)).read()
             ll = bb
-            bitcoinclientgetblock = path['bitcoincli'] + " getblock " + ll
+            bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
             qq = os.popen(bitcoinclientgetblock).read()
             yy = json.loads(qq)
             mm = yy
@@ -420,7 +429,7 @@ def runthenumbers():
     input("\nContinue...")
 
 def countdownblock():
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     try:
@@ -437,7 +446,7 @@ def countdownblock():
         print("Remaining: " + str(q) + " Blocks\n")
         while a > b:
             try:
-                bitcoinclient = path['bitcoincli'] + " getblockcount"
+                bitcoinclient = f'{path["bitcoincli"]} getblockcount'
                 block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
                 b = block
                 if a == b:
@@ -489,7 +498,7 @@ def countdownblockConn():
 
 
 def localHalving():
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     c = b
@@ -580,7 +589,7 @@ def pdfconvert():
 #--------------------------------- NYMs -----------------------------------
 
 def get_ansi_color_code(r, g, b):
-    if r == g and g == b:
+    if r == g == b:
         if r < 8:
             return 16
         if r > 248:
