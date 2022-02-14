@@ -19,8 +19,8 @@ xmltodict
 python-cfonts
 termcolor
 pycoingecko
-protobuf==3.13.0
-six==1.15.0
+protobuf
+six
 robohash
 pillow
 numpy
