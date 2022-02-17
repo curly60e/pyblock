@@ -629,7 +629,7 @@ def localgetnetworkinfo():
 def localkeysend():
     try:
         closed()
-        print("\n\tYou ar going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.\n")
+        print("\n\tYou are going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.\n")
         lncli = " sendpayment "
         node = input("Send to NodeID: ")
         amount = input("Amount in sats: ")
@@ -641,7 +641,42 @@ def localkeysend():
         os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --final_cltv_delta=40")
     except:
         pass
+    
+def localchatsend():
+    try:
+        closed()
+        print("\n\tWrite.\n")
+        lncli = " sendpayment "
+        node = input("Send to NodeID: ")
+        amount = input("Amount in sats: ")
+        message = input("Message: ")        
+        while True:
+            if amount in ["", "0"]:
+                amount = input("\nAmount in sats: ")
+            else:
+                break
+        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --data 7629171=" + message | xxd -p + " --data 34349334=" + message | xxd -p + " --final_cltv_delta=40")
+    except:
+        pass
 
+def localchatnew():
+    try:
+        closed()
+        print("\n\tRead.\n")
+        lncli = " listinvoices ")        
+        os.system(lndconnectload['ln'] + lncli + "grep "7629171|34349334" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a0a/g' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a0a/g' | html2text | xxd -r -p | xargs --null")
+    except:
+        pass    
+                  
+def localchatlist():
+    try:
+        closed()
+        print("\n\tList.\n")
+        lncli = " listpayments ")        
+        os.system(lndconnectload['ln'] + lncli + "grep "7629171|34349334" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a0a/g' | sed 's/34349334/2d5079424c4f434b204d6573736167652052656365697665643a200a0a/g' | html2text | xxd -r -p | xargs --null")
+    except:
+        pass
+                  
 def localchannelbalance():
     lncli = " channelbalance"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
