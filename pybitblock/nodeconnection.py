@@ -655,7 +655,7 @@ def localchatsendA():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --data 34349334=" + message | xxd -p + ")
+        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --data 34349334=" + message | xxd -p ")
     except:
         pass
 
@@ -690,7 +690,7 @@ def localchatsendB():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --data 7629171=" + message | xxd -p + ")
+        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --data 7629171=" + message | xxd -p ")
     except:
         pass
 
@@ -725,7 +725,7 @@ def localchatsendC():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --data 34343434=" + message | xxd -p + ")
+        os.system(lndconnectload['ln'] + lncli + "--keysend --d=" + node + " --amt=" + amount + " --data 34343434=" + message | xxd -p ")
     except:
         pass
 
