@@ -443,7 +443,7 @@ def countdownblock():
         n = int(b)
         print("\nCountDown:", b)
         q = int(a) - int(b)
-        print("Remaining: " + str(q) + " Blocks\n")
+        print(f'Remaining: {str(q)}' + " Blocks\n")
         while a > b:
             try:
                 bitcoinclient = f'{path["bitcoincli"]} getblockcount'
@@ -454,11 +454,11 @@ def countdownblock():
                 elif n != int(b):
                     print("CountDown: ", b)
                     q = int(a) - int(b)
-                    print("Remaining: " + str(q) + " Blocks\n")
+                    print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(b)
             except:
                 break
-        print("#RunTheNumbers " + str(a) + " PyBLOCK")
+        print(f'#RunTheNumbers {str(a)} PyBLOCK')
         input("\nContinue...")
     except:
         menuSelection()
@@ -477,7 +477,7 @@ def countdownblockConn():
         print("\nCountDown:", int(c))
         n = int(c)
         q = int(a) - int(c)
-        print("Remaining: " + str(q) + " Blocks\n")
+        print(f'Remaining: {str(q)}' + " Blocks\n")
         while a > int(c):
             try:
                 b = rpc('getblockcount')
@@ -487,11 +487,11 @@ def countdownblockConn():
                 elif n != int(c):
                     print("CountDown: ", c)
                     q = int(a) - int(c)
-                    print("Remaining: " + str(q) + " Blocks\n")
+                    print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(c)
             except:
                 break
-        print("#RunTheNumbers " + str(a) + " PyBLOCK")
+        print(f'#RunTheNumbers {a} PyBLOCK')
         input("\nContinue...")
     except:
         menuSelection()
@@ -1014,6 +1014,7 @@ def lightningnetworkLOCAL():
     \u001b[33;1mM.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mN.\033[0;37;40m Get Node Info
     \u001b[33;1mO.\033[0;37;40m Get Network Information
+    \u001b[33;1mP.\033[0;37;40m PyChat    
     \u001b[33;1mZ.\033[0;37;40m Stats
     \u001b[33;1mT.\033[0;37;40m Ranking
     \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
@@ -1021,6 +1022,33 @@ def lightningnetworkLOCAL():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    
+def pyCHAT():
+    clear()
+    blogo()
+    sysinfo()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+    
+        lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Write
+    \u001b[38;5;202mB.\033[0;37;40m Read
+    \u001b[38;5;202mC.\033[0;37;40m List    
+    \u001b[31;1mQ.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    pyCHAT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkREMOTE():
     clear()
@@ -5485,6 +5513,10 @@ def lightningnetworkLOCALcontrol(lncore):
         clear()
         blogo()
         localgetnetworkinfo()
+    elif lncore in ["P", "p"]:
+        clear()
+        blogo()
+        chatConn()        
     elif lncore in ["Z", "z"]:
         clear()
         blogo()
@@ -5501,7 +5533,21 @@ def lightningnetworkLOCALcontrol(lncore):
             lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
-
+        
+def chatConn(pyCHAT):
+    if pyCHAT in ["A", "a"]:
+        clear()
+        blogo()
+        localchatsend()
+    elif pyCHAT in ["B", "b"]:
+        clear()
+        blogo()
+        localchatnew()
+    elif pyCHAT in ["C", "c"]:
+        clear()
+        blogo()
+        localchatlist()
+        
 def platfformsLOCALcontrol(platf):
     if platf in ["A", "a"]:
         aaccPPiTippinMe()
