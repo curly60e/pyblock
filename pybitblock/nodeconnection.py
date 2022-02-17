@@ -673,7 +673,7 @@ def localchatlistA():
         closed()
         print("\n\tList.\n")
         lncli = " listpayments ")        
-        os.system(lndconnectload['ln'] + lncli + "grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null")
+        os.system(lndconnectload['ln'] + lncli + "grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null")
     except:
         pass
                   
