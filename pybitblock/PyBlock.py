@@ -443,7 +443,7 @@ def countdownblock():
         n = int(b)
         print("\nCountDown:", b)
         q = int(a) - int(b)
-        print("Remaining: " + str(q) + " Blocks\n")
+        print(f'Remaining: {str(q)}' + " Blocks\n")
         while a > b:
             try:
                 bitcoinclient = f'{path["bitcoincli"]} getblockcount'
@@ -454,11 +454,11 @@ def countdownblock():
                 elif n != int(b):
                     print("CountDown: ", b)
                     q = int(a) - int(b)
-                    print("Remaining: " + str(q) + " Blocks\n")
+                    print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(b)
             except:
                 break
-        print("#RunTheNumbers " + str(a) + " PyBLOCK")
+        print(f'#RunTheNumbers {str(a)} PyBLOCK')
         input("\nContinue...")
     except:
         menuSelection()
@@ -477,7 +477,7 @@ def countdownblockConn():
         print("\nCountDown:", int(c))
         n = int(c)
         q = int(a) - int(c)
-        print("Remaining: " + str(q) + " Blocks\n")
+        print(f'Remaining: {str(q)}' + " Blocks\n")
         while a > int(c):
             try:
                 b = rpc('getblockcount')
@@ -487,11 +487,11 @@ def countdownblockConn():
                 elif n != int(c):
                     print("CountDown: ", c)
                     q = int(a) - int(c)
-                    print("Remaining: " + str(q) + " Blocks\n")
+                    print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(c)
             except:
                 break
-        print("#RunTheNumbers " + str(a) + " PyBLOCK")
+        print(f'#RunTheNumbers {a} PyBLOCK')
         input("\nContinue...")
     except:
         menuSelection()
