@@ -1014,7 +1014,7 @@ def lightningnetworkLOCAL():
     \u001b[33;1mM.\033[0;37;40m List Onchain Transactions
     \u001b[33;1mN.\033[0;37;40m Get Node Info
     \u001b[33;1mO.\033[0;37;40m Get Network Information
-    \u001b[33;1mP.\033[0;37;40m PyChat    
+    \u001b[33;1mP.\033[0;37;40m PyChat
     \u001b[33;1mZ.\033[0;37;40m Stats
     \u001b[33;1mT.\033[0;37;40m Ranking
     \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
@@ -1022,7 +1022,7 @@ def lightningnetworkLOCAL():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def chatConn():
     clear()
     blogo()
@@ -1032,8 +1032,8 @@ def chatConn():
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
     b = json.loads(a)
     d = b
-    
-        lncli = " getinfo"
+
+    lncli = " getinfo"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
@@ -1045,11 +1045,11 @@ def chatConn():
 
     \u001b[38;5;202mA.\033[0;37;40m Open
     \u001b[38;5;202mB.\033[0;37;40m Close
-    \u001b[38;5;202mC.\033[0;37;40m Hidden    
+    \u001b[38;5;202mC.\033[0;37;40m Hidden
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
     chatConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def pyCHATA():
     clear()
     blogo()
@@ -1059,8 +1059,8 @@ def pyCHATA():
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
     b = json.loads(a)
     d = b
-    
-        lncli = " getinfo"
+
+    lncli = " getinfo"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
@@ -1072,11 +1072,11 @@ def pyCHATA():
 
     \u001b[38;5;202mA.\033[0;37;40m Write
     \u001b[38;5;202mB.\033[0;37;40m Read
-    \u001b[38;5;202mC.\033[0;37;40m List    
+    \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
     pyCHATA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def pyCHATB():
     clear()
     blogo()
@@ -1086,8 +1086,8 @@ def pyCHATB():
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
     b = json.loads(a)
     d = b
-    
-        lncli = " getinfo"
+
+    lncli = " getinfo"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
@@ -1099,11 +1099,11 @@ def pyCHATB():
 
     \u001b[38;5;202mA.\033[0;37;40m Write
     \u001b[38;5;202mB.\033[0;37;40m Read
-    \u001b[38;5;202mC.\033[0;37;40m List    
+    \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
     pyCHATB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def pyCHATC():
     clear()
     blogo()
@@ -1113,8 +1113,8 @@ def pyCHATC():
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
     b = json.loads(a)
     d = b
-    
-        lncli = " getinfo"
+
+    lncli = " getinfo"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
@@ -1126,11 +1126,11 @@ def pyCHATC():
 
     \u001b[38;5;202mA.\033[0;37;40m Write
     \u001b[38;5;202mB.\033[0;37;40m Read
-    \u001b[38;5;202mC.\033[0;37;40m List    
+    \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
     pyCHATC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def lightningnetworkREMOTE():
     clear()
     blogo()
@@ -5408,7 +5408,7 @@ def miscellaneousLOCALmenu(misce):
                     break
         elif misce in ["R", "r"]:
             menuSelection()
-            
+
 def miscellaneousLOCALmenuOnchainONLY(misce):
     if misce in ["A", "a"]:
         while True:
@@ -5598,7 +5598,7 @@ def lightningnetworkLOCALcontrol(lncore):
     elif lncore in ["P", "p"]:
         clear()
         blogo()
-        chatConn()        
+        chatConn()
     elif lncore in ["Z", "z"]:
         clear()
         blogo()
@@ -5615,7 +5615,7 @@ def lightningnetworkLOCALcontrol(lncore):
             lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
-        
+
 def chatConn(menuch):
     if menuch in ["A", "a"]:
         pyCHATA()
@@ -5623,7 +5623,7 @@ def chatConn(menuch):
         pyCHATB()
     elif menuch in ["C", "c"]:
         pyCHATC()
-        
+
 def chatConnA(pyCHATA):
     if pyCHATA in ["A", "a"]:
         clear()
@@ -5637,7 +5637,7 @@ def chatConnA(pyCHATA):
         clear()
         blogo()
         localchatlistA()
-        
+
 def chatConnB(pyCHATB):
     if pyCHATB in ["A", "a"]:
         clear()
@@ -5650,8 +5650,8 @@ def chatConnB(pyCHATB):
     elif pyCHATB in ["C", "c"]:
         clear()
         blogo()
-        localchatlistB()  
-        
+        localchatlistB()
+
 def chatConnC(pyCHATC):
     if pyCHATC in ["A", "a"]:
         clear()
@@ -5664,8 +5664,8 @@ def chatConnC(pyCHATC):
     elif pyCHATC in ["C", "c"]:
         clear()
         blogo()
-        localchatlistC()  
-        
+        localchatlistC()
+
 def platfformsLOCALcontrol(platf):
     if platf in ["A", "a"]:
         aaccPPiTippinMe()
