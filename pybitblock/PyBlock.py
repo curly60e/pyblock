@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.11"
+version = "1.1.12-alpha"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -1048,7 +1048,7 @@ def chatConn():
     \u001b[38;5;202mC.\033[0;37;40m Hidden
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
-    chatConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    chatConnA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATA():
     clear()
@@ -1075,7 +1075,7 @@ def pyCHATA():
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
-    pyCHATA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    chatConnB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATB():
     clear()
@@ -1102,7 +1102,7 @@ def pyCHATB():
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
-    pyCHATB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    chatConnC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATC():
     clear()
@@ -1129,7 +1129,7 @@ def pyCHATC():
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
-    pyCHATC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    chatConnD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkREMOTE():
     clear()
@@ -5616,7 +5616,7 @@ def lightningnetworkLOCALcontrol(lncore):
     elif lncore in ["R", "r"]:
         menuSelection()
 
-def chatConn(menuch):
+def chatConnA(menuch):
     if menuch in ["A", "a"]:
         pyCHATA()
     elif menuch in ["B", "b"]:
@@ -5624,7 +5624,7 @@ def chatConn(menuch):
     elif menuch in ["C", "c"]:
         pyCHATC()
 
-def chatConnA(pyCHATA):
+def chatConnB(pyCHATA):
     if pyCHATA in ["A", "a"]:
         clear()
         blogo()
@@ -5638,7 +5638,7 @@ def chatConnA(pyCHATA):
         blogo()
         localchatlistA()
 
-def chatConnB(pyCHATB):
+def chatConnC(pyCHATB):
     if pyCHATB in ["A", "a"]:
         clear()
         blogo()
@@ -5652,7 +5652,7 @@ def chatConnB(pyCHATB):
         blogo()
         localchatlistB()
 
-def chatConnC(pyCHATC):
+def chatConnD(pyCHATC):
     if pyCHATC in ["A", "a"]:
         clear()
         blogo()
