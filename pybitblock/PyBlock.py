@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-alpha3"
+version = "1.1.12-alpha4"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -389,6 +389,10 @@ def design():
             outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print("\x1b[?25l" + outputtxs)
             t.sleep(10)
+            txs = str(mm['nTx'])
+            if txs == "1":
+                os.system("""curl https://poptart.spinda.net""")
+            t.sleep(20)
             clear()
             close()
             a = b
