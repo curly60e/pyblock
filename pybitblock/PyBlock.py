@@ -394,17 +394,16 @@ def getnewaddressOnchain():
 
 def gettransactionsOnchain():
     try:
+        listtxs = " listunspent"
         while True:
             clear()
             blogo()
             close()
-            listtxs = " listunspent"
             gna = os.popen(path['bitcoincli'] + listtxs)
             gnaa = gna.read()
             gna1 = str(gnaa)
             d = json.loads(gna1)
-            getbal = " getbalance"
-            gnb = os.popen(path['bitcoincli'] + getbal)
+            gnb = os.popen(path['bitcoincli'] + " getbalance")
             gnbb= gnb.read()
             gnb1 = str(gnbb)
             sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
@@ -532,7 +531,6 @@ def design():
                     p.wait(5)
                 except subprocess.TimeoutExpired:
                     p.kill()
-                    pass
             print("\033[0;37;40m\x1b[?25l")
             clear()
             close()
