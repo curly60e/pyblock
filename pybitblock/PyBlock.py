@@ -190,7 +190,7 @@ def getPoolSlushCheck():
             break
 
 
-#-----------------------------END Stats--------------------------------
+#-----------------------------END Slush--------------------------------
 
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
