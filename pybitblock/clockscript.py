@@ -87,7 +87,6 @@ def design():
                         p.wait(5)
                     except subprocess.TimeoutExpired:
                         p.kill()
-                        pass
                 print("\033[0;37;40m\x1b[?25l")
                 clear()
                 close()
