@@ -58,6 +58,64 @@ def rpc(method, params=[]):
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 
+#-----------------------------Slush--------------------------------
+
+def slDIFFConn():
+    try:
+        conn = """curl -s https://insights.braiins.com/api/v1.0/difficulty-stats?json=1 | jq -C """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("difficult"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def slHASHConn():
+    try:
+        conn = """curl -s https://insights.braiins.com/api/v1.0/hash-rate-stats?json=1 | jq -C """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("hash rate"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+    
+def slPOOLConn():
+    try:
+        conn = """curl -s https://insights.braiins.com/api/v1.0/pool-stats?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("pool"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+    
+def slHISTConn():
+    try:
+        conn = """curl -s https://insights.braiins.com/api/v1.0/hashrate-and-difficulty-history?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("history"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+    
 def getPoolSlushCheck():
 
     s = ""
@@ -130,6 +188,9 @@ def getPoolSlushCheck():
 
         except:
             break
+
+
+#-----------------------------END Stats--------------------------------
 
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
@@ -5299,6 +5360,23 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+        
+    elif menuS in ["ma"]:
+        clear()
+        blogo()
+        slDIFFConn()
+    elif menuS in ["mb"]:
+        clear()
+        blogo()
+        slHASHConn()
+    elif menuS in ["mc"]:
+        clear()
+        blogo()
+        slPOOLConn()
+    elif menuS in ["md"]:
+        clear()
+        blogo()
+        slHISTConn()        
     elif menuS in ["mm"]:
         clear()
         blogo()
