@@ -54,9 +54,9 @@ def design():
         qq = os.popen(bitcoinclientgetblock).read()
         yy = json.loads(qq)
         mm = yy
-        outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+        outputsize = render(str(mm['size']) + " - Bytes.", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
         print("\x1b[?25l" + outputsize)
-        outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+        outputtxs = render(str(mm['nTx']) + " - Txs.", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
         print("\x1b[?25l" + outputtxs)
         while True:
             x = a
@@ -75,11 +75,15 @@ def design():
                 qq = os.popen(bitcoinclientgetblock).read()
                 yy = json.loads(qq)
                 mm = yy
-                outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                outputsize = render(str(mm['size']) + " - Bytes.", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
                 print("\x1b[?25l" + outputsize)
-                outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                outputtxs = render(str(mm['nTx']) + " - Txs.", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
                 print("\x1b[?25l" + outputtxs)
                 t.sleep(10)
+                txs = str(mm['nTx'])
+                if txs == "1":
+                    os.system("""curl https://poptart.spinda.net""")
+                t.sleep(20)                
                 clear()
                 blogo()
                 a = b
