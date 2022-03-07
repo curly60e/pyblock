@@ -33,10 +33,10 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-alpha5"
+version = "1.1.12-alpha6"
 
 def close():
-    print("<<< Back Control + C.\n\n")
+    print("<<< Ctr + C.\n\n")
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
@@ -465,9 +465,9 @@ def design():
             print("\x1b[?25l" + outputtxs)
             t.sleep(10)
             txs = str(mm['nTx'])
-            p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
-            if mm['nTx'] == 1:
+            if txs == "1":
                 try:
+                    p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
                     p.wait(5)
                 except subprocess.TimeoutExpired:
                     p.kill()
