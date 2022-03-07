@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-alpha4"
+version = "1.1.12-alpha5"
 
 def close():
     print("<<< Back Control + C.\n\n")
@@ -52,10 +52,85 @@ def rpc(method, params=[]):
         "params": params
     })
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('$HOME/.pyblock/bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("$HOME/.pyblock/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    if os.path.isfile('$HOME/config/bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        pathv = pickle.load(open("$HOME/config/bclock.conf", "rb")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+
+
+def getPoolSlushCheck():
+
+    s = ""
+    sq = s
+
+    api = ""
+
+    if os.path.isfile("config/slushAPI.conf"):
+        apiv = pickle.load(open("config/slushAPI.conf", "rb"))
+        api = apiv
+    else:
+        clear()
+        blogo()
+        api = input("Insert Slush API KEY: ")
+        pickle.dump(api, open("config/slushAPI.conf", "wb"))
+
+    while True:
+        try:
+            slushpoolbtc = "curl https://slushpool.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token: {}' 2>/dev/null".format(api)
+            slushpoolbtcblock = "curl https://slushpool.com/stats/json/btc/ -H 'SlushPool-Auth-Token: {}' 2>/dev/null".format(api)
+
+            b = os.popen(slushpoolbtc)
+            c = b.read()
+            d = json.loads(c)
+            f = d['btc']
+
+            bblock = os.popen(slushpoolbtcblock)
+            cblock = bblock.read()
+            dblock = json.loads(cblock)
+            fblock = dblock['btc']
+            eblock = fblock['blocks']
+            for i in eblock:
+            	qnq = sorted(eblock)
+            	for n in qnq:
+            		s = n
+
+            if s > sq:
+            	newblock = "\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m".format(s)
+            	sq = s
+            else:
+            	newblock = s
+
+            clear()
+            blogo()
+            print("""\033[A
+
+    --------------------------------------------------------------------------------------------
+
+                        \033[0;37;40mSlushPool BTC
+
+                        Username: {}
+                        Confirmed reward: \u001b[38;5;40m{}\033[0;37;40m BTC
+                        Unconfirmed reward: \u001b[33;1m{}\033[0;37;40m BTC
+                        Estimated reward: {} BTC
+                        All Time reward: {} BTC
+                        Hash Rate 5m: {} Gh/s
+                        Hash Rate 60m: {} Gh/s
+                        Hash Rate 24h: {} Gh/s
+                        Hash Rate Scoring: \u001b[38;5;27m{}\033[0;37;40m Gh/s
+                        Hash Rate Yesterday: {} Gh/s
+                        Connected Workers: {}
+                        Disconnected Workers: {}
+                        Last Block discovered: {}
+
+    --------------------------------------------------------------------------------------------
+
+            \033[A""".format(d['username'], f['confirmed_reward'], f['unconfirmed_reward'], f['estimated_reward'], f['all_time_reward'], f['hash_rate_5m'], f['hash_rate_60m'], f['hash_rate_24h'], f['hash_rate_scoring'], f['hash_rate_yesterday'], f['ok_workers'], f['off_workers'],newblock))
+
+            t.sleep(10)
+
+        except:
+            break
+
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
@@ -366,7 +441,7 @@ def design():
     b = block
     a = b
     output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-    print("\x1b[?25l" + output)
+    print("\033[0;37;40m\x1b[?25l" + output)
     while True:
         x = a
         bitcoinclient = f'{path["bitcoincli"]} getblockcount'
@@ -390,9 +465,14 @@ def design():
             print("\x1b[?25l" + outputtxs)
             t.sleep(10)
             txs = str(mm['nTx'])
-            if txs == "1":
-                os.system("""curl https://poptart.spinda.net""")
-            t.sleep(20)
+            p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
+            if mm['nTx'] == 1:
+                try:
+                    p.wait(5)
+                except subprocess.TimeoutExpired:
+                    p.kill()
+                    pass
+            print("\033[0;37;40m\x1b[?25l")
             clear()
             close()
             a = b
@@ -5219,6 +5299,10 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["mm"]:
+        clear()
+        blogo()
+        getPoolSlushCheck()
 
 def bitcoincoremenuLOCALcontrolA(bcore):
     if bcore in ["A", "a"]:
