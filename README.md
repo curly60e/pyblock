@@ -78,6 +78,7 @@
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
     * a@A:~> poetry install
+    * a@A:~> cd pybitblock
     * a@A:~> poetry run python3 PyBlock.py
 
     -- Upgrade:
@@ -152,6 +153,7 @@
 	    * a@A:~> git clone https://github.com/curly60e/pyblock.git
 	    * a@A:~> cd pyblock
 	    * a@A:~> poetry install
+	    * a@A:~> cd pybitblock
 	    * a@A:~> poetry run python3 PyBlock.py
 
 	    -- Upgrade:
