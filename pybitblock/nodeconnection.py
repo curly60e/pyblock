@@ -672,7 +672,7 @@ def localchatsendA():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34349334=""" + hex_encoded_message + """ | xxd -p """)
+        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34349334=""" + hex_encoded_message + """)
         input("\nContinue...")
     #except:
     #    pass
@@ -713,7 +713,7 @@ def localchatsendB():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 7629171=""" + hex_encoded_message + """ | xxd -p """)
+        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 7629171=""" + hex_encoded_message + """)
         input("\nContinue...")
     except:
         pass
@@ -722,7 +722,7 @@ def localchatnewB():
     try:
         closed()
         print("\n\tRead.\n")
-        os.system("""lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""")
+        os.system("""lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""")
         input("\nContinue...")
     except:
         pass
@@ -738,18 +738,24 @@ def localchatlistB():
 
 def localchatsendC():
     try:
+        try:
         closed()
         print("\n\tWrite.\n")
         lncli = " sendpayment "
         node = input("Send to NodeID: ")
         amount = input("Amount in sats: ")
         message = input("Message: ")
+        encoded_message = message.encode('utf-8')
+        hex_encoded_message = encoded_message.hex()
+        print(encoded_message.hex())
+        input("\nContinue...")
+        
         while True:
             if amount in ["", "0"]:
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34343434=" + message | xxd -p """)
+        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34343434="""" + hex_encoded_message + """)
         input("\nContinue...")
     except:
         pass
