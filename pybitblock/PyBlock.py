@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-beta3"
+version = "1.1.12-beta4"
 
 def close():
     print("<<< Ctr + C.\n\n")
@@ -122,15 +122,17 @@ def getPoolSlushCheck():
     sq = s
 
     api = ""
-
-    if os.path.isfile("config/slushAPI.conf"):
-        apiv = pickle.load(open("config/slushAPI.conf", "rb"))
-        api = apiv
-    else:
-        clear()
-        blogo()
-        api = input("Insert Slush API KEY: ")
-        pickle.dump(api, open("config/slushAPI.conf", "wb"))
+    try:
+        if os.path.isfile("config/slushAPI.conf"):
+            apiv = pickle.load(open("config/slushAPI.conf", "rb"))
+            api = apiv
+        else:
+            clear()
+            blogo()
+            api = input("Insert Slush API KEY: ")
+            pickle.dump(api, open("config/slushAPI.conf", "wb"))
+    except:
+        pass
 
     while True:
         try:
@@ -1544,7 +1546,7 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def slushpoolREMOTEOnchainONLY():
     clear()
     blogo()
@@ -1578,8 +1580,8 @@ def slushpoolREMOTEOnchainONLY():
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    slushpoolREMOTEOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+    slushpoolREMOTEOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def slushpoolLOCALOnchainONLY():
     clear()
     blogo()
@@ -1613,7 +1615,7 @@ def slushpoolLOCALOnchainONLY():
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    slushpoolLOCALOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))    
+    slushpoolLOCALOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenu():
     clear()
@@ -5448,23 +5450,24 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         blogo()
         callGitWardenTerminal()
 
-    elif menuS in ["A"]:
+def slushpoolLOCALOnchainONLYMenu(slush):
+    if slush in ["A", "a"]:
         clear()
         blogo()
         slDIFFConn()
-    elif menuS in ["B"]:
+    elif slush in ["B", "b"]:
         clear()
         blogo()
         slHASHConn()
-    elif menuS in ["C"]:
+    elif slush in ["C", "c"]:
         clear()
         blogo()
         slPOOLConn()
-    elif menuS in ["D"]:
+    elif slush in ["D", "c"]:
         clear()
         blogo()
         slHISTConn()
-    elif menuS in ["E"]:
+    elif slush in ["E", "e"]:
         clear()
         blogo()
         getPoolSlushCheck()
@@ -5949,7 +5952,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["S", "s"]:
-        slushpoolLOCALOnchainONLY()     
+        slushpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -5983,7 +5986,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["S", "s"]:
-        slushpoolLOCALOnchainONLY()    
+        slushpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
 
