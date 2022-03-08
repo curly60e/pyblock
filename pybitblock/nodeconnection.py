@@ -626,16 +626,6 @@ def localgetnetworkinfo():
     print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
-def localFullProtocol():
-
-    proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto2 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto3 = """lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = os.popen(proto1).read()
-    p2 = os.popen(proto2).read()
-    p3 = os.popen(proto3).read()
-
-
 
 def localkeysend():
     try:
@@ -672,7 +662,7 @@ def localchatsendA():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34349334=""" + hex_encoded_message)
+        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34349334=""" + hex_encoded_message + """)
         input("\nContinue...")
     except:
         pass
