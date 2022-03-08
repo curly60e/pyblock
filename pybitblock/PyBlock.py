@@ -67,7 +67,7 @@ def slDIFFConn():
         clear()
         blogo()
         closed()
-        output = render(str("difficulty"), colors=['yellow'], align='left', font='tiny')
+        output = render("difficulty", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -81,7 +81,7 @@ def slHASHConn():
         clear()
         blogo()
         closed()
-        output = render(str("hash rate"), colors=['yellow'], align='left', font='tiny')
+        output = render("hash rate", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -95,7 +95,7 @@ def slPOOLConn():
         clear()
         blogo()
         closed()
-        output = render(str("pool"), colors=['yellow'], align='left', font='tiny')
+        output = render("pool", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -109,7 +109,7 @@ def slHISTConn():
         clear()
         blogo()
         closed()
-        output = render(str("history"), colors=['yellow'], align='left', font='tiny')
+        output = render("history", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -204,7 +204,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             clear()
             blogo()
             close()
-            output = render(str("CHAIN INFO"), colors=['yellow'], align='left', font='tiny')
+            output = render("CHAIN INFO", colors=['yellow'], align='left', font='tiny')
             print(output)
             print("""
             ----------------------------------------------------------------------------
@@ -227,7 +227,7 @@ def searchTXS():
             clear()
             blogo()
             closed()
-            output = render(str("search txs"), colors=['yellow'], align='left', font='tiny')
+            output = render("search txs", colors=['yellow'], align='left', font='tiny')
             print(output)
             tx = input("Search Tx ID: ")
             gettxout = " gettxout "
@@ -241,7 +241,7 @@ def searchTXS():
                 clear()
                 blogo()
                 closed()
-                output = render(str("search txs"), colors=['yellow'], align='left', font='tiny')
+                output = render("search txs", colors=['yellow'], align='left', font='tiny')
                 print(output)
                 print("""
     -------------------------------------------------------------------------------
@@ -266,7 +266,10 @@ def untxsConn():
             clear()
             blogo()
             closed()
-            output = render(str("unconfirmed txs"), colors=['yellow'], align='left', font='tiny')
+            output = render(
+                "unconfirmed txs", colors=['yellow'], align='left', font='tiny'
+            )
+
             print(output)
             getrawmempool = " getrawmempool"
             gna = os.popen(path['bitcoincli'] + getrawmempool)
@@ -407,10 +410,24 @@ def gettransactionsOnchain():
             gnbb= gnb.read()
             gnb1 = str(gnbb)
             sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
-            output = render(str("transactions"), colors=['yellow'], align='left', font='tiny')
+            output = render("transactions", colors=['yellow'], align='left', font='tiny')
             print(output)
             for q in sort_order:
-                print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf: ") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
+                print(
+                    "TxID: "
+                    + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid']))
+                    + " | "
+                    + "Amount: "
+                    + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(
+                        str(q['amount'])
+                    )
+                    + " | "
+                    + "Conf: "
+                    + "\u001b[33;1m{}\033[0;37;40m".format(
+                        str(q['confirmations'])
+                    )
+                )
+
 
             print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
             input("\nRefresh...")
@@ -429,7 +446,7 @@ def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
 def getgenesis(): # get and decode Genesis block
-    output = render(str("genesis"), colors=['yellow'], align='left', font='tiny')
+    output = render("genesis", colors=['yellow'], align='left', font='tiny')
     print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path['bitcoincli'] + bitcoincli)
@@ -619,7 +636,7 @@ def countdownblockConn():
          """.format(a))
         print("\nCountDown:", int(c))
         n = int(c)
-        q = int(a) - int(c)
+        q = a - int(c)
         print(f'Remaining: {str(q)}' + " Blocks\n")
         while a > int(c):
             try:
@@ -629,7 +646,7 @@ def countdownblockConn():
                     break
                 elif n != int(c):
                     print("CountDown: ", c)
-                    q = int(a) - int(c)
+                    q = a - int(c)
                     print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(c)
             except:
@@ -680,7 +697,7 @@ def pdfconvert():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     pathv = pickle.load(open("$HOME/.pyblock/bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
-    if not os.path.isfile(str("$HOME/.pyblock/bitcoin.pdf")):
+    if not os.path.isfile("$HOME/.pyblock/bitcoin.pdf"):
         clear()
         blogo()
         close()
