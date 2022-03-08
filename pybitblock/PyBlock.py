@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-beta2"
+version = "1.1.12-beta3"
 
 def close():
     print("<<< Ctr + C.\n\n")
@@ -67,7 +67,7 @@ def slDIFFConn():
         clear()
         blogo()
         closed()
-        output = render(str("difficulty"), colors=['yellow'], align='left', font='tiny')
+        output = render("difficulty", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -81,7 +81,7 @@ def slHASHConn():
         clear()
         blogo()
         closed()
-        output = render(str("hash rate"), colors=['yellow'], align='left', font='tiny')
+        output = render("hash rate", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -95,7 +95,7 @@ def slPOOLConn():
         clear()
         blogo()
         closed()
-        output = render(str("pool"), colors=['yellow'], align='left', font='tiny')
+        output = render("pool", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -109,7 +109,7 @@ def slHISTConn():
         clear()
         blogo()
         closed()
-        output = render(str("history"), colors=['yellow'], align='left', font='tiny')
+        output = render("history", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -204,7 +204,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             clear()
             blogo()
             close()
-            output = render(str("CHAIN INFO"), colors=['yellow'], align='left', font='tiny')
+            output = render("CHAIN INFO", colors=['yellow'], align='left', font='tiny')
             print(output)
             print("""
             ----------------------------------------------------------------------------
@@ -227,7 +227,7 @@ def searchTXS():
             clear()
             blogo()
             closed()
-            output = render(str("search txs"), colors=['yellow'], align='left', font='tiny')
+            output = render("search txs", colors=['yellow'], align='left', font='tiny')
             print(output)
             tx = input("Search Tx ID: ")
             gettxout = " gettxout "
@@ -241,7 +241,7 @@ def searchTXS():
                 clear()
                 blogo()
                 closed()
-                output = render(str("search txs"), colors=['yellow'], align='left', font='tiny')
+                output = render("search txs", colors=['yellow'], align='left', font='tiny')
                 print(output)
                 print("""
     -------------------------------------------------------------------------------
@@ -266,7 +266,10 @@ def untxsConn():
             clear()
             blogo()
             closed()
-            output = render(str("unconfirmed txs"), colors=['yellow'], align='left', font='tiny')
+            output = render(
+                "unconfirmed txs", colors=['yellow'], align='left', font='tiny'
+            )
+
             print(output)
             getrawmempool = " getrawmempool"
             gna = os.popen(path['bitcoincli'] + getrawmempool)
@@ -407,10 +410,24 @@ def gettransactionsOnchain():
             gnbb= gnb.read()
             gnb1 = str(gnbb)
             sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
-            output = render(str("transactions"), colors=['yellow'], align='left', font='tiny')
+            output = render("transactions", colors=['yellow'], align='left', font='tiny')
             print(output)
             for q in sort_order:
-                print(str("TxID: ") + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid'])) + str(" | ") + str("Amount: ") + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(str(q['amount'])) + str(" | ") + str("Conf: ") + "\u001b[33;1m{}\033[0;37;40m".format(str(q['confirmations'])))
+                print(
+                    "TxID: "
+                    + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid']))
+                    + " | "
+                    + "Amount: "
+                    + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(
+                        str(q['amount'])
+                    )
+                    + " | "
+                    + "Conf: "
+                    + "\u001b[33;1m{}\033[0;37;40m".format(
+                        str(q['confirmations'])
+                    )
+                )
+
 
             print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
             input("\nRefresh...")
@@ -429,7 +446,7 @@ def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
 def getgenesis(): # get and decode Genesis block
-    output = render(str("genesis"), colors=['yellow'], align='left', font='tiny')
+    output = render("genesis", colors=['yellow'], align='left', font='tiny')
     print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     os.system(path['bitcoincli'] + bitcoincli)
@@ -619,7 +636,7 @@ def countdownblockConn():
          """.format(a))
         print("\nCountDown:", int(c))
         n = int(c)
-        q = int(a) - int(c)
+        q = a - int(c)
         print(f'Remaining: {str(q)}' + " Blocks\n")
         while a > int(c):
             try:
@@ -629,7 +646,7 @@ def countdownblockConn():
                     break
                 elif n != int(c):
                     print("CountDown: ", c)
-                    q = int(a) - int(c)
+                    q = a - int(c)
                     print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(c)
             except:
@@ -680,7 +697,7 @@ def pdfconvert():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     pathv = pickle.load(open("$HOME/.pyblock/bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
-    if not os.path.isfile(str("$HOME/.pyblock/bitcoin.pdf")):
+    if not os.path.isfile("$HOME/.pyblock/bitcoin.pdf"):
         clear()
         blogo()
         close()
@@ -1357,6 +1374,7 @@ def APIMenuLOCAL():
     \033[1;32;40mK.\033[0;37;40m Weather     FREE
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
+    \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1400,6 +1418,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mK.\033[0;37;40m Weather     FREE
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
+    \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1525,6 +1544,76 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    
+def slushpoolREMOTEOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Difficulty
+    \u001b[38;5;202mB.\033[0;37;40m Hash Rate
+    \u001b[38;5;202mC.\033[0;37;40m Pool
+    \u001b[38;5;202mD.\033[0;37;40m History
+    \u001b[38;5;202mE.\033[0;37;40m Miner
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    
+def slushpoolLOCALOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Difficulty
+    \u001b[38;5;202mB.\033[0;37;40m Hash Rate
+    \u001b[38;5;202mC.\033[0;37;40m Pool
+    \u001b[38;5;202mD.\033[0;37;40m History
+    \u001b[38;5;202mE.\033[0;37;40m Miner
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))    
 
 def runTheNumbersMenu():
     clear()
@@ -5359,23 +5448,23 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         blogo()
         callGitWardenTerminal()
 
-    elif menuS in ["ma"]:
+    elif menuS in ["A"]:
         clear()
         blogo()
         slDIFFConn()
-    elif menuS in ["mb"]:
+    elif menuS in ["B"]:
         clear()
         blogo()
         slHASHConn()
-    elif menuS in ["mc"]:
+    elif menuS in ["C"]:
         clear()
         blogo()
         slPOOLConn()
-    elif menuS in ["md"]:
+    elif menuS in ["D"]:
         clear()
         blogo()
         slHISTConn()
-    elif menuS in ["mm"]:
+    elif menuS in ["E"]:
         clear()
         blogo()
         getPoolSlushCheck()
@@ -5859,6 +5948,8 @@ def platfformsLOCALcontrol(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["S", "s"]:
+        slushpoolLOCALOnchainONLY()     
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -5891,6 +5982,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["S", "s"]:
+        slushpoolLOCALOnchainONLY()    
     elif platf in ["R", "r"]:
         menuSelection()
 
