@@ -175,11 +175,11 @@ def locallistpeersQQ():
                 hash = s['pub_key']
                 rh = Robohash(hash)
                 rh.assemble(roboset='set1')
-                if not os.path.isfile(str(hash + ".png")):
-                    with open(hash +".png", "wb") as f:
-                    	rh.img.save(f, format="png")
+                if not os.path.isfile(str(f'{hash}.png')):
+                    with open(f'{hash}.png', "wb") as f:
+                        rh.img.save(f, format="png")
 
-                    img_path = open(hash +".png", "rb")
+                    img_path = open(f'{hash}.png', "rb")
                     img = Image.open(img_path)
 
                     h = 1
@@ -189,7 +189,7 @@ def locallistpeersQQ():
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
-                img_path = open(hash +".png", "rb")
+                img_path = open(f'{hash}.png', "rb")
                 img = Image.open(img_path)
 
                 h = 1
@@ -215,7 +215,7 @@ def locallistpeersQQ():
                     rh = Robohash(hash)
                     rh.assemble(roboset='set1')
 
-                    img_path = open(hash +".png", "rb")
+                    img_path = open(f'{hash}.png', "rb")
                     img = Image.open(img_path)
 
                     h = 20
@@ -398,11 +398,11 @@ def locallistchannels():
                 hash = s['remote_pubkey']
                 rh = Robohash(hash)
                 rh.assemble(roboset='set1')
-                if not os.path.isfile(str(hash + ".png")):
-                    with open(hash +".png", "wb") as f:
-                    	rh.img.save(f, format="png")
+                if not os.path.isfile(str(f'{hash}.png')):
+                    with open(f'{hash}.png', "wb") as f:
+                        rh.img.save(f, format="png")
 
-                    img_path = open(hash +".png", "rb")
+                    img_path = open(f'{hash}.png', "rb")
                     img = Image.open(img_path)
 
                     h = 1
@@ -412,7 +412,7 @@ def locallistchannels():
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
-                img_path = open(hash +".png", "rb")
+                img_path = open(f'{hash}.png', "rb")
                 img = Image.open(img_path)
 
                 h = 1
@@ -438,7 +438,7 @@ def locallistchannels():
                     rh = Robohash(hash)
                     rh.assemble(roboset='set1')
 
-                    img_path = open(hash +".png", "rb")
+                    img_path = open(f'{hash}.png', "rb")
                     img = Image.open(img_path)
 
                     h = 20
@@ -485,11 +485,11 @@ def localgetinfo():
     hash = d['identity_pubkey']
     rh = Robohash(hash)
     rh.assemble(roboset='set1')
-    if not os.path.isfile(str(hash + ".png")):
-        with open(hash +".png", "wb") as f:
-        	rh.img.save(f, format="png")
+    if not os.path.isfile(str(f'{hash}.png')):
+        with open(f'{hash}.png', "wb") as f:
+            rh.img.save(f, format="png")
 
-        img_path = open(hash +".png", "rb")
+        img_path = open(f'{hash}.png', "rb")
         img = Image.open(img_path)
 
         h = 20
@@ -499,7 +499,7 @@ def localgetinfo():
         img_arr = np.asarray(img)
         h,w,c = img_arr.shape
 
-    img_path = open(hash +".png", "rb")
+    img_path = open(f'{hash}.png', "rb")
     img = Image.open(img_path)
 
     h = 20
@@ -649,7 +649,11 @@ def localkeysend():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --final_cltv_delta=40""")
+        os.system(
+            f"""lncli sendpayment --keysend --d={node} --amt={amount}"""
+            + """ --final_cltv_delta=40"""
+        )
+
         input("\nContinue...")
     except:
         pass
@@ -672,7 +676,12 @@ def localchatsendA():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34349334=""" + hex_encoded_message)
+        os.system(
+            f"""lncli sendpayment --keysend --d={node} --amt={amount}"""
+            + """ --data 34349334="""
+            + hex_encoded_message
+        )
+
         input("\nContinue...")
     except:
         pass
@@ -885,16 +894,20 @@ def getnewinvoice():
             }
         if amount == "":
             r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"memo": memo + " -PyBLOCK"},
-                )
+                url,
+                headers=headers,
+                verify=cert_path,
+                json={"memo": f'{memo} -PyBLOCK'},
+            )
+
         else:
             r = requests.post(
-                    url,
-                    headers=headers, verify=cert_path,
-                    json={"value": amount, "memo": memo + " -PyBLOCK"},
-                )
+                url,
+                headers=headers,
+                verify=cert_path,
+                json={"value": amount, "memo": f'{memo} -PyBLOCK'},
+            )
+
 
         a = r.json()
         print("\033[1;30;47m")
@@ -1072,11 +1085,11 @@ def getinfo():
     hash = a['identity_pubkey']
     rh = Robohash(hash)
     rh.assemble(roboset='set1')
-    if not os.path.isfile(str(hash + ".png")):
-        with open(hash +".png", "wb") as f:
-        	rh.img.save(f, format="png")
+    if not os.path.isfile(str(f'{hash}.png')):
+        with open(f'{hash}.png', "wb") as f:
+            rh.img.save(f, format="png")
 
-        img_path = open(hash +".png", "rb")
+        img_path = open(f'{hash}.png', "rb")
         img = Image.open(img_path)
 
         h = 20
@@ -1086,7 +1099,7 @@ def getinfo():
         img_arr = np.asarray(img)
         h,w,c = img_arr.shape
 
-    img_path = open(hash +".png", "rb")
+    img_path = open(f'{hash}.png', "rb")
     img = Image.open(img_path)
 
     h = 20
@@ -1125,7 +1138,7 @@ def getinfo():
 #--------------------------------- NYMs -----------------------------------
 
 def get_ansi_color_code(r, g, b):
-    if r == g and g == b:
+    if r == g == b:
         if r < 8:
             return 16
         if r > 248:
@@ -1159,11 +1172,11 @@ def channels():
                 hash = s['remote_pubkey']
                 rh = Robohash(hash)
                 rh.assemble(roboset='set1')
-                if not os.path.isfile(str(hash + ".png")):
-                    with open(hash +".png", "wb") as f:
-                    	rh.img.save(f, format="png")
+                if not os.path.isfile(str(f'{hash}.png')):
+                    with open(f'{hash}.png', "wb") as f:
+                        rh.img.save(f, format="png")
 
-                    img_path = open(hash +".png", "rb")
+                    img_path = open(f'{hash}.png', "rb")
                     img = Image.open(img_path)
 
                     h = 1
@@ -1173,7 +1186,7 @@ def channels():
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
-                img_path = open(hash +".png", "rb")
+                img_path = open(f'{hash}.png', "rb")
                 img = Image.open(img_path)
 
                 h = 1
@@ -1199,7 +1212,7 @@ def channels():
                     rh = Robohash(hash)
                     rh.assemble(roboset='set1')
 
-                    img_path = open(hash +".png" , "rb")
+                    img_path = open(f'{hash}.png', "rb")
                     img = Image.open(img_path)
 
                     h = 20
