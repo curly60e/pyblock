@@ -638,9 +638,9 @@ def localFullProtocol():
     proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listpayments | grep "37629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = os.popen(proto1).read()
-    p2 = os.popen(proto2).read()
-    p3 = os.popen(proto3).read()
+    p1 = os.popen(proto1).list()
+    p2 = os.popen(proto2).list()
+    p3 = os.popen(proto3).list()
 
 
 
