@@ -759,13 +759,19 @@ def localchatsendC():
         hex_encoded_message = encoded_message.hex()
         print(encoded_message.hex())
         input("\nContinue...")
-        
+
         while True:
             if amount in ["", "0"]:
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34343434="""" + hex_encoded_message + """)
+        os.system(
+            f"""lncli sendpayment --keysend --d={node} --amt={amount}"""
+            + """ --data 34343434="""
+            " + hex_encoded_message + "
+            ""
+        )
+
         input("\nContinue...")
     except:
         pass
