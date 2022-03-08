@@ -679,7 +679,6 @@ def localchatsendA():
         message = input("Message: ")
         encoded_message = message.encode('utf-8')
         hex_encoded_message = encoded_message.hex()
-        print(encoded_message.hex())
         input("\nContinue...")
 
         while True:
