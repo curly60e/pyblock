@@ -22,8 +22,6 @@ from robohash import Robohash
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
 settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 
-lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
@@ -46,6 +44,7 @@ def rpc(method, params=[]):
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 def remoteHalving():
+
     b = rpc('getblockcount')
     c = str(b)
     oneh = 0 - int(c) + 210000
@@ -145,6 +144,8 @@ def runthenumbersConn():
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def consoleLN(): # get into the console from bitcoin-cli
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
@@ -155,6 +156,8 @@ def consoleLN(): # get into the console from bitcoin-cli
         lsd.close()
 
 def locallistpeersQQ():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -263,6 +266,8 @@ def locallistpeersQQ():
             break
 
 def localconnectpeer():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         clear()
         print("\033[1;32;40m")
@@ -280,6 +285,8 @@ def localconnectpeer():
         pass
 
 def locallistchaintxns():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -333,6 +340,8 @@ def locallistchaintxns():
             break
 
 def locallistinvoices():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -383,6 +392,8 @@ def locallistinvoices():
             break
 
 def locallistchannels():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -476,6 +487,8 @@ def locallistchannels():
             break
 
 def localgetinfo():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -541,6 +554,8 @@ def localgetinfo():
     input("\nContinue... ")
 
 def localaddinvoice():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " addinvoice"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -593,6 +608,8 @@ def localaddinvoice():
         pass
 
 def localpayinvoice():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         invoiceN = input("Insert the invoice to pay: ")
         invoice = invoiceN.lower()
@@ -611,6 +628,8 @@ def localpayinvoice():
         pass
 
 def localgetnetworkinfo():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " getnetworkinfo"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -631,6 +650,8 @@ def localgetnetworkinfo():
     input("\nContinue... ")
 
 def localFullProtocol():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 
     proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
@@ -649,6 +670,8 @@ def localFullProtocol():
 
 
 def localkeysend():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tYou are going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.\n")
@@ -670,6 +693,8 @@ def localkeysend():
         pass
 
 def localchatsendA():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tWrite.\n")
@@ -697,6 +722,8 @@ def localchatsendA():
         pass
 
 def localchatnewA():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
@@ -706,6 +733,8 @@ def localchatnewA():
         pass
 
 def localchatlistA():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
@@ -715,6 +744,8 @@ def localchatlistA():
         pass
 
 def localchatsendB():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tWrite.\n")
@@ -743,6 +774,8 @@ def localchatsendB():
         pass
 
 def localchatnewB():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
@@ -752,6 +785,8 @@ def localchatnewB():
         pass
 
 def localchatlistB():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
@@ -761,6 +796,8 @@ def localchatlistB():
         pass
 
 def localchatsendC():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tWrite.\n")
@@ -789,6 +826,8 @@ def localchatsendC():
         pass
 
 def localchatnewC():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
@@ -798,6 +837,8 @@ def localchatnewC():
         pass
 
 def localchatlistC():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
@@ -808,6 +849,8 @@ def localchatlistC():
         pass
 
 def localchannelbalance():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " channelbalance"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -825,6 +868,8 @@ def localchannelbalance():
     input("\nContinue... ")
 
 def localnewaddress():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " newaddress p2wkh"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -844,6 +889,8 @@ def localnewaddress():
     input("\nContinue... ")
 
 def localbalanceOC():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " walletbalance"
     lsd = os.popen(lndconnectload['ln'] + lncli).read()
     lsd0 = str(lsd)
@@ -858,6 +905,8 @@ def localbalanceOC():
 
 
 def localrebalancelnd():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
     while True:
         lsd = os.popen(lndconnectload['ln'] + lncli).read()
@@ -895,6 +944,8 @@ def localrebalancelnd():
 # Remote connection with rest -------------------------------------
 
 def getnewinvoice():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
@@ -963,6 +1014,8 @@ def getnewinvoice():
         pass
 
 def payinvoice():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
@@ -1014,6 +1067,8 @@ def payinvoice():
         pass
 
 def getnewaddress():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
@@ -1038,6 +1093,8 @@ def getnewaddress():
         pass
 
 def listinvoice():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -1089,6 +1146,8 @@ def listinvoice():
     input("\nContinue... ")
 
 def getinfo():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -1170,6 +1229,8 @@ def get_color(r, g, b):
     return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
 
 def channels():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
@@ -1265,6 +1326,8 @@ def channels():
             break
 
 def channelbalance():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
@@ -1338,6 +1401,8 @@ def listonchaintxs():
             break
 
 def balanceOC():
+    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
