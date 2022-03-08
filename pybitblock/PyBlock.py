@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-alpha6"
+version = "1.1.12-alpha7"
 
 def close():
     print("<<< Ctr + C.\n\n")
@@ -87,7 +87,7 @@ def slHASHConn():
         input("\a\nContinue...")
     except:
         pass
-    
+
 def slPOOLConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/pool-stats?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
@@ -101,7 +101,7 @@ def slPOOLConn():
         input("\a\nContinue...")
     except:
         pass
-    
+
 def slHISTConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/hashrate-and-difficulty-history?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
@@ -115,7 +115,7 @@ def slHISTConn():
         input("\a\nContinue...")
     except:
         pass
-    
+
 def getPoolSlushCheck():
 
     s = ""
@@ -5358,7 +5358,7 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
-        
+
     elif menuS in ["ma"]:
         clear()
         blogo()
@@ -5374,7 +5374,7 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     elif menuS in ["md"]:
         clear()
         blogo()
-        slHISTConn()        
+        slHISTConn()
     elif menuS in ["mm"]:
         clear()
         blogo()

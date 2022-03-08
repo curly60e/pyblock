@@ -713,7 +713,7 @@ def localchatsendB():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 7629171=""" + hex_encoded_message + """)
+        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 7629171=""" + hex_encoded_message)
         input("\nContinue...")
     except:
         pass
@@ -738,7 +738,6 @@ def localchatlistB():
 
 def localchatsendC():
     try:
-        try:
         closed()
         print("\n\tWrite.\n")
         lncli = " sendpayment "
@@ -749,7 +748,7 @@ def localchatsendC():
         hex_encoded_message = encoded_message.hex()
         print(encoded_message.hex())
         input("\nContinue...")
-        
+
         while True:
             if amount in ["", "0"]:
                 amount = input("\nAmount in sats: ")
