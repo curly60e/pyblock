@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-beta2"
+version = "1.1.12-beta1"
 
 def close():
     print("<<< Ctr + C.\n\n")
@@ -1357,6 +1357,7 @@ def APIMenuLOCAL():
     \033[1;32;40mK.\033[0;37;40m Weather     FREE
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
+    \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1400,6 +1401,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mK.\033[0;37;40m Weather     FREE
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
+    \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1525,6 +1527,76 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    
+def slushpoolREMOTEOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Difficulty
+    \u001b[38;5;202mB.\033[0;37;40m Hash Rate
+    \u001b[38;5;202mC.\033[0;37;40m Pool
+    \u001b[38;5;202mD.\033[0;37;40m History
+    \u001b[38;5;202mE.\033[0;37;40m Miner
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    
+def slushpoolLOCALOnchainONLY():
+    clear()
+    blogo()
+    sysinfo()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Difficulty
+    \u001b[38;5;202mB.\033[0;37;40m Hash Rate
+    \u001b[38;5;202mC.\033[0;37;40m Pool
+    \u001b[38;5;202mD.\033[0;37;40m History
+    \u001b[38;5;202mE.\033[0;37;40m Miner
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))    
 
 def runTheNumbersMenu():
     clear()
@@ -5359,23 +5431,23 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         blogo()
         callGitWardenTerminal()
 
-    elif menuS in ["ma"]:
+    elif menuS in ["A"]:
         clear()
         blogo()
         slDIFFConn()
-    elif menuS in ["mb"]:
+    elif menuS in ["B"]:
         clear()
         blogo()
         slHASHConn()
-    elif menuS in ["mc"]:
+    elif menuS in ["C"]:
         clear()
         blogo()
         slPOOLConn()
-    elif menuS in ["md"]:
+    elif menuS in ["D"]:
         clear()
         blogo()
         slHISTConn()
-    elif menuS in ["mm"]:
+    elif menuS in ["E"]:
         clear()
         blogo()
         getPoolSlushCheck()
@@ -5859,6 +5931,8 @@ def platfformsLOCALcontrol(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["S", "s"]:
+        slushpoolLOCALConn()     
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -5891,6 +5965,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["S", "s"]:
+        slushpoolLOCALConn()    
     elif platf in ["R", "r"]:
         menuSelection()
 
