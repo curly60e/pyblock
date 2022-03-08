@@ -629,8 +629,15 @@ def localgetnetworkinfo():
 def localFullProtocol():
 
     proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto2 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
+    proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
+    p1 = os.popen(proto1).read()
+    p2 = os.popen(proto2).read()
+    p3 = os.popen(proto3).read()
+    
+    proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
+    proto2 = """lncli listpayments | grep "37629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
+    proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     p1 = os.popen(proto1).read()
     p2 = os.popen(proto2).read()
     p3 = os.popen(proto3).read()
@@ -672,7 +679,7 @@ def localchatsendA():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34349334=""" + hex_encoded_message)
+        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 34349334=""" + hex_encoded_message + """)
         input("\nContinue...")
     except:
         pass
@@ -713,7 +720,7 @@ def localchatsendB():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 7629171=""" + hex_encoded_message)
+        os.system("""lncli sendpayment --keysend --d=""" + node + " --amt=" + amount + """ --data 7629171=""" + hex_encoded_message + """)
         input("\nContinue...")
     except:
         pass
@@ -738,6 +745,7 @@ def localchatlistB():
 
 def localchatsendC():
     try:
+        try:
         closed()
         print("\n\tWrite.\n")
         lncli = " sendpayment "
@@ -748,7 +756,7 @@ def localchatsendC():
         hex_encoded_message = encoded_message.hex()
         print(encoded_message.hex())
         input("\nContinue...")
-
+        
         while True:
             if amount in ["", "0"]:
                 amount = input("\nAmount in sats: ")
