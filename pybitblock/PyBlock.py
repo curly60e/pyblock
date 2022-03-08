@@ -1613,7 +1613,7 @@ def slushpoolLOCALOnchainONLY():
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    slushpoolREMOTEOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))    
+    slushpoolLOCALOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))    
 
 def runTheNumbersMenu():
     clear()
