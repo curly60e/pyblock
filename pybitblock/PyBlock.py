@@ -5932,7 +5932,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["S", "s"]:
-        slushpoolLOCALConn()     
+        slushpoolLOCALOnchainONLY()     
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -5966,7 +5966,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["S", "s"]:
-        slushpoolLOCALConn()    
+        slushpoolLOCALOnchainONLY()    
     elif platf in ["R", "r"]:
         menuSelection()
 
