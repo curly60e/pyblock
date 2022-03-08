@@ -759,7 +759,6 @@ def localchatlistB():
 
 def localchatsendC():
     try:
-        try:
         closed()
         print("\n\tWrite.\n")
         lncli = " sendpayment "
