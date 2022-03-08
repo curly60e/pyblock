@@ -782,7 +782,6 @@ def localchatsendC():
         )
 
         input("\nContinue...")
-        input("\nContinue...")
     except:
         pass
 
