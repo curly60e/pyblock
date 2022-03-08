@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12-alpha7"
+version = "1.1.12-alpha8"
 
 def close():
     print("<<< Ctr + C.\n\n")
@@ -67,7 +67,7 @@ def slDIFFConn():
         clear()
         blogo()
         closed()
-        output = render(str("difficult"), colors=['yellow'], align='left', font='tiny')
+        output = render(str("difficulty"), colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
