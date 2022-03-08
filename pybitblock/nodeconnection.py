@@ -21,6 +21,9 @@ from robohash import Robohash
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
 settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 
+lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 def closed():
@@ -634,7 +637,7 @@ def localFullProtocol():
     p1 = os.popen(proto1).read()
     p2 = os.popen(proto2).read()
     p3 = os.popen(proto3).read()
-    
+
     proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
@@ -769,7 +772,7 @@ def localchatsendC():
         hex_encoded_message = encoded_message.hex()
         print(encoded_message.hex())
         input("\nContinue...")
-        
+
         while True:
             if amount in ["", "0"]:
                 amount = input("\nAmount in sats: ")
