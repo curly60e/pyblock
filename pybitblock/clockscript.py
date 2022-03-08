@@ -82,14 +82,17 @@ def design():
                 t.sleep(10)
                 txs = str(mm['nTx'])
                 if txs == "1":
-                    os.system("""curl https://poptart.spinda.net""")
-                t.sleep(20)                
+                    try:
+                        p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
+                        p.wait(5)
+                    except subprocess.TimeoutExpired:
+                        p.kill()
+                print("\033[0;37;40m\x1b[?25l")
                 clear()
-                blogo()
+                close()
                 a = b
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
                 print("\x1b[?25l" + output)
-
 
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
