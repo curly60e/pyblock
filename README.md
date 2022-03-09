@@ -55,7 +55,7 @@
 
 <br />
 
-<blockquote class="twitter-tweet"><p lang="pl" dir="ltr">PyCHAT by <a href="https://twitter.com/_PyBlock_?ref_src=twsrc%5Etfw">@_PyBLOCK_</a></p>&mdash; LN-Tweetbot.com (@LNtweetbot) <a href="https://twitter.com/LNtweetbot/status/1500636745100140548?ref_src=twsrc%5Etfw">March 7, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet"><p lang="pl" dir="ltr">PyCHAT by <a href="https://twitter.com/_PyBlock_?ref_src=twsrc%5Etfw">@_PyBLOCK_</a></p>&mdash; LN-Tweetbot.com (@LNtweetbot) <a href="https://twitter.com/LNtweetbot/status/1500636745100140548?ref_src=twsrc%5Etfw">March 7, 2022</a></blockquote>
 
 # PyBlock v1.1.12
 ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
