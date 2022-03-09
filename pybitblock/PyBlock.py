@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.12"
+version = "1.1.13"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -62,28 +62,50 @@ def rpc(method, params=[]):
 
 def slDIFFConn():
     try:
-        conn = """curl -s https://insights.braiins.com/api/v1.0/difficulty-stats?json=1 | jq -C """
+        conn = """curl -s https://insights.braiins.com/api/v1.0/difficulty-stats"""
         a = os.popen(conn).read()
         clear()
         blogo()
         closed()
         output = render("difficulty", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
+        b = json.loads(a)
+        print(f"""\n
+
+            Block epoch: {b['blocks_epoch']}
+            Difficulty: {b['difficulty']}
+            Epoch block time: {b['epoch_block_time']}
+            Estimated adjustment: {b['estimated_adjustment']}
+            Estimated adjustemnt date: {b['estimated_adjustment_date']}
+            Estimated next differece: {b['estimated_next_diff']}
+            Previous adjustment: {b['previous_adjustment']}
+
+        """)
         input("\a\nContinue...")
     except:
         pass
 
 def slHASHConn():
     try:
-        conn = """curl -s https://insights.braiins.com/api/v1.0/hash-rate-stats?json=1 | jq -C """
+        conn = """curl -s https://insights.braiins.com/api/v1.0/hash-rate-stats"""
         a = os.popen(conn).read()
         clear()
         blogo()
         closed()
         output = render("hash rate", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
+        b = json.loads(a)
+        print(f"""\n
+
+            Averiage fees per block: {b['avg_fees_per_block']}
+            Current hashrate: {b['current_hashrate']}
+            Fees percent: {b['fees_percent']}
+            Hash price: {b['hash_price']}
+            Hash rate 30: {b['hash_rate_30']}
+            Hash value: {b['hash_value']}
+            Rev. USD: {b['rev_usd']}
+
+        """)
         input("\a\nContinue...")
     except:
         pass
@@ -1580,7 +1602,7 @@ def slushpoolREMOTEOnchainONLY():
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    slushpoolREMOTEOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    slushpoolLOCALOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolLOCALOnchainONLY():
     clear()
@@ -5463,7 +5485,7 @@ def slushpoolLOCALOnchainONLYMenu(slush):
         clear()
         blogo()
         slPOOLConn()
-    elif slush in ["D", "c"]:
+    elif slush in ["D", "d"]:
         clear()
         blogo()
         slHISTConn()
@@ -6359,7 +6381,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if not os.path.isdir("$HOME"):
@@ -6403,6 +6425,6 @@ while True: # Loop
         menuSelection()
 
 
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
