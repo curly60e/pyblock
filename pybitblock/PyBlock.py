@@ -36,7 +36,7 @@ from robohash import Robohash
 version = "1.1.12"
 
 def close():
-    print("<<< Ctr + C.\n\n")
+    print("<<< Ctrl + C.\n\n")
 
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
