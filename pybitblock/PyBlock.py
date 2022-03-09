@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.13"
+version = "1.1.14-alpha"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -6381,7 +6381,7 @@ def testClockRemote():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    #try:
+    try:
         clear()
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if not os.path.isdir("$HOME"):
@@ -6425,6 +6425,6 @@ while True: # Loop
         menuSelection()
 
 
-    #except:
-    #    print("\n")
-    #    sys.exit(101)
+    except:
+        print("\n")
+        sys.exit(101)
