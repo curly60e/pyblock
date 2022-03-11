@@ -730,6 +730,7 @@ def localchatnewA():
         os.system("""lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""")
         t.sleep(59)
         print("\n\t    Getting New Messages")
+        input("\nContinue...")
     except:
         pass
 
@@ -783,6 +784,7 @@ def localchatnewB():
         os.system("""lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""")
         t.sleep(59)
         print("\n\t    Getting New Messages")
+        input("\nContinue...")
     except:
         pass
 
@@ -836,6 +838,7 @@ def localchatnewC():
         os.system("""lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""")
         t.sleep(59)
         print("\n\t    Getting New Messages")
+        input("\nContinue...")
     except:
         pass
 
