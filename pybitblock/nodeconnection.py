@@ -88,7 +88,12 @@ def remotegetblock():
     b = rpc('getblockcount')
     c = str(b)
     a = c
-    output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    output = render(
+        c,
+        colors=[settingsClock['colorA'], settingsClock['colorB']],
+        align='center',
+    )
+
     print("\x1b[?25l" + output)
     while True:
         x = a
@@ -97,7 +102,12 @@ def remotegetblock():
         if c > a:
             clear()
             closed()
-            output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            output = render(
+                c,
+                colors=[settingsClock['colorA'], settingsClock['colorB']],
+                align='center',
+            )
+
             print("\a\x1b[?25l" + output)
             a = c
 
@@ -570,7 +580,12 @@ def localaddinvoice():
         amount = input("Amount in sats: ")
         mem = input("Memo: ")
         memo = mem.replace(" ","_")
-        lsd = os.popen(lndconnectload['ln'] + lncli + " --memo {}-PyBLOCK --amt {}".format(memo, amount)).read()
+        lsd = os.popen(
+            lndconnectload['ln']
+            + lncli
+            + f" --memo {memo}-PyBLOCK --amt {amount}"
+        ).read()
+
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         print("\033[1;30;47m")
@@ -941,7 +956,8 @@ def localrebalancelnd():
             tonode = input("\nSelect TO a Node ID : ")
             amt = input("\nAmount in sats: ")
             fee = input("\nMax Fee factor in sats: ")
-            fromtonode = "python3 rebalance.py -f {} -t {} -a {} --max-fee-factor {}".format(fromnode,tonode,amt,fee)
+            fromtonode = f"python3 rebalance.py -f {fromnode} -t {tonode} -a {amt} --max-fee-factor {fee}"
+
             os.system(str(fromtonode))
             input("Continue...")
         except:
@@ -964,7 +980,7 @@ def getnewinvoice():
     try:
         amount = input("Amount in sats: ")
         memo = input("Memo: ")
-        url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/invoices'
         data = {
 
             }
@@ -994,10 +1010,10 @@ def getnewinvoice():
         print("Lightning Invoice: " + a['payment_request'])
         b = str(a['payment_request'])
         while True:
-            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], b)
+            url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
             r = requests.get(url, headers=headers, verify=cert_path)
             a = r.json()
-            url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
+            url = f"""https://{lndconnectload["ip_port"]}/v1/invoice/{a['payment_hash']}"""
             rr = requests.get(url, headers=headers, verify=cert_path)
             m = rr.json()
             if m['state'] == 'SETTLED':
@@ -1028,7 +1044,7 @@ def payinvoice():
     try:
         while True:
             bolt11N = input("Insert the invoice to pay: ")
-            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
+            url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{bolt11N}'
             r = requests.get(url, headers=headers, verify=cert_path)
             s = r.json()
             print("\n----------------------------------------------------------------------------------------------------")
@@ -1044,8 +1060,12 @@ def payinvoice():
             input("\nEnter to Continue... ")
             bolt11 = bolt11N.lower()
             r = requests.post(
-                url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
+                url=f'https://{lndconnectload["ip_port"]}/v1/channels/transactions',
+                headers=headers,
+                verify=cert_path,
+                json={"payment_request": bolt11},
             )
+
             try:
                 r.json()['error']
                 print("\nThe Invoice don't have an amount. Please insert an Invoice with amount. \n")
@@ -1053,7 +1073,12 @@ def payinvoice():
             except:
                 break
         ok, checking_id, fee_msat, error_message = r.ok, None, 0, None
-        r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path,)
+        r = requests.get(
+            url=f'https://{lndconnectload["ip_port"]}/v1/payreq/{bolt11}',
+            headers=headers,
+            verify=cert_path,
+        )
+
         t.sleep(5)
         if r.ok:
             checking_id = r.json()["payment_hash"]
@@ -1085,7 +1110,7 @@ def getnewaddress():
     border=4,
     )
     try:
-        url = 'https://{}/v1/newaddress'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/newaddress'
         r = requests.get(url, headers=headers, verify=cert_path)
         addr = r.json()
         print("\033[1;30;47m")
@@ -1110,7 +1135,7 @@ def listinvoice():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/invoices'
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     n = a['invoices']
@@ -1163,7 +1188,7 @@ def getinfo():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     hash = a['identity_pubkey']
@@ -1240,7 +1265,7 @@ def channels():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/channels'
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     n = a['channels']
@@ -1337,7 +1362,7 @@ def channelbalance():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/balance/channels'
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     print("""
@@ -1362,7 +1387,7 @@ def listonchaintxs():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/transactions'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/transactions'
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     n = a['transactions']
@@ -1412,7 +1437,7 @@ def balanceOC():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/balance/blockchain'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/balance/blockchain'
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     print("\n----------------------------------------------------------------------------------------------------")
