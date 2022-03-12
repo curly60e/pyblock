@@ -1567,8 +1567,16 @@ def OpenNodecreatecharge():
         """)
         print("\n----------------------------------------------------------------------------------------------------")
         selection = input("Select a FIAT currency: ")
-        amt = input("Amount in {}: ".format(selection))
-        curl = 'curl https://api.opennode.co/v1/charges -X POST -H ' + '"Authorization: {}"'.format(b) + ' -H "Content-Type: application/json" -d ' + "'{" + '"amount": "{}", "currency": "{}"'.format(amt,selection.upper()) +  "}'"
+        amt = input(f"Amount in {selection}: ")
+        curl = (
+            'curl https://api.opennode.co/v1/charges -X POST -H '
+            + f'"Authorization: {b}"'
+            + ' -H "Content-Type: application/json" -d '
+            + "'{"
+            + f'"amount": "{amt}", "currency": "{selection.upper()}"'
+            + "}'"
+        )
+
         sh = os.popen(curl).read()
         clear()
         blogo()
@@ -1628,7 +1636,15 @@ def OpenNodecreatecharge():
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
-        curl = 'curl https://api.opennode.co/v1/charges -X POST -H' + '"Authorization: {}"'.format(b) + ' -H "Content-Type: application/json" -d ' + "'{" + '"amount": "{}", "currency": "BTC"'.format(amt) +  "}'"
+        curl = (
+            'curl https://api.opennode.co/v1/charges -X POST -H'
+            + f'"Authorization: {b}"'
+            + ' -H "Content-Type: application/json" -d '
+            + "'{"
+            + f'"amount": "{amt}", "currency": "BTC"'
+            + "}'"
+        )
+
         sh = os.popen(curl).read()
         clear()
         blogo()
@@ -1636,8 +1652,8 @@ def OpenNodecreatecharge():
         d = json.loads(n)
         dd = d['data']
         qq = dd['lightning_invoice']
-        pp = dd['address']
         nn = qq['payreq']
+        pp = dd['address']
         mm = nn.lower()
         while True:
             try:
@@ -1657,8 +1673,8 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
@@ -1699,7 +1715,13 @@ def OpenNodeiniciatewithdrawal():
         try:
             while True:
                 invoice = input("\nInvoice: ")
-                checkcurl = 'curl https://api.opennode.co/v1/charge/decode -X POST -H "Authorization: {}" -H "Content-Type: application/json" -d '.format(b) + "'{" + '"pay_req": "{}"'.format(invoice) + "}'"
+                checkcurl = (
+                    f'curl https://api.opennode.co/v1/charge/decode -X POST -H "Authorization: {b}" -H "Content-Type: application/json" -d '
+                    + "'{"
+                    + f'"pay_req": "{invoice}"'
+                    + "}'"
+                )
+
                 ssh = os.popen(checkcurl).read()
                 nn = str(ssh)
                 dd = json.loads(nn)
@@ -1729,7 +1751,13 @@ def OpenNodeiniciatewithdrawal():
             print("<<< Cancel Control + C")
             input("\nEnter to Continue... ")
 
-            curl = 'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {}"'.format(b) + " -d '{" + '"type": "ln", "address": "{}", "callback_url": ""'.format(invoice) + "}'"
+            curl = (
+                f'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {b}"'
+                + " -d '{"
+                + f'"type": "ln", "address": "{invoice}", "callback_url": ""'
+                + "}'"
+            )
+
             sh = os.popen(curl).read()
             n = str(sh)
             d = json.loads(n)
@@ -1747,7 +1775,13 @@ def OpenNodeiniciatewithdrawal():
                 print("\n\tMinimum amount 200000 sats\n")
                 address = input("\nBitcoin Address: ")
                 amt = int(input("Amount in sats: "))
-                curl = 'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {}"'.format(b) + " -d '{" + '"type": "chain", "amount": {}, "address": "{}", "callback_url": ""'.format(amt,address) + "}'"
+                curl = (
+                    f'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {b}"'
+                    + " -d '{"
+                    + f'"type": "chain", "amount": {amt}, "address": "{address}", "callback_url": ""'
+                    + "}'"
+                )
+
                 if amt < 199999:
                     sh = os.popen(curl).read()
                     n = str(sh)
@@ -1792,7 +1826,8 @@ def OpenNodeListPayments():
     )
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = 'curl https://api.opennode.co/v1/withdrawals -H "Content-Type: application/json" -H "Authorization: {}"'.format(b)
+    curl = f'curl https://api.opennode.co/v1/withdrawals -H "Content-Type: application/json" -H "Authorization: {b}"'
+
     sh = os.popen(curl).read()
     clear()
     blogo()
