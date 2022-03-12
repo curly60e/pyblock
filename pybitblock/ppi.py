@@ -327,7 +327,7 @@ def satoshiConn():
         blogo()
         closed()
         output = render(
-            "Satoshi Nakamoto. 0x18C09E865EC948A1. DE4E FCA3 E1AB 9E41 CE96 CECB 18C0 9E86 5EC9 48A1", colors=['green'], align='center', font='console'
+            "𝐒𝐚𝐭𝐨𝐬𝐡𝐢 𝐍𝐚𝐤𝐚𝐦𝐨𝐭𝐨. 𝟎𝐱𝟏𝟖𝐂𝟎𝟗𝐄𝟖𝟔𝟓𝐄𝐂𝟗𝟒𝟖𝐀𝟏. 𝐃𝐄𝟒𝐄 𝐅𝐂𝐀𝟑 𝐄𝟏𝐀𝐁 𝟗𝐄𝟒𝟏 𝐂𝐄𝟗𝟔 𝐂𝐄𝐂𝐁 𝟏𝟖𝐂𝟎 𝟗𝐄𝟖𝟔 𝟓𝐄𝐂𝟗 𝟒𝟖𝐀𝟏.", colors=['green'], align='left', font='console'
         )
 
         print(output)
@@ -1913,7 +1913,7 @@ def tippinmeGetInvoice():
         q = input("Amount in Sats: ")
         clear()
         blogo()
-        url = 'https://api.tippin.me/v1/public/addinvoice/{}/{}'.format(b,q)
+        url = f'https://api.tippin.me/v1/public/addinvoice/{b}/{q}'
         response = requests.get(url)
         responseB = str(response.text)
         responseC = responseB
@@ -1997,7 +1997,12 @@ def tallycoGetPayment():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = "curl -d " + '"type=profile&id={}&satoshi_amount={}&payment_method={}"'.format(d, amount, lnd_onchain) + " -X POST https://api.tallyco.in/v1/payment/request/"
+        curl = (
+            "curl -d "
+            + f'"type=profile&id={d}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
+            + " -X POST https://api.tallyco.in/v1/payment/request/"
+        )
+
         tallycomethod = os.popen(curl).read()
         n = str(tallycomethod)
         d = json.loads(n)
@@ -2044,7 +2049,12 @@ def tallycoDonateid():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = "curl -d " + '"type=profile&id={}&satoshi_amount={}&payment_method={}"'.format(donate, amount, lnd_onchain) + " -X POST https://api.tallyco.in/v1/payment/request/"
+        curl = (
+            "curl -d "
+            + f'"type=profile&id={donate}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
+            + " -X POST https://api.tallyco.in/v1/payment/request/"
+        )
+
         tallycomethod = os.popen(curl).read()
         n = str(tallycomethod)
         d = json.loads(n)
