@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-alpha4"
+version = "1.1.14-alpha6"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -5675,15 +5675,11 @@ def miscellaneousLOCALmenu(misce):
             except:
                 break
         elif misce in ["B", "b"]:
-            while True:
-                try:
-                    clear()
-                    blogo()
-                    close()
-                    sysinfoDetail()
-                    t.sleep(1)
-                except:
-                    break
+            clear()
+            blogo()
+            close()
+            sysinfoDetail()
+            t.sleep(1)
         elif misce in ["C", "c"]:
             clear()
             blogo()
@@ -5721,40 +5717,22 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
             except:
                 pass
     elif misce in ["B", "b"]:
-        while True:
-            try:
-                clear()
-                blogo()
-                close()
-                sysinfoDetail()
-                t.sleep(1)
-            except:
-                break
+        clear()
+        blogo()
+        close()
+        sysinfoDetail()
     elif misce in ["D", "d"]:
-        try:
-            clear()
-            blogo()
-            quotesConn()
-            input("Continue...")
-        except:
-            pass
+        clear()
+        blogo()
+        quotesConn()
     elif misce in ["C", "c"]:
-        try:
-            clear()
-            blogo()
-            datesConn()
-            input("Continue...")
-        except:
-            pass
+        clear()
+        blogo()
+        datesConn()
     elif misce in ["S", "s"]:
-        while True:
-            try:
-                clear()
-                blogo()
-                satoshiConn()
-                input("Continue...")
-            except:
-                pass
+        clear()
+        blogo()
+        satoshiConn()
     elif misce in ["R", "r"]:
         menuSelection()
 
