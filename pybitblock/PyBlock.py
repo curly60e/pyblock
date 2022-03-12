@@ -1548,6 +1548,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mB.\033[0;37;40m System
     \u001b[38;5;202mC.\033[0;37;40m Dates
     \u001b[38;5;202mD.\033[0;37;40m Quotes
+    \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
@@ -1583,6 +1584,7 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[38;5;202mB.\033[0;37;40m System
     \u001b[38;5;202mC.\033[0;37;40m Dates
     \u001b[38;5;202mD.\033[0;37;40m Quotes
+    \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
@@ -5687,6 +5689,10 @@ def miscellaneousLOCALmenu(misce):
         clear()
         blogo()
         quotesConn()
+    elif misce in ["P", "p"]:
+        clear()
+        blogo()
+        pgpConn()    
     elif misce in ["S", "s"]:
         clear()
         blogo()
@@ -5728,6 +5734,10 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         clear()
         blogo()
         datesConn()
+    elif misce in ["P", "p"]:
+        clear()
+        blogo()
+        pgpConn()     
     elif misce in ["S", "s"]:
         clear()
         blogo()
