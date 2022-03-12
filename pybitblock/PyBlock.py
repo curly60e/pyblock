@@ -1531,6 +1531,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mB.\033[0;37;40m System
     \u001b[38;5;202mC.\033[0;37;40m Dates
     \u001b[38;5;202mD.\033[0;37;40m Quotes
+    \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1565,6 +1566,7 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[38;5;202mB.\033[0;37;40m System
     \u001b[38;5;202mC.\033[0;37;40m Dates
     \u001b[38;5;202mD.\033[0;37;40m Quotes
+    \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5684,6 +5686,15 @@ def miscellaneousLOCALmenu(misce):
                     input("Continue...")
                 except:
                     break
+        elif misce in ["S", "s"]:
+            while True:
+                try:
+                    clear()
+                    blogo()
+                    satoshiConn()
+                    input("Continue...")
+                except:
+                    pass                     
         elif misce in ["R", "r"]:
             menuSelection()
 
@@ -5734,6 +5745,15 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
             input("Continue...")
         except:
             pass
+    elif misce in ["S", "s"]:
+        while True:
+            try:
+                clear()
+                blogo()
+                satoshiConn()
+                input("Continue...")
+            except:
+                pass        
     elif misce in ["R", "r"]:
         menuSelection()
 
