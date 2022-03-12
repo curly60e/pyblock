@@ -158,8 +158,10 @@ def getPoolSlushCheck():
 
     while True:
         try:
-            slushpoolbtc = "curl https://slushpool.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token: {}' 2>/dev/null".format(api)
-            slushpoolbtcblock = "curl https://slushpool.com/stats/json/btc/ -H 'SlushPool-Auth-Token: {}' 2>/dev/null".format(api)
+            slushpoolbtc = f"curl https://slushpool.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+
+            slushpoolbtcblock = f"curl https://slushpool.com/stats/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+
 
             b = os.popen(slushpoolbtc)
             c = b.read()
@@ -316,7 +318,12 @@ def untxsConn():
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
                     else:
                         print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['asm'],knx['type']))
-                        decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(b) + " | xxd -r -p | hexyl -n 256"
+                        decodeTX = (
+                            path['bitcoincli']
+                            + f" getrawtransaction {b}"
+                            + " | xxd -r -p | hexyl -n 256"
+                        )
+
                         print("OP_RETURN Hex: ")
                         os.system(decodeTX)
                 input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
@@ -478,12 +485,22 @@ def getgenesis(): # get and decode Genesis block
 def readHexBlock(): # Hex Decoder using Hexyl on local node
     hexa = input("Add the Block Hash you want to decode: ")
     blocknumber = input("Add the Block number: ")
-    decodeBlock = path['bitcoincli'] + " getblock {} {}".format(hexa, blocknumber) + " | xxd -r -p | hexyl -n 256"
+    decodeBlock = (
+        path['bitcoincli']
+        + f" getblock {hexa} {blocknumber}"
+        + " | xxd -r -p | hexyl -n 256"
+    )
+
     os.system(decodeBlock)
 
 def readHexTx(): # Hex Decoder using Hexyl on an external node
     hexa = input("Add the Transaction ID. you want to decode: ")
-    decodeTX = path['bitcoincli'] + " getrawtransaction {}".format(hexa) + " | xxd -r -p | hexyl -n 256"
+    decodeTX = (
+        path['bitcoincli']
+        + f" getrawtransaction {hexa}"
+        + " | xxd -r -p | hexyl -n 256"
+    )
+
     os.system(decodeTX)
 
 def tmp():
@@ -797,7 +814,7 @@ def robotNym():
             cert_path = lndconnectload["tls"]
             macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
             headers = {'Grpc-Metadata-macaroon': macaroon}
-            url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+            url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
             r = requests.get(url, headers=headers, verify=cert_path)
             alias = r.json()
 
@@ -936,7 +953,7 @@ def MainMenuREMOTE(): #Main Menu
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
     alias = r.json()
 
@@ -1113,7 +1130,7 @@ def bitcoincoremenuREMOTE():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
     alias = r.json()
 
@@ -1145,7 +1162,7 @@ def bitcoincoremenuREMOTEOPRETURN():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
     alias = r.json()
 
@@ -1326,7 +1343,7 @@ def lightningnetworkREMOTE():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
     alias = r.json()
 
@@ -1376,7 +1393,7 @@ def APIMenuLOCAL():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1421,7 +1438,7 @@ def APIMenuLOCALOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1518,7 +1535,7 @@ def miscellaneousLOCAL():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1554,7 +1571,7 @@ def miscellaneousLOCALOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1589,7 +1606,7 @@ def slushpoolREMOTEOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1624,7 +1641,7 @@ def slushpoolLOCALOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1664,7 +1681,7 @@ def runTheNumbersMenu():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1698,7 +1715,7 @@ def runTheNumbersMenuOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1736,7 +1753,7 @@ def runTheNumbersMenuConn():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1770,7 +1787,7 @@ def weatherMenuOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1807,7 +1824,7 @@ def weatherMenu():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1845,7 +1862,7 @@ def dnt(): # Donation selection menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1878,7 +1895,7 @@ def dntOnchainONLY(): # Donation selection menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1916,7 +1933,7 @@ def dntDev(): # Dev Donation Menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1950,7 +1967,7 @@ def dntDevOnchainONLY(): # Dev Donation Menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -1988,7 +2005,7 @@ def dntTst(): # Tester Donation Menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
