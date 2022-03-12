@@ -327,7 +327,7 @@ def satoshiConn():
         blogo()
         closed()
         output = render(
-            "Satoshi Nakamoto. 0x18C09E865EC948A1 DE4E FCA3 E1AB 9E41 CE96 CECB 18C0 9E86 5EC9 48A1", colors=['green'], align='center', font='console'
+            "Satoshi Nakamoto. 0x18C09E865EC948A1. DE4E FCA3 E1AB 9E41 CE96 CECB 18C0 9E86 5EC9 48A1", colors=['green'], align='center', font='console'
         )
 
         print(output)
