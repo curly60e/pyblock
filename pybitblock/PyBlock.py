@@ -2040,7 +2040,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -2078,7 +2078,7 @@ def satnodeMenu(): # Satnode Menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -2113,7 +2113,7 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -2152,7 +2152,7 @@ def rateSX():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -2185,7 +2185,7 @@ def rateSXOncainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
