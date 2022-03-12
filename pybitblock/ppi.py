@@ -317,6 +317,27 @@ def statsConn():
 
 #-----------------------------END Stats--------------------------------
 
+#-----------------------------PGP--------------------------------
+
+def pgpConn():
+    try:
+        conn = """curl -s https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "pgp", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END PGP--------------------------------
+
 #-----------------------------Satoshi--------------------------------
 
 def satoshiConn():
