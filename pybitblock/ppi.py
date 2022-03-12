@@ -1913,7 +1913,7 @@ def tippinmeGetInvoice():
         q = input("Amount in Sats: ")
         clear()
         blogo()
-        url = 'https://api.tippin.me/v1/public/addinvoice/{}/{}'.format(b,q)
+        url = f'https://api.tippin.me/v1/public/addinvoice/{b}/{q}'
         response = requests.get(url)
         responseB = str(response.text)
         responseC = responseB
@@ -1997,7 +1997,12 @@ def tallycoGetPayment():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = "curl -d " + '"type=profile&id={}&satoshi_amount={}&payment_method={}"'.format(d, amount, lnd_onchain) + " -X POST https://api.tallyco.in/v1/payment/request/"
+        curl = (
+            "curl -d "
+            + f'"type=profile&id={d}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
+            + " -X POST https://api.tallyco.in/v1/payment/request/"
+        )
+
         tallycomethod = os.popen(curl).read()
         n = str(tallycomethod)
         d = json.loads(n)
@@ -2044,7 +2049,12 @@ def tallycoDonateid():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = "curl -d " + '"type=profile&id={}&satoshi_amount={}&payment_method={}"'.format(donate, amount, lnd_onchain) + " -X POST https://api.tallyco.in/v1/payment/request/"
+        curl = (
+            "curl -d "
+            + f'"type=profile&id={donate}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
+            + " -X POST https://api.tallyco.in/v1/payment/request/"
+        )
+
         tallycomethod = os.popen(curl).read()
         n = str(tallycomethod)
         d = json.loads(n)
