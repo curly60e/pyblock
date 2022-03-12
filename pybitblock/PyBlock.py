@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-alpha6"
+version = "1.1.14-alpha7"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -5654,8 +5654,8 @@ def bitcoincoremenuLOCALcontrolOOnchainONLY(oreturn):
         opretminer()
 
 def miscellaneousLOCALmenu(misce):
-    while True:
-        if misce in ["A", "a"]:
+    if misce in ["A", "a"]:
+        while True:
             try:
                 clear()
                 blogo()
@@ -5674,26 +5674,25 @@ def miscellaneousLOCALmenu(misce):
                 tmp()
             except:
                 break
-        elif misce in ["B", "b"]:
-            clear()
-            blogo()
-            close()
-            sysinfoDetail()
-            t.sleep(1)
-        elif misce in ["C", "c"]:
-            clear()
-            blogo()
-            datesConn()
-        elif misce in ["D", "d"]:
-            clear()
-            blogo()
-            quotesConn()
-        elif misce in ["S", "s"]:
-            clear()
-            blogo()
-            satoshiConn()
-        elif misce in ["R", "r"]:
-            menuSelection()
+    elif misce in ["B", "b"]:
+        clear()
+        blogo()
+        close()
+        sysinfoDetail()
+    elif misce in ["C", "c"]:
+        clear()
+        blogo()
+        datesConn()
+    elif misce in ["D", "d"]:
+        clear()
+        blogo()
+        quotesConn()
+    elif misce in ["S", "s"]:
+        clear()
+        blogo()
+        satoshiConn()
+    elif misce in ["R", "r"]:
+        menuSelection()
 
 def miscellaneousLOCALmenuOnchainONLY(misce):
     if misce in ["A", "a"]:
@@ -5715,7 +5714,7 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
                 logoC()
                 tmp()
             except:
-                pass
+                break
     elif misce in ["B", "b"]:
         clear()
         blogo()
