@@ -266,16 +266,18 @@
 [@Whale_Alert,](https://twitter.com/whale_alert)
 [@BitcoinExplorer,](https://twitter.com/BitcoinExplorer)
 [@JanoSide,](https://twitter.com/janoside)
-[@LNstats](https://twitter.com/LNstats)
-[@Slush_Pool](https://twitter.com/slush_pool)
-[@Braiins_Systems](https://twitter.com/braiins_systems)
-[@JohnCantrell97](https://twitter.com/JohnCantrell97)
-[@JoostJgr](https://twitter.com/joostjgr)
-[@PRguitarman](https://twitter.com/PRguitarman)
-[@NyanCat](https://twitter.com/nyannyancat)
+[@LNstats,](https://twitter.com/LNstats)
+[@Slush_Pool,](https://twitter.com/slush_pool)
+[@Braiins_Systems,](https://twitter.com/braiins_systems)
+[@JohnCantrell97,](https://twitter.com/JohnCantrell97)
+[@JoostJgr,](https://twitter.com/joostjgr)
+[@PRguitarman,](https://twitter.com/PRguitarman)
+[@NyanCat,](https://twitter.com/nyannyancat)
 ...
 
 SUPPORT PyBLØCK.
+
+⚡️ pyblock@zbd.gg ⚡️
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
