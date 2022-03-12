@@ -286,6 +286,25 @@ def statsConn():
         pass
 
 #-----------------------------END Stats--------------------------------
+
+#-----------------------------Satoshi--------------------------------
+
+def satoshiConn():
+    try:
+        conn = """curl -s https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html | html2text | tail -n 82 | grep -v "Unsubscribe" | grep -v "Next message" | grep -v "Previous message"| grep -v "Messages sorted" | grep -v "More information" | grep -v "list]" """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(str("satoshi nakamoto"), colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Satoshi--------------------------------
+
 #-----------------------------Whale Alert--------------------------------
 
 def whalalConn():
