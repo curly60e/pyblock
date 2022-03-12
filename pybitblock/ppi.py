@@ -37,10 +37,22 @@ def opreturnOnchainONLY():
     try:
         clear()
         blogo()
-        output = render(str("OP_RETURN Message"), colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "OP_RETURN Message", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
         message = input("Message: ")
-        curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
+        curl = (
+            "curl --header "
+            + """"Content-Type: application/json" """
+            + "--request POST  --data "
+            + """'{"message":"""
+            + f'"{message}...PyBLOCK"'
+            + "}'"
+            + " https://opreturnbot.com/api/create"
+        )
+
         while True:
             if len(message) <= 70:
                 break
@@ -66,16 +78,15 @@ def opreturnOnchainONLY():
             lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
             lsd0 = str(lsd)
             d = json.loads(lsd0)
-            url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
+            url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
         else:
             cert_path = lndconnectload["tls"]
             macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
             headers = {'Grpc-Metadata-macaroon': macaroon}
-            bolt11N = b
-            url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
+            url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
             r = requests.get(url, headers=headers, verify=cert_path)
             s = r.json()
-            url = 'http://opreturnbot.com/api/status/{}'.format(s['payment_hash'])
+            url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
         response = requests.get(url)
         responseB = str(response.text)
         responseC = responseB
@@ -117,7 +128,10 @@ def opreturn():
             blogo()
             print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
             print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
-            path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
+            path[
+                'ip_port'
+            ] = f'http://{input("Insert IP:PORT to access your remote Bitcoin-Cli node: ")}'
+
             path['rpcuser'] = input("RPC User: ")
             path['rpcpass'] = input("RPC Password: ")
             print("\n\tLocal Bitcoin Core Node connection.\n")
@@ -125,10 +139,22 @@ def opreturn():
             pickle.dump(path, open("bclock.conf", "wb"))
         clear()
         blogo()
-        output = render(str("OP_RETURN Message"), colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "OP_RETURN Message", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
         message = input("Message: ")
-        curl = "curl --header " + """"Content-Type: application/json" """ + "--request POST  --data " + """'{"message":""" + '"{}...PyBLOCK"'.format(message) + "}'"  + " https://opreturnbot.com/api/create"
+        curl = (
+            "curl --header "
+            + """"Content-Type: application/json" """
+            + "--request POST  --data "
+            + """'{"message":"""
+            + f'"{message}...PyBLOCK"'
+            + "}'"
+            + " https://opreturnbot.com/api/create"
+        )
+
         while True:
             if len(message) <= 70:
                 break
@@ -149,11 +175,10 @@ def opreturn():
                 cert_path = lndconnectload["tls"]
                 macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
                 headers = {'Grpc-Metadata-macaroon': macaroon}
-                bolt11N = b
-                url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
+                url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
                 r = requests.get(url, headers=headers, verify=cert_path)
                 s = r.json()
-                url = 'http://opreturnbot.com/api/status/{}'.format(s['payment_hash'])
+                url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
@@ -170,7 +195,7 @@ def opreturn():
                 lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
-                url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
+                url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
@@ -195,16 +220,15 @@ def opreturn():
                 lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
-                url = 'http://opreturnbot.com/api/status/{}'.format(d['payment_hash'])
+                url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
             else:
                 cert_path = lndconnectload["tls"]
                 macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
                 headers = {'Grpc-Metadata-macaroon': macaroon}
-                bolt11N = b
-                url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
+                url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
                 r = requests.get(url, headers=headers, verify=cert_path)
                 s = r.json()
-                url = 'http://opreturnbot.com/api/status/{}'.format(s['payment_hash'])
+                url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
             response = requests.get(url)
             responseB = str(response.text)
             responseC = responseB
@@ -219,10 +243,13 @@ def opreturn_view():
     try:
         clear()
         blogo()
-        output = render(str("OP_RETURN Message"), colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "OP_RETURN Message", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
         responseC = input("TX ID: ")
-        url2 = 'http://opreturnbot.com/api/view/{}'.format(responseC)
+        url2 = f'http://opreturnbot.com/api/view/{responseC}'
         r = requests.get(url2)
         r2 = str(r.text)
         r3 = r2
@@ -241,7 +268,10 @@ def opretminer():
         clear()
         blogo()
         closed()
-        output = render(str("decoded coinbase"), colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "decoded coinbase", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
         print(a)
         input("")
@@ -278,7 +308,7 @@ def statsConn():
         clear()
         blogo()
         closed()
-        output = render(str("stats"), colors=['yellow'], align='left', font='tiny')
+        output = render("stats", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -286,6 +316,28 @@ def statsConn():
         pass
 
 #-----------------------------END Stats--------------------------------
+
+#-----------------------------Satoshi--------------------------------
+
+def satoshiConn():
+    try:
+        conn = """curl -s https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html | html2text | tail -n 82 | grep -v "Unsubscribe" | grep -v "Next message" | grep -v "Previous message"| grep -v "Messages sorted" | grep -v "More information" | grep -v "list]" """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "satoshi nakamoto", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Satoshi--------------------------------
+
 #-----------------------------Whale Alert--------------------------------
 
 def whalalConn():
@@ -295,7 +347,7 @@ def whalalConn():
         clear()
         blogo()
         closed()
-        output = render(str("whale alert"), colors=['yellow'], align='left', font='tiny')
+        output = render("whale alert", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -327,7 +379,7 @@ def datesConn():
         clear()
         blogo()
         closed()
-        output = render(str("dates"), colors=['yellow'], align='left', font='tiny')
+        output = render("dates", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -344,7 +396,7 @@ def quotesConn():
         clear()
         blogo()
         closed()
-        output = render(str("quotes"), colors=['yellow'], align='left', font='tiny')
+        output = render("quotes", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -361,7 +413,7 @@ def miningConn():
         clear()
         blogo()
         closed()
-        output = render(str("hashrate"), colors=['yellow'], align='left', font='tiny')
+        output = render("hashrate", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -378,7 +430,10 @@ def stalnConn():
         clear()
         blogo()
         closed()
-        output = render(str("lightning stats"), colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "lightning stats", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -395,7 +450,7 @@ def ranConn():
         clear()
         blogo()
         closed()
-        output = render(str("ranking"), colors=['yellow'], align='left', font='tiny')
+        output = render("ranking", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -760,7 +815,14 @@ def lnbitCreateNewInvoice():
         memo = input("Memo: ")
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
-        curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": {}, "memo": "{} -PyBLOCK" """.format(amt,memo) + "}'" + """ -H "X-Api-Key: {} " -H "Content-type: application/json" """.format(b)
+        curl = (
+            'curl -X POST https://lnbits.com/api/v1/payments -d '
+            + "'{"
+            + f""""out": false, "amount": {amt}, "memo": "{memo} -PyBLOCK" """
+            + "}'"
+            + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json" """
+        )
+
         sh = os.popen(curl).read()
         clear()
         blogo()
@@ -792,10 +854,9 @@ def lnbitCreateNewInvoice():
                 dn = str(d['checking_id'])
                 checkcurl = (
                     f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                    + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(
-                        b
-                    )
+                    + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
                 )
+
 
                 rsh = os.popen(checkcurl).read()
                 clear()
@@ -817,7 +878,14 @@ def lnbitPayInvoice():
     bolt = input("Invoice: ")
     a = loadFileConnLNBits(['admin_key'])
     b = str(a['admin_key'])
-    curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": true, "bolt11": "{}" """.format(bolt) + "}'" + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(b)
+    curl = (
+        'curl -X POST https://lnbits.com/api/v1/payments -d '
+        + "'{"
+        + f""""out": true, "bolt11": "{bolt}" """
+        + "}'"
+        + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
+    )
+
     try:
         sh = os.popen(curl).read()
         n = str(sh)
@@ -828,10 +896,9 @@ def lnbitPayInvoice():
         while True:
             checkcurl = (
                 f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                + """ -H "X-Api-Key: {}" -H "Content-type: application/json" """.format(
-                    b
-                )
+                + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
             )
+
 
             rsh = os.popen(checkcurl).read()
             clear()
@@ -861,7 +928,14 @@ def lnbitCreatePayWall():
                 remember = "true"
             elif remb in ["N", "n"]:
                 remember = "false"
-            curl = 'curl -X POST https://lnbits.com/paywall/api/v1/paywalls -d ' + "'{" + """"url": "{}", "memo": "{}", "description": "{}", "amount": {}, "remembers": {} """.format(url,memo,desc,amt,remember) + "}'" + """ -H  "Content-type: application/json" -H "X-Api-Key: {}" """.format(b)
+            curl = (
+                'curl -X POST https://lnbits.com/paywall/api/v1/paywalls -d '
+                + "'{"
+                + f""""url": "{url}", "memo": "{memo}", "description": "{desc}", "amount": {amt}, "remembers": {remember} """
+                + "}'"
+                + f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """
+            )
+
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -872,7 +946,11 @@ def lnbitCreatePayWall():
             clear()
             aa = loadFileConnLNBits(['invoice_read_key'])
             bb = str(a['invoice_read_key'])
-            checkcurl = 'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H' + """ "X-Api-Key: {}" """.format(bb)
+            checkcurl = (
+                'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H'
+                + f""" "X-Api-Key: {bb}" """
+            )
+
             sh = os.popen(checkcurl).read()
             clear()
             blogo()
@@ -911,7 +989,11 @@ def lnbitCreatePayWall():
 def lnbitListPawWall():
     a = loadFileConnLNBits(['invoice_read_key'])
     b = str(a['invoice_read_key'])
-    checkcurl = 'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H' + """ "X-Api-Key: {}" """.format(b)
+    checkcurl = (
+        'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H'
+        + f""" "X-Api-Key: {b}" """
+    )
+
     sh = os.popen(checkcurl).read()
     clear()
     blogo()
@@ -953,7 +1035,11 @@ def lnbitDeletePayWall():
         try:
             a = loadFileConnLNBits(['invoice_read_key'])
             b = str(a['invoice_read_key'])
-            checkcurl = 'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H' + """ "X-Api-Key: {}" """.format(b)
+            checkcurl = (
+                'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H'
+                + f""" "X-Api-Key: {b}" """
+            )
+
             sh = os.popen(checkcurl).read()
             clear()
             blogo()
@@ -992,7 +1078,11 @@ def lnbitDeletePayWall():
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
             id = input("Insert PayWall ID: ")
-            curl = "curl -X DELETE https://lnbits.com/paywall/api/v1/paywalls/{}".format(id) + """ -H "X-Api-Key: {}" """.format(b)
+            curl = (
+                f"curl -X DELETE https://lnbits.com/paywall/api/v1/paywalls/{id}"
+                + f""" -H "X-Api-Key: {b}" """
+            )
+
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -1019,7 +1109,14 @@ def lnbitsLNURLw():
             isunique = input("Is unique? true/false: ")
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            curl = 'curl -X POST https://lnbits.com/withdraw/api/v1/links -d ' + """'{"title":""" + f'"{title}", "min_withdrawable": {minwith}, "max_withdrawable": {maxwith}, "uses": {usesw}, "wait_time": {waittime}, "is_unique": {isunique}' + "}'"  + ' -H "Content-type: application/json" -H "X-Api-Key: {}"'.format(b)
+            curl = (
+                'curl -X POST https://lnbits.com/withdraw/api/v1/links -d '
+                + """'{"title":"""
+                + f'"{title}", "min_withdrawable": {minwith}, "max_withdrawable": {maxwith}, "uses": {usesw}, "wait_time": {waittime}, "is_unique": {isunique}'
+                + "}'"
+                + f' -H "Content-type: application/json" -H "X-Api-Key: {b}"'
+            )
+
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -1029,7 +1126,8 @@ def lnbitsLNURLw():
             t.sleep(2)
             clear()
             while True:
-                checkcurl = 'curl -X GET https://lnbits.com/withdraw/api/v1/links -H ' '"X-Api-Key: {}"'.format(b)
+                checkcurl = f'curl -X GET https://lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
+
                 sh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -1068,7 +1166,8 @@ def lnbitsLNURLwList():
         while True:
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            checkcurl = 'curl -X GET https://lnbits.com/withdraw/api/v1/links -H ' '"X-Api-Key: {}"'.format(b)
+            checkcurl = f'curl -X GET https://lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
+
             sh = os.popen(checkcurl).read()
             clear()
             blogo()
@@ -1395,7 +1494,11 @@ def createFileConnOpenNode():
 def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = "curl https://api.opennode.co/v1/account/balance -H "+ '"Content-Type: application/json" -H "Authorization: {}"'.format(b)
+    curl = (
+        "curl https://api.opennode.co/v1/account/balance -H "
+        + f'"Content-Type: application/json" -H "Authorization: {b}"'
+    )
+
     sh = os.popen(curl).read()
     clear()
     blogo()
