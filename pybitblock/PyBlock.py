@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-alpha8"
+version = "1.1.14-alpha9"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -736,9 +736,9 @@ def localHalving():
 
 def pdfconvert():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("$HOME/.pyblock/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
-    if not os.path.isfile("$HOME/.pyblock/bitcoin.pdf"):
+    if not os.path.isfile("config/bitcoin.pdf"):
         clear()
         blogo()
         close()
@@ -774,7 +774,7 @@ def pdfconvert():
             ---------------------------------
             """)
             input("Continue...")
-            bitcoincli = """ getrawtransaction 54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713 | sed 's/0100000000000000/\\n/g' | tail -n +2 | cut -c7-136,139-268,271-400 | tr -d "\n" | cut -c17-368600 | xxd -p -r > bitcoin.pdf """
+            bitcoincli = """ getblock 00000000000000ecbbff6bafb7efa2f7df05b227d5c73dca8f2635af32a2e949 0 | tail -c+92167 | for ((o=0;o<946;++o)) ; do read -rN420 x ; echo -n ${x::130}${x:132:130}${x:264:130} ; done | xxd -r -p | tail -c+9 | head -c184292 > bitcoin.pdf """
             os.system(path['bitcoincli'] + bitcoincli)
             clear()
             blogo()
@@ -5692,7 +5692,7 @@ def miscellaneousLOCALmenu(misce):
     elif misce in ["P", "p"]:
         clear()
         blogo()
-        pgpConn()    
+        pgpConn()
     elif misce in ["S", "s"]:
         clear()
         blogo()
@@ -5737,7 +5737,7 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
     elif misce in ["P", "p"]:
         clear()
         blogo()
-        pgpConn()     
+        pgpConn()
     elif misce in ["S", "s"]:
         clear()
         blogo()
