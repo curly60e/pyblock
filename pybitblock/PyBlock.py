@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-alpha9"
+version = "1.1.14-alpha11"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -43,6 +43,26 @@ def sysinfo():  #Cpu and memory usage
     print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
     print("    \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
     print("    \033[0;37;40m----------------------")
+
+def rectangle(n):
+    x = n - 3
+    y = n - x
+    [
+        print(''.join(i))
+        for i in
+        (
+            ''*x
+            if i in (0,y-1)
+            else
+            (
+                f'{""*n}{"|"*n}{""*n}'
+                if i >= (n+1)/2 and i <= (1*n)/2
+                else
+                f'\u001b[38;5;27m{"■"*(x-1)}'
+            )
+            for i in range(y)
+        )
+    ]
 
 def rpc(method, params=[]):
     payload = json.dumps({
@@ -581,6 +601,10 @@ def design():
             print("\x1b[?25l" + outputsize)
             outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print("\x1b[?25l" + outputtxs)
+            sh = int(mm['nTx']) / 4
+            shq = int(sh)
+            ss = str(rectangle(shq))
+            print(ss.replace("None",""))
             t.sleep(10)
             txs = str(mm['nTx'])
             if txs == "1":
