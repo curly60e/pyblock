@@ -48,7 +48,7 @@ def rectangle(n):
     x = n - 3
     y = n - x
     [
-        print(''.join(i))
+        delay_print(''.join(i))
         for i in
         (
             ''*x
