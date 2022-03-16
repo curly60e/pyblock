@@ -490,42 +490,80 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
     os.system(path['bitcoincli'] + bitcoincli)
 
-def getbestblockhash(): # get access to bitcoin-cli with the command getblockcount
-    bitcoincli = " getbestblockhash"
-    os.system(path['bitcoincli'] + bitcoincli)
-
+def getbestblockhash():
+    try:
+        conn = """curl -s https://get.txoutset.info/ """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("block hash", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+    
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
-def getgenesis(): # get and decode Genesis block
-    output = render("genesis", colors=['yellow'], align='left', font='tiny')
-    print(output)
-    bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
-    os.system(path['bitcoincli'] + bitcoincli)
+def getgenesis():
+    try:
+        conn = """curl -s https://bitcoinexplorer.org/block-height/0#JSON """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("genesis", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
 
-def readHexBlock(): # Hex Decoder using Hexyl on local node
-    hexa = input("Add the Block Hash you want to decode: ")
-    blocknumber = input("Add the Block number: ")
-    decodeBlock = (
-        path['bitcoincli']
-        + f" getblock {hexa} {blocknumber}"
-        + " | xxd -r -p | hexyl -n 256"
-    )
+def readHexBlock():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Hex Block", colors=['yellow'], align='left', font='tiny'
+        )
 
-    os.system(decodeBlock)
+        print(output)
+        responseC = input("TX ID: ")
+        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Hex Block: {r3}')
+        input("\nContinue...")
+    except:
+        pass
 
-def readHexTx(): # Hex Decoder using Hexyl on an external node
-    hexa = input("Add the Transaction ID. you want to decode: ")
-    decodeTX = (
-        path['bitcoincli']
-        + f" getrawtransaction {hexa}"
-        + " | xxd -r -p | hexyl -n 256"
-    )
+def readHexTx():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Hex Tx", colors=['yellow'], align='left', font='tiny'
+        )
 
-    os.system(decodeTX)
-
-def tmp():
-    t.sleep(15)
+        print(output)
+        responseC = input("TX ID: ")
+        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Hex Tx: {r3}')
+        input("\nContinue...")
+    except:
+        pass
 
 def console(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type 'help' for more information.\n\n")
@@ -650,9 +688,18 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
             break
 
 def runthenumbers():
-    bitcoincli = " gettxoutsetinfo"
-    os.system(path['bitcoincli'] + bitcoincli)
-    input("\nContinue...")
+    try:
+        conn = """curl -s https://get.txoutset.info/ """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("run the numbers", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
 
 def countdownblock():
     bitcoinclient = f'{path["bitcoincli"]} getblockcount'
@@ -724,39 +771,19 @@ def countdownblockConn():
 
 
 def localHalving():
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block
-    c = b
-    oneh = 0 - int(c) + 210000
-    twoh = 210000 - int(c) + 210000
-    thrh = 420000 - int(c) + 210000
-    forh = 630000 - int(c) + 210000
-    fifh = 840000 - int(c) + 210000
-    sixh = 1050000 - int(c) + 210000
-    sevh = 1260000 - int(c) + 210000
-    eith = 1470000 - int(c) + 210000
-    ninh = 1680000 - int(c) + 210000
-    tenh = 1890000 - int(c) + 210000
-
-    q = """
-    \033[0;37;40m------------------- HALVING CLOCK -------------------
-
-            1st  Halving: in {} Blocks {}
-            2nd  Halving: in {} Blocks {}
-            3rd  Halving: in {} Blocks {}
-            4th  Halving: in {} Blocks {}
-            5th  Halving: in {} Blocks {}
-            6th  Halving: in {} Blocks {}
-            7th  Halving: in {} Blocks {}
-            8th  Halving: in {} Blocks {}
-            9th  Halving: in {} Blocks {}
-            10th Halving: in {} Blocks {}
-
-    -------------------------------------------------------
-    """.format("0" if int(c) == 210000 else oneh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 420000 else twoh,"\033[1;32;40mCOMPLETE\033[0;37;40m", "0" if int(c) == 630000 else thrh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 840000 else forh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 840000 else "\033[1;35;40mPENDING\033[0;37;40m", "0" if int(c) >= 1050000 else fifh , "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1050000 else "\033[1;35;40mPENDING\033[0;37;40m", sixh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1260000 else "\033[1;35;40mPENDING\033[0;37;40m", sevh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1470000 else "\033[1;35;40mPENDING\033[0;37;40m", eith,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1680000 else "\033[1;35;40mPENDING\033[0;37;40m", ninh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m", tenh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m")
-    print(q)
-    input("\nContinue...")
+    try:
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Blocks until mining reward is halved" | tr -d '*' """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("blocks until mining reward is halved", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+    
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 def pdfconvert():
@@ -2249,7 +2276,7 @@ def mempoolmenu():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -2282,7 +2309,7 @@ def mempoolmenuOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
