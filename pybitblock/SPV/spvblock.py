@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha"
+version = "2.0-alpha1"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -503,7 +503,7 @@ def getbestblockhash():
         input("\a\nContinue...")
     except:
         pass
-    
+
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
@@ -613,52 +613,34 @@ def design():
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block
-    a = b
-    output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    clear()
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    n = r.text
+    di = json.loads(n)
+    a = di
+    b = str(a)
+    print(a)
+    clear()
+    close()
+    output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
     print("\033[0;37;40m\x1b[?25l" + output)
     while True:
-        x = a
-        bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-        b = block
-        if b > a:
+        x = b
+        r = requests.get('https://mempool.space/api/blocks/tip/height')
+        r.headers['Content-Type']
+        n = r.text
+        di = json.loads(n)
+        a = di
+        if x < str(a):
             clear()
             close()
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\a\x1b[?25l" + output)
-            bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-            bb = os.popen(str(bitcoinclient)).read()
-            ll = bb
-            bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-            qq = os.popen(bitcoinclientgetblock).read()
-            yy = json.loads(qq)
-            mm = yy
-            outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\x1b[?25l" + outputsize)
-            outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\x1b[?25l" + outputtxs)
-            sh = int(mm['nTx']) / 4
-            shq = int(sh)
-            ss = str(rectangle(shq))
-            print(ss.replace("None",""))
-            t.sleep(10)
-            txs = str(mm['nTx'])
-            if txs == "1":
-                try:
-                    p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
-                    p.wait(5)
-                except subprocess.TimeoutExpired:
-                    p.kill()
-            print("\033[0;37;40m\x1b[?25l")
-            clear()
-            close()
-            a = b
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\x1b[?25l" + output)
-
+            output5 = subprocess.check_output(['sudo', 'iwgetid'])
+            z = str(output5)
+            pp = random.choice(list(faceshappy.values())).encode('utf-8').decode('latin-1')
+            output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            print("\033[0;37;40m\x1b[?25l" + output)
+            b = str(a)    #try:
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
@@ -783,7 +765,7 @@ def localHalving():
         input("\a\nContinue...")
     except:
         pass
-    
+
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 def pdfconvert():
@@ -939,20 +921,11 @@ def callColdCore():
 
 #--------------------------------- Menu section -----------------------------------
 
-def MainMenuLOCAL(): #Main Menu
+def MainMenuCROPPED(): #Main Menu
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
@@ -963,70 +936,12 @@ def MainMenuLOCAL(): #Main Menu
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
     \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
     \u001b[33;1mL.\033[0;37;40m Lightning Network
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
-    mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def MainMenuLOCALChainONLYCROPPED(): #Main Menu
-
-    clear()
-    blogo()
-    sysinfo()
-
-    n = "CROPPED" #if path['bitcoincli'] else "Remote"
-    #bitcoincli = " getblockchaininfo"
-    #a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    #b = json.loads(a)
-    #d = b
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
     \u001b[38;5;40mP.\033[0;37;40m Platforms
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
     \u001b[38;5;93mQ.\033[0;37;40m Exit
     \n\n\x1b[?25h""".format(n,"N", version, checkupdate()))
-    mainmenuLOCALcontrolOnchainONLYCROPPED(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def MainMenuREMOTE(): #Main Menu
-    clear()
-    blogo()
-    sysinfo()
-    a = "Local" if path['bitcoincli'] else "Remote"
-    blk = rpc('getblockchaininfo')
-    d = blk
-
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-    r = requests.get(url, headers=headers, verify=cert_path)
-    alias = r.json()
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
-    \u001b[33;1mL.\033[0;37;40m Lightning Network
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
-    mainmenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCAL():
     clear()
