@@ -16,7 +16,7 @@ import requests
 import json
 import simplejson as json
 import numpy as np
-from SPV.spvblock import MainMenuLOCALChainONLYCROPPED
+from SPV.spvblock import *
 from cfonts import render, say
 from clone import *
 from donation import *
@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-alpha13"
+version = "1.1.14-alpha14"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -916,6 +916,12 @@ def MainMenuLOCAL(): #Main Menu
     clear()
     blogo()
     sysinfo()
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
+    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -947,6 +953,9 @@ def MainMenuLOCALChainONLY(): #Main Menu
     clear()
     blogo()
     sysinfo()
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -971,6 +980,9 @@ def MainMenuREMOTE(): #Main Menu
     clear()
     blogo()
     sysinfo()
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
     a = "Local" if path['bitcoincli'] else "Remote"
     blk = rpc('getblockchaininfo')
     d = blk
@@ -3891,23 +3903,25 @@ def colorsSelectRainbowEndOnchainONLY():
     menuColorsSelectRainbowEndOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
     if os.path.isfile('config/intro.conf'):
         chain = pickle.load(open("config/intro.conf", "rb"))
         chln = chain
         print(chln + "\n")
-        if path['bitcoincli']:
-            if chln == "B":
-                MainMenuLOCALChainONLY()
-            elif chln == "A":
-                MainMenuLOCAL()
-            elif chln == "C":
-                MainMenuLOCALChainONLYCROPPED()
-        else:
-            MainMenuREMOTE()
+        if chln == "B":
+            path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+            path = pathv # Copy the variable pathv to 'path'
+            MainMenuLOCALChainONLY()
+        elif chln == "A":
+            path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+            path = pathv # Copy the variable pathv to 'path'
+            MainMenuLOCAL()
+        elif chln == "C":
+            MainMenuCROPPED()
+        #else:
+        #    MainMenuREMOTE()
     else:
         if os.path.isfile('config/blndconnect.conf'):
             chln['offchain'] = "offchain"
@@ -6451,24 +6465,6 @@ def commandsINIT(initCONF):
             cropped()
 
 def cropped():
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if not os.path.isdir("config"):
-        dir = 'mkdir config'
-        os.system(dir)
-
-    if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
-    else:
-        blogo()
-        print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-        print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
-        path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
-        path['rpcuser'] = input("RPC User: ")
-        path['rpcpass'] = input("RPC Password: ")
-        print("\n\tLocal Bitcoin Core Node connection.\n")
-        path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-        pickle.dump(path, open("config/bclock.conf", "wb"))
     menuSelection()
 
 def fullbtc():
