@@ -650,9 +650,18 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
             break
 
 def runthenumbers():
-    bitcoincli = " gettxoutsetinfo"
-    os.system(path['bitcoincli'] + bitcoincli)
-    input("\nContinue...")
+    try:
+        conn = """curl -s https://get.txoutset.info/ """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("run the numbers", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
 
 def countdownblock():
     bitcoinclient = f'{path["bitcoincli"]} getblockcount'
