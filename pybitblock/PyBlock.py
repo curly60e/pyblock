@@ -239,6 +239,63 @@ def getPoolSlushCheck():
 
 #-----------------------------END Slush--------------------------------
 
+def getPoolCKCheck():
+
+    s = ""
+    sq = s
+
+    api = ""
+    try:
+        if os.path.isfile("config/CKPOOLAPI.conf"):
+            apiv = pickle.load(open("config/CKPOOLAPI.conf", "rb"))
+            api = apiv
+        else:
+            clear()
+            blogo()
+            api = input("Insert CKPool Wallet.Worker: ")
+            pickle.dump(api, open("config/CKPOOLAPI.conf", "wb"))
+    except:
+        pass
+
+    while True:
+        try:
+            ckpool = f"curl https://solo.ckpool.org/users/ -H 'CKPool-Wallet.Worker: {api}' 2>/dev/null"
+
+
+            b = os.popen(ckpool)
+            c = b.read()
+            d = json.loads(c)
+            f = d['worker']
+            e = f[0]
+
+            clear()
+            blogo()
+            print("""\033[A
+
+    --------------------------------------------------------------------------------------------
+
+                        \033[0;37;40mCKPool BTC
+
+                        Username: {}
+                        Hash Rate 1m: {}
+                        Hash Rate 5m: {}
+                        Hash Rate 1h: {}
+                        Hash Rate 1d: {}
+                        Hash Rate 7d: {}
+                        Last Share: \u001b[38;5;27m{}\033[0;37;40m
+                        Shares: {}
+                        Best Share: {}
+                        Best Ever: {}
+                        Workers: {}
+
+    --------------------------------------------------------------------------------------------
+
+            \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
+
+    		t.sleep(10)
+
+        except:
+            break
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
@@ -1453,6 +1510,7 @@ def APIMenuLOCAL():
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
     \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
+    \033[1;32;40mW.\033[0;37;40m CKPool      FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1497,6 +1555,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
     \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
+    \033[1;32;40mW.\033[0;37;40m CKPool      FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5557,6 +5616,18 @@ def slushpoolLOCALOnchainONLYMenu(slush):
         blogo()
         getPoolSlushCheck()
 
+def ckpoolLOCALOnchainONLYMenu(slush):
+    if ckpool in ["A", "a"]:
+        clear()
+        blogo()
+        getPoolCKCheck()
+
+def ckpoolREMOTEOnchainONLYMenu(slush):
+    if ckpool in ["A", "a"]:
+        clear()
+        blogo()
+        getPoolCKCheck()
+
 def bitcoincoremenuLOCALcontrolA(bcore):
     if bcore in ["A", "a"]:
         while True:
@@ -6025,6 +6096,8 @@ def platfformsLOCALcontrol(platf):
         whalalConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["W", "w"]:
+        ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -6059,8 +6132,15 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         whalalConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["W", "w"]:
+        ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
+
+
+def ckpool(menuch):
+    if menuch in ["A", "a"]:
+        ckpool()
 
 #----------------------------REMOTE MENUS
 
