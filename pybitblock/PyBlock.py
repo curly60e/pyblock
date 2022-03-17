@@ -2259,7 +2259,7 @@ def mempoolmenu():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -2292,7 +2292,7 @@ def mempoolmenuOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -2334,7 +2334,7 @@ def APILnbit():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -6498,12 +6498,12 @@ def fullbtclnd():
     else:
         blogo()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-        print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
+        print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in 𝗕𝗟𝗔𝗡𝗞.\n")
         path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
         path['rpcuser'] = input("RPC User: ")
         path['rpcpass'] = input("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
-        path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
+        path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝐛𝐢𝐭𝐜𝐨𝐢𝐧-𝐜𝐥𝐢: ")
         pickle.dump(path, open("config/bclock.conf", "wb"))
 
     if os.path.isfile('config/blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
@@ -6519,12 +6519,12 @@ def fullbtclnd():
             yesno = input("Do you want to connect your Lightning Node? yes/no: ")
             pickle.dump(yesno, open("config/init.conf", "wb"))
             if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
-                print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
+                print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in 𝗕𝗟𝗔𝗡𝗞.\n")
                 lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
                 lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
                 lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
                 print("\n\tLocal Lightning Node connection.\n")
-                lndconnectload["ln"] = input("Insert the path to lncli: ")
+                lndconnectload["ln"] = input("Insert the Path to Lncli. Normally you just need to type 𝐥𝐧𝐜𝐥𝐢: ")
                 pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb")) # Save the file 'bclock.conf'
     menuSelection()
 
@@ -6540,9 +6540,9 @@ def introINIT():
     Connect PyBLØCK to your Nodes or Run the Cropped option.
 
 
-    \u001b[31;1mA.\033[0;37;40m PyBLØCK (Bitcoin & Lightning)
-    \u001b[38;5;202mB.\033[0;37;40m PyBLØCK (Bitcoin)
-    \u001b[33;1mC.\033[0;37;40m PyBLØCK (Cropped - ***ALPHA***)
+    \u001b[31;1mA.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin & Lightning)
+    \u001b[38;5;202mB.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin)
+    \u001b[33;1mC.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Cropped - ***ALPHA***)
     \n\n\x1b[?25h""")
     commandsINIT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
