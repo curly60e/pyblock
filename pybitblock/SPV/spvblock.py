@@ -239,6 +239,58 @@ def getPoolSlushCheck():
 
 #-----------------------------END Slush--------------------------------
 
+def ckpoolpoolCROPPED():
+
+    s = ""
+    sq = s
+
+    api = ""
+    try:
+        if os.path.isfile("config/CKPOOLAPI.conf"):
+            apiv = pickle.load(open("config/CKPOOLAPI.conf", "rb"))
+            api = apiv
+        else:
+            clear()
+            blogo()
+            api = input("Insert CKPool Wallet.Worker: ")
+            pickle.dump(api, open("config/CKPOOLAPI.conf", "wb"))
+    except:
+        pass
+
+    while True:
+        try:
+            ckpool = f"curl https://solo.ckpool.org/users/{api} 2>/dev/null"
+
+
+            b = os.popen(ckpool)
+            c = b.read()
+            d = json.loads(c)
+            f = d['worker']
+            e = f[0]
+
+            clear()
+            blogo()
+            print("""\033[A
+    --------------------------------------------------------------------------------------------
+                        \033[0;37;40mCKPool BTC
+                        Username: {}
+                        Hash Rate 1m: {}
+                        Hash Rate 5m: {}
+                        Hash Rate 1h: {}
+                        Hash Rate 1d: {}
+                        Hash Rate 7d: {}
+                        Last Share: \u001b[38;5;27m{}\033[0;37;40m
+                        Shares: {}
+                        Best Share: {}
+                        Best Ever: {}
+                        Workers: {}
+    --------------------------------------------------------------------------------------------
+            \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
+
+            t.sleep(10)
+
+        except:
+            break
 
 def getblock():
     try:
