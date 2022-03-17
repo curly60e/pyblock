@@ -239,6 +239,82 @@ def getPoolSlushCheck():
 
 #-----------------------------END Slush--------------------------------
 
+def getPoolCKCheck():
+
+    s = ""
+    sq = s
+
+    api = ""
+    try:
+        if os.path.isfile("config/CKPOOLAPI.conf"):
+            apiv = pickle.load(open("config/CKPOOLAPI.conf", "rb"))
+            api = apiv
+        else:
+            clear()
+            blogo()
+            api = input("Insert CKPool Wallet.Worker: ")
+            pickle.dump(api, open("config/slushAPI.conf", "wb"))
+    except:
+        pass
+
+    while True:
+        try:
+            slushpoolbtc = f"curl https://solo.ckpool.org/users/ -H 'CKPool-Wallet.Worker: {api}' 2>/dev/null"
+
+            slushpoolbtcblock = f"curl https://solo.ckpool.org/users/ -H 'CKPool-Wallet.Worker: {api}' 2>/dev/null"
+
+
+            b = os.popen(slushpoolbtc)
+            c = b.read()
+            d = json.loads(c)
+            f = d['btc']
+
+            bblock = os.popen(slushpoolbtcblock)
+            cblock = bblock.read()
+            dblock = json.loads(cblock)
+            fblock = dblock['btc']
+            eblock = fblock['blocks']
+            for i in eblock:
+            	qnq = sorted(eblock)
+            	for n in qnq:
+            		s = n
+
+            if s > sq:
+            	newblock = "\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{}\u001b[31;1m! \u001b[38;5;202mFresh Sats for you!\033[0;37;40m".format(s)
+            	sq = s
+            else:
+            	newblock = s
+
+            clear()
+            blogo()
+            print("""\033[A
+
+    --------------------------------------------------------------------------------------------
+
+                        \033[0;37;40mCKPool BTC
+
+                        Username: {}
+                        Confirmed reward: \u001b[38;5;40m{}\033[0;37;40m BTC
+                        Unconfirmed reward: \u001b[33;1m{}\033[0;37;40m BTC
+                        Estimated reward: {} BTC
+                        All Time reward: {} BTC
+                        Hash Rate 5m: {} Gh/s
+                        Hash Rate 60m: {} Gh/s
+                        Hash Rate 24h: {} Gh/s
+                        Hash Rate Scoring: \u001b[38;5;27m{}\033[0;37;40m Gh/s
+                        Hash Rate Yesterday: {} Gh/s
+                        Connected Workers: {}
+                        Disconnected Workers: {}
+                        Last Block discovered: {}
+
+    --------------------------------------------------------------------------------------------
+
+            \033[A""".format(d['Worker'], f['confirmed_reward'], f['unconfirmed_reward'], f['estimated_reward'], f['all_time_reward'], f['hash_rate_5m'], f['hash_rate_60m'], f['hash_rate_24h'], f['hash_rate_scoring'], f['hash_rate_yesterday'], f['ok_workers'], f['off_workers'],newblock))
+
+            t.sleep(10)
+
+        except:
+            break
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
@@ -1453,6 +1529,7 @@ def APIMenuLOCAL():
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
     \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
+    \033[1;32;40mW.\033[0;37;40m CKPool      FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1497,6 +1574,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
     \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
+    \033[1;32;40mW.\033[0;37;40m CKPool      FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5556,6 +5634,18 @@ def slushpoolLOCALOnchainONLYMenu(slush):
         clear()
         blogo()
         getPoolSlushCheck()
+        
+def ckpoolLOCALOnchainONLYMenu(slush):
+    if ckpool in ["A", "a"]:
+        clear()
+        blogo()
+        getPoolCKCheck()
+   
+def ckpoolREMOTEOnchainONLYMenu(slush):
+    if ckpool in ["A", "a"]:
+        clear()
+        blogo()
+        getPoolCKCheck()
 
 def bitcoincoremenuLOCALcontrolA(bcore):
     if bcore in ["A", "a"]:
@@ -6025,6 +6115,8 @@ def platfformsLOCALcontrol(platf):
         whalalConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["W", "w"]:
+        ckpoolpoolLOCALOnchainONLY()     
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -6059,8 +6151,15 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         whalalConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["W", "w"]:
+        ckpoolpoolLOCALOnchainONLY()    
     elif platf in ["R", "r"]:
         menuSelection()
+        
+        
+def ckpool(menuch):
+    if menuch in ["A", "a"]:
+        ckpool()        
 
 #----------------------------REMOTE MENUS
 
