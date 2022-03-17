@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-beta"
+version = "1.1.14-beta1"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -239,7 +239,7 @@ def getPoolSlushCheck():
 
 #-----------------------------END Slush--------------------------------
 
-def getPoolCKCheck():
+def ckpoolpoolLOCALOnchainONLY():
 
     s = ""
     sq = s
@@ -259,7 +259,7 @@ def getPoolCKCheck():
 
     while True:
         try:
-            ckpool = f"curl https://solo.ckpool.org/users/ -H 'CKPool-Wallet.Worker: {api}' 2>/dev/null"
+            ckpool = f"curl https://solo.ckpool.org/users/{api} 2>/dev/null"
 
 
             b = os.popen(ckpool)
@@ -1468,6 +1468,11 @@ def APIMenuLOCAL():
     clear()
     blogo()
     sysinfo()
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
+    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1519,6 +1524,9 @@ def APIMenuLOCALOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
