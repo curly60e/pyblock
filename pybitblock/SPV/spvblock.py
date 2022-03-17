@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha1"
+version = "2.0-alpha2"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -947,16 +947,7 @@ def bitcoincoremenuLOCAL():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
 
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
@@ -979,78 +970,14 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,"N", version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def bitcoincoremenuLOCALOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
-    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
-    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
-    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
-    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mW.\033[0;37;40m Wallet
-    \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mM.\033[0;37;40m Hashrate
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
-    \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
-    bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def walletmenuLOCALOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Deposit
-    \u001b[38;5;202mB.\033[0;37;40m Show transactions
-    \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
-    walletmenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCALOPRETURN():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
 
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
@@ -1062,106 +989,14 @@ def bitcoincoremenuLOCALOPRETURN():
     \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
     \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,"N", version, checkupdate()))
     bitcoincoremenuLOCALcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def bitcoincoremenuLOCALOPRETURNOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Send OP_RETURN
-    \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
-    \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
-    \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
-    bitcoincoremenuLOCALcontrolOOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def bitcoincoremenuREMOTE():
-    clear()
-    blogo()
-    sysinfo()
-    a = "Local" if path['bitcoincli'] else "Remote"
-    blk = rpc('getblockchaininfo')
-    d = blk
-
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-    r = requests.get(url, headers=headers, verify=cert_path)
-    alias = r.json()
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mC.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mD.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mE.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mM.\033[0;37;40m Hashrate
-    \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
-    bitcoincoremenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def bitcoincoremenuREMOTEOPRETURN():
-    clear()
-    blogo()
-    sysinfo()
-    a = "Local" if path['bitcoincli'] else "Remote"
-    blk = rpc('getblockchaininfo')
-    d = blk
-
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-    r = requests.get(url, headers=headers, verify=cert_path)
-    alias = r.json()
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Send OP_RETURN
-    \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
-    \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
-    \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
-    bitcoincoremenuREMOTEcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkLOCAL():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
 
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
@@ -1190,7 +1025,7 @@ def lightningnetworkLOCAL():
     \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
+    \n\n\x1b[?25h""".format(n,"N", version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def chatConn():
@@ -1301,43 +1136,6 @@ def pyCHATC():
     \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
     chatConnD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def lightningnetworkREMOTE():
-    clear()
-    blogo()
-    sysinfo()
-    a = "Local" if path['bitcoincli'] else "Remote"
-    blk = rpc('getblockchaininfo')
-    d = blk
-
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-    r = requests.get(url, headers=headers, verify=cert_path)
-    alias = r.json()
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[33;1mA.\033[0;37;40m New Invoice
-    \u001b[33;1mB.\033[0;37;40m Pay Invoice
-    \u001b[33;1mC.\033[0;37;40m New Bitcoin Address
-    \u001b[33;1mD.\033[0;37;40m List Invoices
-    \u001b[33;1mE.\033[0;37;40m Channel Balance
-    \u001b[33;1mF.\033[0;37;40m Show Channels
-    \u001b[33;1mG.\033[0;37;40m Onchain Balance
-    \u001b[33;1mH.\033[0;37;40m List Onchain Transactions
-    \u001b[33;1mI.\033[0;37;40m Get Node Info
-    \u001b[33;1mZ.\033[0;37;40m Stats
-    \u001b[33;1mT.\033[0;37;40m Ranking
-    \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
-    lightningnetworkREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIMenuLOCAL():
     clear()
@@ -1389,50 +1187,6 @@ def APIMenuLOCAL():
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def APIMenuLOCALOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m TippinMe    FREE
-    \033[1;32;40mB.\033[0;37;40m Tallycoin   FREE
-    \033[1;32;40mC.\033[0;37;40m Mempool     FREE
-    \033[1;32;40mD.\033[0;37;40m CoinGecko   FREE
-    \033[1;32;40mE.\033[0;37;40m Rate.sx     FREE
-    \033[1;32;40mF.\033[0;37;40m BWT         FREE
-    \033[1;32;40mG.\033[0;37;40m LNBits      \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mH.\033[0;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mI.\033[0;37;40m OpenNode    \033[3;35;40m{opennodepaid}\033[0;37;40m
-    \033[1;32;40mJ.\033[0;37;40m SatNode     FREE
-    \033[1;32;40mK.\033[0;37;40m Weather     FREE
-    \033[1;32;40mL.\033[0;37;40m Arcade      FREE
-    \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
-    \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
-    \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
-    platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
 def decodeHex():
     clear()
     blogo()
@@ -1460,26 +1214,6 @@ def decodeHex():
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     decodeHexLOCAL(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def decodeHexOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Decode Blocks in HEX
-    \u001b[38;5;202mB.\033[0;37;40m Decode Transactions in HEX
-    \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
-    decodeHexLOCALOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def miscellaneousLOCAL():
     clear()
@@ -1522,42 +1256,6 @@ def miscellaneousLOCAL():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def miscellaneousLOCALOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Ascii ₿
-    \u001b[38;5;202mB.\033[0;37;40m System
-    \u001b[38;5;202mC.\033[0;37;40m Dates
-    \u001b[38;5;202mD.\033[0;37;40m Quotes
-    \u001b[38;5;202mP.\033[0;37;40m PGP
-    \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
-    \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolREMOTEOnchainONLY():
     clear()
@@ -1667,39 +1365,6 @@ def runTheNumbersMenu():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def runTheNumbersMenuOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Countdown Block
-    \033[1;32;40mB.\033[0;37;40m Countdown Halving
-    \033[1;32;40mC.\033[0;37;40m Audit
-    \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    runTheNumbersControlOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenuConn():
     clear()
