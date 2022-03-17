@@ -6462,10 +6462,7 @@ def commandsINIT(initCONF):
             initPATH = intCONF['cropped']
             pickle.dump(initPATH, open("config/intro.conf", "wb"))
             clear()
-            cropped()
-
-def cropped():
-    menuSelection()
+            menuSelection()
 
 def fullbtc():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
@@ -6545,7 +6542,7 @@ def introINIT():
 
     \u001b[31;1mA.\033[0;37;40m PyBLØCK (Bitcoin & Lightning)
     \u001b[38;5;202mB.\033[0;37;40m PyBLØCK (Bitcoin)
-    \u001b[33;1mC.\033[0;37;40m PyBLØCK (Cropped)
+    \u001b[33;1mC.\033[0;37;40m PyBLØCK (Cropped - ***ALPHA***)
     \n\n\x1b[?25h""")
     commandsINIT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
@@ -6554,7 +6551,7 @@ def introINIT():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
             pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -6567,6 +6564,6 @@ while True: # Loop
             introINIT()
         else:
             menuSelection()
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
