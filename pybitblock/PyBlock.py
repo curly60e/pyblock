@@ -253,37 +253,20 @@ def getPoolCKCheck():
             clear()
             blogo()
             api = input("Insert CKPool Wallet.Worker: ")
-            pickle.dump(api, open("config/slushAPI.conf", "wb"))
+            pickle.dump(api, open("config/CKPOOLAPI.conf", "wb"))
     except:
         pass
 
     while True:
         try:
-            slushpoolbtc = f"curl https://solo.ckpool.org/users/ -H 'CKPool-Wallet.Worker: {api}' 2>/dev/null"
-
-            slushpoolbtcblock = f"curl https://solo.ckpool.org/users/ -H 'CKPool-Wallet.Worker: {api}' 2>/dev/null"
+            ckpool = f"curl https://solo.ckpool.org/users/ -H 'CKPool-Wallet.Worker: {api}' 2>/dev/null"
 
 
-            b = os.popen(slushpoolbtc)
+            b = os.popen(ckpool)
             c = b.read()
             d = json.loads(c)
-            f = d['btc']
-
-            bblock = os.popen(slushpoolbtcblock)
-            cblock = bblock.read()
-            dblock = json.loads(cblock)
-            fblock = dblock['btc']
-            eblock = fblock['blocks']
-            for i in eblock:
-            	qnq = sorted(eblock)
-            	for n in qnq:
-            		s = n
-
-            if s > sq:
-            	newblock = "\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{}\u001b[31;1m! \u001b[38;5;202mFresh Sats for you!\033[0;37;40m".format(s)
-            	sq = s
-            else:
-            	newblock = s
+            f = d['worker']
+            e = f[0]
 
             clear()
             blogo()
@@ -294,24 +277,22 @@ def getPoolCKCheck():
                         \033[0;37;40mCKPool BTC
 
                         Username: {}
-                        Confirmed reward: \u001b[38;5;40m{}\033[0;37;40m BTC
-                        Unconfirmed reward: \u001b[33;1m{}\033[0;37;40m BTC
-                        Estimated reward: {} BTC
-                        All Time reward: {} BTC
-                        Hash Rate 5m: {} Gh/s
-                        Hash Rate 60m: {} Gh/s
-                        Hash Rate 24h: {} Gh/s
-                        Hash Rate Scoring: \u001b[38;5;27m{}\033[0;37;40m Gh/s
-                        Hash Rate Yesterday: {} Gh/s
-                        Connected Workers: {}
-                        Disconnected Workers: {}
-                        Last Block discovered: {}
+                        Hash Rate 1m: {}
+                        Hash Rate 5m: {}
+                        Hash Rate 1h: {}
+                        Hash Rate 1d: {}
+                        Hash Rate 7d: {}
+                        Last Share: \u001b[38;5;27m{}\033[0;37;40m
+                        Shares: {}
+                        Best Share: {}
+                        Best Ever: {}
+                        Workers: {}
 
     --------------------------------------------------------------------------------------------
 
-            \033[A""".format(d['Worker'], f['confirmed_reward'], f['unconfirmed_reward'], f['estimated_reward'], f['all_time_reward'], f['hash_rate_5m'], f['hash_rate_60m'], f['hash_rate_24h'], f['hash_rate_scoring'], f['hash_rate_yesterday'], f['ok_workers'], f['off_workers'],newblock))
+            \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
 
-            t.sleep(10)
+    		t.sleep(10)
 
         except:
             break
@@ -5634,13 +5615,13 @@ def slushpoolLOCALOnchainONLYMenu(slush):
         clear()
         blogo()
         getPoolSlushCheck()
-        
+
 def ckpoolLOCALOnchainONLYMenu(slush):
     if ckpool in ["A", "a"]:
         clear()
         blogo()
         getPoolCKCheck()
-   
+
 def ckpoolREMOTEOnchainONLYMenu(slush):
     if ckpool in ["A", "a"]:
         clear()
@@ -6116,7 +6097,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["W", "w"]:
-        ckpoolpoolLOCALOnchainONLY()     
+        ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -6152,14 +6133,14 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["W", "w"]:
-        ckpoolpoolLOCALOnchainONLY()    
+        ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
-        
-        
+
+
 def ckpool(menuch):
     if menuch in ["A", "a"]:
-        ckpool()        
+        ckpool()
 
 #----------------------------REMOTE MENUS
 
