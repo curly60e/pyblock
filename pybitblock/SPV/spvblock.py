@@ -240,70 +240,39 @@ def getPoolSlushCheck():
 #-----------------------------END Slush--------------------------------
 
 
-def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
-    while True:
-        try:
-            bitcoincli = " getblockchaininfo"
-            a = os.popen(path['bitcoincli'] + bitcoincli).read()
-            b = json.loads(a)
-            d = b
-            print(d)
-            clear()
-            blogo()
-            close()
-            output = render("CHAIN INFO", colors=['yellow'], align='left', font='tiny')
-            print(output)
-            print("""
-            ----------------------------------------------------------------------------
-            Chain: {}
-            Blocks: {}
-            Best BlockHash: {}
-            Difficulty: {}
-            Verification Progress: {}
-            Size on Disk: {}
-            Pruned: {}
-            ----------------------------------------------------------------------------
-            """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
-            t.sleep(10)
-        except:
-            break
+def getblock(): 
+    try:
+        conn = """curl -s https://bitcoinexplorer.org/rpc-browser """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("block", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
 
 def searchTXS():
     try:
-        while True:
-            clear()
-            blogo()
-            closed()
-            output = render("search txs", colors=['yellow'], align='left', font='tiny')
-            print(output)
-            tx = input("Search Tx ID: ")
-            gettxout = " gettxout "
+        clear()
+        blogo()
+        output = render(
+            "Tx", colors=['yellow'], align='left', font='tiny'
+        )
 
-            gnt = os.popen(path['bitcoincli'] + gettxout + tx + " 1")
-            gnta = gnt.read()
-            gnt1 = str(gnta)
-            gnt2 = json.loads(gnt1)
-            scriptPubKey = gnt2['scriptPubKey']
-            if gnt2['bestblock']:
-                clear()
-                blogo()
-                closed()
-                output = render("search txs", colors=['yellow'], align='left', font='tiny')
-                print(output)
-                print("""
-    -------------------------------------------------------------------------------
-    Tx: \u001b[38;5;40m{} \033[0;37;40m
-    -------------------------------------------------------------------------------
-    \u001b[31;1mBestblockhash: \u001b[31;1m{}
-    \u001b[31;1mConfirmations: \u001b[38;5;27m{}
-    \u001b[31;1mAmount: \u001b[38;5;202m{} BTC
-    \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m
-    -------------------------------------------------------------------------------
-                    """.format(tx, gnt2['bestblock'], gnt2['confirmations'], gnt2['value'], scriptPubKey['address']))
-            else:
-                print("Is this a \u001b[38;5;40m Coinbase\033[0;37;40m tx?")
-
-            input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
+        print(output)
+        responseC = input("TX ID: ")
+        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Tx: {r3}')
+        input("\nContinue...")
     except:
         pass
 
@@ -491,16 +460,24 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     os.system(path['bitcoincli'] + bitcoincli)
 
 def getbestblockhash():
-    try:
-        conn = """curl -s https://get.txoutset.info/ """
-        a = os.popen(conn).read()
+   try:
         clear()
         blogo()
-        closed()
-        output = render("block hash", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Tx", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        print(a)
-        input("\a\nContinue...")
+        responseC = input("TX ID: ")
+        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'x: {r3}')
+        input("\nContinue...")
     except:
         pass
 
@@ -509,7 +486,7 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/block-height/0#JSON """
+        conn = """curl -s https://bitcoinexplorer.org/block-height/0 """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -671,7 +648,7 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ """
+        conn = """curl -s https://get.txoutset.info/ | html2text """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -684,73 +661,16 @@ def runthenumbers():
         pass
 
 def countdownblock():
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block
     try:
-        a = input("Insert your block target: ")
-        clear()
-        blogo()
-        print("""
-        --------------------- BLOCK {} COUNTDOWN ---------------------
-
-         """.format(a))
-        n = int(b)
-        print("\nCountDown:", b)
-        q = int(a) - int(b)
-        print(f'Remaining: {str(q)}' + " Blocks\n")
-        while a > b:
-            try:
-                bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-                block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-                b = block
-                if a == b:
-                    break
-                elif n != int(b):
-                    print("CountDown: ", b)
-                    q = int(a) - int(b)
-                    print(f'Remaining: {str(q)}' + " Blocks\n")
-                    n = int(b)
-            except:
-                break
-        print(f'#RunTheNumbers {str(a)} PyBLOCK')
-        input("\nContinue...")
-    except:
-        menuSelection()
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
 
 def countdownblockConn():
-    b = rpc('getblockcount')
-    c = str(b)
     try:
-        a = int(input("Insert your block target: "))
-        clear()
-        blogo()
-        print("""
-        --------------------- BLOCK {} COUNTDOWN ---------------------
-
-         """.format(a))
-        print("\nCountDown:", int(c))
-        n = int(c)
-        q = a - int(c)
-        print(f'Remaining: {str(q)}' + " Blocks\n")
-        while a > int(c):
-            try:
-                b = rpc('getblockcount')
-                c = str(b)
-                if a == c:
-                    break
-                elif n != int(c):
-                    print("CountDown: ", c)
-                    q = a - int(c)
-                    print(f'Remaining: {str(q)}' + " Blocks\n")
-                    n = int(c)
-            except:
-                break
-        print(f'#RunTheNumbers {a} PyBLOCK')
-        input("\nContinue...")
-    except:
-        menuSelection()
-
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
 
 def localHalving():
     try:
@@ -769,58 +689,19 @@ def localHalving():
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 def pdfconvert():
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
-    if not os.path.isfile("config/bitcoin.pdf"):
+    try:
+        conn = """curl -s https://bitcoinexplorer.org/bitcoin.pdf | pdf2text """
+        a = os.popen(conn).read()
         clear()
         blogo()
-        close()
-        print("""
-        -----------------------------------------
-
-                The Bitcoin Whitepaper
-                    is not in this
-                       directory
-
-        -----------------------------------------
-
-        """)
-        a = input("Do you want to download it from the Blockchain? Y/n: ")
-        if a in ["y", "Y"]:
-            clear()
-            blogo()
-            close()
-            print("""
-            ---------------------------------
-
-                    You are going to
-                      download the
-                    Whitepaper  from
-                     the Blockchain
-
-                     This file will
-                     be save in the
-                      main PyBLOCK
-                       folder  as
-                       bitcoin.pdf
-
-            ---------------------------------
-            """)
-            input("Continue...")
-            bitcoincli = """ getblock 00000000000000ecbbff6bafb7efa2f7df05b227d5c73dca8f2635af32a2e949 0 | tail -c+92167 | for ((o=0;o<946;++o)) ; do read -rN420 x ; echo -n ${x::130}${x:132:130}${x:264:130} ; done | xxd -r -p | tail -c+9 | head -c184292 > bitcoin.pdf """
-            os.system(path['bitcoincli'] + bitcoincli)
-            clear()
-            blogo()
-            close()
-            os.system("pdf2txt.py bitcoin.pdf")
-            input("Continue...")
-    else:
-        clear()
-        blogo()
-        close()
-        os.system("pdf2txt.py bitcoin.pdf")
-        input("Continue...")
+        closed()
+        output = render("whitepaper", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+    
 #--------------------------------- NYMs -----------------------------------
 
 def get_ansi_color_code(r, g, b):
@@ -934,7 +815,7 @@ def MainMenuCROPPED(): #Main Menu
     b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40mRun your Node\033[0;37;40m\a
     \033[1;37;40mVersion\033[0;37;40m: {}
 
 
