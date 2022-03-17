@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-alpha14"
+version = "1.1.14-beta"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -292,7 +292,7 @@ def getPoolCKCheck():
 
             \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
 
-    		t.sleep(10)
+            t.sleep(10)
 
         except:
             break
