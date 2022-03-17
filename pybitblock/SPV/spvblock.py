@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha4"
+version = "2.0-alpha5"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -240,7 +240,7 @@ def getPoolSlushCheck():
 #-----------------------------END Slush--------------------------------
 
 
-def getblock(): 
+def getblock():
     try:
         conn = """curl -s https://bitcoinexplorer.org/rpc-browser """
         a = os.popen(conn).read()
@@ -460,7 +460,7 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     os.system(path['bitcoincli'] + bitcoincli)
 
 def getbestblockhash():
-   try:
+   #try:
         clear()
         blogo()
         output = render(
@@ -478,8 +478,8 @@ def getbestblockhash():
         print("\nTransaction ID: " + responseC)
         print(f'x: {r3}')
         input("\nContinue...")
-    except:
-        pass
+    #except:
+    #    pass
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
@@ -665,12 +665,16 @@ def countdownblock():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
+    except:
+        pass
 
 def countdownblockConn():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
+    except:
+        pass
 
 def localHalving():
     try:
@@ -701,7 +705,7 @@ def pdfconvert():
         input("\a\nContinue...")
     except:
         pass
-    
+
 #--------------------------------- NYMs -----------------------------------
 
 def get_ansi_color_code(r, g, b):
