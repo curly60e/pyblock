@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha3"
+version = "2.0-alpha4"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -953,10 +953,14 @@ def bitcoincoremenuLOCAL():
     blogo()
     sysinfo()
     n = "CROPPED"
-
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -975,7 +979,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,"N", version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCALOPRETURN():
@@ -983,10 +987,14 @@ def bitcoincoremenuLOCALOPRETURN():
     blogo()
     sysinfo()
     n = "CROPPED"
-
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -994,7 +1002,7 @@ def bitcoincoremenuLOCALOPRETURN():
     \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
     \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,"N", version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     bitcoincoremenuLOCALcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkLOCAL():
@@ -1002,10 +1010,14 @@ def lightningnetworkLOCAL():
     blogo()
     sysinfo()
     n = "CROPPED"
-
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -1030,7 +1042,7 @@ def lightningnetworkLOCAL():
     \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,"N", version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def chatConn():
@@ -1147,9 +1159,14 @@ def APIMenuLOCAL():
     blogo()
     sysinfo()
     n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -1168,7 +1185,7 @@ def APIMenuLOCAL():
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
     \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,"N", version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def decodeHex():
@@ -1246,6 +1263,12 @@ def slushpoolREMOTEOnchainONLY():
     blogo()
     sysinfo()
     n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1257,7 +1280,7 @@ def slushpoolREMOTEOnchainONLY():
     \u001b[38;5;202mD.\033[0;37;40m History
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,"N", version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     slushpoolLOCALOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolLOCALOnchainONLY():
@@ -1265,6 +1288,12 @@ def slushpoolLOCALOnchainONLY():
     blogo()
     sysinfo()
     n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1276,38 +1305,22 @@ def slushpoolLOCALOnchainONLY():
     \u001b[38;5;202mD.\033[0;37;40m History
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,"N", version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     slushpoolLOCALOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenu():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -1315,38 +1328,22 @@ def runTheNumbersMenu():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenuConn():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -1354,30 +1351,20 @@ def runTheNumbersMenuConn():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def weatherMenuOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1386,106 +1373,64 @@ def weatherMenuOnchainONLY():
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuWeatherOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def weatherMenu():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dnt(): # Donation selection menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \u001b[38;5;15mA.\033[0;37;40m Developers Donation
     \u001b[38;5;15mB.\033[0;37;40m Testers Donation
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     menuC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntOnchainONLY(): # Donation selection menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1494,7 +1439,7 @@ def dntOnchainONLY(): # Donation selection menu
     \u001b[38;5;15mA.\033[0;37;40m Developers Donation
     \u001b[38;5;15mB.\033[0;37;40m Testers Donation
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     menuCOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -1502,28 +1447,13 @@ def dntDev(): # Dev Donation Menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
@@ -1534,30 +1464,20 @@ def dntDev(): # Dev Donation Menu
     \u001b[38;5;202mB.\033[0;37;40m Bitcoin Address
     \u001b[33;1mC.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntDevOnchainONLY(): # Dev Donation Menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1567,68 +1487,42 @@ def dntDevOnchainONLY(): # Dev Donation Menu
     \u001b[38;5;202mB.\033[0;37;40m Bitcoin Address
     \u001b[33;1mC.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuEOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntTst(): # Tester Donation Menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
     \u001b[33;1mB.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuF(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntTstOnchainONLY(): # Tester Donation Menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1637,7 +1531,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
     \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
     \u001b[33;1mB.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     menuFOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -1645,31 +1539,15 @@ def satnodeMenu(): # Satnode Menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -1678,30 +1556,20 @@ def satnodeMenu(): # Satnode Menu
     \033[1;32;40mC.\033[0;37;40m Setup
     \033[1;34;40mS.\033[0;37;40m Send a Message to Space
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def satnodeMenuOnchainONLY(): # Satnode Menu
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1712,68 +1580,42 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
     \033[1;32;40mC.\033[0;37;40m Setup
     \033[1;34;40mS.\033[0;37;40m Send a Message to Space
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def rateSX():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;32;40mA.\033[0;37;40m Rate
     \033[1;32;40mB.\033[0;37;40m Chart
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     rateSXMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def rateSXOncainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1782,68 +1624,42 @@ def rateSXOncainONLY():
     \033[1;32;40mA.\033[0;37;40m Rate
     \033[1;32;40mB.\033[0;37;40m Chart
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     rateSXMenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def mempoolmenu():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def mempoolmenuOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1852,7 +1668,7 @@ def mempoolmenuOnchainONLY():
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     mempoolmenuSOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -1864,31 +1680,15 @@ def APILnbit():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -1902,7 +1702,7 @@ def APILnbit():
     \033[1;32;40mF.\033[0;37;40m Create LNURL
     \033[1;32;40mG.\033[0;37;40m List LNURL
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnbitOnchainONLY():
@@ -1913,23 +1713,13 @@ def APILnbitOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1945,7 +1735,7 @@ def APILnbitOnchainONLY():
     \033[1;32;40mF.\033[0;37;40m Create LNURL
     \033[1;32;40mG.\033[0;37;40m List LNURL
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, bitLN['NN'], checkupdate()))
     menuLNBPIOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnPay():
@@ -1956,31 +1746,15 @@ def APILnPay():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -1992,7 +1766,7 @@ def APILnPay():
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
     menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnPayOnchainONLY():
@@ -2003,23 +1777,13 @@ def APILnPayOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -2033,7 +1797,7 @@ def APILnPayOnchainONLY():
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
     menuLNPAYOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNode():
@@ -2044,31 +1808,15 @@ def APIOpenNode():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2080,7 +1828,7 @@ def APIOpenNode():
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;32;40mS.\033[0;37;40m Status
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNodeOnchainONLY():
@@ -2091,23 +1839,13 @@ def APIOpenNodeOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -2121,38 +1859,22 @@ def APIOpenNodeOnchainONLY():
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;32;40mS.\033[0;37;40m Status
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
     menuOpenNodeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITippinMe():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2160,30 +1882,20 @@ def APITippinMe():
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITippinMeOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -2193,38 +1905,22 @@ def APITippinMeOnchainONLY():
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuTippinMeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITallyCo():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2233,30 +1929,20 @@ def APITallyCo():
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITallyCoOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -2267,7 +1953,7 @@ def APITallyCoOnchainONLY():
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuTallyCoOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 #-------------------------------- SETTINGS -----------------------------------------------
 
@@ -2276,20 +1962,15 @@ def settings4Local():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
-
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2297,88 +1978,22 @@ def settings4Local():
     \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
     \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuSettingsLocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def settings4LocalOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
-    \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
-    \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
-    \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
-    menuSettingsLocalOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def settings4Remote():
-    clear()
-    blogo()
-    sysinfo()
-    a = "Local" if path['bitcoincli'] else "Remote"
-    blk = rpc('getblockchaininfo')
-    d = blk
-
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
-    alias = r.json()
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
-    \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
-    \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
-    \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
-    menuSettingsRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designQ():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2395,82 +2010,22 @@ def designQ():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def designQOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Block
-    \033[1;31;40mB.\033[0;37;40m Slick
-    \033[1;31;40mC.\033[0;37;40m Tiny
-    \033[1;31;40mD.\033[0;37;40m Grid
-    \033[1;31;40mE.\033[0;37;40m Pallet
-    \033[1;31;40mF.\033[0;37;40m Shade
-    \033[1;31;40mG.\033[0;37;40m Chrome
-    \033[1;31;40mH.\033[0;37;40m Simple
-    \033[1;31;40mI.\033[0;37;40m Simple Block
-    \033[1;31;40mJ.\033[0;37;40m 3D
-    \033[1;31;40mK.\033[0;37;40m Simple 3D
-    \033[1;31;40mL.\033[0;37;40m Huge
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    menuDesignOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designC():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2487,130 +2042,22 @@ def designC():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuDesignClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def designCOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Block
-    \033[1;31;40mB.\033[0;37;40m Slick
-    \033[1;31;40mC.\033[0;37;40m Tiny
-    \033[1;31;40mD.\033[0;37;40m Grid
-    \033[1;31;40mE.\033[0;37;40m Pallet
-    \033[1;31;40mF.\033[0;37;40m Shade
-    \033[1;31;40mG.\033[0;37;40m Chrome
-    \033[1;31;40mH.\033[0;37;40m Simple
-    \033[1;31;40mI.\033[0;37;40m Simple Block
-    \033[1;31;40mJ.\033[0;37;40m 3D
-    \033[1;31;40mK.\033[0;37;40m Simple 3D
-    \033[1;31;40mL.\033[0;37;40m Huge
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    menuDesignClockOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def designCRemote():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Block
-    \033[1;31;40mB.\033[0;37;40m Slick
-    \033[1;31;40mC.\033[0;37;40m Tiny
-    \033[1;31;40mD.\033[0;37;40m Grid
-    \033[1;31;40mE.\033[0;37;40m Pallet
-    \033[1;31;40mF.\033[0;37;40m Shade
-    \033[1;31;40mG.\033[0;37;40m Chrome
-    \033[1;31;40mH.\033[0;37;40m Simple
-    \033[1;31;40mI.\033[0;37;40m Simple Block
-    \033[1;31;40mJ.\033[0;37;40m 3D
-    \033[1;31;40mK.\033[0;37;40m Simple 3D
-    \033[1;31;40mL.\033[0;37;40m Huge
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
-    menuDesignClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colors():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2618,182 +2065,44 @@ def colors():
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;31;40mC.\033[0;37;40m Rainbow
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Front Color
-    \033[1;31;40mB.\033[0;37;40m Back Color
-    \033[1;31;40mC.\033[0;37;40m Rainbow
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    menuColorsOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsC():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsCOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Front Color
-    \033[1;31;40mB.\033[0;37;40m Back Color
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    menuColorsClockOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsCRemote():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Front Color
-    \033[1;31;40mB.\033[0;37;40m Back Color
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
-    menuColorsClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFront():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2807,79 +2116,22 @@ def colorsSelectFront():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsSelectFront(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectFrontOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a ,d['blocks'], version, checkupdate()))
-    menuColorsSelectFrontOncainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFrontClock():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -2893,124 +2145,22 @@ def colorsSelectFrontClock():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsSelectFrontClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectFrontClockOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, checkupdate()))
-    menuColorsSelectFrontClockOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectFrontClockRemote():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
-    menuColorsSelectFrontClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBack():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -3024,83 +2174,22 @@ def colorsSelectBack():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsSelectBack(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectBackOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "RemotcolorsCe"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
-    menuColorsSelectBackOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBackClock():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -3114,196 +2203,45 @@ def colorsSelectBackClock():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n ,b, version, checkupdate()))
     menuColorsSelectBackClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectBackClockOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, checkupdate()))
-    menuColorsSelectBackClockOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectBackClockRemote():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
-    menuColorsSelectBackClockRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbow():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \033[1;32;40mA.\033[0;37;40m Start Color
     \033[1;31;40mB.\033[0;37;40m End Color
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsSelectRainbow(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectRainbowOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Start Color
-    \033[1;31;40mB.\033[0;37;40m End Color
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, checkupdate()))
-    menuColorsSelectRainbowOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowStart():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
 
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -3317,79 +2255,22 @@ def colorsSelectRainbowStart():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsSelectRainbowStart(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectRainbowStartOnchaiONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a ,  d['blocks'], version, checkupdate()))
-    menuColorsSelectRainbowStartOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowEnd():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -3403,53 +2284,8 @@ def colorsSelectRainbowEnd():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
-def colorsSelectRainbowEndOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Black
-    \033[1;31;40mB.\033[0;37;40m Red
-    \033[1;31;40mC.\033[0;37;40m Green
-    \033[1;31;40mD.\033[0;37;40m Yellow
-    \033[1;31;40mE.\033[0;37;40m Blue
-    \033[1;31;40mF.\033[0;37;40m Magenta
-    \033[1;31;40mG.\033[0;37;40m Cyan
-    \033[1;31;40mH.\033[0;37;40m White
-    \033[1;31;40mI.\033[0;37;40m Gray
-    \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, checkupdate()))
-    menuColorsSelectRainbowEndOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
