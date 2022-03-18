@@ -33,7 +33,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha6"
+version = "2.0-alpha7"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -343,7 +343,7 @@ def gettransactionsOnchain():
         input("\a\nContinue...")
     except:
         pass
-    
+
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
@@ -351,7 +351,7 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
         input("\a\nContinue...")
     except:
         pass
-    
+
 def getbestblockhash():
    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
