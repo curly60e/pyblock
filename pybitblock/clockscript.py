@@ -2,7 +2,9 @@ import pickle
 import os
 import sys
 import base64, codecs, json, requests
+import time as t
 from cfonts import render, say
+
 
 
 def clear(): # clear the screen
@@ -22,7 +24,7 @@ def rectangle(n):
                 f'{""*n}{"|"*n}{""*n}'
                 if i >= (n+1)/2 and i <= (1*n)/2
                 else
-                f'\u001b[38;5;27m{"■"*(x-1)}'
+                f'\033[A\u001b[38;5;27m{"■"*(x-1)}\033[A'
             )
             for i in range(y)
         )
@@ -51,6 +53,12 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             design()
         except:
             break
+
+def pathexec():
+    global path
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
 
 def design():
     while True:
@@ -122,8 +130,6 @@ def design():
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
                 print("\x1b[?25l" + output)
 
-
-
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
@@ -144,7 +150,6 @@ while True: # Loop
             print("\n\tLocal Bitcoin Core Node connection.\n")
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
             pickle.dump(path, open("config/bclock.conf", "wb"))
-
         artist()
 
 
