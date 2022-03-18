@@ -345,7 +345,7 @@ def gettransactionsOnchain():
         pass
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -353,7 +353,7 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
         pass
 
 def getbestblockhash():
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -3954,12 +3954,11 @@ def decodeHexLOCAL(hexloc):
             readHexBlock()
             while True:
                 r = input("Do you want to continue decoding? Y/n: ")
-                if r in ["Y", "y"]:
-                    clear()
-                    blogo()
-                    readHexBlock()
-                else:
+                if r not in ["Y", "y"]:
                     break
+                clear()
+                blogo()
+                readHexBlock()
         except:
             pass
     elif hexloc in ["B", "b"]:
@@ -3988,12 +3987,11 @@ def decodeHexLOCALOnchainONLY(hexloc):
             readHexBlock()
             while True:
                 r = input("Do you want to continue decoding? Y/n: ")
-                if r in ["Y", "y"]:
-                    clear()
-                    blogo()
-                    readHexBlock()
-                else:
+                if r not in ["Y", "y"]:
                     break
+                clear()
+                blogo()
+                readHexBlock()
         except:
             pass
     elif hexloc in ["B", "b"]:
@@ -4566,7 +4564,12 @@ def testClockRemote():
     b = rpc('getblockcount')
     c = str(b)
     a = c
-    output = render(str(c), colors=[settingsClock['colorA'], settingsClock['colorB']], align='left')
+    output = render(
+        c,
+        colors=[settingsClock['colorA'], settingsClock['colorB']],
+        align='left',
+    )
+
     print(output)
     print("""
 
