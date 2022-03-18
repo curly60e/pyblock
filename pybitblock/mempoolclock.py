@@ -78,7 +78,7 @@ while True: # Loop
             print("\n\tLocal Bitcoin Core Node connection.\n")
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
             pickle.dump(path, open("config/bclock.conf", "wb"))
-        artist()
+        counttxs()
 
 
     except:
