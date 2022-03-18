@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha7"
+version = "2.0-alpha8"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -608,7 +608,7 @@ def readHexTx(): # Hex Decoder using Hexyl on an external node
     decodeTX = (
         path['bitcoincli']
         + f" getrawtransaction {hexa}"
-        + " | xxd -r -p | hexyl -n 256"
+                + " | xxd -r -p | hexyl -n 256"
     )
 
     os.system(decodeTX)
@@ -1875,7 +1875,7 @@ def runTheNumbersMenuOnchainONLY():
     blogo()
     sysinfo()
     pathexec()
-    lndconnectexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -6827,7 +6827,7 @@ def introINIT():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
             pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -6840,6 +6840,6 @@ while True: # Loop
             introINIT()
         else:
             menuSelection()
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
