@@ -1,5 +1,6 @@
 #Developer: Curly60e
-#PyBLOCK its a clock of the Bitcoin blockchain.
+#Tester: __B__T__C__
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
 import requests
@@ -20,7 +21,7 @@ def donationAddr():
     qr.print_ascii()
     print("\033[0;37;40m")
     qr.clear()
-    print("Bitcoin Address Bech32: " + url)
+    print(f"Bitcoin Address Bech32: {url}")
 
 def donationPayNym():
     qr = qrcode.QRCode(
@@ -35,7 +36,7 @@ def donationPayNym():
     qr.print_ascii()
     print("\033[0;37;40m")
     qr.clear()
-    print("PayNym: " + url)
+    print(f"PayNym: {url}")
 
 #Dev LN
 def donationLN():
@@ -46,7 +47,14 @@ def donationLN():
     border=4,
     )
     amt = input("Amount: ")
-    curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": {}, "memo": "Donation" """.format(amt) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+    curl = (
+        'curl -X POST https://lnbits.com/api/v1/payments -d '
+        + "'{"
+        + f""""out": false, "amount": {amt}, "memo": "Donation" """
+        + "}'"
+        + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+    )
+
     sh = os.popen(curl).read()
     clear()
     blogo()
@@ -60,10 +68,14 @@ def donationLN():
         qr.print_ascii()
         print("\033[0;37;40m")
         qr.clear()
-        print("Lightning Invoice: " + c)
+        print(f"Lightning Invoice: {c}")
         dn = str(d['checking_id'])
         t.sleep(10)
-        checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+        checkcurl = (
+            f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+            + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+        )
+
         rsh = os.popen(checkcurl).read()
         clear()
         blogo()
@@ -92,7 +104,7 @@ def donationAddrTst():
     qr.print_ascii()
     print("\033[0;37;40m")
     qr.clear()
-    print("Bitcoin Address Bech32: " + url)
+    print(f"Bitcoin Address Bech32: {url}")
 
 #Tester LN
 def donationLNTst():
@@ -107,29 +119,19 @@ def donationLNTst():
     responseB = str(response.text)
     responseC = responseB
     lnreq = responseC.split(',')
-    lnbc1 = lnreq[1]
-    lnbc1S = str(lnbc1)
-    lnbc1R = lnbc1S.split(':')
-    lnbc1W = lnbc1R[1]
-    ln = str(lnbc1W)
-    ln1 = ln.strip('"')
-    node_not = input("Do you want to pay this tip with your node? Y/n: ")
-    if node_not in ["Y", "y"]:
-        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        if lndconnectload['ip_port']:
-            print("\nInvoice: " + ln1 + "\n")
-            payinvoice()
-        elif lndconnectload['ln']:
-            print("\nInvoice: " + ln1 + "\n")
-            localpayinvoice()
-    elif node_not in ["N", "n"]:
+    lnurl = lnreq[1]
+    lnurlS = str(lnbc1)
+    node_not = input("Are you Satoshi? Y/n: ")
+    if node_not in ["Y", "y", "N", "n"]:
         print("\033[1;30;47m")
+        lnurlR = lnurlS.split(':')
+        lnurlW = lnurlR[1]
+        ln = str(lnurlW)
+        ln1 = ln.strip('"')
         qr.add_data(ln1)
         qr.print_ascii()
         print("\033[0;37;40m")
-        print("LND Invoice: " + ln1)
+        print(f"LNURL: {ln1}")
         qr.clear()
         response.close()
 
@@ -146,4 +148,4 @@ def decodeQR():
     qr.print_ascii()
     print("\033[0;37;40m")
     qr.clear()
-    print("Bitcoin Address: " + url)
+    print(f"Bitcoin Address: {url}")
