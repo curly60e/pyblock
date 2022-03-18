@@ -286,7 +286,7 @@ def ckpoolpoolLOCALOnchainONLY():
 
 def getblock():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/rpc-browser """
+        conn = """curl -s https://mempool.space/api/blocks/tip/height """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -308,7 +308,7 @@ def searchTXS():
 
         print(output)
         responseC = input("TX ID: ")
-        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
+        url2 = f'curl -s https://mempool.space/api/tx/{responseC}'
         r = requests.get(url2)
         r2 = str(r.text)
         r3 = r2
@@ -322,208 +322,43 @@ def searchTXS():
 
 def untxsConn():
     try:
-        while True:
-            clear()
-            blogo()
-            closed()
-            output = render(
-                "unconfirmed txs", colors=['yellow'], align='left', font='tiny'
-            )
-
-            print(output)
-            getrawmempool = " getrawmempool"
-            gna = os.popen(path['bitcoincli'] + getrawmempool)
-            gnaa = gna.read()
-            gna1 = str(gnaa)
-            d = json.loads(gna1)
-            getrawtrans = " getrawtransaction "
-            for b in d:
-                n = "".join(map(str, b))
-                m = getrawtrans + n + " 1"
-                gnb = os.popen(path['bitcoincli'] + m)
-                gnba = gnb.read()
-                gnb1 = str(gnba)
-                abc = json.loads(gnb1)
-                ab = abc['vout']
-                knz = 'address'
-                for value in ab:
-                    knx = value['scriptPubKey']
-                    if knz in knx:
-                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
-                    else:
-                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['asm'],knx['type']))
-                        decodeTX = (
-                            path['bitcoincli']
-                            + f" getrawtransaction {b}"
-                            + " | xxd -r -p | hexyl -n 256"
-                        )
-
-                        print("OP_RETURN Hex: ")
-                        os.system(decodeTX)
-                input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
     except:
         pass
 
 def getnewaddressOnchain():
     try:
-        clear()
-        blogo()
-        close()
-        qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-        )
-        getadd = " getnewaddress"
-        getbal = " getbalance"
-        getfeemempool = " getmempoolinfo"
-        getunconfirm = " getunconfirmedbalance"
-        gna = os.popen(path['bitcoincli'] + getadd)
-        gnaa = gna.read()
-        gna1 = str(gnaa)
-        gnb = os.popen(path['bitcoincli'] + getbal)
-        gnbb= gnb.read()
-        gnb1 = str(gnbb)
-        gnu = os.popen(path['bitcoincli'] + getunconfirm)
-        gnua= gnu.read()
-        gnub = str(gnua)
-        output = render(
-            str(f'{gnb1} BTC'), colors=['yellow'], align='left', font='tiny'
-        )
-
-        print("""---------------------------------------------------------------
-            {}
----------------------------------------------------------------""".format(output))
-        print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
-        print("---------------------------------------------------------------")
-        print("\033[1;30;47m")
-        qr.add_data(gna1.replace("\n",""))
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        qr.clear()
-        print("\x1b[?25l" + "Bitcoin Address: " + gna1)
-        gna.close()
-        a = gnub
-        b = gnb1
-        getbal = " getbalance"
-        while True:
-            x = a
-            z = b
-            gnb = os.popen(path['bitcoincli'] + getbal)
-            gnbb= gnb.read()
-            gnb1 = str(gnbb)
-            gnaq = os.popen(path['bitcoincli'] + getfeemempool)
-            gnaaq = gnaq.read()
-            gna1q = str(gnaaq)
-            gnu = os.popen(path['bitcoincli'] + getunconfirm)
-            gnua= gnu.read()
-            gnub = str(gnua)
-            d = json.loads(gna1q)
-            if gnub > a or gnb1 > b:
-                clear()
-                blogo()
-                close()
-                getadd = " getnewaddress"
-                gna = os.popen(path['bitcoincli'] + getadd)
-                gnaa = gna.read()
-                gna1 = str(gnaa)
-                output = render(
-                    str(f'{gnb1} BTC'),
-                    colors=['yellow'],
-                    align='left',
-                    font='tiny',
-                )
-
-                print("""---------------------------------------------------------------
-                    {}
----------------------------------------------------------------""".format(output))
-                print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
-                print("---------------------------------------------------------------")
-                getfeemempool = " getmempoolinfo"
-                gnaq = os.popen(path['bitcoincli'] + getfeemempool)
-                gnaaq = gnaq.read()
-                gna1q = str(gnaaq)
-                d = json.loads(gna1q)
-                print("\033[1;30;47m")
-                qr.add_data(gna1.replace("\n",""))
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print("\x1b[?25l" + "Bitcoin Address: " + gna1)
-                gna.close()
-                a = gnub
-                b = gnb1
-            nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
-            print("\n\033[ALive Fee: ~{} sat/vB \033[A".format(nn))
-            t.sleep(10)
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
     except:
-        walletmenuLOCALOnchainONLY()
+        pass
 
 def gettransactionsOnchain():
     try:
-        listtxs = " listunspent"
-        while True:
-            clear()
-            blogo()
-            close()
-            gna = os.popen(path['bitcoincli'] + listtxs)
-            gnaa = gna.read()
-            gna1 = str(gnaa)
-            d = json.loads(gna1)
-            gnb = os.popen(path['bitcoincli'] + " getbalance")
-            gnbb= gnb.read()
-            gnb1 = str(gnbb)
-            sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
-            output = render("transactions", colors=['yellow'], align='left', font='tiny')
-            print(output)
-            for q in sort_order:
-                print(
-                    "TxID: "
-                    + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid']))
-                    + " | "
-                    + "Amount: "
-                    + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(
-                        str(q['amount'])
-                    )
-                    + " | "
-                    + "Conf: "
-                    + "\u001b[33;1m{}\033[0;37;40m".format(
-                        str(q['confirmations'])
-                    )
-                )
-
-
-            print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
-            input("\nRefresh...")
-    except:
-        walletmenuLOCALOnchainONLY()
-
-def getblockcount(): # get access to bitcoin-cli with the command getblockcount
-    bitcoincli = " getblockcount"
-    os.system(path['bitcoincli'] + bitcoincli)
-
-def getbestblockhash():
-   #try:
-        clear()
-        blogo()
-        output = render(
-            "Tx", colors=['yellow'], align='left', font='tiny'
-        )
-
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
-        responseC = input("TX ID: ")
-        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
-        clear()
-        blogo()
-        print("\nTransaction ID: " + responseC)
-        print(f'x: {r3}')
-        input("\nContinue...")
-    #except:
-    #    pass
+        input("\a\nContinue...")
+    except:
+        pass
+    
+def getblockcount(): # get access to bitcoin-cli with the command getblockcount
+   try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+    
+def getbestblockhash():
+   try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
 
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
@@ -587,20 +422,12 @@ def readHexTx():
         pass
 
 def console(): # get into the console from bitcoin-cli
-    print("\t\033[0;37;40mThis is \033[1;33;40mBitcoin-cli's \033[0;37;40mconsole. Type 'help' for more information.\n\n")
-    while True:
-        cle = input("\u001b[38;5;202m₿ console >: \033[0;37;40m")
-        if cle == "clear":
-            clear()
-            blogo()
-            sysinfo()
-            close()
-            console()
-        lsd = os.popen(f'{path["bitcoincli"]} {cle}')
-        lsd0 = lsd.read()
-        lsd1 = str(lsd0)
-        print(lsd1)
-        lsd.close()
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
 
 def screensv():
     try:
@@ -666,29 +493,26 @@ def design():
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
 def getrawtx(): # show confirmatins from transactions
-    while True:
-        try:
-            clear()
-            blogo()
-            close()
-            tx = input("Insert your TxID: ")
-            if tx == "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b":
-                print("""\t\t\n\033[1;35;40mThis transaction it's the first one of the Bitcoin Blockchain on Block 0 by Satoshi Nakamoto.
-You can decode that block in HEX and see what's inside.\033[0;37;40m""")
-            else:
-                bitcoincli = " getrawtransaction "
-                lsd = os.popen(path['bitcoincli'] + bitcoincli + tx + " 1")
-                lsd0 = lsd.read()
-                lsd1 = str(lsd0)
-                lsda = lsd1.split(',')
-                lsdb = lsda[-3]
-                lsdc = str(lsdb)
-                print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))
-                tmp()
-                lsd.close()
-            input("Continue...")
-        except:
-            break
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Hex Tx", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("TX ID: ")
+        url2 = f'curl -s https://mempool.space/api/block/{responseC}/raw'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Hex Tx: {r3}')
+        input("\nContinue...")
+    except:
+        pass
 
 def runthenumbers():
     try:
