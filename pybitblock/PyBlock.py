@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha6"
+version = "2.0-alpha7"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -89,6 +89,29 @@ def lndconnectexec():
     lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 #-----------------------------Slush--------------------------------
+
+def counttxs():
+    while True:
+        try:
+            pathexec()
+            clear()
+            getrawmempool = " getrawmempool"
+            gna = os.popen(path['bitcoincli'] + getrawmempool)
+            gnaa = gna.read()
+            gna1 = str(gnaa)
+            d = json.loads(gna1)
+            e = len(d)
+            n = e / 10
+            outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            print("\x1b[?25l" + outputtxs)
+            shq = int(n)
+            ss = str(rectangle(shq))
+            qq = ss.replace("None","")
+            print(f"\033[A{qq}\033[A")
+            t.sleep(10)
+        except:
+            break
+
 
 def slDIFFConn():
     try:
@@ -1111,6 +1134,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
+    \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1147,6 +1171,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
+    \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5843,6 +5868,10 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
+    elif bcore in ["Q", "q"]:
+        searchTXS()
+    elif bcore in ["S", "s"]:
+        counttxs()
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -5896,8 +5925,10 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
-    elif bcore in ["S", "s"]:
+    elif bcore in ["Q", "q"]:
         searchTXS()
+    elif bcore in ["S", "s"]:
+        counttxs()
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
