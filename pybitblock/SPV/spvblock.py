@@ -345,7 +345,7 @@ def gettransactionsOnchain():
         pass
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -353,7 +353,7 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
         pass
 
 def getbestblockhash():
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
