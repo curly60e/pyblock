@@ -1,5 +1,6 @@
 #Developer: Curly60e
-#PyBLOCK its a clock of the Bitcoin blockchain.
+#Tester: __B__T__C__
+#ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
 import requests
@@ -113,7 +114,7 @@ def donationLNTst():
     lnbc1W = lnbc1R[1]
     ln = str(lnbc1W)
     ln1 = ln.strip('"')
-    node_not = input("Do you want to pay this tip with your node? Y/n: ")
+    node_not = input("Do you have Node? Y/n: ")
     if node_not in ["Y", "y"]:
         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
         lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
