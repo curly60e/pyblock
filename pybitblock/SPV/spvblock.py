@@ -530,7 +530,7 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/block-height/0 """
+        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f | jq -C """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -692,7 +692,7 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text """
+        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -727,7 +727,7 @@ def localHalving():
         clear()
         blogo()
         closed()
-        output = render("blocks until mining reward is halved", colors=['yellow'], align='left', font='tiny')
+        output = render("blocks to halving", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -738,7 +738,7 @@ def localHalving():
 
 def pdfconvert():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/bitcoin.pdf | pdf2text """
+        conn = """curl -s https://raw.githubusercontent.com/karask/satoshi-paper/master/bitcoin.md | html2text | jq -R """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -2268,7 +2268,14 @@ def aaccPPiLNBits():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = (
+                'curl -X POST https://lnbits.com/api/v1/payments -d '
+                + "'{"
+                + f""""out": false, "amount": 1000, "memo": "LNBits on PyBLOCK {bitLN['NN']}" """
+                + "}'"
+                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            )
+
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -2282,7 +2289,7 @@ def aaccPPiLNBits():
                 qr.print_ascii()
                 print("\033[0;37;40m")
                 qr.clear()
-                print("Lightning Invoice: " + c)
+                print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
                 checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
@@ -2323,7 +2330,14 @@ def aaccPPiLNPay():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = (
+                'curl -X POST https://lnbits.com/api/v1/payments -d '
+                + "'{"
+                + f""""out": false, "amount": 1000, "memo": "LNPay on PyBLOCK {bitLN['NN']}" """
+                + "}'"
+                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            )
+
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -2337,7 +2351,7 @@ def aaccPPiLNPay():
                 qr.print_ascii()
                 print("\033[0;37;40m")
                 qr.clear()
-                print("Lightning Invoice: " + c)
+                print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
                 checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
@@ -2379,7 +2393,14 @@ def aaccPPiOpenNode():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = (
+                'curl -X POST https://lnbits.com/api/v1/payments -d '
+                + "'{"
+                + f""""out": false, "amount": 1000, "memo": "OpenNode on PyBLOCK {bitLN['NN']}" """
+                + "}'"
+                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            )
+
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -2393,7 +2414,7 @@ def aaccPPiOpenNode():
                 qr.print_ascii()
                 print("\033[0;37;40m")
                 qr.clear()
-                print("Lightning Invoice: " + c)
+                print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
                 checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
