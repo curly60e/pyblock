@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "1.1.14-beta1"
+version = "1.1.14-beta2"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -78,7 +78,16 @@ def rpc(method, params=[]):
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
+def pathexec():
+    global path
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
 
+def lndconnectexec():
+    global lndconnectload
+    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 #-----------------------------Slush--------------------------------
 
 def slDIFFConn():
@@ -973,12 +982,8 @@ def MainMenuLOCAL(): #Main Menu
     clear()
     blogo()
     sysinfo()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
-    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1010,9 +1015,8 @@ def MainMenuLOCALChainONLY(): #Main Menu
     clear()
     blogo()
     sysinfo()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
+    pathexec()
+    #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1037,6 +1041,8 @@ def MainMenuREMOTE(): #Main Menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
@@ -1072,6 +1078,8 @@ def bitcoincoremenuLOCAL():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1111,6 +1119,8 @@ def bitcoincoremenuLOCALOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1145,6 +1155,8 @@ def walletmenuLOCALOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1166,6 +1178,8 @@ def bitcoincoremenuLOCALOPRETURN():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1194,6 +1208,8 @@ def bitcoincoremenuLOCALOPRETURNOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1217,6 +1233,8 @@ def bitcoincoremenuREMOTE():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     a = "Local" if path['bitcoincli'] else "Remote"
     blk = rpc('getblockchaininfo')
     d = blk
@@ -1249,6 +1267,8 @@ def bitcoincoremenuREMOTEOPRETURN():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     a = "Local" if path['bitcoincli'] else "Remote"
     blk = rpc('getblockchaininfo')
     d = blk
@@ -1277,6 +1297,8 @@ def lightningnetworkLOCAL():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1322,6 +1344,8 @@ def chatConn():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1349,6 +1373,8 @@ def pyCHATA():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1376,6 +1402,8 @@ def pyCHATB():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1403,6 +1431,8 @@ def pyCHATC():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1430,6 +1460,8 @@ def lightningnetworkREMOTE():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     a = "Local" if path['bitcoincli'] else "Remote"
     blk = rpc('getblockchaininfo')
     d = blk
@@ -1468,11 +1500,8 @@ def APIMenuLOCAL():
     clear()
     blogo()
     sysinfo()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
-    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1524,9 +1553,8 @@ def APIMenuLOCALOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1572,6 +1600,8 @@ def decodeHex():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1599,6 +1629,8 @@ def decodeHexOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -1620,6 +1652,8 @@ def miscellaneousLOCAL():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1662,6 +1696,8 @@ def miscellaneousLOCALOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1698,6 +1734,8 @@ def slushpoolREMOTEOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1733,6 +1771,8 @@ def slushpoolLOCALOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1768,6 +1808,8 @@ def runTheNumbersMenu():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1807,6 +1849,8 @@ def runTheNumbersMenuOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1840,6 +1884,8 @@ def runTheNumbersMenuConn():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1879,6 +1925,8 @@ def weatherMenuOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1911,6 +1959,8 @@ def weatherMenu():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1949,6 +1999,8 @@ def dnt(): # Donation selection menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -1987,6 +2039,8 @@ def dntOnchainONLY(): # Donation selection menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2020,6 +2074,8 @@ def dntDev(): # Dev Donation Menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2059,6 +2115,8 @@ def dntDevOnchainONLY(): # Dev Donation Menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2092,6 +2150,8 @@ def dntTst(): # Tester Donation Menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2130,6 +2190,8 @@ def dntTstOnchainONLY(): # Tester Donation Menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2163,6 +2225,8 @@ def satnodeMenu(): # Satnode Menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2203,6 +2267,8 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2237,6 +2303,8 @@ def rateSX():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2275,6 +2343,8 @@ def rateSXOncainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2307,6 +2377,8 @@ def mempoolmenu():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2345,6 +2417,8 @@ def mempoolmenuOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2382,6 +2456,8 @@ def APILnbit():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2424,6 +2500,11 @@ def APILnbit():
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnbitOnchainONLY():
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
+    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
         bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
@@ -2431,6 +2512,8 @@ def APILnbitOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2474,6 +2557,8 @@ def APILnPay():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2521,6 +2606,8 @@ def APILnPayOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2562,6 +2649,8 @@ def APIOpenNode():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2609,6 +2698,8 @@ def APIOpenNodeOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2646,6 +2737,8 @@ def APITippinMe():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2685,6 +2778,8 @@ def APITippinMeOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2718,6 +2813,8 @@ def APITallyCo():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2758,6 +2855,8 @@ def APITallyCoOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2794,6 +2893,8 @@ def settings4Local():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -2822,6 +2923,8 @@ def settings4LocalOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
@@ -2844,6 +2947,8 @@ def settings4Remote():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     a = "Local" if path['bitcoincli'] else "Remote"
     blk = rpc('getblockchaininfo')
     d = blk
@@ -2872,6 +2977,8 @@ def designQ():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2920,6 +3027,8 @@ def designQOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -2964,6 +3073,8 @@ def designC():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3012,6 +3123,8 @@ def designCOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3056,6 +3169,8 @@ def designCRemote():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3104,6 +3219,8 @@ def colors():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3143,6 +3260,8 @@ def colorsOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3178,6 +3297,8 @@ def colorsC():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3216,6 +3337,8 @@ def colorsCOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3249,6 +3372,8 @@ def colorsCRemote():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3287,6 +3412,8 @@ def colorsSelectFront():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3332,6 +3459,8 @@ def colorsSelectFrontOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3373,6 +3502,8 @@ def colorsSelectFrontClock():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3418,6 +3549,8 @@ def colorsSelectFrontClockOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3459,6 +3592,8 @@ def colorsSelectFrontClockRemote():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3504,6 +3639,8 @@ def colorsSelectBack():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3549,6 +3686,8 @@ def colorsSelectBackOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "RemotcolorsCe"
         bitcoincli = " getblockchaininfo"
@@ -3590,6 +3729,8 @@ def colorsSelectBackClock():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3639,6 +3780,8 @@ def colorsSelectBackClockOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3680,6 +3823,8 @@ def colorsSelectBackClockRemote():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3725,6 +3870,8 @@ def colorsSelectRainbow():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3763,6 +3910,8 @@ def colorsSelectRainbowOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3797,6 +3946,8 @@ def colorsSelectRainbowStart():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3842,6 +3993,8 @@ def colorsSelectRainbowStartOnchaiONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    #lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3883,6 +4036,8 @@ def colorsSelectRainbowEnd():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3928,6 +4083,8 @@ def colorsSelectRainbowEndOnchainONLY():
     clear()
     blogo()
     sysinfo()
+    pathexec()
+    lndconnectexec()
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -3987,8 +4144,6 @@ def menuSelection():
             MainMenuLOCAL()
         elif chln == "C":
             MainMenuCROPPED()
-        #else:
-        #    MainMenuREMOTE()
     else:
         if os.path.isfile('config/blndconnect.conf'):
             chln['offchain'] = "offchain"
@@ -4240,6 +4395,8 @@ def testlogoRB():
         pass
 
 def testClock():
+    pathexec()
+    #lndconnectexec()
     bitcoinclient = path['bitcoincli'] + " getblockcount"
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
