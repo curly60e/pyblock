@@ -530,7 +530,7 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/block-height/0 """
+        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f | jq -C """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -692,7 +692,7 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text """
+        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -727,7 +727,7 @@ def localHalving():
         clear()
         blogo()
         closed()
-        output = render("blocks until mining reward is halved", colors=['yellow'], align='left', font='tiny')
+        output = render("blocks to halving", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -738,7 +738,7 @@ def localHalving():
 
 def pdfconvert():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/bitcoin.pdf | pdf2text """
+        conn = """curl -s https://raw.githubusercontent.com/karask/satoshi-paper/master/bitcoin.md | html2text | jq -R """
         a = os.popen(conn).read()
         clear()
         blogo()
