@@ -460,7 +460,7 @@ def getrawtx(): # show confirmatins from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C """
+        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -506,7 +506,7 @@ def localHalving():
 
 def pdfconvert():
     try:
-        conn = """curl -s https://raw.githubusercontent.com/karask/satoshi-paper/master/bitcoin.md | html2text | jq -R"""
+        conn = """curl -s https://nakamotoinstitute.org/bitcoin/ | html2text | grep Abstract -A 427"""
         a = os.popen(conn).read()
         clear()
         blogo()
