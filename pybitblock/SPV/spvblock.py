@@ -286,12 +286,12 @@ def ckpoolpoolLOCALOnchainONLY():
 
 def getblock():
     try:
-        conn = """curl -s https://mempool.space/api/blocks/tip/height """
+        conn = """curl -s https://developer.bitcoin.org/reference/rpc/getblockchaininfo.html | html2text | grep -E Result -A 50 | grep -v Result """
         a = os.popen(conn).read()
         clear()
         blogo()
         closed()
-        output = render("block", colors=['yellow'], align='left', font='tiny')
+        output = render("getblockchaininfo", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -300,23 +300,9 @@ def getblock():
 
 def searchTXS():
     try:
-        clear()
-        blogo()
-        output = render(
-            "Tx", colors=['yellow'], align='left', font='tiny'
-        )
-
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
-        responseC = input("TX ID: ")
-        url2 = f'curl -s https://mempool.space/api/tx/{responseC}'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
-        clear()
-        blogo()
-        print("\nTransaction ID: " + responseC)
-        print(f'Tx: {r3}')
-        input("\nContinue...")
+        input("\a\nContinue...")
     except:
         pass
 
@@ -365,7 +351,7 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f | jq -C """
+        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f | jq -C"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -379,45 +365,17 @@ def getgenesis():
 
 def readHexBlock():
     try:
-        clear()
-        blogo()
-        output = render(
-            "Hex Block", colors=['yellow'], align='left', font='tiny'
-        )
-
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
-        responseC = input("TX ID: ")
-        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
-        clear()
-        blogo()
-        print("\nTransaction ID: " + responseC)
-        print(f'Hex Block: {r3}')
-        input("\nContinue...")
+        input("\a\nContinue...")
     except:
         pass
 
 def readHexTx():
     try:
-        clear()
-        blogo()
-        output = render(
-            "Hex Tx", colors=['yellow'], align='left', font='tiny'
-        )
-
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
-        responseC = input("TX ID: ")
-        url2 = f'curl -s https://mempool.space/api/tx/{responseC}/hex'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
-        clear()
-        blogo()
-        print("\nTransaction ID: " + responseC)
-        print(f'Hex Tx: {r3}')
-        input("\nContinue...")
+        input("\a\nContinue...")
     except:
         pass
 
@@ -494,29 +452,15 @@ def design():
 
 def getrawtx(): # show confirmatins from transactions
     try:
-        clear()
-        blogo()
-        output = render(
-            "Hex Tx", colors=['yellow'], align='left', font='tiny'
-        )
-
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
-        responseC = input("TX ID: ")
-        url2 = f'curl -s https://mempool.space/api/block/{responseC}/raw'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
-        clear()
-        blogo()
-        print("\nTransaction ID: " + responseC)
-        print(f'Hex Tx: {r3}')
-        input("\nContinue...")
+        input("\a\nContinue...")
     except:
         pass
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C """
+        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -562,7 +506,7 @@ def localHalving():
 
 def pdfconvert():
     try:
-        conn = """curl -s https://raw.githubusercontent.com/karask/satoshi-paper/master/bitcoin.md | html2text | jq -R """
+        conn = """curl -s https://nakamotoinstitute.org/bitcoin/ | html2text | grep October -A 428"""
         a = os.popen(conn).read()
         clear()
         blogo()
