@@ -3135,7 +3135,7 @@ def pdfconvert():
         output = render("whitepaper", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
-        input("\a\nContinue...")
+        input("\a\nControl + C...")
     except:
         pass
 
