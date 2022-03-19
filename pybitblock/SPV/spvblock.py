@@ -2995,7 +2995,7 @@ def console(): # get into the console from bitcoin-cli
         closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
-        input("\a\nContinue...")
+        input("\a\nControl + C...")
     except:
         pass
 
