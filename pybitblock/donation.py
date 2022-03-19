@@ -45,49 +45,13 @@ def donationLN():
     box_size=10,
     border=4,
     )
-    amt = input("Amount: ")
-    curl = (
-        'curl -X POST https://lnbits.com/api/v1/payments -d '
-        + "'{"
-        + f""""out": false, "amount": {amt}, "memo": "Donation" """
-        + "}'"
-        + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-    )
-
-    sh = os.popen(curl).read()
-    clear()
-    blogo()
-    n = str(sh)
-    d = json.loads(n)
-    q = d['payment_request']
-    c = q.lower()
-    while True:
-        print("\033[1;30;47m")
-        qr.add_data(c)
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        qr.clear()
-        print(f"Lightning Invoice: {c}")
-        dn = str(d['checking_id'])
-        t.sleep(10)
-        checkcurl = (
-            f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-            + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-        )
-
-        rsh = os.popen(checkcurl).read()
-        clear()
-        blogo()
-        nn = str(rsh)
-        dd = json.loads(nn)
-        db = dd['paid']
-        if db is not True:
-            continue
-
-        clear()
-        blogo()
-        tick()
-        bitLN['pd'] = "PAID"
+    url = 'pyblock@zbd.gg'
+    print("\033[1;30;47m")
+    qr.add_data(url)
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    qr.clear()
+    print(f"Lightning Address: {url}")
 
 #Tester Address
 def donationAddrTst():
@@ -113,36 +77,13 @@ def donationLNTst():
     box_size=10,
     border=4,
     )
-    url = 'https://api.tippin.me/v1/public/addinvoice/__B__T__C__'
-    response = requests.get(url)
-    responseB = str(response.text)
-    responseC = responseB
-    lnreq = responseC.split(',')
-    lnurl = lnreq[1]
-    lnurlS = str(lnurl)
-    lnurlR = lnurlS.split(':')
-    lnurlW = lnurlR[1]
-    ln = str(lnurlW)
-    ln1 = ln.strip('"')
-    node_not = input("Do you want to pay this tip with your node? Y/n: ")
-    if node_not in ["Y", "y"]:
-        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        if lndconnectload['ip_port']:
-            print("\nInvoice: " + ln1 + "\n")
-            payinvoice()
-        elif lndconnectload['ln']:
-            print("\nInvoice: " + ln1 + "\n")
-            localpayinvoice()
-    elif node_not in ["N", "n"]:
-        print("\033[1;30;47m")
-        qr.add_data(ln1)
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        print(f"LND Invoice: {ln1}")
-        qr.clear()
-        response.close()
+    url = 'sn@getalby.com'
+    print("\033[1;30;47m")
+    qr.add_data(url)
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    qr.clear()
+    print(f"Lightning Address: {url}")
 
 def decodeQR():
     qr = qrcode.QRCode(
