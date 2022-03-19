@@ -1977,11 +1977,11 @@ def tippinmeGetInvoice():
         responseB = str(response.text)
         responseC = responseB
         lnreq = responseC.split(',')
-        lnbc1 = lnreq[1]
-        lnbc1S = str(lnbc1)
-        lnbc1R = lnbc1S.split(':')
-        lnbc1W = lnbc1R[1]
-        ln = str(lnbc1W)
+        lnurl = lnreq[1]
+        lnurlS = str(lnurl)
+        lnurlR = lnurlS.split(':')
+        lnurlW = lnbc1R[1]
+        ln = str(lnurlW)
         ln1 = ln.strip('"')
         node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
@@ -2809,7 +2809,7 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f | jq -C"""
+        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f#JSON | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -2918,7 +2918,7 @@ def getrawtx(): # show confirmatins from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C"""
+        conn = """curl -s https://get.txoutset.info/ | html2text | xargs -L 1 | tr -d '{|}|]|,'"""
         a = os.popen(conn).read()
         clear()
         blogo()
