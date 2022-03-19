@@ -10,25 +10,6 @@ from cfonts import render, say
 def clear(): # clear the screen
     os.system('cls' if os.name=='nt' else 'clear')
 
-def rectangle(n):
-    x = n - 3
-    y = n - x
-    [
-        print(''.join(i))
-        for i in
-        (
-            ''*x
-            if i in (0,y-1)
-            else
-            (
-                f'{""*n}{"|"*n}{""*n}'
-                if i >= (n+1)/2 and i <= (1*n)/2
-                else
-                f'\033[A\u001b[38;5;27m{"■"*(x-1)}\033[A'
-            )
-            for i in range(y)
-        )
-    ]
 
 def blogo():
 
@@ -82,9 +63,9 @@ def design():
         qq = os.popen(bitcoinclientgetblock).read()
         yy = json.loads(qq)
         mm = yy
-        outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+        outputsize = render(str(mm['size']) + " - Bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
         print("\x1b[?25l" + outputsize)
-        outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+        outputtxs = render(str(mm['nTx']) + " - Txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
         print("\x1b[?25l" + outputtxs)
         sh = int(mm['nTx']) / 4
         shq = int(sh)
@@ -107,9 +88,9 @@ def design():
                 qq = os.popen(bitcoinclientgetblock).read()
                 yy = json.loads(qq)
                 mm = yy
-                outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                outputsize = render(str(mm['size']) + " - Bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
                 print("\x1b[?25l" + outputsize)
-                outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                outputtxs = render(str(mm['nTx']) + " - Txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='console')
                 print("\x1b[?25l" + outputtxs)
                 sh = int(mm['nTx']) / 4
                 shq = int(sh)
