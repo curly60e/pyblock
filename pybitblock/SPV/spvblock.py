@@ -3495,29 +3495,12 @@ def APIMenuLOCAL():
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def decodeHex():
-    clear()
-    blogo()
-    sysinfo()
-    n = "CROPPED"
-    r = requests.get('https://mempool.space/api/blocks/tip/height')
-    r.headers['Content-Type']
-    nn = r.text
-    di = json.loads(nn)
-    a = di
-    b = str(a)
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Decode Blocks in HEX
-    \u001b[38;5;202mB.\033[0;37;40m Decode Transactions in HEX
-    \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, d['blocks'], version, checkupdate()))
-    decodeHexLOCAL(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
 
 def miscellaneousLOCAL():
     clear()
