@@ -3955,7 +3955,7 @@ def decodeHexLOCALOnchainONLY(hexloc):
         except:
             pass
 
-def lightningnetworkLOCALcontrol(lncore):
+def lightningnetworkLOCALcontrolCROPPED(lncore):
     if lncore in ["A", "a"]:
         while True:
             try:
