@@ -2891,6 +2891,9 @@ def getblock():
 
 def searchTXS():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -2910,6 +2913,9 @@ def untxsConn():
 
 def getnewaddressOnchain():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -2962,6 +2968,9 @@ def getgenesis():
 
 def readHexBlock():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -2970,6 +2979,9 @@ def readHexBlock():
 
 def readHexTx():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -2978,6 +2990,9 @@ def readHexTx():
 
 def console(): # get into the console from bitcoin-cli
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -3049,6 +3064,9 @@ def design():
 
 def getrawtx(): # show confirmatins from transactions
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -3071,6 +3089,9 @@ def runthenumbers():
 
 def countdownblock():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -3079,6 +3100,9 @@ def countdownblock():
 
 def countdownblockConn():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
