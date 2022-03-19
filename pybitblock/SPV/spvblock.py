@@ -351,7 +351,7 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f | jq -C"""
+        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f#JSON | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -460,7 +460,7 @@ def getrawtx(): # show confirmatins from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C"""
+        conn = """curl -s https://get.txoutset.info/ | html2text | xargs -L 1 | tr -d '{|}|]|,'"""
         a = os.popen(conn).read()
         clear()
         blogo()
