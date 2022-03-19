@@ -107,10 +107,10 @@ def donationLNTst():
     responseB = str(response.text)
     responseC = responseB
     lnreq = responseC.split(',')
-    lnbc1 = lnreq[1]
-    lnbc1S = str(lnbc1)
-    lnbc1R = lnbc1S.split(':')
-    lnbc1W = lnbc1R[1]
+    lnurl = lnreq[1]
+    lnurlS = str(lnbc1)
+    lnurlR = lnurlS.split(':')
+    lnurlW = lnurlR[1]
     ln = str(lnbc1W)
     ln1 = ln.strip('"')
     node_not = input("Do you want to pay this tip with your node? Y/n: ")
