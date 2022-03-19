@@ -302,6 +302,119 @@ def localgetnetworkinfoC():
         input("\a\nContinue...")
     except:
         pass
+    
+def chatConn():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    lndconnectexec()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+    \u001b[38;5;202mA.\033[0;37;40m Open
+    \u001b[38;5;202mB.\033[0;37;40m Close
+    \u001b[38;5;202mC.\033[0;37;40m Hidden
+    \u001b[31;1mQ.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    chatConnA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def pyCHATA():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    lndconnectexec()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+    \u001b[38;5;202mA.\033[0;37;40m Write
+    \u001b[38;5;202mB.\033[0;37;40m Read
+    \u001b[38;5;202mC.\033[0;37;40m List
+    \u001b[31;1mQ.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    chatConnB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def pyCHATB():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    lndconnectexec()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+    \u001b[38;5;202mA.\033[0;37;40m Write
+    \u001b[38;5;202mB.\033[0;37;40m Read
+    \u001b[38;5;202mC.\033[0;37;40m List
+    \u001b[31;1mQ.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    chatConnC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def pyCHATC():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    lndconnectexec()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    lncli = " getinfo"
+    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd0 = str(lsd)
+    alias = json.loads(lsd0)
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+    \u001b[38;5;202mA.\033[0;37;40m Write
+    \u001b[38;5;202mB.\033[0;37;40m Read
+    \u001b[38;5;202mC.\033[0;37;40m List
+    \u001b[31;1mQ.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    chatConnD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    
 
 #-----------------------------Slush--------------------------------
 
