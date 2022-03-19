@@ -17,5 +17,5 @@ def btcSupplyAtBlock(b):
 
 
 if __name__ == "__main__":
-    block = 1000000  # you want the supply after which block?
+    block = 777777  # you want the supply after which block?
     print(btcSupplyAtBlock(block))
