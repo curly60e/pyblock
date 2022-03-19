@@ -351,7 +351,7 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f#JSON | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1"""
+        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f | jq -C"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -460,7 +460,7 @@ def getrawtx(): # show confirmatins from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | xargs -L 1 | tr -d '{|}|]|,'"""
+        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -3963,66 +3963,66 @@ def lightningnetworkLOCALcontrol(lncore):
                 blogo()
                 sysinfo()
                 close()
-                consoleLN()
+                consoleLNC()
                 t.sleep(5)
             except:
                 break
     elif lncore in ["B", "b"]:
         clear()
         blogo()
-        localaddinvoice()
+        localaddinvoiceC()
     elif lncore in ["C", "c"]:
         clear()
         blogo()
-        localpayinvoice()
+        localpayinvoiceC()
     elif lncore in ["D", "d"]:
         clear()
         blogo()
-        localkeysend()
+        localkeysendC()
     elif lncore in ["E", "e"]:
         clear()
         blogo()
-        localnewaddress()
+        localnewaddressC()
     elif lncore in ["F", "f"]:
         clear()
         blogo()
-        locallistinvoices()
+        locallistinvoicesC()
     elif lncore in ["G", "g"]:
         clear()
         blogo()
-        localchannelbalance()
+        localchannelbalanceC()
     elif lncore in ["H", "h"]:
         clear()
         blogo()
-        locallistchannels()
+        locallistchannelsC()
     elif lncore in ["I", "i"]:
         clear()
         blogo()
-        localrebalancelnd()
+        localrebalancelndC()
     elif lncore in ["J", "j"]:
         clear()
         blogo()
-        locallistpeersQQ()
+        locallistpeersQQC()
     elif lncore in ["K", "k"]:
         clear()
         blogo()
-        localconnectpeer()
+        localconnectpeerC()
     elif lncore in ["L", "l"]:
         clear()
         blogo()
-        localbalanceOC()
+        localbalanceOCC()
     elif lncore in ["M", "m"]:
         clear()
         blogo()
-        locallistchaintxns()
+        locallistchaintxnsC()
     elif lncore in ["N", "n"]:
         clear()
         blogo()
-        localgetinfo()
+        localgetinfoC()
     elif lncore in ["O", "o"]:
         clear()
         blogo()
-        localgetnetworkinfo()
+        localgetnetworkinfoC()
     elif lncore in ["P", "p"]:
         clear()
         blogo()
@@ -4056,43 +4056,43 @@ def chatConnB(pyCHATA):
     if pyCHATA in ["A", "a"]:
         clear()
         blogo()
-        localchatsendA()
+        localchatsendAC()
     elif pyCHATA in ["B", "b"]:
         clear()
         blogo()
-        localchatnewA()
+        localchatnewAC()
     elif pyCHATA in ["C", "c"]:
         clear()
         blogo()
-        localchatlistA()
+        localchatlistAC()
 
 def chatConnC(pyCHATB):
     if pyCHATB in ["A", "a"]:
         clear()
         blogo()
-        localchatsendB()
+        localchatsendBC()
     elif pyCHATB in ["B", "b"]:
         clear()
         blogo()
-        localchatnewB()
+        localchatnewBC()
     elif pyCHATB in ["C", "c"]:
         clear()
         blogo()
-        localchatlistB()
+        localchatlistBC()
 
 def chatConnD(pyCHATC):
     if pyCHATC in ["A", "a"]:
         clear()
         blogo()
-        localchatsendC()
+        localchatsendCC()
     elif pyCHATC in ["B", "b"]:
         clear()
         blogo()
-        localchatnewC()
+        localchatnewCC()
     elif pyCHATC in ["C", "c"]:
         clear()
         blogo()
-        localchatlistC()
+        localchatlistCC()
 
 def platfformsLOCALcontrol(platf):
     if platf in ["A", "a"]:
