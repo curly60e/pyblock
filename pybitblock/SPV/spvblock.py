@@ -65,6 +65,244 @@ def rectangle(n):
     ]
 
 
+
+
+def localkeysendC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatsendAC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+
+def localchatnewAC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatlistAC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatsendBC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatnewBC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatlistBC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatsendCC():
+   try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatnewCC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchatlistCC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localchannelbalanceC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localnewaddressC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localbalanceOCC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localrebalancelndC():
+   try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+# Remote connection with rest -------------------------------------
+
+def getnewinvoice():
+   try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def payinvoice():
+   try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def getnewaddress():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def listinvoice():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def getinfo():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+
+def consoleLNC(): # get into the console from bitcoin-cli
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def locallistpeersQQC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localconnectpeerC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def locallistchaintxnsC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def locallistinvoicesC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def locallistchannelsC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localgetinfoC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localaddinvoiceC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localpayinvoiceC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def localgetnetworkinfoC():
+    try:
+        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
 #-----------------------------Slush--------------------------------
 
 def slDIFFConn():
@@ -3957,16 +4195,9 @@ def decodeHexLOCALOnchainONLY(hexloc):
 
 def lightningnetworkLOCALcontrol(lncore):
     if lncore in ["A", "a"]:
-        while True:
-            try:
-                clear()
-                blogo()
-                sysinfo()
-                close()
-                consoleLNC()
-                t.sleep(5)
-            except:
-                break
+        clear()
+        blogo()
+        consoleLNC()
     elif lncore in ["B", "b"]:
         clear()
         blogo()
