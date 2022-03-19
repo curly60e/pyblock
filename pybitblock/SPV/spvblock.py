@@ -65,6 +65,211 @@ def rectangle(n):
     ]
 
 
+def blogo():
+
+    if os.path.isfile('config/pyblocksettinconfig/gs.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("config/pyblocksettings.conf", "rb")) # Load the file 'bclock.conf'
+        settings = settingsv # Copy the variable pathv to 'path'
+    else:
+        settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
+
+    if settings["gradient"] == "grd":
+        output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
+    else:
+        output = render('PyBLOCK', colors=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
+
+    print(output)
+
+def tick():
+    print("""\033[1;32;40m
+
+
+
+
+                             @
+                              @
+                               @
+                               @@
+                                @@
+                                @@@
+                            @@@  @@.
+                             @@@@@@@
+                             @@@@@@@@
+                              @@@@
+                               @@@@
+                           @    @@@@
+                            @@@@@@@@
+                             @@@@@@@@
+                              @@@
+                               @@@
+                                @@
+                                 @@
+                                   @
+                                    @
+
+
+
+
+
+
+\033[0;37;40m""")
+
+def canceled():
+    print("""
+                   )              (         (
+   (     (      ( /(    (         )\ )      )\ )
+   )\    )\     )\())   )\   (   (()/(  (  (()/(
+ (((_)((((_)(  ((_)\  (((_)  )\   /(_)) )\  /(_))
+ )\___ )\ _ )\  _((_) )\___ ((_) (_))  ((_)(_))_
+((/ __|(_)_\(_)| \| |((/ __|| __|| |   | __||   \
+ | (__  / _ \  | .` | | (__ | _| | |__ | _| | |) |
+  \___|/_/ \_\ |_|\_|  \___||___||____||___||___/
+
+""")
+
+
+
+def logoA():
+    print("""\n\n\033[1;33;40m
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*****@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@****************************#@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@***************************************@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@***********************************************@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@*****************************************************@@@@@@@@@@@@@
+    @@@@@@@@@@@***********************************************************@@@@@@@@@@
+    @@@@@@@@@******************************    *****************************@@@@@@@@
+    @@@@@@@*******************************     ***     ***********************@@@@@@
+    @@@@@@**********************    .****     ****    *************************@@@@@
+    @@@@***********************                ,*     **************************@@@@
+    @@@****************************                    ***************************@@
+    @@******************************        *.              **********************#@
+    @@*****************************         ********          *********************@
+    @******************************        ***********        **********************
+    @*****************************        ***********         **********************
+    @*****************************                           ***********************
+    *****************************                         **************************
+    @***************************        ********           *************************
+    @***************************        ***********.         ***********************
+    @*********************  ***        *************         ***********************
+    @@*******************              ************          **********************@
+    @@********************                                  **********************@@
+    @@@**************************                         ,***********************@@
+    @@@@#***********************     ***     *.       **************************@@@@
+    @@@@@@*********************     ****    ***********************************@@@@@
+    @@@@@@@****************************     **********************************@@@@@@
+    @@@@@@@@@***************************************************************@@@@@@@@
+    @@@@@@@@@@@**********************************************************,@@@@@@@@@@
+    @@@@@@@@@@@@@@*****************************************************@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@***********************************************@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@***************************************@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@#***************************@@@@@@@@@@@@@@@@@@@@@@@@@@\033[0;37;40m
+    """)
+
+def logoB():
+    print("""\n\n\033[1;33;40m
+                                            /////
+                                ////////////////////////////%
+                          ///////////////////////////////////////
+                     ///////////////////////////////////////////////
+                  /////////////////////////////////////////////////////
+               ///////////////////////////////////////////////////////////
+             //////////////////////////////    /////////////////////////////
+           ///////////////////////////////     ///     ///////////////////////
+          //////////////////////    .////     ////    /////////////////////////
+        ///////////////////////                */     //////////////////////////
+       ////////////////////////////                    *//////////////////////////
+      //////////////////////////////        /.              //////////////////////
+      /////////////////////////////         ////////          /////////////////////
+     //////////////////////////////        //////////*        //////////////////////
+     /////////////////////////////        ///////////         //////////////////////
+     /////////////////////////////                           ///////////////////////
+    /////////////////////////////                         */////////////////////////
+     ///////////////////////////        ////////           /////////////////////////
+     ///////////////////////////        ///////////,         ///////////////////////
+     /////////////////////  ///        /////////////         ///////////////////////
+      ///////////////////              ////////////          //////////////////////
+      ////////////////////                                  //////////////////////
+       //////////////////////////                         *///////////////////////
+        %///////////////////////     ///     /.       //////////////////////////
+          /////////////////////     ////    ///////////////////////////////////
+           ////////////////////////////     //////////////////////////////////
+             ///////////////////////////////////////////////////////////////
+                //////////////////////////////////////////////////////////*
+                  /////////////////////////////////////////////////////
+                     ///////////////////////////////////////////////
+                         ///////////////////////////////////////
+                             %///////////////////////////
+                                        /////\033[0;37;40m
+    """)
+
+def logoC():
+    print("""\n\n\033[1;33;40m
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&&&&@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@
+    @@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@
+    @@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&    &&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@
+    @@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&     &&&     &&&&&&&&&&&&&&&&&&&&&&&@@@@@@
+    @@@@@@&&&&&&&&&&&&&&&&&&&&&&    *&&&&     &&&&    &&&&&&&&&&&&&&&&&&&&&&&&&@@@@@
+    @@@@&&&&&&&&&&&&&&&&&&&&&&&                #&     &&&&&&&&&&&&&&&&&&&&&&&&&&@@@@
+    @@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&.                   %&&&&&&&&&&&&&&&&&&&&&&&&&&@@
+    @@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&        &,              &&&&&&&&&&&&&&&&&&&&&&@@
+    @@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.        &&&&&&&&          &&&&&&&&&&&&&&&&&&&&&@
+    @&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&        &&&&&&&&&&%        &&&&&&&&&&&&&&&&&&&&&&
+    @&&&&&&&&&&&&&&&&&&&&&&&&&&&&&        &&&&&&&&&&&         &&&&&&&&&&&&&&&&&&&&&&
+    @&&&&&&&&&&&&&&&&&&&&&&&&&&&&&                           &&&&&&&&&&&&&&&&&&&&&&&
+    &&&&&&&&&&&&&&&&&&&&&&&&&&&&&                         %&&&&&&&&&&&&&&&&&&&&&&&&&
+    @&&&&&&&&&&&&&&&&&&&&&&&&&&&        &&&&&&&&           &&&&&&&&&&&&&&&&&&&&&&&&&
+    @&&&&&&&&&&&&&&&&&&&&&&&&&&&        &&&&&&&&&&&/         &&&&&&&&&&&&&&&&&&&&&&&
+    @&&&&&&&&&&&&&&&&&&&&&  &&&        &&&&&&&&&&&&&         &&&&&&&&&&&&&&&&&&&&&&&
+    @@&&&&&&&&&&&&&&&&&&&              &&&&&&&&&&&&          &&&&&&&&&&&&&&&&&&&&&&@
+    @@&&&&&&&&&&&&&&&&&&&&                                  &&&&&&&&&&&&&&&&&&&&&&@@
+    @@@&&&&&&&&&&&&&&&&&&&&&&&&&&                         %&&&&&&&&&&&&&&&&&&&&&&&@@
+    @@@@@&&&&&&&&&&&&&&&&&&&&&&&     &&&     &,       &&&&&&&&&&&&&&&&&&&&&&&&&&@@@@
+    @@@@@@&&&&&&&&&&&&&&&&&&&&&     &&&&    &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@
+    @@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&     &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@
+    @@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@
+    @@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@
+    @@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&@@@@@@@@@@@@@@@@@@@@@@@@@@\033[0;37;40m
+    """)
+
+def gitclone():
+    url = "https://github.com/curly60e/satellite"
+    os.system("git clone " + url)
+    os.system("mkdir satellite/api/examples/.gnupg")
+    os.system("gpg --full-generate-key --homedir satellite/api/examples/.gnupg")
+
+def satnode():
+    try:
+        os.system("python3 satellite/api/examples/demo-rx.py &")
+        t.sleep(5)
+        os.system("python3 satellite/api/examples/api_data_reader.py --demo  --plaintext ")
+    except:
+        os.system("ps -ef | grep api_data_reader.py | grep -v grep | awk '{print $2}' | xargs kill -9")
+        os.system("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9")
+
+def matrixsc():
+    if os.path.isdir('$HOME/pyblock/terminal_matrix'):
+        print("OK Pass")
+    else:
+        url = "https://github.com/curly60e/terminal_matrix.git"
+        os.system("git clone " + url)
+
+def main():
+    scriptpath = os.path.join(os.path.dirname(__file__), 'PyBlock.py')
+    os.system(f"python3 {scriptpath}")
+
+
+if __name__ == "__main__":
+    typer.run(main)
+
+
 def opreturnOnchainONLY():
     qr = qrcode.QRCode(
     version=1,
@@ -3132,17 +3337,13 @@ def chatConn():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
-
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -3152,23 +3353,20 @@ def chatConn():
     \u001b[38;5;202mB.\033[0;37;40m Close
     \u001b[38;5;202mC.\033[0;37;40m Hidden
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     chatConnA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATA():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
 
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
@@ -3179,23 +3377,20 @@ def pyCHATA():
     \u001b[38;5;202mB.\033[0;37;40m Read
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     chatConnB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATB():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
 
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
@@ -3206,23 +3401,20 @@ def pyCHATB():
     \u001b[38;5;202mB.\033[0;37;40m Read
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     chatConnC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATC():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
 
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
@@ -3233,7 +3425,7 @@ def pyCHATC():
     \u001b[38;5;202mB.\033[0;37;40m Read
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     chatConnD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -3276,16 +3468,13 @@ def decodeHex():
     clear()
     blogo()
     sysinfo()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
 
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
@@ -3296,7 +3485,7 @@ def decodeHex():
     \u001b[38;5;202mA.\033[0;37;40m Decode Blocks in HEX
     \u001b[38;5;202mB.\033[0;37;40m Decode Transactions in HEX
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, d['blocks'], version, checkupdate()))
     decodeHexLOCAL(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -3304,28 +3493,13 @@ def miscellaneousLOCAL():
     clear()
     blogo()
     sysinfo()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-
-        lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
-        lsd0 = str(lsd)
-        alias = json.loads(lsd0)
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
-
-        cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-        headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-        r = requests.get(url, headers=headers, verify=cert_path)
-        alias = r.json()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
@@ -3339,7 +3513,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolREMOTEOnchainONLY():
