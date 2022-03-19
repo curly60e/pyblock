@@ -125,7 +125,7 @@ def localchatlistBC():
         pass
 
 def localchatsendCC():
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -173,7 +173,7 @@ def localbalanceOCC():
         pass
 
 def localrebalancelndC():
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -183,7 +183,7 @@ def localrebalancelndC():
 # Remote connection with rest -------------------------------------
 
 def getnewinvoice():
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -191,7 +191,7 @@ def getnewinvoice():
         pass
 
 def payinvoice():
-   try:
+    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
