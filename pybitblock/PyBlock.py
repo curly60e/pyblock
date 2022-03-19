@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha8"
+version = "2.0-alpha9"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -6818,8 +6818,8 @@ def introINIT():
     blogo()
     #sysinfo()
     print("""\t\t
-    Welcome 𝓒𝔂𝓹𝓱𝓮𝓻𝓹𝓾𝓷𝓴. 
-    
+    Welcome 𝓒𝔂𝓹𝓱𝓮𝓻𝓹𝓾𝓷𝓴.
+
     Connect 𝗣𝘆𝗕𝗟Ø𝗖𝗞 to your Nodes or Run the Cropped option.
 
 
@@ -6834,7 +6834,7 @@ def introINIT():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
             pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -6847,6 +6847,6 @@ while True: # Loop
             introINIT()
         else:
             menuSelection()
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
