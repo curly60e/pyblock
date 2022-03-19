@@ -25,7 +25,7 @@ def rectangle(n):
                 f'{""*n}{"|"*n}{""*n}'
                 if i >= (n+1)/2 and i <= (1*n)/2
                 else
-                f'\033[A\u001b[38;5;27m{"■"*(x-1)}\033[A'
+                f'\033[A\u001b[38;5;27m{"❑"*(x-1)}\033[A'
             )
             for i in range(y)
         )
@@ -49,7 +49,7 @@ def counttxs():
             d = json.loads(gna1)
             e = len(d)
             n = e / 10
-            outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            outputtxs = render(str(e) + " unconfirmed txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print("\x1b[?25l" + outputtxs)
             shq = int(n)
             ss = str(rectangle(shq))
