@@ -125,7 +125,10 @@ while True: # Loop
             blogo()
             print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
             print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
-            path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
+            path[
+                'ip_port'
+            ] = f'http://{input("Insert IP:PORT to access your remote Bitcoin-Cli node: ")}'
+
             path['rpcuser'] = input("RPC User: ")
             path['rpcpass'] = input("RPC Password: ")
             print("\n\tLocal Bitcoin Core Node connection.\n")
