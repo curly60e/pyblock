@@ -241,7 +241,7 @@ def logoC():
 
 def gitclone():
     url = "https://github.com/curly60e/satellite"
-    os.system("git clone " + url)
+    os.system(f"git clone {url}")
     os.system("mkdir satellite/api/examples/.gnupg")
     os.system("gpg --full-generate-key --homedir satellite/api/examples/.gnupg")
 
@@ -259,7 +259,7 @@ def matrixsc():
         print("OK Pass")
     else:
         url = "https://github.com/curly60e/terminal_matrix.git"
-        os.system("git clone " + url)
+        os.system(f"git clone {url}")
 
 def main():
     scriptpath = os.path.join(os.path.dirname(__file__), 'PyBlock.py')
@@ -2899,6 +2899,9 @@ def searchTXS():
 
 def untxsConn():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
@@ -2915,6 +2918,9 @@ def getnewaddressOnchain():
 
 def gettransactionsOnchain():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
