@@ -91,7 +91,7 @@ def runthenumbersConn():
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
-def consoleLN(): # get into the console from bitcoin-cli
+def consoleLNC(): # get into the console from bitcoin-cli
    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -99,7 +99,7 @@ def consoleLN(): # get into the console from bitcoin-cli
     except:
         pass
 
-def locallistpeersQQ():
+def locallistpeersQQC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -107,7 +107,7 @@ def locallistpeersQQ():
     except:
         pass
 
-def localconnectpeer():
+def localconnectpeerC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -115,7 +115,7 @@ def localconnectpeer():
     except:
         pass
 
-def locallistchaintxns():
+def locallistchaintxnsC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -123,7 +123,7 @@ def locallistchaintxns():
     except:
         pass
 
-def locallistinvoices():
+def locallistinvoicesC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -131,7 +131,7 @@ def locallistinvoices():
     except:
         pass
 
-def locallistchannels():
+def locallistchannelsC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -139,7 +139,7 @@ def locallistchannels():
     except:
         pass
 
-def localgetinfo():
+def localgetinfoC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -147,7 +147,7 @@ def localgetinfo():
     except:
         pass
 
-def localaddinvoice():
+def localaddinvoiceC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -155,7 +155,7 @@ def localaddinvoice():
     except:
         pass
 
-def localpayinvoice():
+def localpayinvoiceC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -163,7 +163,7 @@ def localpayinvoice():
     except:
         pass
 
-def localgetnetworkinfo():
+def localgetnetworkinfoC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -191,7 +191,7 @@ def localFullProtocol():
 
 
 
-def localkeysend():
+def localkeysendC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -199,7 +199,7 @@ def localkeysend():
     except:
         pass
 
-def localchatsendA():
+def localchatsendAC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -208,7 +208,7 @@ def localchatsendA():
         pass
     
     
-def localchatnewA():
+def localchatnewAC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -216,7 +216,7 @@ def localchatnewA():
     except:
         pass
 
-def localchatlistA():
+def localchatlistAC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -224,7 +224,7 @@ def localchatlistA():
     except:
         pass
 
-def localchatsendB():
+def localchatsendBC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -232,7 +232,7 @@ def localchatsendB():
     except:
         pass
 
-def localchatnewB():
+def localchatnewBC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -240,7 +240,7 @@ def localchatnewB():
     except:
         pass
 
-def localchatlistB():
+def localchatlistBC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -248,7 +248,7 @@ def localchatlistB():
     except:
         pass
     
-def localchatsendC():
+def localchatsendCC():
    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -256,7 +256,7 @@ def localchatsendC():
     except:
         pass
     
-def localchatnewC():
+def localchatnewCC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -264,7 +264,7 @@ def localchatnewC():
     except:
         pass
 
-def localchatlistC():
+def localchatlistCC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -272,7 +272,7 @@ def localchatlistC():
     except:
         pass
 
-def localchannelbalance():
+def localchannelbalanceC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -280,7 +280,7 @@ def localchannelbalance():
     except:
         pass
     
-def localnewaddress():
+def localnewaddressC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -288,7 +288,7 @@ def localnewaddress():
     except:
         pass
 
-def localbalanceOC():
+def localbalanceOCC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
@@ -296,7 +296,7 @@ def localbalanceOC():
     except:
         pass
     
-def localrebalancelnd():
+def localrebalancelndC():
    try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
