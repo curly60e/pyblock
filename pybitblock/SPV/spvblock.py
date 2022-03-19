@@ -143,38 +143,6 @@ def opreturn():
     border=4,
     )
     try:
-        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-            lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        else:
-            clear()
-            blogo()
-            print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
-            lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
-            lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
-            lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
-            print("\n\tLocal Lightning Node connection.\n")
-            lndconnectload["ln"] = input("Insert the path to lncli: ")
-            pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
-
-        path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-        if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
-        else:
-            blogo()
-            print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-            print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
-            path[
-                'ip_port'
-            ] = f'http://{input("Insert IP:PORT to access your remote Bitcoin-Cli node: ")}'
-
-            path['rpcuser'] = input("RPC User: ")
-            path['rpcpass'] = input("RPC Password: ")
-            print("\n\tLocal Bitcoin Core Node connection.\n")
-            path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-            pickle.dump(path, open("bclock.conf", "wb"))
         clear()
         blogo()
         output = render(
@@ -202,78 +170,38 @@ def opreturn():
             message = input("\nMessage: ")
         a = os.popen(curl).read()
         b = str(a)
-        node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
-        if node_not in ["Y", "y"]:
-            lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-            if lndconnectload['ip_port']:
-                print("\nInvoice: " + b + "\n")
-                payinvoice()
-                cert_path = lndconnectload["tls"]
-                macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-                headers = {'Grpc-Metadata-macaroon': macaroon}
-                url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
-                r = requests.get(url, headers=headers, verify=cert_path)
-                s = r.json()
-                url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
-                response = requests.get(url)
-                responseB = str(response.text)
-                responseC = responseB
-                clear()
-                blogo()
-                print("\nTransaction ID: " + responseC)
-                input("\nContinue...")
-            elif lndconnectload['ln']:
-                print("\nInvoice: " + b + "\n")
-                localpayinvoice()
-                invoiceN = b
-                invoice = invoiceN.lower()
-                lncli = " payinvoice "
-                lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
-                lsd0 = str(lsd)
-                d = json.loads(lsd0)
-                url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
-                response = requests.get(url)
-                responseB = str(response.text)
-                responseC = responseB
-                clear()
-                blogo()
-                print("\nTransaction ID: " + responseC)
-                input("\nContinue...")
+        clear()
+        blogo()
+        print("\033[1;30;47m")
+        qr.add_data(b)
+        qr.print_ascii()
+        print("\033[0;37;40m")
+        print(f'LND Invoice: {b}')
+        qr.clear()
+        input("\nContinue...")
+        if lndconnectload['ln']:
+            invoiceN = b
+            invoice = invoiceN.lower()
+            lncli = " payinvoice "
+            lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
+            lsd0 = str(lsd)
+            d = json.loads(lsd0)
+            url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
         else:
-            clear()
-            blogo()
-            print("\033[1;30;47m")
-            qr.add_data(b)
-            qr.print_ascii()
-            print("\033[0;37;40m")
-            print(f'LND Invoice: {b}')
-            qr.clear()
-            input("\nContinue...")
-            if lndconnectload['ln']:
-                invoiceN = b
-                invoice = invoiceN.lower()
-                lncli = " payinvoice "
-                lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
-                lsd0 = str(lsd)
-                d = json.loads(lsd0)
-                url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
-            else:
-                cert_path = lndconnectload["tls"]
-                macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-                headers = {'Grpc-Metadata-macaroon': macaroon}
-                url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
-                r = requests.get(url, headers=headers, verify=cert_path)
-                s = r.json()
-                url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
-            response = requests.get(url)
-            responseB = str(response.text)
-            responseC = responseB
-            clear()
-            blogo()
-            print("\nTransaction ID: " + responseC)
-            input("\nContinue...")
+            cert_path = lndconnectload["tls"]
+            macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+            headers = {'Grpc-Metadata-macaroon': macaroon}
+            url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
+            r = requests.get(url, headers=headers, verify=cert_path)
+            s = r.json()
+            url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
+        response = requests.get(url)
+        responseB = str(response.text)
+        responseC = responseB
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        input("\nContinue...")
     except:
         pass
 
