@@ -1939,11 +1939,11 @@ def tippinmeGetInvoice():
         responseB = str(response.text)
         responseC = responseB
         lnreq = responseC.split(',')
-        lnbc1 = lnreq[1]
-        lnbc1S = str(lnbc1)
-        lnbc1R = lnbc1S.split(':')
-        lnbc1W = lnbc1R[1]
-        ln = str(lnbc1W)
+        lnurl = lnreq[1]
+        lnurlS = str(lnurl)
+        lnurlR = lnurlS.split(':')
+        lnurlW = lnurlR[1]
+        ln = str(lnurlW)
         ln1 = ln.strip('"')
         node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
