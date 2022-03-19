@@ -48,10 +48,15 @@ def counttxs():
             gna1 = str(gnaa)
             d = json.loads(gna1)
             e = len(d)
-            n = e / 10
-            outputtxs = render(str(e) + " unconfirmed txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            outputtxs = render(
+                f'{e} unconfirmed txs',
+                colors=[settingsClock['colorA'], settingsClock['colorB']],
+                align='center',
+                font='tiny',
+            )
+
             print("\x1b[?25l" + outputtxs)
-            shq = int(n)
+            shq = e // 10
             ss = str(rectangle(shq))
             qq = ss.replace("None","")
             print(f"\033[A{qq}\033[A")
@@ -72,7 +77,10 @@ while True: # Loop
             blogo()
             print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
             print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
-            path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
+            path[
+                'ip_port'
+            ] = f'http://{input("Insert IP:PORT to access your remote Bitcoin-Cli node: ")}'
+
             path['rpcuser'] = input("RPC User: ")
             path['rpcpass'] = input("RPC Password: ")
             print("\n\tLocal Bitcoin Core Node connection.\n")
