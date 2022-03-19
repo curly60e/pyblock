@@ -3,7 +3,7 @@ import os
 import sys
 import base64, codecs, json, requests
 import time as t
-from pynput import keyboard
+from pblogo import *
 from cfonts import render, say
 
 
@@ -63,6 +63,7 @@ def counttxs():
             t.sleep(10)
         except:
             break
+
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
