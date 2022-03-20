@@ -2884,7 +2884,6 @@ def getblock():
         closed()
         output = render("getblockchaininfo", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
         input("\a\nContinue...")
     except:
         pass
@@ -2961,7 +2960,6 @@ def getgenesis():
         closed()
         output = render("genesis", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
         input("\a\nContinue...")
     except:
         pass
