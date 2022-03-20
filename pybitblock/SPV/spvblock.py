@@ -33,7 +33,10 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 
-version = "2.0"
+version = "2.0.1-alpha1"
+
+settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -64,6 +67,85 @@ def rectangle(n):
         )
     ]
 
+def counttxs():
+    rr = requests.get('https://mempool.space/api/blocks/tip/height')
+    rr.headers['Content-Type']
+    qs = rr.text
+    din = json.loads(qs)
+    an = din
+    bs = str(an)
+    a = bs
+    r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
+    r.headers['Content-Type']
+    n = r.text
+    di = json.loads(n)
+    s = di
+    e = int(s)
+    n = e / 10
+    nn = n
+    clear()
+    outputtxs = render(
+        f'{e} txs',
+        colors=[settingsClock['colorA'], settingsClock['colorB']],
+        align='center',
+        font='tiny',
+    )
+
+    print("\x1b[?25l" + outputtxs)
+    shq = int(n)
+    ss = str(rectangle(shq))
+    qq = ss.replace("None","")
+    print(f"\033[A{qq}\033[A")
+    while True:
+        x = a
+        rr = requests.get('https://mempool.space/api/blocks/tip/height')
+        rr.headers['Content-Type']
+        qs = rr.text
+        din = json.loads(qs)
+        an = din
+        bs = str(an)
+        r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
+        r.headers['Content-Type']
+        n = r.text
+        di = json.loads(n)
+        s = di
+        e = int(s)
+        n = e / 10
+        if e > nn:
+            clear()
+            outputtxs = render(
+                f'{e} txs',
+                colors=[settingsClock['colorA'], settingsClock['colorB']],
+                align='center',
+                font='tiny',
+            )
+
+            print("\x1b[?25l" + outputtxs)
+            shq = int(n)
+            ss = str(rectangle(shq))
+            qq = ss.replace("None","")
+            print(f"\033[A{qq}\033[A")
+            nn = e
+        if bs > a:
+            rr = requests.get('https://mempool.space/api/blocks/tip/height')
+            rr.headers['Content-Type']
+            qs = rr.text
+            din = json.loads(qs)
+            an = din
+            bs = str(an)
+            r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
+            print("\n\n\n")
+            output = render(
+                bs,
+                colors=[settingsClock['colorA'], settingsClock['colorB']],
+                align='center',
+                font='tiny',
+            )
+
+            print("\a\x1b[?25l" + output)
+            t.sleep(5)
+            a = bs
+            nn = e
 
 def blogo():
 
@@ -2884,6 +2966,7 @@ def getblock():
         closed()
         output = render("getblockchaininfo", colors=['yellow'], align='left', font='tiny')
         print(output)
+        print(a)
         input("\a\nContinue...")
     except:
         pass
@@ -3036,7 +3119,6 @@ def design():
     di = json.loads(n)
     a = di
     b = str(a)
-    print(a)
     clear()
     close()
     output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
@@ -3294,6 +3376,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
+    \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6283,6 +6366,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
+    elif bcore in ["S", "s"]:
+        counttxs()
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
