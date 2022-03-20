@@ -38,12 +38,6 @@ def pathexec():
     path = pathv # Copy the variable pathv to 'path'
 
 def counttxs():
-    if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
-        settingsClock = settingsv # Copy the variable pathv to 'path'
-    else:
-        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
     bitcoinclient = f'{path["bitcoincli"]} getblockcount'
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
@@ -57,22 +51,13 @@ def counttxs():
     d = json.loads(gna1)
     e = len(d)
     n = e / 10
-    outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-    print("\x1b[?25l" + outputtxs)
-    shq = int(n)
-    ss = str(rectangle(shq))
-    qq = ss.replace("None","")
-    print(f"\033[A{qq}\033[A")
-    #output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-    #print("\033[0;37;40m\x1b[?25l" + output)
+    nn = n
     while True:
-        clear()
         x = a
         bitcoinclient = f'{path["bitcoincli"]} getblockcount'
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
         pathexec()
-        clear()
         getrawmempool = " getrawmempool"
         gna = os.popen(path['bitcoincli'] + getrawmempool)
         gnaa = gna.read()
@@ -80,16 +65,18 @@ def counttxs():
         d = json.loads(gna1)
         e = len(d)
         n = e / 10
-        outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-        print("\x1b[?25l" + outputtxs)
-        shq = int(n)
-        ss = str(rectangle(shq))
-        qq = ss.replace("None","")
-        print(f"\033[A{qq}\033[A")
-        if b > a:
+        if e > nn:
             clear()
-            close()
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            print("\x1b[?25l" + outputtxs)
+            shq = int(n)
+            ss = str(rectangle(shq))
+            qq = ss.replace("None","")
+            print(f"\033[A{qq}\033[A")
+            nn = e
+        if b > a:
+            print("\n\n\n")
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print("\a\x1b[?25l" + output)
             bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
             bb = os.popen(str(bitcoinclient)).read()
@@ -98,28 +85,16 @@ def counttxs():
             qq = os.popen(bitcoinclientgetblock).read()
             yy = json.loads(qq)
             mm = yy
-            outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\x1b[?25l" + outputsize)
             outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print("\x1b[?25l" + outputtxs)
             sh = int(mm['nTx']) / 4
             shq = int(sh)
             ss = str(rectangle(shq))
             print(ss.replace("None",""))
-            t.sleep(10)
-            txs = str(mm['nTx'])
-            if txs == "1":
-                try:
-                    p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
-                    p.wait(5)
-                except subprocess.TimeoutExpired:
-                    p.kill()
-            print("\033[0;37;40m\x1b[?25l")
-            clear()
-            close()
+            t.sleep(5)
             a = b
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\x1b[?25l" + output)
+            nn = e
+
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
