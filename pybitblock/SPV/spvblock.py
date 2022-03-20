@@ -33,7 +33,7 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 
-version = "2.0.1-alpha1"
+version = "2.0.1-alpha2"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
@@ -68,42 +68,14 @@ def rectangle(n):
     ]
 
 def counttxs():
-    rr = requests.get('https://mempool.space/api/blocks/tip/height')
-    rr.headers['Content-Type']
-    qs = rr.text
-    din = json.loads(qs)
-    an = din
-    bs = str(an)
-    a = bs
-    r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
-    r.headers['Content-Type']
-    n = r.text
-    di = json.loads(n)
-    s = di
-    e = int(s)
-    n = e / 10
-    nn = n
-    clear()
-    outputtxs = render(
-        f'{e} txs',
-        colors=[settingsClock['colorA'], settingsClock['colorB']],
-        align='center',
-        font='tiny',
-    )
-
-    print("\x1b[?25l" + outputtxs)
-    shq = int(n)
-    ss = str(rectangle(shq))
-    qq = ss.replace("None","")
-    print(f"\033[A{qq}\033[A")
-    while True:
-        x = a
+    try:
         rr = requests.get('https://mempool.space/api/blocks/tip/height')
         rr.headers['Content-Type']
         qs = rr.text
         din = json.loads(qs)
         an = din
         bs = str(an)
+        a = bs
         r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
         r.headers['Content-Type']
         n = r.text
@@ -111,22 +83,22 @@ def counttxs():
         s = di
         e = int(s)
         n = e / 10
-        if e > nn:
-            clear()
-            outputtxs = render(
-                f'{e} txs',
-                colors=[settingsClock['colorA'], settingsClock['colorB']],
-                align='center',
-                font='tiny',
-            )
+        nn = n
+        clear()
+        outputtxs = render(
+            f'{e} txs',
+            colors=[settingsClock['colorA'], settingsClock['colorB']],
+            align='center',
+            font='tiny',
+        )
 
-            print("\x1b[?25l" + outputtxs)
-            shq = int(n)
-            ss = str(rectangle(shq))
-            qq = ss.replace("None","")
-            print(f"\033[A{qq}\033[A")
-            nn = e
-        if bs > a:
+        print("\x1b[?25l" + outputtxs)
+        shq = int(n)
+        ss = str(rectangle(shq))
+        qq = ss.replace("None","")
+        print(f"\033[A{qq}\033[A")
+        while True:
+            x = a
             rr = requests.get('https://mempool.space/api/blocks/tip/height')
             rr.headers['Content-Type']
             qs = rr.text
@@ -134,18 +106,49 @@ def counttxs():
             an = din
             bs = str(an)
             r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
-            print("\n\n\n")
-            output = render(
-                bs,
-                colors=[settingsClock['colorA'], settingsClock['colorB']],
-                align='center',
-                font='tiny',
-            )
+            r.headers['Content-Type']
+            n = r.text
+            di = json.loads(n)
+            s = di
+            e = int(s)
+            n = e / 10
+            if e > nn:
+                clear()
+                outputtxs = render(
+                    f'{e} txs',
+                    colors=[settingsClock['colorA'], settingsClock['colorB']],
+                    align='center',
+                    font='tiny',
+                )
 
-            print("\a\x1b[?25l" + output)
-            t.sleep(5)
-            a = bs
-            nn = e
+                print("\x1b[?25l" + outputtxs)
+                shq = int(n)
+                ss = str(rectangle(shq))
+                qq = ss.replace("None","")
+                print(f"\033[A{qq}\033[A")
+                nn = e
+            if bs > a:
+                rr = requests.get('https://mempool.space/api/blocks/tip/height')
+                rr.headers['Content-Type']
+                qs = rr.text
+                din = json.loads(qs)
+                an = din
+                bs = str(an)
+                r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
+                print("\n\n\n")
+                output = render(
+                    bs,
+                    colors=[settingsClock['colorA'], settingsClock['colorB']],
+                    align='center',
+                    font='tiny',
+                )
+
+                print("\a\x1b[?25l" + output)
+                t.sleep(5)
+                a = bs
+                nn = e
+    except:
+        pass
 
 def blogo():
 
