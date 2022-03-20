@@ -33,7 +33,7 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 
-version = "2.0-alpha9"
+version = "2.0"
 
 def close():
     print("<<< Ctrl + C.\n\n")
