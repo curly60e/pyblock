@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0.1-alpha2"
+version = "2.0.1-alpha3"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -141,7 +141,7 @@ def counttxs():
                 mm = yy
                 outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
                 print("\x1b[?25l" + outputtxs)
-                sh = int(mm['nTx']) / 4
+                sh = int(mm['nTx']) / 10
                 shq = int(sh)
                 ss = str(rectangle(shq))
                 print(ss.replace("None",""))
