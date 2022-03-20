@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0-alpha9"
+version = "2.0"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -6825,7 +6825,7 @@ def introINIT():
 
     \u001b[31;1mA.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin & Lightning)
     \u001b[38;5;202mB.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin)
-    \u001b[33;1mC.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Cropped - ***ALPHA***)
+    \u001b[33;1mC.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Cropped)
     \n\n\x1b[?25h""")
     commandsINIT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
