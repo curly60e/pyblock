@@ -82,7 +82,13 @@ def counttxs():
     n = e / 10
     nn = n
     clear()
-    outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+    outputtxs = render(
+        f'{e} txs',
+        colors=[settingsClock['colorA'], settingsClock['colorB']],
+        align='center',
+        font='tiny',
+    )
+
     print("\x1b[?25l" + outputtxs)
     shq = int(n)
     ss = str(rectangle(shq))
@@ -106,7 +112,13 @@ def counttxs():
         n = e / 10
         if e > nn:
             clear()
-            outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            outputtxs = render(
+                f'{e} txs',
+                colors=[settingsClock['colorA'], settingsClock['colorB']],
+                align='center',
+                font='tiny',
+            )
+
             print("\x1b[?25l" + outputtxs)
             shq = int(n)
             ss = str(rectangle(shq))
@@ -122,7 +134,13 @@ def counttxs():
             bs = str(an)
             r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
             print("\n\n\n")
-            output = render(str(bs), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            output = render(
+                bs,
+                colors=[settingsClock['colorA'], settingsClock['colorB']],
+                align='center',
+                font='tiny',
+            )
+
             print("\a\x1b[?25l" + output)
             t.sleep(5)
             a = bs
