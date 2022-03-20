@@ -3496,6 +3496,9 @@ def APIMenuLOCAL():
 
 def decodeHex():
     try:
+        clear()
+        blogo()
+        closed()
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
