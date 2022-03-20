@@ -87,7 +87,7 @@ def counttxs():
             mm = yy
             outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print("\x1b[?25l" + outputtxs)
-            sh = int(mm['nTx']) / 4
+            sh = int(mm['nTx']) / 10
             shq = int(sh)
             ss = str(rectangle(shq))
             print(ss.replace("None",""))
