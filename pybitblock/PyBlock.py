@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0"
+version = "2.0.1-alpha"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -91,31 +91,62 @@ def lndconnectexec():
 #-----------------------------Slush--------------------------------
 
 def counttxs():
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
+    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    b = block
+    a = b
+    pathexec()
+    clear()
+    getrawmempool = " getrawmempool"
+    gna = os.popen(path['bitcoincli'] + getrawmempool)
+    gnaa = gna.read()
+    gna1 = str(gnaa)
+    d = json.loads(gna1)
+    e = len(d)
+    n = e / 10
+    nn = n
     while True:
-        try:
-            pathexec()
+        x = a
+        bitcoinclient = f'{path["bitcoincli"]} getblockcount'
+        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        b = block
+        pathexec()
+        getrawmempool = " getrawmempool"
+        gna = os.popen(path['bitcoincli'] + getrawmempool)
+        gnaa = gna.read()
+        gna1 = str(gnaa)
+        d = json.loads(gna1)
+        e = len(d)
+        n = e / 10
+        if e > nn:
             clear()
-            getrawmempool = " getrawmempool"
-            gna = os.popen(path['bitcoincli'] + getrawmempool)
-            gnaa = gna.read()
-            gna1 = str(gnaa)
-            d = json.loads(gna1)
-            e = len(d)
-            outputtxs = render(
-                f'{e} txs',
-                colors=[settingsClock['colorA'], settingsClock['colorB']],
-                align='center',
-                font='tiny',
-            )
-
+            outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
             print("\x1b[?25l" + outputtxs)
-            shq = e // 10
+            shq = int(n)
             ss = str(rectangle(shq))
             qq = ss.replace("None","")
             print(f"\033[A{qq}\033[A")
-            t.sleep(10)
-        except:
-            break
+            nn = e
+        if b > a:
+            print("\n\n\n")
+            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            print("\a\x1b[?25l" + output)
+            bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
+            bb = os.popen(str(bitcoinclient)).read()
+            ll = bb
+            bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
+            qq = os.popen(bitcoinclientgetblock).read()
+            yy = json.loads(qq)
+            mm = yy
+            outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+            print("\x1b[?25l" + outputtxs)
+            sh = int(mm['nTx']) / 4
+            shq = int(sh)
+            ss = str(rectangle(shq))
+            print(ss.replace("None",""))
+            t.sleep(5)
+            a = b
+            nn = e
 
 
 def slDIFFConn():
