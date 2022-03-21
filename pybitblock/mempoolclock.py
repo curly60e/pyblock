@@ -38,26 +38,13 @@ def pathexec():
     path = pathv # Copy the variable pathv to 'path'
 
 def counttxs():
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block
-    a = b
-    pathexec()
-    clear()
-    getrawmempool = " getrawmempool"
-    gna = os.popen(path['bitcoincli'] + getrawmempool)
-    gnaa = gna.read()
-    gna1 = str(gnaa)
-    d = json.loads(gna1)
-    e = len(d)
-    n = e / 10
-    nn = n
-    while True:
-        x = a
+    try:
         bitcoinclient = f'{path["bitcoincli"]} getblockcount'
         block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
         b = block
+        a = b
         pathexec()
+        clear()
         getrawmempool = " getrawmempool"
         gna = os.popen(path['bitcoincli'] + getrawmempool)
         gnaa = gna.read()
@@ -65,35 +52,59 @@ def counttxs():
         d = json.loads(gna1)
         e = len(d)
         n = e / 10
-        if e > nn:
-            clear()
-            outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\x1b[?25l" + outputtxs)
-            shq = int(n)
-            ss = str(rectangle(shq))
-            qq = ss.replace("None","")
-            print(f"\033[A{qq}\033[A")
-            nn = e
-        if b > a:
-            print("\n\n\n")
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\a\x1b[?25l" + output)
-            bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-            bb = os.popen(str(bitcoinclient)).read()
-            ll = bb
-            bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-            qq = os.popen(bitcoinclientgetblock).read()
-            yy = json.loads(qq)
-            mm = yy
-            outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\x1b[?25l" + outputtxs)
-            sh = int(mm['nTx']) / 10
-            shq = int(sh)
-            ss = str(rectangle(shq))
-            print(ss.replace("None",""))
-            t.sleep(5)
-            a = b
-            nn = e
+        nn = n
+        while True:
+            x = a
+            bitcoinclient = f'{path["bitcoincli"]} getblockcount'
+            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+            b = block
+            pathexec()
+            getrawmempool = " getrawmempool"
+            gna = os.popen(path['bitcoincli'] + getrawmempool)
+            gnaa = gna.read()
+            gna1 = str(gnaa)
+            d = json.loads(gna1)
+            e = len(d)
+            n = e / 10
+            if e > nn:
+                clear()
+                outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                print("\x1b[?25l" + outputtxs)
+                shq = int(n)
+                ss = str(rectangle(shq))
+                qq = ss.replace("None","")
+                print(f"\033[A{qq}\033[A")
+                nn = e
+            if b > a:
+                print("\n\n\n")
+                output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                print("\a\x1b[?25l" + output)
+                bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
+                bb = os.popen(str(bitcoinclient)).read()
+                ll = bb
+                bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
+                qq = os.popen(bitcoinclientgetblock).read()
+                yy = json.loads(qq)
+                mm = yy
+                outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                print("\x1b[?25l" + outputtxs)
+                sh = int(mm['nTx']) / 10
+                shq = int(sh)
+                ss = str(rectangle(shq))
+                print(ss.replace("None",""))
+                t.sleep(5)
+                txs = str(mm['nTx'])
+                if txs == "1":
+                    try:
+                        p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
+                        p.wait(5)
+                    except subprocess.TimeoutExpired:
+                        p.kill()
+                print("\033[0;37;40m\x1b[?25l")
+                a = b
+                nn = e
+    except:
+        pass
 
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
