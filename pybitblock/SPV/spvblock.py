@@ -61,7 +61,7 @@ def rectangle(n):
                 f'{""*n}{"|"*n}{""*n}'
                 if i >= (n+1)/2 and i <= (1*n)/2
                 else
-                f'\u001b[38;5;27m{"■"*(x-1)}'
+                f'\u001b[38;5;27m{"█"*(x-1)}'
             )
             for i in range(y)
         )
