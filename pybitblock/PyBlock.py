@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0.1-alpha4"
+version = "2.0.1"
 
 def close():
     print("<<< Ctrl + C.\n\n")
