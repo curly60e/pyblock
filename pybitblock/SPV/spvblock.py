@@ -3159,7 +3159,7 @@ def getrawtx(): # show confirmatins from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | xargs -L 1 | tr -d '{|}|]|,'"""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -3167,7 +3167,7 @@ def runthenumbers():
         output = render("run the numbers", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
-        input("\a\nContinue...")
+        input("\a\n")
     except:
         pass
 
