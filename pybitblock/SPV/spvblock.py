@@ -33,7 +33,7 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 
-version = "2.0.1"
+version = "2.0.2-alpha"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
@@ -61,7 +61,7 @@ def rectangle(n):
                 f'{""*n}{"|"*n}{""*n}'
                 if i >= (n+1)/2 and i <= (1*n)/2
                 else
-                f'\u001b[38;5;27m{"■"*(x-1)}'
+                f'\u001b[38;5;27m{"█"*(x-1)}'
             )
             for i in range(y)
         )
