@@ -3039,13 +3039,14 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f#JSON | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1"""
+        conn = """curl -s https://en.bitcoin.it/wiki/Genesis_block | html2text | grep -E 52706 -A 48 | grep -v 52706 """
         a = os.popen(conn).read()
         clear()
         blogo()
         closed()
         output = render("genesis", colors=['yellow'], align='left', font='tiny')
         print(output)
+        print(a)
         input("\a\nContinue...")
     except:
         pass
