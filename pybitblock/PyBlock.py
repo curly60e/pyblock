@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0.1"
+version = "2.0.2-alpha"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -59,7 +59,7 @@ def rectangle(n):
                 f'{""*n}{"|"*n}{""*n}'
                 if i >= (n+1)/2 and i <= (1*n)/2
                 else
-                f'\u001b[38;5;27m{"■"*(x-1)}'
+                f'\u001b[38;5;27m{"█"*(x-1)}'
             )
             for i in range(y)
         )
@@ -106,13 +106,13 @@ def counttxs():
         e = len(d)
         n = e / 10
         nn = n
+        getrawmempool = " getrawmempool"
         while True:
             x = a
             bitcoinclient = f'{path["bitcoincli"]} getblockcount'
             block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
             b = block
             pathexec()
-            getrawmempool = " getrawmempool"
             gna = os.popen(path['bitcoincli'] + getrawmempool)
             gnaa = gna.read()
             gna1 = str(gnaa)
@@ -121,7 +121,13 @@ def counttxs():
             n = e / 10
             if e > nn:
                 clear()
-                outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                outputtxs = render(
+                    f'{e} txs',
+                    colors=[settingsClock['colorA'], settingsClock['colorB']],
+                    align='center',
+                    font='tiny',
+                )
+
                 print("\x1b[?25l" + outputtxs)
                 shq = int(n)
                 ss = str(rectangle(shq))
@@ -3504,7 +3510,7 @@ def colorsSelectFront():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -3547,7 +3553,7 @@ def colorsSelectFrontOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -3594,7 +3600,7 @@ def colorsSelectFrontClock():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -3637,7 +3643,7 @@ def colorsSelectFrontClockOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -3684,7 +3690,7 @@ def colorsSelectFrontClockRemote():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -3731,7 +3737,7 @@ def colorsSelectBack():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
