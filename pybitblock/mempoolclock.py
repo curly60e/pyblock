@@ -25,7 +25,7 @@ def rectangle(n):
                 f'{""*n}{"|"*n}{""*n}'
                 if i >= (n+1)/2 and i <= (1*n)/2
                 else
-                f'\033[A\u001b[38;5;27m{"❑"*(x-1)}\033[A'
+                f'\033[A\u001b[38;5;27m{"█"*(x-1)}\033[A'
             )
             for i in range(y)
         )
@@ -53,13 +53,13 @@ def counttxs():
         e = len(d)
         n = e / 10
         nn = n
+        getrawmempool = " getrawmempool"
         while True:
             x = a
             bitcoinclient = f'{path["bitcoincli"]} getblockcount'
             block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
             b = block
             pathexec()
-            getrawmempool = " getrawmempool"
             gna = os.popen(path['bitcoincli'] + getrawmempool)
             gnaa = gna.read()
             gna1 = str(gnaa)
@@ -68,7 +68,13 @@ def counttxs():
             n = e / 10
             if e > nn:
                 clear()
-                outputtxs = render(str(e) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
+                outputtxs = render(
+                    f'{e} txs',
+                    colors=[settingsClock['colorA'], settingsClock['colorB']],
+                    align='center',
+                    font='tiny',
+                )
+
                 print("\x1b[?25l" + outputtxs)
                 shq = int(n)
                 ss = str(rectangle(shq))
