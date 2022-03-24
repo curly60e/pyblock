@@ -3689,10 +3689,21 @@ def decodeHex():
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Decode", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("Block Height : ")
+        url2 = f'https://bitcoinexplorer.org/api/block/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nBlock: " + responseC)
+        print(f'Raw: {r3}')
+        input("\n")
     except:
         pass
 
