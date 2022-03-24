@@ -33,7 +33,7 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 
-version = "2.0.2"
+version = "2.0.3"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
