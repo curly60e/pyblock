@@ -3039,14 +3039,15 @@ def clear(): # clear the screen
 
 def getgenesis():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f#JSON | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1"""
+        conn = """curl -s https://en.bitcoin.it/wiki/Genesis_block | html2text | grep -E 52706 -A 48 | grep -v 52706"""
         a = os.popen(conn).read()
         clear()
         blogo()
         closed()
         output = render("genesis", colors=['yellow'], align='left', font='tiny')
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
@@ -3158,15 +3159,15 @@ def getrawtx(): # show confirmatins from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | xargs -L 1 | tr -d '{|}|]|,'"""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
         a = os.popen(conn).read()
         clear()
         blogo()
         closed()
-        output = render("run the numbers", colors=['yellow'], align='left', font='tiny')
+        output = render("total amount", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
-        input("\a\nContinue...")
+        input("\a\n")
     except:
         pass
 
