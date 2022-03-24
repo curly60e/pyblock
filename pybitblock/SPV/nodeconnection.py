@@ -222,26 +222,53 @@ def channels():
             break
 
 def channelbalance():
+    def channelbalance():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("channel balance", colors=['yellow'], align='left', font='tiny')
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
 def listonchaintxs():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        clear()
+        blogo()
+        output = render(
+            "Onchain Txs", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("TX ID: ")
+        url2 = f'https://mempool.space/api/tx/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Onchain Txs: {r3}')
+        input("\n")
     except:
         pass
 
 def balanceOC():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("balance", colors=['yellow'], align='left', font='tiny')
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
