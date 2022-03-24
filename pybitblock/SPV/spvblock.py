@@ -3164,7 +3164,7 @@ def runthenumbers():
         clear()
         blogo()
         closed()
-        output = render("run the numbers", colors=['yellow'], align='left', font='tiny')
+        output = render("total amount", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\n")
