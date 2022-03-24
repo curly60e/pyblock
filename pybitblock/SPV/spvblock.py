@@ -2468,40 +2468,66 @@ def remoteconsole(): # get into the console from bitcoin-cli
 
 def runthenumbersConn():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C """
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
         a = os.popen(conn).read()
         clear()
         blogo()
         closed()
-        output = render("run the numbers", colors=['yellow'], align='left', font='tiny')
+        output = render("total amount", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
-        input("\a\nContinue...")
+        input("\a\n")
     except:
         pass
-
 
 def channelbalance():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("channel balance", colors=['yellow'], align='left', font='tiny')
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
+
 def listonchaintxs():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        clear()
+        blogo()
+        output = render(
+            "Onchain Txs", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("TX ID: ")
+        url2 = f'https://mempool.space/api/tx/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Onchain Txs: {r3}')
+        input("\n")
     except:
         pass
 
 def balanceOC():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("balance", colors=['yellow'], align='left', font='tiny')
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
@@ -2978,24 +3004,46 @@ def searchTXS():
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Tx", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("TX: ")
+        url2 = f'https://mempool.space/api/tx/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Tx: {r3}')
+        input("\n")
     except:
         pass
-
+    
 def untxsConn():
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Onchain Txs", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("TX ID: ")
+        url2 = f'https://mempool.space/api/tx/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Onchain Txs: {r3}')
+        input("\n")
     except:
         pass
-
+    
 def getnewaddressOnchain():
     try:
         clear()
@@ -3011,10 +3059,21 @@ def gettransactionsOnchain():
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Tx", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("TX: ")
+        url2 = f'https://mempool.space/api/tx/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nTransaction ID: " + responseC)
+        print(f'Tx: {r3}')
+        input("\n")
     except:
         pass
 
@@ -3028,9 +3087,23 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
 
 def getbestblockhash():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        clear()
+        blogo()
+        output = render(
+            "Block Hash", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("Shot enter to view the hash ")
+        url2 = f'https://mempool.space/api/blocks/tip/hash{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nHash: " + responseC)
+        print(f'Block Hash: {r3}')
+        input("\n")
     except:
         pass
 
@@ -3055,10 +3128,21 @@ def readHexBlock():
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Hex", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("TX ID: ")
+        url2 = f'https://mempool.space/api/tx/{responseC}/hex'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nHex: " + responseC)
+        print(f'Hex: {r3}')
+        input("\n")
     except:
         pass
 
@@ -3066,10 +3150,21 @@ def readHexTx():
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Block", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("BLOCK: ")
+        url2 = f'https://mempool.space/api/blocks/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nBlock: " + responseC)
+        print(f'Block: {r3}')
+        input("\n")
     except:
         pass
 
@@ -3150,10 +3245,21 @@ def getrawtx(): # show confirmatins from transactions
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Raw", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("Tx: ")
+        url2 = f'https://mempool.space/api/tx/{responseC}/merkleblock-proof'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nRaw: " + responseC)
+        print(f'Raw: {r3}')
+        input("\n")
     except:
         pass
 
