@@ -130,7 +130,7 @@ def channels():
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
+    url = f'https://{lndconnectload["ip_port"]}/v1/channels'
     r = requests.get(url, headers=headers, verify=cert_path)
     a = r.json()
     n = a['channels']
