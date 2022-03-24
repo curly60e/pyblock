@@ -3246,7 +3246,7 @@ def getrawtx(): # show confirmatins from transactions
         clear()
         blogo()
         output = render(
-            "Raw", colors=['yellow'], align='left', font='tiny'
+            "Tx", colors=['yellow'], align='left', font='tiny'
         )
 
         print(output)
@@ -3257,7 +3257,7 @@ def getrawtx(): # show confirmatins from transactions
         r3 = r2
         clear()
         blogo()
-        print("\nRaw: " + responseC)
+        print("\nTx: " + responseC)
         print(f'Raw: {r3}')
         input("\n")
     except:
