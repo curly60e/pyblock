@@ -47,7 +47,7 @@
 
 <br />
 
-<img src="https://pbs.twimg.com/media/FAskRpLXIAgC-fC.jpg" width="50%" />
+<img src="https://pbs.twimg.com/media/FOkh2BmWYAA2LZq.jpg" width="50%" />
 
 <br />
 
