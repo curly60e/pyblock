@@ -2657,9 +2657,23 @@ def getnewinvoice():
 
 def payinvoice():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        clear()
+        blogo()
+        output = render(
+            "invoice decoder", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("Invoice: ")
+        url2 = f'https://lndecode.com/?invoice={responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nInvoice: " + responseC)
+        print(f'Invoice: {r3}')
+        input("\n")
     except:
         pass
 
@@ -3103,7 +3117,7 @@ def getbestblockhash():
         clear()
         blogo()
         print("\nHash: " + responseC)
-        print(f'Block Hash: {r3}')
+        print(f'Block Hash {r3}')
         input("\n")
     except:
         pass
@@ -3247,7 +3261,7 @@ def getrawtx(): # show confirmatins from transactions
         clear()
         blogo()
         output = render(
-            "Raw", colors=['yellow'], align='left', font='tiny'
+            "Tx", colors=['yellow'], align='left', font='tiny'
         )
 
         print(output)
@@ -3258,7 +3272,7 @@ def getrawtx(): # show confirmatins from transactions
         r3 = r2
         clear()
         blogo()
-        print("\nRaw: " + responseC)
+        print("\nTx: " + responseC)
         print(f'Raw: {r3}')
         input("\n")
     except:
@@ -3690,10 +3704,21 @@ def decodeHex():
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "Decode", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("Block Height: ")
+        url2 = f'https://bitcoinexplorer.org/api/block/{responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nBlock: " + responseC)
+        print(f'Raw: {r3}')
+        input("\n")
     except:
         pass
 
