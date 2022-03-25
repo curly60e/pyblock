@@ -3256,7 +3256,7 @@ def design():
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
-def getrawtx(): # show confirmatins from transactions
+def getrawtx(): # show confirmations from transactions
     try:
         clear()
         blogo()
@@ -3273,7 +3273,7 @@ def getrawtx(): # show confirmatins from transactions
         clear()
         blogo()
         print("\nTx: " + responseC)
-        print(f'Raw: {r3}')
+        print(f'Merkle Block Proof: {r3}')
         input("\n")
     except:
         pass
@@ -3710,14 +3710,14 @@ def decodeHex():
 
         print(output)
         responseC = input("Block Height: ")
-        url2 = f'https://bitcoinexplorer.org/api/block/{responseC}'
+        url2 = f'https://bitcoinexplorer.org/api/block/{responseC} | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"' '
         r = requests.get(url2)
         r2 = str(r.text)
         r3 = r2
         clear()
         blogo()
         print("\nBlock: " + responseC)
-        print(f'Raw: {r3}')
+        print(f'Decoded: {r3}')
         input("\n")
     except:
         pass
