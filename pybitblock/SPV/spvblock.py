@@ -2656,9 +2656,23 @@ def getnewinvoice():
 
 def payinvoice():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        clear()
+        blogo()
+        output = render(
+            "invoice decoder", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("Invoice: ")
+        url2 = f'https://lndecode.com/?invoice={responseC}'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nInvoice: " + responseC)
+        print(f'Invoice: {r3}')
+        input("\n")
     except:
         pass
 
