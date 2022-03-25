@@ -3102,7 +3102,7 @@ def getbestblockhash():
         clear()
         blogo()
         print("\nHash: " + responseC)
-        print(f'Block Hash: {r3}')
+        print(f'Block Hash {r3}')
         input("\n")
     except:
         pass
@@ -3694,7 +3694,7 @@ def decodeHex():
         )
 
         print(output)
-        responseC = input("Block Height : ")
+        responseC = input("Block Height: ")
         url2 = f'https://bitcoinexplorer.org/api/block/{responseC}'
         r = requests.get(url2)
         r2 = str(r.text)
