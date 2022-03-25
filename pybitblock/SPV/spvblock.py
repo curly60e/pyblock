@@ -33,7 +33,7 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 
-version = "2.0.3"
+version = "2.0.4-alpha"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
@@ -145,6 +145,7 @@ def counttxs():
 
                 print("\a\x1b[?25l" + output)
                 t.sleep(5)
+                clear()
                 a = bs
                 nn = e
     except:
