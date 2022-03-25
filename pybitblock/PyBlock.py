@@ -160,6 +160,7 @@ def counttxs():
                     except subprocess.TimeoutExpired:
                         p.kill()
                 print("\033[0;37;40m\x1b[?25l")
+                clear()
                 a = b
                 nn = e
     except:
