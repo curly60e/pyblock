@@ -2875,7 +2875,7 @@ def getPoolSlushCheck():
         else:
             clear()
             blogo()
-            api = input("Insert Slush API KEY: ")
+            api = input("Insert SlushPool API KEY: ")
             pickle.dump(api, open("config/slushAPI.conf", "wb"))
     except:
         pass
@@ -2999,7 +2999,70 @@ def ckpoolpoolLOCALOnchainONLY():
 
         except:
             break
+            
+            
+def kanopoolpoolLOCALOnchainONLY():
 
+    s = ""
+    sq = s
+
+    api = ""
+    try:
+        if os.path.isfile("config/KANOPOOLUSER.conf", "config/KANOPOOLAPI.conf"):
+            apiv = pickle.load(open("config/KANOPOOLUSER.conf", "rb"))
+            api = apiv
+            apiv2 = pickle.load(open("config/KANOPOOLAPI.conf", "rb"))
+            api2 = apiv2
+        else:
+            clear()
+            blogo()
+            api = input("Insert KanoPool Username: ")
+            pickle.dump(api, open("config/KANOPOOLUSER.conf", "wb"))
+            api2 = input("Insert KanoPool API KEY: ")
+            pickle.dump(api2, open("config/KANOPOOLAPI.conf", "wb"))
+    except:
+        pass
+
+    while True:
+        try:
+            kanopool = f"curl https://kano.is/index.php?k=api&username={api}&api={api2}&json=y&work=y 2>/dev/null"
+
+
+            b = os.popen(kanopool)
+            c = b.read()
+            d = json.loads(c)
+            f = d['worker']
+            e = f[0]
+
+            clear()
+            blogo()
+            print("""\033[A
+
+    --------------------------------------------------------------------------------------------
+
+                        \033[0;37;40mKanoPool BTC
+
+                        Username: {}
+                        Hash Rate 1m: {}
+                        Hash Rate 5m: {}
+                        Hash Rate 1h: {}
+                        Hash Rate 1d: {}
+                        Hash Rate 7d: {}
+                        Last Share: \u001b[38;5;27m{}\033[0;37;40m
+                        Shares: {}
+                        Best Share: {}
+                        Best Ever: {}
+                        Workers: {}
+
+    --------------------------------------------------------------------------------------------
+
+            \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
+
+            t.sleep(10)
+
+        except:
+            break
+            
 
 def getblock():
     try:
