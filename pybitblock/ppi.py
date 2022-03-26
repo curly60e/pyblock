@@ -429,7 +429,7 @@ def quotesConn():
 
 def miningConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,'"""
+        conn = """curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
         a = os.popen(conn).read()
         clear()
         blogo()
