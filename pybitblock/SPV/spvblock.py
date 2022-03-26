@@ -2752,9 +2752,18 @@ def locallistchannelsC():
 
 def localgetinfoC():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        conn = """curl -s https://1ml.com/trends | html2text | grep -E "24h|7d|30d" -A 4 | tr -d '{|}|]|,' | tr -d '"' | tr -d '* [' | tr -d '-' | tr -d '#'"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "lightning network trends", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
