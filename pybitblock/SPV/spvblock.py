@@ -6985,6 +6985,8 @@ def platfformsLOCALcontrol(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["P", "p"]:
+        kanopoolpoolLOCALOnchainONLY()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["W", "w"]:
@@ -7021,8 +7023,12 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["P", "p"]:
+        kanopoolpoolLOCALOnchainONLY()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["W", "w"]:
+        ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
 
