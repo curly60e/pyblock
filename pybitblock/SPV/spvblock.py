@@ -3259,10 +3259,21 @@ def console(): # get into the console from bitcoin-cli
     try:
         clear()
         blogo()
-        closed()
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        output = render(
+            "RPC", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nControl + C...")
+        responseC = input("RPC Command: ")
+        url2 = f'curl -s https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links"'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nRPC: " + responseC)
+        print(f'About: {r3}')
+        input("\n")
     except:
         pass
 
