@@ -2695,9 +2695,23 @@ def listinvoice():
 
 def getinfo():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        clear()
+        blogo()
+        output = render(
+            "node info", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        responseC = input("Public Key or URI: ")
+        url2 = f'curl -s https://1ml.com/node/{responseC}/json | html2text | jq'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nNode: " + responseC)
+        print(f'About: {r3}')
+        input("\n")
     except:
         pass
 
