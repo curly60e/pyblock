@@ -2704,9 +2704,15 @@ def getinfo():
 
 def consoleLNC(): # get into the console from bitcoin-cli
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        conn = """curl -s https://github.com/tomosaigon/lncli-commands | html2text | grep -E "## COMMANDS" -A 120"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("lncli-commands", colors=['yellow'], align='left', font='tiny')
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
