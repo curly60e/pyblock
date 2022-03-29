@@ -233,15 +233,15 @@
 
 ### Created by
 
-[@Curly60e](https://twitter.com/curly60e) ⚡️ curly60e@bitrefill.com
+[@Curly60e.](https://twitter.com/curly60e) ⚡️ curly60e@bitrefill.com
 
 ### Pentester and contribution by
 
-[@SN](https://twitter.com/__B__T__C__) ⚡️ sn@getalby.com
+[@SN.](https://twitter.com/__B__T__C__) ⚡️ sn@getalby.com
 
 ### Contributor
 
-[@Danvergara](https://twitter.com/__danvergara__)
+[@Danvergara.](https://twitter.com/__danvergara__)
 
 ### Tools by
 
@@ -277,6 +277,8 @@
 [@JoostJgr,](https://twitter.com/joostjgr)
 [@PRguitarman,](https://twitter.com/PRguitarman)
 [@NyanCat,](https://twitter.com/nyannyancat)
+[@Mononautical,](https://twitter.com/mononautical)
+[@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
 SUPPORT PyBLØCK.
