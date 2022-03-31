@@ -3825,7 +3825,7 @@ def decodeHex():
             print(a)
             t.sleep(77)
         except:
-            break
+            pass
 
 def miscellaneousLOCAL():
     clear()
