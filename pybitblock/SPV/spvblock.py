@@ -3813,7 +3813,7 @@ def decodeHex():
 
         print(output)
         responseC = input("Block Height: ")
-   except:
+    except:
         pass
    while True:
         try:     
