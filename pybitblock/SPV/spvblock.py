@@ -3815,7 +3815,7 @@ def decodeHex():
         responseC = input("Block Height: ")
     except:
         pass
-   while True:
+    while True:
         try:     
             list = """curl -s https://bitcoinexplorer.org/api/block/{responseC} | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
             a = os.popen(list).read()
