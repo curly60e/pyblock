@@ -3817,7 +3817,7 @@ def decodeHex():
         pass
    while True:
         try:     
-            list = "curl -s https://bitcoinexplorer.org/api/block/{responseC} | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
+            list = """curl -s https://bitcoinexplorer.org/api/block/{responseC} | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
             a = os.popen(list).read()
             clear()
             blogo()
@@ -3825,7 +3825,7 @@ def decodeHex():
             print(a)
             t.sleep(77)
         except:
-            pass
+            break
 
 def miscellaneousLOCAL():
     clear()
