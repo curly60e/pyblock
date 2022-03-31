@@ -382,9 +382,7 @@ def opreturnOnchainONLY():
             + " https://opreturnbot.com/api/create"
         )
 
-        while True:
-            if len(message) <= 70:
-                break
+        while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
@@ -452,9 +450,7 @@ def opreturn():
             + " https://opreturnbot.com/api/create"
         )
 
-        while True:
-            if len(message) <= 70:
-                break
+        while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
@@ -3813,11 +3809,11 @@ def decodeHex():
 
         print(output)
         responseC = input("Block Height: ")
-   except:
+    except:
         pass
-   while True:
+    while True:
         try:     
-            list = "curl -s https://bitcoinexplorer.org/api/block/{responseC} | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
+            list = """curl -s https://bitcoinexplorer.org/api/block/{responseC} | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
             a = os.popen(list).read()
             clear()
             blogo()
