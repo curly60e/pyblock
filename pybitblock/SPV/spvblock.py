@@ -3809,14 +3809,16 @@ def decodeHex():: # show hex
 
         print(output)
         responseC = input("Block Height: ")
-        url2 = f'curl -s https://bitcoinexplorer.org/api/block/{responseC} | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"''
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
+    except:
+        pass
+    while True:
+        try:    
+        list = "curl -s https://bitcoinexplorer.org/api/block/'" + responseC + " | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"''"
+        a = os.popen(list).read()
         clear()
         blogo()
         print("\nBlock: " + responseC)
-        print(f'Decoded: {r3}')
+        print(a)
         input("\n")
     except:
         pass
