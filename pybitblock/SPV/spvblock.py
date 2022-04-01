@@ -3281,17 +3281,19 @@ def console(): # get into the console from bitcoin-cli
 
         print(output)
         responseC = input("RPC Command: ")
-        url2 = f'curl -s https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links"'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
-        clear()
-        blogo()
-        print("\nRPC: " + responseC)
-        print(f'About: {r3}')
-        input("\n")
     except:
         pass
+    while True:
+        try:    
+            list = "curl -s https://bitcoinexplorer.org/rpc-browser?method='" + responseC + "#Help-Content | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links"'
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print("\nCommand: " + responseC)
+            print(a)
+            input("\n")
+        except:
+            pass
 
 def screensv():
     try:
@@ -3813,7 +3815,7 @@ def decodeHex(): # show hex
         pass
     while True:
         try:    
-            list = "curl -s https://bitcoinexplorer.org/api/block/'" + responseC + " | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"''"
+            list = "curl -s https://bitcoinexplorer.org/api/block/'" + responseC + " | jq -C ".[]" | tr -d "{|}|]|," | tr -d '"'"'
             a = os.popen(list).read()
             clear()
             blogo()
@@ -3821,7 +3823,7 @@ def decodeHex(): # show hex
             print(a)
             input("\n")
         except:
-            pass
+            break
 
 def miscellaneousLOCAL():
     clear()
