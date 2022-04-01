@@ -2806,7 +2806,7 @@ def localpayinvoiceC():
 
 def localgetnetworkinfoC():
     try:
-        conn = """curl -s https://1ml.com/trends | html2text | grep -E "24h|7d|30d" -A 4 | tr -d '{|}|]|,' | tr -d '"' | tr -d '* [' | tr -d '-' | tr -d '#' | xargs -L 1"""
+        conn = """curl -s https://1ml.com/trends | html2text | grep -E "Increase|Decrease" -A 4 | tr -d '"' | tr -d '* [' | tr -d '-' | tr -d '#' | xargs -L 1"""
         a = os.popen(conn).read()
         clear()
         blogo()
