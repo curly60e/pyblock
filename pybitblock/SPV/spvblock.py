@@ -3799,7 +3799,7 @@ def APIMenuLOCAL():
     \n\n\x1b[?25h""".format(n,b, version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
     
-def decodeHex():: # show hex
+def decodeHex(): # show hex
     try:
         clear()
         blogo()
