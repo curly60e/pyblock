@@ -2768,18 +2768,23 @@ def locallistchannelsC():
 
 def localgetinfoC():
     try:
-        conn = """curl -s https://1ml.com/trends | html2text | grep -E "24h|7d|30d" -A 4 | tr -d '{|}|]|,' | tr -d '"' | tr -d '* [' | tr -d '-' | tr -d '#'"""
-        a = os.popen(conn).read()
         clear()
         blogo()
-        closed()
         output = render(
-            "lightning network trends", colors=['yellow'], align='left', font='tiny'
+            "node info", colors=['yellow'], align='left', font='tiny'
         )
 
         print(output)
-        print(a)
-        input("\a\n")
+        responseC = input("Public Key: ")
+        url2 = f'curl -s https://1ml.com/node/{responseC}/json | html2text | jq'
+        r = requests.get(url2)
+        r2 = str(r.text)
+        r3 = r2
+        clear()
+        blogo()
+        print("\nNode: " + responseC)
+        print(f'About: {r3}')
+        input("\n")
     except:
         pass
 
@@ -2801,9 +2806,18 @@ def localpayinvoiceC():
 
 def localgetnetworkinfoC():
     try:
-        output = render("run your node", colors=['yellow'], align='left', font='tiny')
+        conn = """curl -s https://1ml.com/trends | html2text | grep -E "24h|7d|30d" -A 4 | tr -d '{|}|]|,' | tr -d '"' | tr -d '* [' | tr -d '-' | tr -d '#' | xargs -L 1"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "lightning network trends", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        input("\a\nContinue...")
+        print(a)
+        input("\a\n")
     except:
         pass
 
@@ -3813,8 +3827,8 @@ def decodeHex(): # show hex
         pass
     while True:
         try:    
-            list = "curl -s https://bitcoinexplorer.org/api/block/'" + responseC + " | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"''"
-            a = os.popen(list).read()
+            conn = "curl -s https://bitcoinexplorer.org/api/block/'" + responseC + " | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"''"
+            a = os.popen(conn).read()
             clear()
             blogo()
             print("\nBlock: " + responseC)
