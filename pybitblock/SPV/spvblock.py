@@ -3813,15 +3813,15 @@ def decodeHex(): # show hex
         pass
     while True:
         try:    
-        list = "curl -s https://bitcoinexplorer.org/api/block/'" + responseC + " | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"''"
-        a = os.popen(list).read()
-        clear()
-        blogo()
-        print("\nBlock: " + responseC)
-        print(a)
-        input("\n")
-    except:
-        pass
+            list = "curl -s https://bitcoinexplorer.org/api/block/'" + responseC + " | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"''"
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            print("\nBlock: " + responseC)
+            print(a)
+            input("\n")
+        except:
+            pass
 
 def miscellaneousLOCAL():
     clear()
