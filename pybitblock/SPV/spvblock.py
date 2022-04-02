@@ -3252,14 +3252,12 @@ def readHexBlock():
         print(output)
         responseC = input("BLOCK: ")
         list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """"
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
+        a = os.popen(list).read()
         clear()
         blogo()
         print("\nHex: " + responseC)
-        print(f'Hex: {r3}')
-        input("\n")
+        print("\nPyBLOCK Hex: " + a)
+        input("\nContinue...")
     except:
         pass
 
@@ -3278,8 +3276,8 @@ def readHexTx():
         clear()
         blogo()
         print("\nBlock: " + responseC)
-        print("\nDecoded: " + a)
-        input("\n")
+        print("\nPyBLOCK Decoded: " + a)
+        input("\nContinue...")
     except:
         pass
 
