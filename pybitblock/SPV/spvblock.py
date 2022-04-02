@@ -3251,7 +3251,7 @@ def readHexBlock():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """hex' """"
+        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """"
         r = requests.get(url2)
         r2 = str(r.text)
         r3 = r2
