@@ -273,6 +273,8 @@
 [@LNstats,](https://twitter.com/LNstats)
 [@Slush_Pool,](https://twitter.com/slush_pool)
 [@Braiins_Systems,](https://twitter.com/braiins_systems)
+[@CKPoolDev,](https://twitter.com/ckpooldev)
+[@KanoBTC,](https://twitter.com/kanobtc)
 [@JohnCantrell97,](https://twitter.com/JohnCantrell97)
 [@JoostJgr,](https://twitter.com/joostjgr)
 [@PRguitarman,](https://twitter.com/PRguitarman)
