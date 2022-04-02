@@ -2699,15 +2699,13 @@ def getinfo():
 
         print(output)
         responseC = input("Public Key: ")
-        url2 = f'curl -s https://1ml.com/node/{responseC}/json | html2text | jq'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
+        list = "curl -s 'https://1ml.com/node/" + responseC + """/json' | html2text | jq' """"
+        a = os.popen(list).read()
         clear()
         blogo()
         print("\nNode: " + responseC)
-        print(f'About: {r3}')
-        input("\n")
+        print("\nAbout: " + a)
+        input("\nContinue...")
     except:
         pass
 
