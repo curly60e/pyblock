@@ -2699,7 +2699,7 @@ def getinfo():
 
         print(output)
         responseC = input("Public Key: ")
-        list = "curl -s 'https://1ml.com/node/" + responseC + """/json' | html2text | jq' """"
+        list = "curl -s 'https://1ml.com/node/" + responseC + """/json' | html2text | jq' """
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3249,7 +3249,7 @@ def readHexBlock():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """"
+        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """
         a = os.popen(list).read()
         clear()
         blogo()
