@@ -2699,15 +2699,13 @@ def getinfo():
 
         print(output)
         responseC = input("Public Key: ")
-        url2 = f'curl -s https://1ml.com/node/{responseC}/json | html2text | jq'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
+        list = "curl -s 'https://1ml.com/node/" + responseC + """/json' | html2text | jq' """"
+        a = os.popen(list).read()
         clear()
         blogo()
         print("\nNode: " + responseC)
-        print(f'About: {r3}')
-        input("\n")
+        print("\nAbout: " + a)
+        input("\nContinue...")
     except:
         pass
 
@@ -3251,15 +3249,13 @@ def readHexBlock():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """hex'""""
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
+        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """"
+        a = os.popen(list).read()
         clear()
         blogo()
         print("\nHex: " + responseC)
-        print(f'Hex: {r3}')
-        input("\n")
+        print("\nPyBLOCK Hex: " + a)
+        input("\nContinue...")
     except:
         pass
 
@@ -3273,13 +3269,13 @@ def readHexTx():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s https://mempool.space/api/blocks/" + responseC + """'""""
+        list = "curl -s https://mempool.space/api/blocks/" + responseC + """' """"
         a = os.popen(list).read()
         clear()
         blogo()
         print("\nBlock: " + responseC)
-        print("\nDecoded: " + a)
-        input("\n")
+        print("\nPyBLOCK Decoded: " + a)
+        input("\nContinue...")
     except:
         pass
 
@@ -3298,7 +3294,7 @@ def console(): # get into the console from bitcoin-cli
         clear()
         blogo()
         print("\nRPC: " + responseC)
-        print("\nCommand: " + a)
+        print("\nPyBLOCK Help: " + a)
         input("\n")
     except:
         pass
