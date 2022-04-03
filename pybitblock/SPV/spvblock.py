@@ -2705,7 +2705,7 @@ def getinfo():
         blogo()
         print("\nNode: " + responseC)
         print("\nAbout: " + a)
-        input("\nContinue...")
+        input("\a\nContinue...")
     except:
         pass
 
