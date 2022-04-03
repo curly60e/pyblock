@@ -2774,7 +2774,7 @@ def localgetinfoC():
 
         print(output)
         responseC = input("Public Key: ")
-        list = "curl -s https://1ml.com/node/" + responseC + """/json"""
+        list = f"curl -s https://1ml.com/node/{responseC}/json"
         a = os.popen(conn).read()
         clear()
         blogo()
