@@ -3269,7 +3269,7 @@ def readHexTx():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s https://mempool.space/api/blocks/" + responseC + """' """"
+        list = "curl -s https://mempool.space/api/blocks/" + responseC + """' """
         a = os.popen(list).read()
         clear()
         blogo()
