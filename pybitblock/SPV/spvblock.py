@@ -2699,13 +2699,13 @@ def getinfo():
 
         print(output)
         responseC = input("Public Key: ")
-        list = "curl -s 'https://1ml.com/node/" + responseC + """/json' | html2text | jq' """"
+        list = "curl -s 'https://1ml.com/node/'"+ responseC +"""/json'"""
         a = os.popen(list).read()
         clear()
         blogo()
         print("\nNode: " + responseC)
-        print("\nAbout: " + a)
-        input("\nContinue...")
+        print(a)
+        input("\a\nContinue...")
     except:
         pass
 
@@ -2774,15 +2774,13 @@ def localgetinfoC():
 
         print(output)
         responseC = input("Public Key: ")
-        url2 = f'curl -s https://1ml.com/node/{responseC}/json | html2text | jq'
-        r = requests.get(url2)
-        r2 = str(r.text)
-        r3 = r2
+        list = f"curl -s https://1ml.com/node/{responseC}/json"
+        a = os.popen(list).read()
         clear()
         blogo()
         print("\nNode: " + responseC)
-        print(f'About: {r3}')
-        input("\n")
+        print(a)
+        input("\nContinue...")
     except:
         pass
 
@@ -3249,7 +3247,7 @@ def readHexBlock():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """"
+        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3269,7 +3267,7 @@ def readHexTx():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s https://mempool.space/api/blocks/" + responseC + """' """"
+        list = f"curl -s https://mempool.space/api/blocks/{responseC}"
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3596,9 +3594,9 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
     \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
     \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
+    \u001b[38;5;202mE.\033[0;37;40m Decode Block
     \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
+    \u001b[38;5;202mG.\033[0;37;40m Show Merkle Proof from a Tx
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
