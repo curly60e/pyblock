@@ -2774,7 +2774,7 @@ def localgetinfoC():
 
         print(output)
         responseC = input("Public Key: ")
-        list = "curl -s https://1ml.com/node/" + responseC + """/json"""
+        list = f"curl -s https://1ml.com/node/{responseC}/json"
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3267,7 +3267,7 @@ def readHexTx():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s https://mempool.space/api/blocks/" + responseC + """' """
+        list = f"curl -s https://mempool.space/api/blocks/{responseC}" + """' """
         a = os.popen(list).read()
         clear()
         blogo()
