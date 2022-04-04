@@ -3361,14 +3361,14 @@ def getrawtx(): # show confirmations from transactions
 
         print(output)
         responseC = input("Tx: ")
-        url2 = f'https://mempool.space/api/tx/{responseC}/merkleblock-proof'
+        url2 = f'https://mempool.space/api/tx/{responseC}/merkle-proof'
         r = requests.get(url2)
         r2 = str(r.text)
         r3 = r2
         clear()
         blogo()
         print("\nTx: " + responseC)
-        print(f'Merkle Block Proof: {r3}')
+        print(f'Merkle Proof: {r3}')
         input("\n")
     except:
         pass
