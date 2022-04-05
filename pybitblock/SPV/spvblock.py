@@ -3361,8 +3361,8 @@ def getrawtx(): # show confirmations from transactions
 
         print(output)
         responseC = input("Tx: ")
-        conn = """https://mempool.space/api/tx/""" + responseC + """/merkle-proof | jq -C '.[]' """
-        a = os.popen(conn).read()
+        list = "curl -s https://mempool.space/api/tx/" + responseC + """/merkle-proof | jq -C '.[]'"""
+        a = os.popen(list).read()
         clear()
         blogo()
         print("\nTx: " + responseC)
