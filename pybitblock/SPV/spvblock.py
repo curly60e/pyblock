@@ -3225,7 +3225,7 @@ def getgenesis():
         output = render("genesis", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
-        input("\a\n")
+        input("\a\nContinue...")
     except:
         pass
 
@@ -3244,7 +3244,7 @@ def readHexBlock():
         clear()
         blogo()
         print("\nHex: " + responseC)
-        print("\nPyBLOCK Hex: " + a)
+        print("\nPyBLOCK Hex:\n" + a)
         input("\nContinue...")
     except:
         pass
@@ -3264,7 +3264,7 @@ def readHexTx():
         clear()
         blogo()
         print("\nBlock: " + responseC)
-        print("\nPyBLOCK Decoded: " + a)
+        print("\nPyBLOCK Decoded:\n" + a)
         input("\nContinue...")
     except:
         pass
@@ -3284,8 +3284,8 @@ def console(): # get into the console from bitcoin-cli
         clear()
         blogo()
         print("\nRPC: " + responseC)
-        print("\nPyBLOCK Help: " + a)
-        input("\n")
+        print("\nPyBLOCK Help:\n" + a)
+        input("\nContinue...")
     except:
         pass
 
@@ -3368,8 +3368,8 @@ def getrawtx(): # show confirmations from transactions
         clear()
         blogo()
         print("\nTx: " + responseC)
-        print(f'Merkle Proof: {r3}')
-        input("\n")
+        print(f'Merkle Proof:\n{r3}')
+        input("\nContinue...")
     except:
         pass
 
@@ -3383,7 +3383,7 @@ def runthenumbers():
         output = render("total amount", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
-        input("\a\n")
+        input("\a\nContinue...")
     except:
         pass
 
