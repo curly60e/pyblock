@@ -3137,7 +3137,7 @@ def searchTXS():
     
 def untxsConn():
     try:
-        conn = """https://mempool.space/api/mempool/txids"""
+        conn = """curl -s https://mempool.space/api/mempool/txids"""
         a = os.popen(conn).read()
         clear()
         blogo()
