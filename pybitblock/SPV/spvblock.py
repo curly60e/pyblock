@@ -3366,7 +3366,7 @@ def getrawtx(): # show confirmations from transactions
         clear()
         blogo()
         print("\nTx: " + responseC)
-        print("\nMerkle Proof:\n" + a)
+        print("\nMerkle Proof: " + a)
         input("\nContinue...")
     except:
         pass
