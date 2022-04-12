@@ -1013,6 +1013,13 @@ def robotNym():
         menuSelection()
 
 
+#---------------------------------Sat Sale----------------------------------
+def callGitSatSale():
+    if not os.path.isdir('SatSale'):
+        git = "git clone https://github.com/nickfarrow/SatSale.git"
+        os.system(git)
+    os.system("cd SatSale && python3 satsale.py")
+    
 #---------------------------------Warden Terminal----------------------------------
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
@@ -5790,6 +5797,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["ss", "SS", "Ss", "sS"]:
+        clear()
+        blogo()
+        callGitSatSale()    
 
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -5836,6 +5847,10 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["ss", "SS", "Ss", "sS"]:
+        clear()
+        blogo()
+        callGitSatSale()      
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
@@ -6447,6 +6462,10 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["ss", "SS", "Ss", "sS"]:
+        clear()
+        blogo()
+        callGitSatSale()      
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
