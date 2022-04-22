@@ -277,6 +277,8 @@
 [@PRguitarman,](https://twitter.com/PRguitarman)
 [@NyanCat,](https://twitter.com/nyannyancat)
 [@Mononautical,](https://twitter.com/mononautical)
+[@Janna3257,](https://twitter.com/Janna3257)
+[@Cercatrova_21,](https://twitter.com/cercatrova_21)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
@@ -285,7 +287,7 @@
 ## Tutorial
 
 1. Install the app "Scriptable" -> [Apple Appstore - Scriptable](https://apps.apple.com/ch/app/scriptable/id1405459188)
-2. Open the app and click the "+" sign on the top right corner
+2. Open the app and click the "+" sign on the top right corner.
 3. Paste the following script created by [PyBLOCK](https://twitter.com/_PyBlock_):
 
 ```js
@@ -349,10 +351,10 @@ let SN = await req.loadImage();
 ```
 
 4. Click on the bottom left corner the "sliders" to name your script. For example: PyBLOCK.
-5. Click close and done
-6. Go to the homescreen, press and hold for a few seconds to make the icons move. Tab on the top left corner the "+" symbol
+5. Click close and done.
+6. Go to the homescreen, press and hold for a few seconds to make the icons move. Tab on the top left corner the "+" symbol.
 7. Scroll down untill you find the "Scriptable" App. Select it and scroll to the right for the full sized version.
-8. Click "Add Widget" and tab the new created widget to edit it. Select the created script and you're done :)
+8. Click "Add Widget" and tab the new created widget to edit it. Select the created script and you're done. 
 
 ![PyBLOCK Widget](https://user-images.githubusercontent.com/65907137/164778013-0d15fbf9-51b2-431e-b195-d028c4b01a29.jpeg)
 
