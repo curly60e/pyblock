@@ -1,6 +1,3 @@
-<meta name="lightning" content="pyblock@zbd.gg" />
-<meta property="og:image" content="./pybitblock/resources/images/Logo.PNG" />
-
 <img src="./pybitblock/resources/images/Logo.PNG" width="80%" />
 
    
@@ -282,6 +279,83 @@
 [@Mononautical,](https://twitter.com/mononautical)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
+
+# PyBLØCK Widget
+
+## Tutorial
+
+1. Install the app "Scriptable" -> [Apple Appstore - Scriptable](https://apps.apple.com/ch/app/scriptable/id1405459188)
+2. Open the app and click the "+" sign on the top right corner
+3. Paste the following script created by [PyBLOCK](https://twitter.com/_PyBlock_):
+
+```js
+let req = new Request('https://mempool.space/api/blocks/tip/height');
+let blockHeight = await req.loadString();
+
+let widget = await createWidget();
+
+// Check where the script is running
+if (config.runsInWidget) 
+  {
+  // Runs inside a widget so add it to the homescreen widget
+  Script.setWidget(widget);
+  } 
+else 
+  {
+  // Show the medium widget inside the app
+  widget.presentLarge();
+  }
+
+Script.complete();
+
+async function createWidget() 
+  {
+    
+  // Create new empty ListWidget instance
+  let listwidget = new ListWidget();
+
+
+  // Set new background color
+  listwidget.backgroundColor = new Color("#000000");
+
+ // add 10 second to now
+  let nextRefresh = Date.now() + 1000*10 
+
+  listwidget.refreshAfterDate = new Date(nextRefresh)
+
+
+  // Add widget heading
+  let pyblock = listwidget.addText("PyBLØCK");
+  pyblock.centerAlignText();
+  pyblock.font = Font.boldRoundedSystemFont(60);
+  pyblock.textColor = new Color("#00FF7F")
+  let heading = listwidget.addText(blockHeight);
+  heading.centerAlignText();
+  heading.font = Font.boldSystemFont(60);
+  heading.textColor = new Color("#00FF7F");
+
+  
+  let req = new Request('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Bitcoin-Genesis-block.jpg/1200px-Bitcoin-Genesis-block.jpg');
+let SN = await req.loadImage();
+
+
+  // Add widget heading
+  let gn = listwidget.addImage(SN).centerAlignImage()
+
+
+  // Return the created widget
+  return listwidget;
+}
+```
+
+4. Click on the bottom left corner the "sliders" to name your script. For example: PyBLOCK.
+5. Click close and done
+6. Go to the homescreen, press and hold for a few seconds to make the icons move. Tab on the top left corner the "+" symbol
+7. Scroll down untill you find the "Scriptable" App. Select it and scroll to the right for the full sized version.
+8. Click "Add Widget" and tab the new created widget to edit it. Select the created script and you're done :)
+
+![PyBLOCK Widget](https://user-images.githubusercontent.com/65907137/164778013-0d15fbf9-51b2-431e-b195-d028c4b01a29.jpeg)
+
 
 SUPPORT PyBLØCK.
 
