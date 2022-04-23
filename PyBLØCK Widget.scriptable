@@ -1,4 +1,3 @@
-
 let req = new Request("https://mempool.space/api/blocks/tip/height");
 let blockHeight = await req.loadString();
 
@@ -63,11 +62,11 @@ let pyp = await sns.loadImage();
   heading.centerAlignText();
   heading.font = Font.boldSystemFont(70);
   heading.textColor = new Color("#0aff17");
-  let txs = listwidget.addText("▁▂▃▄▅▆▇█ " + tx);
+  let txs = listwidget.addText("▁▂▃▄▅▆▇ " + tx + " ▇▆▅▄▃▂▁");
   txs.centerAlignText();
   txs.font = Font.boldSystemFont(13);
   txs.textColor = new Color("#FFFFFF");
-  let wdgDesc = listwidget.addText("High           Medium           Low");
+  let wdgDesc = listwidget.addText("🟥           🟨           🟩");
 
   // Add widget heading  
    let mem = listwidget.addText(fast + "    " + halfHour + "    " + hour);    
@@ -75,7 +74,7 @@ let pyp = await sns.loadImage();
   wdgDesc.centerAlignText();
   mem.centerAlignText();
   
-  wdgDesc.font = Font.boldSystemFont(7);
+  wdgDesc.font = Font.boldSystemFont(10);
   
   if(fast < 10)
     mem.font = Font.boldSystemFont(30);
@@ -104,7 +103,7 @@ let pyp = await sns.loadImage();
   
   
   
-  let req = new Request('https://pbs.twimg.com/media/FIMmCzIWQAk_Ul_.png');
+  let req = new Request('https://pbs.twimg.com/media/E3IikexWYAQfqY2.png');
 let SN = await req.loadImage();
 
 
