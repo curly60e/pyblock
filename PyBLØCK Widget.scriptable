@@ -1,0 +1,97 @@
+let req = new Request("https://mempool.space/api/blocks/tip/height");
+let blockHeight = await req.loadString();
+
+let cRequest = new Request("https://bitcoinexplorer.org/api/mempool/count");
+let tx = await cRequest.loadString();
+
+let make = new Request('https://mempool.space/api/v1/fees/recommended');
+let json = await make.loadJSON();
+
+fast = json.fastestFee.toString();
+halfHour = json.halfHourFee.toString();
+hour = json.hourFee.toString();
+
+let call = new Request('https://bitcoinexplorer.org/api/blockchain/coins');
+let supply = await call.loadString();
+
+let widget = await createWidget();
+
+// Check where the script is running
+if (config.runsInWidget) 
+  {
+  // Runs inside a widget so add it to the homescreen widget
+  Script.setWidget(widget);
+  } 
+else 
+  {
+  // Show the medium widget inside the app
+  widget.presentLarge();
+  }
+
+Script.complete();
+
+async function createWidget() 
+  {
+    
+  // Create new empty ListWidget instance
+  let listwidget = new ListWidget();
+
+
+  // Set new background color
+  listwidget.backgroundColor = new Color("#000000");
+
+ // add 10 second to now
+  let nextRefresh = Date.now() + 1000*10 
+
+  listwidget.refreshAfterDate = new Date(nextRefresh)
+
+
+  // Add widget heading
+  let pyblock = listwidget.addText("PyBLØCK");
+  pyblock.centerAlignText();
+  pyblock.font = Font.boldRoundedSystemFont(50);
+  pyblock.textColor = new Color("#FFFFFF")
+  let heading = listwidget.addText(blockHeight);
+  heading.centerAlignText();
+  heading.font = Font.boldSystemFont(70);
+  heading.textColor = new Color("#00FF7F");
+  let txs = listwidget.addText(tx + " - ▁▂▃▄▅▆▇█");
+  txs.centerAlignText();
+  txs.font = Font.boldSystemFont(13);
+  txs.textColor = new Color("#FFFFFF");
+  let wdgDesc = listwidget.addText("High           Medium           Low");
+
+  // Add widget heading  
+   let mem = listwidget.addText(fast + "    " + halfHour + "    " + hour);    
+
+  wdgDesc.centerAlignText();
+  mem.centerAlignText();
+  
+  wdgDesc.font = Font.boldSystemFont(7);
+  
+  if(fast < 10)
+    mem.font = Font.boldSystemFont(30);
+  else if(fast < 100)
+     mem.font = Font.boldSystemFont(30);
+  else
+    mem.font = Font.boldSystemFont(30);
+    
+  wdgDesc.textColor = new Color("#EEEEEE");
+  mem.textColor = new Color("#00FF7F");
+  
+  let coin = listwidget.addText(supply + " ₿itcoin Supply");
+  coin.centerAlignText();
+  coin.font = Font.boldSystemFont(10);
+  coin.textColor = new Color("#eeeeee")
+  
+  let req = new Request('https://pbs.twimg.com/media/FIMmCzIWQAk_Ul_.png');
+let SN = await req.loadImage();
+
+
+  // Add widget heading
+  let gn = listwidget.addImage(SN).centerAlignImage()
+
+
+  // Return the created widget
+  return listwidget;
+}
