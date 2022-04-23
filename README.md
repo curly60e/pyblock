@@ -282,7 +282,7 @@
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
-# PyBLØCK Widget
+## PyBLØCK Widget 
 
 ## Tutorial
 
@@ -296,10 +296,9 @@
 8. Scroll down untill you find the "Scriptable" App. Select it and scroll to the right for the full sized version.
 9. Click "Add Widget" and tab the new created widget to edit it. Select the created script and you're done. 
 
-![PyBLOCK Widget](https://user-images.githubusercontent.com/65907137/164778013-0d15fbf9-51b2-431e-b195-d028c4b01a29.jpeg)
 
 
-SUPPORT PyBLØCK.
+## SUPPORT PyBLØCK.
 
 ⚡️ pyblock@zbd.gg ⚡️
 
