@@ -1,6 +1,3 @@
-<meta name="lightning" content="pyblock@zbd.gg" />
-<meta property="og:image" content="./pybitblock/resources/images/Logo.PNG" />
-
 <img src="./pybitblock/resources/images/Logo.PNG" width="80%" />
 
    
@@ -280,10 +277,28 @@
 [@PRguitarman,](https://twitter.com/PRguitarman)
 [@NyanCat,](https://twitter.com/nyannyancat)
 [@Mononautical,](https://twitter.com/mononautical)
+[@Janna3257,](https://twitter.com/Janna3257)
+[@Cercatrova_21,](https://twitter.com/cercatrova_21)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
-SUPPORT PyBLØCK.
+## PyBLØCK Widget 
+
+## Tutorial
+
+1. Install the app "Scriptable" -> [Apple Appstore - Scriptable](https://apps.apple.com/ch/app/scriptable/id1405459188)
+2. Open the app and click the "+" sign on the top right corner.
+3. Download the following script created by [PyBLOCK](https://github.com/curly60e/pyblock/blob/master/PyBL%C3%98CK%20Widget.scriptable):
+4. Open in Scriptable.
+5. Run the script.
+6. Click and done.
+7. Go to the homescreen, press and hold for a few seconds to make the icons move. Tab on the top left corner the "+" symbol.
+8. Scroll down untill you find the "Scriptable" App. Select it and scroll to the right for the full sized version.
+9. Click "Add Widget" and tab the new created widget to edit it. Select the created script and you're done. 
+
+
+
+## SUPPORT PyBLØCK.
 
 ⚡️ pyblock@zbd.gg ⚡️
 
