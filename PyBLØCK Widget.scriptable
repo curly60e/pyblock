@@ -1,0 +1,116 @@
+let req = new Request("https://mempool.space/api/blocks/tip/height");
+let blockHeight = await req.loadString();
+
+let cRequest = new Request("https://bitcoinexplorer.org/api/mempool/count");
+let tx = await cRequest.loadString();
+
+let make = new Request('https://mempool.space/api/v1/fees/recommended');
+let json = await make.loadJSON();
+
+fast = json.fastestFee.toString();
+halfHour = json.halfHourFee.toString();
+hour = json.hourFee.toString();
+
+let call = new Request('https://bitcoinexplorer.org/api/blockchain/coins');
+let supply = await call.loadString();
+
+let get = new Request('https://bitcoinexplorer.org/api/price/usd/sats');
+let MoscowTime = await get.loadString();
+
+let prin = new Request('https://bitcoinexplorer.org/api/price/usd');
+let Price = await prin.loadString();
+
+let widget = await createWidget();
+
+// Check where the script is running
+if (config.runsInWidget) 
+  {
+  // Runs inside a widget so add it to the homescreen widget
+  Script.setWidget(widget);
+  } 
+else 
+  {
+  // Show the medium widget inside the app
+  widget.presentLarge();
+  }
+
+Script.complete();
+
+async function createWidget() 
+  {
+    
+  // Create new empty ListWidget instance
+  let listwidget = new ListWidget();
+
+
+  // Set new background color
+  listwidget.backgroundColor = new Color("#000000");
+
+ // add 10 second to now
+  let nextRefresh = Date.now() + 1000*10 
+
+  listwidget.refreshAfterDate = new Date(nextRefresh)
+
+
+  // Add widget heading
+  let sns = new Request('https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/resources/images/Logo.PNG');
+let pyp = await sns.loadImage();
+
+  let tt = listwidget.addImage(pyp).centerAlignImage()
+
+  let heading = listwidget.addText(blockHeight);
+  heading.centerAlignText();
+  heading.font = Font.boldSystemFont(70);
+  heading.textColor = new Color("#0aff17");
+  let txs = listwidget.addText("▁▂▃▄▅▆▇ " + tx + " ▇▆▅▄▃▂▁");
+  txs.centerAlignText();
+  txs.font = Font.boldSystemFont(13);
+  txs.textColor = new Color("#FFFFFF");
+  let wdgDesc = listwidget.addText("🟥           🟨           🟩");
+
+  // Add widget heading  
+   let mem = listwidget.addText(fast + "    " + halfHour + "    " + hour);    
+
+  wdgDesc.centerAlignText();
+  mem.centerAlignText();
+  
+  wdgDesc.font = Font.boldSystemFont(10);
+  
+  if(fast < 10)
+    mem.font = Font.boldSystemFont(30);
+  else if(fast < 100)
+     mem.font = Font.boldSystemFont(30);
+  else
+    mem.font = Font.boldSystemFont(30);
+    
+  wdgDesc.textColor = new Color("#EEEEEE");
+  mem.textColor = new Color("#0aff17");
+  
+  let pr = listwidget.addText(Price + " $ = 1 ₿");
+  pr.centerAlignText();
+  pr.font = Font.boldSystemFont(11);
+  pr.textColor = new Color("#eeeeee")
+  
+  let ms = listwidget.addText(MoscowTime +" Ș = 1 $");
+  ms.centerAlignText();
+  ms.font = Font.boldSystemFont(11);
+  ms.textColor = new Color("#0aff17")
+  
+  let coin = listwidget.addText(supply + " Supply");
+  coin.centerAlignText();
+  coin.font = Font.boldSystemFont(10);
+  coin.textColor = new Color("#EEEEEE")
+  
+  
+  
+  let req = new Request('https://pbs.twimg.com/media/E3IikexWYAQfqY2.png');
+let SN = await req.loadImage();
+
+
+  // Add widget heading
+  let gn = listwidget.addImage(SN).centerAlignImage()
+
+
+  // Return the created widget
+  return listwidget;
+}
