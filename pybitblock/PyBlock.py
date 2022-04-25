@@ -1013,6 +1013,13 @@ def robotNym():
         menuSelection()
 
 
+#---------------------------------Sat Sale----------------------------------
+def callGitSatSale():
+    if not os.path.isdir('SatSale'):
+        git = "git clone https://github.com/nickfarrow/SatSale.git"
+        os.system(git)
+    os.system("cd SatSale && python3 satsale.py")
+    
 #---------------------------------Warden Terminal----------------------------------
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
@@ -3781,7 +3788,7 @@ def colorsSelectBackOnchainONLY():
         cert_path = lndconnectload["tls"]
         macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
-        url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
     print("""\t\t
@@ -5790,6 +5797,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["ss", "SS", "Ss", "sS"]:
+        clear()
+        blogo()
+        callGitSatSale()    
 
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -5836,6 +5847,10 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["ss", "SS", "Ss", "sS"]:
+        clear()
+        blogo()
+        callGitSatSale()      
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
@@ -6447,6 +6462,10 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["ss", "SS", "Ss", "sS"]:
+        clear()
+        blogo()
+        callGitSatSale()      
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
