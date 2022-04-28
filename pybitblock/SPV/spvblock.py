@@ -3361,7 +3361,11 @@ def getrawtx(): # show confirmations from transactions
 
         print(output)
         responseC = input("Tx: ")
-        list = "curl -s https://mempool.space/api/tx/" + responseC + """/merkle-proof | jq -C '.[]'"""
+        list = (
+            f"curl -s https://mempool.space/api/tx/{responseC}"
+            + """/merkle-proof | jq -C '.[]'"""
+        )
+
         a = os.popen(list).read()
         clear()
         blogo()
@@ -4944,7 +4948,11 @@ def aaccPPiLNBits():
                 print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = (
+                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                )
+
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -5006,7 +5014,11 @@ def aaccPPiLNPay():
                 print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = (
+                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                )
+
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -5069,7 +5081,11 @@ def aaccPPiOpenNode():
                 print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = (
+                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                )
+
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
