@@ -1,3 +1,5 @@
+// Made by PyBLØCK Crew
+
 let req = new Request("https://mempool.space/api/blocks/tip/height");
 let blockHeight = await req.loadString();
 
@@ -54,7 +56,7 @@ async function createWidget()
 
   // Add widget heading
   let sns = new Request('https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/resources/images/Logo.PNG');
-let pyp = await sns.loadImage();
+  let pyp = await sns.loadImage();
 
   let tt = listwidget.addImage(pyp).centerAlignImage()
 
@@ -104,7 +106,7 @@ let pyp = await sns.loadImage();
   
   
   let req = new Request('https://pbs.twimg.com/media/E3IikexWYAQfqY2.png');
-let SN = await req.loadImage();
+  let SN = await req.loadImage();
 
 
   // Add widget heading
