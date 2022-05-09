@@ -338,6 +338,27 @@ def pgpConn():
 
 #-----------------------------END PGP--------------------------------
 
+#-----------------------------MT--------------------------------
+
+def mtConn():
+    try:
+        conn = """curl -s https://bitcoinexplorer.org/api/price/usd/sats"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "Moscow Time", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END MT--------------------------------
+
 #-----------------------------Satoshi--------------------------------
 
 def satoshiConn():
