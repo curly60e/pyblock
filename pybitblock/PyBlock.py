@@ -1190,6 +1190,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
@@ -1226,6 +1227,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
@@ -1342,6 +1344,7 @@ def bitcoincoremenuREMOTE():
     \u001b[38;5;202mC.\033[0;37;40m Run the Numbers
     \u001b[38;5;202mD.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mE.\033[0;37;40m Miscellaneous
+    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
     \u001b[33;1mR.\033[0;37;40m Return
@@ -5928,6 +5931,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
+    elif bcore in ["M", "m"]:
+        mtConn()     
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["Z", "z"]:
@@ -5983,6 +5988,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
+    elif bcore in ["M", "m"]:
+        mtConn()     
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURNOnchainONLY()
     elif bcore in ["W", "w"]:
@@ -6495,6 +6502,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
             pass
     elif bcore in ["E", "e"]:
         miscellaneousLOCAL()
+    elif bcore in ["M", "m"]:
+        mtConn()     
     elif bcore in ["O", "o"]:
         bitcoincoremenuREMOTEOPRETURN()
     elif bcore in ["Z", "z"]:
