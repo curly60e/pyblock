@@ -591,6 +591,27 @@ def pgpConn():
 
 #-----------------------------END PGP--------------------------------
 
+#-----------------------------MT--------------------------------
+
+def mtConn():
+    try:
+        conn = """curl -s https://bitcoinexplorer.org/api/price/usd/sats"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "Moscow Time", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END MT--------------------------------
+
 #-----------------------------Satoshi--------------------------------
 
 def satoshiConn():
@@ -3361,7 +3382,11 @@ def getrawtx(): # show confirmations from transactions
 
         print(output)
         responseC = input("Tx: ")
-        list = "curl -s https://mempool.space/api/tx/" + responseC + """/merkle-proof | jq -C '.[]'"""
+        list = (
+            f"curl -s https://mempool.space/api/tx/{responseC}"
+            + """/merkle-proof | jq -C '.[]'"""
+        )
+
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3590,6 +3615,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mM.\033[0;37;40m Hashrate
@@ -4944,7 +4970,11 @@ def aaccPPiLNBits():
                 print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = (
+                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                )
+
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -5006,7 +5036,11 @@ def aaccPPiLNPay():
                 print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = (
+                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                )
+
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -5069,7 +5103,11 @@ def aaccPPiOpenNode():
                 print(f"Lightning Invoice: {c}")
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = (
+                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                )
+
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -6585,6 +6623,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
+    elif bcore in ["M", "m"]:
+        mtConn()    
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["Z", "z"]:
@@ -6638,6 +6678,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
+    elif bcore in ["M", "m"]:
+        mtConn()     
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURNOnchainONLY()
     elif bcore in ["W", "w"]:
