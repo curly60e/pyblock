@@ -53,9 +53,7 @@ def opreturnOnchainONLY():
             + " https://opreturnbot.com/api/create"
         )
 
-        while True:
-            if len(message) <= 70:
-                break
+        while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
@@ -155,9 +153,7 @@ def opreturn():
             + " https://opreturnbot.com/api/create"
         )
 
-        while True:
-            if len(message) <= 70:
-                break
+        while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
@@ -337,6 +333,27 @@ def pgpConn():
         pass
 
 #-----------------------------END PGP--------------------------------
+
+#-----------------------------MT--------------------------------
+
+def mtConn():
+    try:
+        conn = """curl -s https://bitcoinexplorer.org/api/price/usd/sats"""
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "Moscow Time", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END MT--------------------------------
 
 #-----------------------------Satoshi--------------------------------
 
