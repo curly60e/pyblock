@@ -135,7 +135,7 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "numpy"
-version = "1.21.4"
+version = "1.23.0"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "main"
 optional = false
