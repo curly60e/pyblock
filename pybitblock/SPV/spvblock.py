@@ -44,7 +44,10 @@ def close():
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
     print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print("    \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
+    print(
+        f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
+    )
+
     print("    \033[0;37;40m----------------------")
 
 def rectangle(n):
@@ -1922,7 +1925,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
@@ -1990,7 +1993,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
@@ -2959,10 +2962,11 @@ def getPoolSlushCheck():
             		s = n
 
             if s > sq:
-            	newblock = "\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m".format(s)
-            	sq = s
+                newblock = f"\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{s}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m"
+
+                sq = s
             else:
-            	newblock = s
+                newblock = s
 
             clear()
             blogo()
@@ -3468,14 +3472,12 @@ def get_ansi_color_code(r, g, b):
     if r == g == b:
         if r < 8:
             return 16
-        if r > 248:
-            return 231
-        return round(((r - 8) / 247) * 24) + 232
+        return 231 if r > 248 else round(((r - 8) / 247) * 24) + 232
     return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
 
 
 def get_color(r, g, b):
-    return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
+    return f"\x1b[48;5;{int(get_ansi_color_code(r, g, b))}m \x1b[0m"
 
 
 def robotNym():
