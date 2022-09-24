@@ -139,7 +139,7 @@ version = "1.23.0"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "main"
 optional = false
-python-versions = ">=3.8,<3.11"
+python-versions = ">=3.6,<3.7"
 
 [[package]]
 name = "pdfminer"
@@ -166,7 +166,7 @@ version = "3.15.0"
 description = "Protocol Buffers"
 category = "main"
 optional = false
-python-versions = ">=3.8,<3.11"
+python-versions = "*"
 
 [package.dependencies]
 six = ">=1.9"
