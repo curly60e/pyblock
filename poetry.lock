@@ -209,6 +209,7 @@ pdf2image = "*"
 "pdfminer.six" = "*"
 Pillow = "*"
 PyPDF2 = "*"
+python-versions = ">=3.7,<3.11"
 
 [[package]]
 name = "pdfminer"
