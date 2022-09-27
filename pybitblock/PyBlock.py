@@ -1020,6 +1020,14 @@ def callGitSatSale():
         os.system(git)
     os.system("cd SatSale && python3 satsale.py")
     
+#---------------------------------Cashu----------------------------------
+def callGitCashu():
+    if not os.path.isdir('Cashu'):
+        git = "pip3 install cashu"
+        os.system(git)
+    os.system("cashu")    
+    
+    
 #---------------------------------Warden Terminal----------------------------------
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
@@ -5803,7 +5811,11 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     elif menuS in ["ss", "SS", "Ss", "sS"]:
         clear()
         blogo()
-        callGitSatSale()    
+        callGitSatSale() 
+    elif menuS in ["CA", "ca", "Ca", "cA"]:
+        clear()
+        blogo()
+        callGitCashu()     
 
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -5853,7 +5865,11 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     elif menuS in ["ss", "SS", "Ss", "sS"]:
         clear()
         blogo()
-        callGitSatSale()      
+        callGitSatSale() 
+    elif menuS in ["CA", "ca", "Ca", "cA"]:
+        clear()
+        blogo()
+        callGitCashu()      
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
