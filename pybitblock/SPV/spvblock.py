@@ -44,7 +44,10 @@ def close():
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
     print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print("    \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
+    print(
+        f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
+    )
+
     print("    \033[0;37;40m----------------------")
 
 def rectangle(n):
@@ -1218,11 +1221,11 @@ def lnbitCreatePayWall():
             amt = input("Amount in sats: ")
             remb = input("Remembers Y/n: ")
             a = loadFileConnLNBits(['admin_key'])
-            b = str(a['admin_key'])
             if remb in ["Y", "y"]:
                 remember = "true"
             elif remb in ["N", "n"]:
                 remember = "false"
+            b = str(a['admin_key'])
             curl = (
                 'curl -X POST https://lnbits.com/paywall/api/v1/paywalls -d '
                 + "'{"
@@ -1241,10 +1244,8 @@ def lnbitCreatePayWall():
             clear()
             aa = loadFileConnLNBits(['invoice_read_key'])
             bb = str(a['invoice_read_key'])
-            checkcurl = (
-                'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H'
-                + f""" "X-Api-Key: {bb}" """
-            )
+            checkcurl = f"""curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H "X-Api-Key: {bb}" """
+
 
             sh = os.popen(checkcurl).read()
             clear()
@@ -1262,7 +1263,8 @@ def lnbitCreatePayWall():
                     nn = s['id']
                     if nd == nn:
                         print("\n----------------------------------------------------------------------------------------------------------------")
-                        print("""
+                        print(
+                            """
                         \tLNBITS PAYWALL DECODED
 
                         ID: {}
@@ -1273,7 +1275,18 @@ def lnbitCreatePayWall():
                         Remembers: {}
                         URL: {}
                         Wallet: {}
-                        """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
+                        """.format(
+                                nn,
+                                s['amount'],
+                                s['description'],
+                                s['memo'],
+                                s['extras'],
+                                s['remembers'],
+                                s['url'],
+                                s['wallet'],
+                            )
+                        )
+
                         print("----------------------------------------------------------------------------------------------------------------\n")
                 input("Continue...")
             clear()
@@ -1642,9 +1655,9 @@ def lnpayGetTransactions():
             for transaction in transactions:
                 s = transaction
                 nn = s['id']
-                nnn = s['lnTx']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------")
+                    nnn = s['lnTx']
                     print("""
                     \tLNPAY LIST PAYMENT DECODED
 
@@ -1789,10 +1802,8 @@ def createFileConnOpenNode():
 def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = (
-        "curl https://api.opennode.co/v1/account/balance -H "
-        + f'"Content-Type: application/json" -H "Authorization: {b}"'
-    )
+    curl = f'curl https://api.opennode.co/v1/account/balance -H "Content-Type: application/json" -H "Authorization: {b}"'
+
 
     sh = os.popen(curl).read()
     clear()
@@ -1800,8 +1811,8 @@ def OpenNodelistfunds():
     n = str(sh)
     d = json.loads(n)
     r = d['data']
-    p = r['balance']
     print("\n----------------------------------------------------------------------------------------------------")
+    p = r['balance']
     print("""
     OPENNODE BALANCE
 
