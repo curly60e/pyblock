@@ -42,7 +42,10 @@ def close():
 def sysinfo():  #Cpu and memory usage
     print("    \033[0;37;40m----------------------")
     print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print("    \033[3;33;40mMemory Usage: \033[1;32;40m" "{}% \033[0;37;40m".format(int(psutil.virtual_memory().percent)))
+    print(
+        f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
+    )
+
     print("    \033[0;37;40m----------------------")
 
 def rectangle(n):
@@ -285,10 +288,11 @@ def getPoolSlushCheck():
             		s = n
 
             if s > sq:
-            	newblock = "\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m".format(s)
-            	sq = s
+                newblock = f"\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{s}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m"
+
+                sq = s
             else:
-            	newblock = s
+                newblock = s
 
             clear()
             blogo()
@@ -412,6 +416,8 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
 
 def searchTXS():
     try:
+        gettxout = " gettxout "
+
         while True:
             clear()
             blogo()
@@ -419,19 +425,17 @@ def searchTXS():
             output = render("search txs", colors=['yellow'], align='left', font='tiny')
             print(output)
             tx = input("Search Tx ID: ")
-            gettxout = " gettxout "
-
             gnt = os.popen(path['bitcoincli'] + gettxout + tx + " 1")
             gnta = gnt.read()
             gnt1 = str(gnta)
             gnt2 = json.loads(gnt1)
-            scriptPubKey = gnt2['scriptPubKey']
             if gnt2['bestblock']:
                 clear()
                 blogo()
                 closed()
                 output = render("search txs", colors=['yellow'], align='left', font='tiny')
                 print(output)
+                scriptPubKey = gnt2['scriptPubKey']
                 print("""
     -------------------------------------------------------------------------------
     Tx: \u001b[38;5;40m{} \033[0;37;40m
@@ -478,9 +482,15 @@ def untxsConn():
                 for value in ab:
                     knx = value['scriptPubKey']
                     if knz in knx:
-                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['address'],knx['type']))
+                        print(
+                            f"TxID: \u001b[38;5;40m{b} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{value['value']} BTC \033[0;37;40m| \u001b[31;1mAddress: \u001b[33;1m{knx['address']}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{knx['type']}\u001b[33;1m"
+                        )
+
                     else:
-                        print("TxID: \u001b[38;5;40m{} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{}\u001b[33;1m".format(b,value['value'],knx['asm'],knx['type']))
+                        print(
+                            f"TxID: \u001b[38;5;40m{b} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{value['value']} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{knx['asm']}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{knx['type']}\u001b[33;1m"
+                        )
+
                         decodeTX = (
                             path['bitcoincli']
                             + f" getrawtransaction {b}"
@@ -584,7 +594,7 @@ def getnewaddressOnchain():
                 a = gnub
                 b = gnb1
             nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
-            print("\n\033[ALive Fee: ~{} sat/vB \033[A".format(nn))
+            print(f"\n\033[ALive Fee: ~{nn} sat/vB \033[A")
             t.sleep(10)
     except:
         walletmenuLOCALOnchainONLY()
@@ -608,19 +618,21 @@ def gettransactionsOnchain():
             print(output)
             for q in sort_order:
                 print(
-                    "TxID: "
-                    + "\u001b[38;5;40m{}\033[0;37;40m".format(str(q['txid']))
-                    + " | "
-                    + "Amount: "
-                    + "\u001b[38;5;202m{} BTC\033[0;37;40m".format(
-                        str(q['amount'])
-                    )
-                    + " | "
-                    + "Conf: "
-                    + "\u001b[33;1m{}\033[0;37;40m".format(
-                        str(q['confirmations'])
+                    (
+                        (
+                            (
+                                (
+                                    f"TxID: \u001b[38;5;40m{str(q['txid'])}\033[0;37;40m | Amount: "
+                                    + f"\u001b[38;5;202m{str(q['amount'])} BTC\033[0;37;40m"
+                                )
+                                + " | "
+                            )
+                            + "Conf: "
+                        )
+                        + f"\u001b[33;1m{str(q['confirmations'])}\033[0;37;40m"
                     )
                 )
+
 
 
             print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
@@ -784,7 +796,13 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
                 lsda = lsd1.split(',')
                 lsdb = lsda[-3]
                 lsdc = str(lsdb)
-                print("\033[0;37;40mTransaction " + "\033[1;31;40m{}\033[0;37;40m".format(tx) + " has:\n" + "\033[1;31;40m{}\033[0;37;40m".format(lsdc))
+                print(
+                    "\033[0;37;40mTransaction "
+                    + f"\033[1;31;40m{tx}\033[0;37;40m"
+                    + " has:\n"
+                    + f"\033[1;31;40m{lsdc}\033[0;37;40m"
+                )
+
                 tmp()
                 lsd.close()
             input("Continue...")
@@ -960,14 +978,12 @@ def get_ansi_color_code(r, g, b):
     if r == g == b:
         if r < 8:
             return 16
-        if r > 248:
-            return 231
-        return round(((r - 8) / 247) * 24) + 232
+        return 231 if r > 248 else round(((r - 8) / 247) * 24) + 232
     return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
 
 
 def get_color(r, g, b):
-    return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
+    return f"\x1b[48;5;{int(get_ansi_color_code(r, g, b))}m \x1b[0m"
 
 
 def robotNym():
@@ -1019,6 +1035,14 @@ def callGitSatSale():
         git = "git clone https://github.com/nickfarrow/SatSale.git"
         os.system(git)
     os.system("cd SatSale && python3 satsale.py")
+    
+#---------------------------------Cashu----------------------------------
+def callGitCashu():
+    if not os.path.isdir('Cashu'):
+        git = "pip3 install cashu"
+        os.system(git)
+    os.system("cashu")    
+    
     
 #---------------------------------Warden Terminal----------------------------------
 def callGitWardenTerminal():
@@ -5803,7 +5827,11 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     elif menuS in ["ss", "SS", "Ss", "sS"]:
         clear()
         blogo()
-        callGitSatSale()    
+        callGitSatSale() 
+    elif menuS in ["CA", "ca", "Ca", "cA"]:
+        clear()
+        blogo()
+        callGitCashu()     
 
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -5853,7 +5881,11 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     elif menuS in ["ss", "SS", "Ss", "sS"]:
         clear()
         blogo()
-        callGitSatSale()      
+        callGitSatSale() 
+    elif menuS in ["CA", "ca", "Ca", "cA"]:
+        clear()
+        blogo()
+        callGitCashu()      
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
