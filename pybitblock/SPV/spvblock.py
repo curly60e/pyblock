@@ -3528,6 +3528,13 @@ def callGitWardenTerminal():
         os.system(git)
     os.system("cd warden_terminal && python3 node_warden.py")
 
+#---------------------------------Warden Terminal----------------------------------
+def callGitCashu():
+    if not os.path.isdir('Cashu'):
+        git = "pip3 install cashu"
+        os.system(git)
+    os.system("cashu")
+    
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
     clear()
@@ -6512,6 +6519,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["CA", "ca", "Ca", "cA"]:
+        clear()
+        blogo()
+        callGitCashu()     
 
 def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -6558,6 +6569,10 @@ def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu o
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["CA", "ca", "Ca", "cA"]:
+        clear()
+        blogo()
+        callGitCashu()     
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
