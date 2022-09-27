@@ -3528,7 +3528,7 @@ def callGitWardenTerminal():
         os.system(git)
     os.system("cd warden_terminal && python3 node_warden.py")
 
-#---------------------------------Warden Terminal----------------------------------
+#---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
         git = "pip3 install cashu"
