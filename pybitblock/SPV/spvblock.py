@@ -3542,9 +3542,9 @@ def callGitWardenTerminal():
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
-        git = "pip3 install cashu"
+        git = "pip3 install cashu && mkdir Cashu"
         os.system(git)
-    os.system("cashu")
+    os.system("cd Cashu && cashu")
     
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
