@@ -1893,13 +1893,13 @@ def OpenNodecreatecharge():
         selection = input("Select a FIAT currency: ")
         amt = input(f"Amount in {selection}: ")
         curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H '
-            + f'"Authorization: {b}"'
+            f'curl https://api.opennode.co/v1/charges -X POST -H "Authorization: {b}"'
             + ' -H "Content-Type: application/json" -d '
             + "'{"
             + f'"amount": "{amt}", "currency": "{selection.upper()}"'
             + "}'"
         )
+
 
         sh = os.popen(curl).read()
         clear()
@@ -1908,9 +1908,9 @@ def OpenNodecreatecharge():
         d = json.loads(n)
         dd = d['data']
         qq = dd['lightning_invoice']
-        pp = dd['address']
         nn = qq['payreq']
         mm = nn.lower()
+        pp = dd['address']
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -1929,8 +1929,8 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
@@ -1951,7 +1951,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
@@ -1961,13 +1961,13 @@ def OpenNodecreatecharge():
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
         curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H'
-            + f'"Authorization: {b}"'
+            f'curl https://api.opennode.co/v1/charges -X POST -H"Authorization: {b}"'
             + ' -H "Content-Type: application/json" -d '
             + "'{"
             + f'"amount": "{amt}", "currency": "BTC"'
             + "}'"
         )
+
 
         sh = os.popen(curl).read()
         clear()
@@ -1977,8 +1977,8 @@ def OpenNodecreatecharge():
         dd = d['data']
         qq = dd['lightning_invoice']
         nn = qq['payreq']
-        pp = dd['address']
         mm = nn.lower()
+        pp = dd['address']
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -2019,7 +2019,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
@@ -2988,10 +2988,11 @@ def getPoolSlushCheck():
             		s = n
 
             if s > sq:
-            	newblock = "\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m".format(s)
-            	sq = s
+                newblock = f"\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{s}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m"
+
+                sq = s
             else:
-            	newblock = s
+                newblock = s
 
             clear()
             blogo()
@@ -3497,14 +3498,12 @@ def get_ansi_color_code(r, g, b):
     if r == g == b:
         if r < 8:
             return 16
-        if r > 248:
-            return 231
-        return round(((r - 8) / 247) * 24) + 232
+        return 231 if r > 248 else round(((r - 8) / 247) * 24) + 232
     return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
 
 
 def get_color(r, g, b):
-    return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
+    return f"\x1b[48;5;{int(get_ansi_color_code(r, g, b))}m \x1b[0m"
 
 
 def robotNym():
