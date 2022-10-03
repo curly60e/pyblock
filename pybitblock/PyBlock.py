@@ -929,10 +929,10 @@ def epoch():
     q = """
     \033[0;37;40m------------------- EPOCH CLOCK -------------------
 
-            Bitcoin Epoch: {} {}
+            Epoch {} Status {}
         
     -------------------------------------------------------
-    """.format("0" if int(c) == 3437 else oneh,"\033[1;32;40mCOMPLETE\033[0;37;40m")
+    """.format("0" if int(c) == 3437 else oneh,"\033[1;32;40mON\033[0;37;40m")
     print(q)
     input("\nContinue...")
 
