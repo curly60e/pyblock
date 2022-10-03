@@ -279,6 +279,10 @@
 [@Mononautical,](https://twitter.com/mononautical)
 [@Janna3257,](https://twitter.com/Janna3257)
 [@Cercatrova_21,](https://twitter.com/cercatrova_21)
+[@ChaumDotCom,](https://twitter.com/chaumdotcom)
+[@CashuBTC,](https://twitter.com/CashuBTC)
+[@CalleBTC,](https://twitter.com/callebtc)
+[@0xB10C,](https://twitter.com/0xB10C)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
