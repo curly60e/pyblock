@@ -573,6 +573,24 @@ def statsConn():
 
 #-----------------------------END Stats--------------------------------
 
+#-----------------------------Block Templates--------------------------------
+
+def blockTmpConn():
+    try:
+        conn = """curl -s https://miningpool.observer/template-and-block | html2text | grep "Template and Block for" -A 13 """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("Templates and Blocks", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Block Templates--------------------------------
+
 #-----------------------------PGP--------------------------------
 
 def pgpConn():
@@ -1875,13 +1893,13 @@ def OpenNodecreatecharge():
         selection = input("Select a FIAT currency: ")
         amt = input(f"Amount in {selection}: ")
         curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H '
-            + f'"Authorization: {b}"'
+            f'curl https://api.opennode.co/v1/charges -X POST -H "Authorization: {b}"'
             + ' -H "Content-Type: application/json" -d '
             + "'{"
             + f'"amount": "{amt}", "currency": "{selection.upper()}"'
             + "}'"
         )
+
 
         sh = os.popen(curl).read()
         clear()
@@ -1890,9 +1908,9 @@ def OpenNodecreatecharge():
         d = json.loads(n)
         dd = d['data']
         qq = dd['lightning_invoice']
-        pp = dd['address']
         nn = qq['payreq']
         mm = nn.lower()
+        pp = dd['address']
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -1911,8 +1929,8 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
@@ -1933,7 +1951,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
@@ -1943,13 +1961,13 @@ def OpenNodecreatecharge():
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
         curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H'
-            + f'"Authorization: {b}"'
+            f'curl https://api.opennode.co/v1/charges -X POST -H"Authorization: {b}"'
             + ' -H "Content-Type: application/json" -d '
             + "'{"
             + f'"amount": "{amt}", "currency": "BTC"'
             + "}'"
         )
+
 
         sh = os.popen(curl).read()
         clear()
@@ -1959,8 +1977,8 @@ def OpenNodecreatecharge():
         dd = d['data']
         qq = dd['lightning_invoice']
         nn = qq['payreq']
-        pp = dd['address']
         mm = nn.lower()
+        pp = dd['address']
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -2001,7 +2019,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
@@ -2970,10 +2988,11 @@ def getPoolSlushCheck():
             		s = n
 
             if s > sq:
-            	newblock = "\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m".format(s)
-            	sq = s
+                newblock = f"\a\n\n\t\t\u001b[31;1m    New Block Mined \u001b[38;5;27m{s}\u001b[31;1m! \u001b[38;5;202mFresh sats for you!\033[0;37;40m"
+
+                sq = s
             else:
-            	newblock = s
+                newblock = s
 
             clear()
             blogo()
@@ -3479,14 +3498,12 @@ def get_ansi_color_code(r, g, b):
     if r == g == b:
         if r < 8:
             return 16
-        if r > 248:
-            return 231
-        return round(((r - 8) / 247) * 24) + 232
+        return 231 if r > 248 else round(((r - 8) / 247) * 24) + 232
     return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
 
 
 def get_color(r, g, b):
-    return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
+    return f"\x1b[48;5;{int(get_ansi_color_code(r, g, b))}m \x1b[0m"
 
 
 def robotNym():
@@ -3953,6 +3970,7 @@ def runTheNumbersMenu():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
+    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -3976,6 +3994,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
+    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6412,6 +6431,10 @@ def runTheNumbersControl(menuNumbers):
         cprint(comeback, 'yellow')
         cprint(calc, 'red', attrs=['blink'])
         runthenumbers()
+    elif menuNumbers in ["D", "d"]:
+        clear()
+        blogo()
+        blockTmpConn()     
 
 def runTheNumbersControlOnchainONLY(menuNumbers):
     if menuNumbers in ["A", "a"]:
@@ -6441,6 +6464,10 @@ def runTheNumbersControlOnchainONLY(menuNumbers):
         cprint(comeback, 'yellow')
         cprint(calc, 'red', attrs=['blink'])
         runthenumbers()
+    elif menuNumbers in ["D", "d"]:
+        clear()
+        blogo()
+        blockTmpConn()     
 
 def runTheNumbersControlConn(menuNumbersconn):
     if menuNumbersconn in ["A", "a"]:
@@ -6470,6 +6497,10 @@ def runTheNumbersControlConn(menuNumbersconn):
         cprint(comeback, 'yellow')
         cprint(calc, 'red', attrs=['blink'])
         runthenumbersConn()
+    elif menuNumbers in ["D", "d"]:
+        clear()
+        blogo()
+        blockTmpConn()     
 
 def menuWeather(menuWD):
     if menuWD in ["A", "a"]:
