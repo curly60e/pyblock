@@ -924,12 +924,12 @@ def epoch():
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     c = b
-    oneh =  int(c) / 2016
+    oneh = 0 - int(c) / 2016
     
     q = """
     \033[0;37;40m------------------- EPOCH CLOCK -------------------
 
-            Bitcoin  Epoch: {}
+            Bitcoin Epoch: {}
         
     -------------------------------------------------------
     """.format("0" if int(c) == 3437 else oneh,"\033[1;32;40mCOMPLETE\033[0;37;40m")
