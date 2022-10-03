@@ -573,6 +573,24 @@ def statsConn():
 
 #-----------------------------END Stats--------------------------------
 
+#-----------------------------Block Templates--------------------------------
+
+def blockTmpConn():
+    try:
+        conn = """curl -s https://miningpool.observer/template-and-block | html2text | grep "Template and Block for" -A 13 """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("Templates and Blocks", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Block Templates--------------------------------
+
 #-----------------------------PGP--------------------------------
 
 def pgpConn():
@@ -3953,6 +3971,7 @@ def runTheNumbersMenu():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
+    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -3976,6 +3995,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mA.\033[0;37;40m Countdown Block
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
+    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6412,6 +6432,10 @@ def runTheNumbersControl(menuNumbers):
         cprint(comeback, 'yellow')
         cprint(calc, 'red', attrs=['blink'])
         runthenumbers()
+    elif menuNumbers in ["D", "d"]:
+        clear()
+        blogo()
+        blockTmpConn()     
 
 def runTheNumbersControlOnchainONLY(menuNumbers):
     if menuNumbers in ["A", "a"]:
@@ -6441,6 +6465,10 @@ def runTheNumbersControlOnchainONLY(menuNumbers):
         cprint(comeback, 'yellow')
         cprint(calc, 'red', attrs=['blink'])
         runthenumbers()
+    elif menuNumbers in ["D", "d"]:
+        clear()
+        blogo()
+        blockTmpConn()     
 
 def runTheNumbersControlConn(menuNumbersconn):
     if menuNumbersconn in ["A", "a"]:
@@ -6470,6 +6498,10 @@ def runTheNumbersControlConn(menuNumbersconn):
         cprint(comeback, 'yellow')
         cprint(calc, 'red', attrs=['blink'])
         runthenumbersConn()
+    elif menuNumbers in ["D", "d"]:
+        clear()
+        blogo()
+        blockTmpConn()     
 
 def menuWeather(menuWD):
     if menuWD in ["A", "a"]:
