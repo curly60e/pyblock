@@ -1216,7 +1216,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mM.\033[0;37;40m Hashrate
+    \u001b[38;5;202mR.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[33;1mR.\033[0;37;40m Return
@@ -1254,7 +1254,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mM.\033[0;37;40m Hashrate
+    \u001b[38;5;202mR.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[33;1mR.\033[0;37;40m Return
@@ -1369,7 +1369,7 @@ def bitcoincoremenuREMOTE():
     \u001b[38;5;202mE.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mM.\033[0;37;40m Hashrate
+    \u001b[38;5;202mR.\033[0;37;40m Hashrate
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5968,7 +5968,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["Z", "z"]:
         statsConn()
-    elif bcore in ["M", "m"]:
+    elif bcore in ["R", "r"]:
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
@@ -6027,7 +6027,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
         statsConn()
-    elif bcore in ["M", "m"]:
+    elif bcore in ["R", "r"]:
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
@@ -6539,7 +6539,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         bitcoincoremenuREMOTEOPRETURN()
     elif bcore in ["Z", "z"]:
         statsConn()
-    elif bcore in ["M", "m"]:
+    elif bcore in ["R", "r"]:
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
