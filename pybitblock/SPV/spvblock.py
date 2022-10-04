@@ -625,8 +625,11 @@ def mtConn():
             "Moscow Time", colors=['yellow'], align='left', font='tiny'
         )
 
+        outputT = render(
+            a + " sats", colors=['green'], align='left', font='tiny'
+        )
         print(output)
-        print(a)
+        print(outputT)
         input("\a\nContinue...")
     except:
         pass
