@@ -346,9 +346,7 @@ def mtConn():
         output = render(
             "Moscow Time", colors=['yellow'], align='left', font='tiny'
         )
-        outputT = render(
-            a + " sats", colors=['green'], align='left', font='tiny'
-        )
+        outputT = render(f"{a} sats", colors=['green'], align='left', font='tiny')
         print(output)
         print(outputT)
         input("\a\nContinue...")
@@ -963,11 +961,11 @@ def lnbitCreatePayWall():
             amt = input("Amount in sats: ")
             remb = input("Remembers Y/n: ")
             a = loadFileConnLNBits(['admin_key'])
-            b = str(a['admin_key'])
             if remb in ["Y", "y"]:
                 remember = "true"
             elif remb in ["N", "n"]:
                 remember = "false"
+            b = str(a['admin_key'])
             curl = (
                 'curl -X POST https://lnbits.com/paywall/api/v1/paywalls -d '
                 + "'{"
@@ -986,10 +984,8 @@ def lnbitCreatePayWall():
             clear()
             aa = loadFileConnLNBits(['invoice_read_key'])
             bb = str(a['invoice_read_key'])
-            checkcurl = (
-                'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H'
-                + f""" "X-Api-Key: {bb}" """
-            )
+            checkcurl = f"""curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H "X-Api-Key: {bb}" """
+
 
             sh = os.popen(checkcurl).read()
             clear()
@@ -1007,7 +1003,8 @@ def lnbitCreatePayWall():
                     nn = s['id']
                     if nd == nn:
                         print("\n----------------------------------------------------------------------------------------------------------------")
-                        print("""
+                        print(
+                            """
                         \tLNBITS PAYWALL DECODED
 
                         ID: {}
@@ -1018,7 +1015,18 @@ def lnbitCreatePayWall():
                         Remembers: {}
                         URL: {}
                         Wallet: {}
-                        """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
+                        """.format(
+                                nn,
+                                s['amount'],
+                                s['description'],
+                                s['memo'],
+                                s['extras'],
+                                s['remembers'],
+                                s['url'],
+                                s['wallet'],
+                            )
+                        )
+
                         print("----------------------------------------------------------------------------------------------------------------\n")
                 input("Continue...")
             clear()
@@ -1387,9 +1395,9 @@ def lnpayGetTransactions():
             for transaction in transactions:
                 s = transaction
                 nn = s['id']
-                nnn = s['lnTx']
                 if nd == nn:
                     print("\n----------------------------------------------------------------------------------------------------")
+                    nnn = s['lnTx']
                     print("""
                     \tLNPAY LIST PAYMENT DECODED
 
@@ -1534,10 +1542,8 @@ def createFileConnOpenNode():
 def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = (
-        "curl https://api.opennode.co/v1/account/balance -H "
-        + f'"Content-Type: application/json" -H "Authorization: {b}"'
-    )
+    curl = f'curl https://api.opennode.co/v1/account/balance -H "Content-Type: application/json" -H "Authorization: {b}"'
+
 
     sh = os.popen(curl).read()
     clear()
@@ -1545,8 +1551,8 @@ def OpenNodelistfunds():
     n = str(sh)
     d = json.loads(n)
     r = d['data']
-    p = r['balance']
     print("\n----------------------------------------------------------------------------------------------------")
+    p = r['balance']
     print("""
     OPENNODE BALANCE
 
@@ -1609,13 +1615,13 @@ def OpenNodecreatecharge():
         selection = input("Select a FIAT currency: ")
         amt = input(f"Amount in {selection}: ")
         curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H '
-            + f'"Authorization: {b}"'
+            f'curl https://api.opennode.co/v1/charges -X POST -H "Authorization: {b}"'
             + ' -H "Content-Type: application/json" -d '
             + "'{"
             + f'"amount": "{amt}", "currency": "{selection.upper()}"'
             + "}'"
         )
+
 
         sh = os.popen(curl).read()
         clear()
@@ -1624,9 +1630,9 @@ def OpenNodecreatecharge():
         d = json.loads(n)
         dd = d['data']
         qq = dd['lightning_invoice']
-        pp = dd['address']
         nn = qq['payreq']
         mm = nn.lower()
+        pp = dd['address']
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -1645,8 +1651,8 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
@@ -1667,7 +1673,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
@@ -1677,13 +1683,13 @@ def OpenNodecreatecharge():
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
         curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H'
-            + f'"Authorization: {b}"'
+            f'curl https://api.opennode.co/v1/charges -X POST -H"Authorization: {b}"'
             + ' -H "Content-Type: application/json" -d '
             + "'{"
             + f'"amount": "{amt}", "currency": "BTC"'
             + "}'"
         )
+
 
         sh = os.popen(curl).read()
         clear()
@@ -1693,8 +1699,8 @@ def OpenNodecreatecharge():
         dd = d['data']
         qq = dd['lightning_invoice']
         nn = qq['payreq']
-        pp = dd['address']
         mm = nn.lower()
+        pp = dd['address']
         while True:
             try:
                 print("\n----------------------------------------------------------------------------------------------------")
@@ -1735,7 +1741,7 @@ def OpenNodecreatecharge():
                     qr.print_ascii()
                     print("\033[0;37;40m")
                     qr.clear()
-                    print("\nAmount in sats: {} sats".format(dd['amount']))
+                    print(f"\nAmount in sats: {dd['amount']} sats")
                     print("\nOnchain Address: " + pp)
                 input("\nContinue...")
                 clear()
