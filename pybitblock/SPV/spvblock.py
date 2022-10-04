@@ -49,6 +49,9 @@ def sysinfo():  #Cpu and memory usage
     )
 
     print("    \033[0;37;40m----------------------")
+    
+def tmp():
+    t.sleep(15)
 
 def rectangle(n):
     x = n - 3
