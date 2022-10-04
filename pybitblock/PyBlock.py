@@ -924,15 +924,15 @@ def epoch():
     block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
     b = block
     c = b
-    oneh = 0 - int(c) / 2016
+    oneh = 0 int(c) / 2016
     
     q = """
     \033[0;37;40m------------------- EPOCH CLOCK -------------------
 
             Epoch {} Status {}
         
-    -------------------------------------------------------
-    """.format("0" if int(c) == 3437 else oneh,"\033[1;32;40mON\033[0;37;40m")
+    ----------------------------------------------------
+    """.format("0" if int(c) == 6930000 else oneh,"\033[1;32;40mON\033[0;37;40m")
     print(q)
     input("\nContinue...")
 
