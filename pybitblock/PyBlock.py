@@ -300,7 +300,7 @@ def getPoolSlushCheck():
 
     --------------------------------------------------------------------------------------------
 
-                        \033[0;37;40mSlushPool BTC
+                        \033[0;37;40mBraiins Pool
 
                         Username: {}
                         Confirmed reward: \u001b[38;5;40m{}\033[0;37;40m BTC
