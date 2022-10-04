@@ -3434,9 +3434,7 @@ def runthenumbers():
         blogo()
         closed()
         output = render("total amount", colors=['yellow'], align='left', font='tiny')
-        outputT = render(
-            a + " sats", colors=['green'], align='left', font='tiny'
-        )
+        outputT = render(f"{a} sats", colors=['green'], align='left', font='tiny')
         print(output)
         print(outputT)
         input("\a\nContinue...")
