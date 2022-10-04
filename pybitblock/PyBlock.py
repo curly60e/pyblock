@@ -917,6 +917,25 @@ def localHalving():
     """.format("0" if int(c) == 210000 else oneh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 420000 else twoh,"\033[1;32;40mCOMPLETE\033[0;37;40m", "0" if int(c) == 630000 else thrh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 840000 else forh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 840000 else "\033[1;35;40mPENDING\033[0;37;40m", "0" if int(c) >= 1050000 else fifh , "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1050000 else "\033[1;35;40mPENDING\033[0;37;40m", sixh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1260000 else "\033[1;35;40mPENDING\033[0;37;40m", sevh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1470000 else "\033[1;35;40mPENDING\033[0;37;40m", eith,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1680000 else "\033[1;35;40mPENDING\033[0;37;40m", ninh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m", tenh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m")
     print(q)
     input("\nContinue...")
+
+
+def epoch():
+    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
+    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    b = block
+    c = b
+    oneh = 0 - int(c) / 2016
+    
+    q = """
+    \033[0;37;40m------------------- EPOCH CLOCK -------------------
+
+            Epoch {} Status {}
+        
+    -------------------------------------------------------
+    """.format("0" if int(c) == 3437 else oneh,"\033[1;32;40mON\033[0;37;40m")
+    print(q)
+    input("\nContinue...")
+
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 def pdfconvert():
@@ -1971,6 +1990,7 @@ def runTheNumbersMenu():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \033[1;32;40mD.\033[0;37;40m Templates & Blocks
+    \033[1;32;40mE.\033[0;37;40m Epoch
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2007,6 +2027,7 @@ def runTheNumbersMenuOnchainONLY():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \033[1;32;40mD.\033[0;37;40m Templates & Blocks
+    \033[1;32;40mE.\033[0;37;40m Epoch
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     runTheNumbersControlOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2049,6 +2070,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \033[1;32;40mD.\033[0;37;40m Templates & Blocks
+    \033[1;32;40mE.\033[0;37;40m Epoch
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5763,7 +5785,11 @@ def runTheNumbersControlOnchainONLY(menuNumbers):
         clear()
         blogo()
         blockTmpConn()     
-
+    elif menuNumbers in ["E", "e"]:
+        clear()
+        blogo()
+        epoch()  
+            
 def runTheNumbersControlConn(menuNumbersconn):
     if menuNumbersconn in ["A", "a"]:
         clear()
@@ -5795,7 +5821,11 @@ def runTheNumbersControlConn(menuNumbersconn):
     elif menuNumbers in ["D", "d"]:
         clear()
         blogo()
-        blockTmpConn()     
+        blockTmpConn()   
+    elif menuNumbers in ["E", "e"]:
+        clear()
+        blogo()
+        epoch()     
 
 def menuWeather(menuWD):
     if menuWD in ["A", "a"]:
