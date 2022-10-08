@@ -706,6 +706,23 @@ def datesConn():
         pass
 
 #-----------------------------END Dates--------------------------------
+#-----------------------------Missing--------------------------------
+
+def missingConn():
+    try:
+        conn = """curl -s https://miningpool.observer/missing/feed.xml | html2text | grep -v "link" | grep -v "https" | grep -v "Missing Transaction" """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("missing transactions", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------END Missing--------------------------------
 #-----------------------------Quotes--------------------------------
 
 def quotesConn():
@@ -3977,6 +3994,7 @@ def runTheNumbersMenu():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \033[1;32;40mD.\033[0;37;40m Templates & Blocks
+    \033[1;32;40mE.\033[0;37;40m Missing Transactions
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -4001,6 +4019,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mB.\033[0;37;40m Countdown Halving
     \033[1;32;40mC.\033[0;37;40m Audit
     \033[1;32;40mD.\033[0;37;40m Templates & Blocks
+    \033[1;32;40mE.\033[0;37;40m Missing Transactions
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6473,7 +6492,11 @@ def runTheNumbersControlOnchainONLY(menuNumbers):
     elif menuNumbers in ["D", "d"]:
         clear()
         blogo()
-        blockTmpConn()     
+        blockTmpConn()
+    elif menuNumbers in ["E", "e"]:
+        clear()
+        blogo()
+        missingConn()      
 
 def runTheNumbersControlConn(menuNumbersconn):
     if menuNumbersconn in ["A", "a"]:
@@ -6506,7 +6529,11 @@ def runTheNumbersControlConn(menuNumbersconn):
     elif menuNumbers in ["D", "d"]:
         clear()
         blogo()
-        blockTmpConn()     
+        blockTmpConn()
+    elif menuNumbers in ["E", "e"]:
+        clear()
+        blogo()
+        missingConn()     
 
 def menuWeather(menuWD):
     if menuWD in ["A", "a"]:
