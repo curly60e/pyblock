@@ -618,21 +618,39 @@ def pgpConn():
 #-----------------------------MT--------------------------------
 
 def mtConn():
-    try:
-        conn = """curl -s https://bitcoinexplorer.org/api/price/usd/sats"""
-        a = os.popen(conn).read()
-        clear()
-        blogo()
-        closed()
-        output = render(
-            "Moscow Time", colors=['yellow'], align='left', font='tiny'
-        )
-        outputT = render(f"{a} sats", colors=['green'], align='left', font='tiny')
-        print(output)
-        print(outputT)
-        input("\a\nContinue...")
-    except:
-        pass
+    if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
+        settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+        settingsClock = settingsv # Copy the variable pathv to 'path'
+    else:
+        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
+        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
+    clear()
+    r = requests.get('https://bitcoinexplorer.org/api/price/usd/sats')
+    r.headers['Content-Type']
+    n = r.text
+    di = json.loads(n)
+    a = di
+    b = str(a)
+    clear()
+    close()
+    output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    print("\033[0;37;40m\x1b[?25l" + output)
+    while True:
+        x = b
+        r = requests.get('https://bitcoinexplorer.org/api/price/usd/sats')
+        r.headers['Content-Type']
+        n = r.text
+        di = json.loads(n)
+        a = di
+        if x < str(a):
+            clear()
+            close()
+            output5 = subprocess.check_output(['sudo', 'iwgetid'])
+            z = str(output5)
+            pp = random.choice(list(faceshappy.values())).encode('utf-8').decode('latin-1')
+            output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            print("\033[0;37;40m\x1b[?25l" + output)
+            b = str(a)    #try:
 
 #-----------------------------END MT--------------------------------
 
