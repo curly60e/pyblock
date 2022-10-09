@@ -283,6 +283,7 @@
 [@CashuBTC,](https://twitter.com/CashuBTC)
 [@CalleBTC,](https://twitter.com/callebtc)
 [@0xB10C,](https://twitter.com/0xB10C)
+[@BitRawr,](https://twitter.com/bitrawr)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
