@@ -616,8 +616,16 @@ def pgpConn():
 #-----------------------------END PGP--------------------------------
 
 #-----------------------------MT--------------------------------
+def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
+    while True:
+        try:
+            clear()
+            close()
+            mtclock()
+        except:
+            break
 
-def mtConn():
+def mtclock():
     if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
         settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
         settingsClock = settingsv # Copy the variable pathv to 'path'
