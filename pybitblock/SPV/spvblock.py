@@ -6475,7 +6475,11 @@ def runTheNumbersControl(menuNumbers):
     elif menuNumbers in ["D", "d"]:
         clear()
         blogo()
-        blockTmpConn()     
+        blockTmpConn()
+    elif menuNumbers in ["E", "e"]:
+        clear()
+        blogo()
+        missingConn()       
 
 def runTheNumbersControlOnchainONLY(menuNumbers):
     if menuNumbers in ["A", "a"]:
