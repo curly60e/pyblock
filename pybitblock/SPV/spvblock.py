@@ -783,6 +783,31 @@ def miningConn():
         pass
 
 #-----------------------------END Hashrate--------------------------------
+
+#-----------------------------Strings Dat--------------------------------
+
+def decodeStrDat(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "strings", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Blk Dat: ")
+        list = "curl -s 'https://bitcoinstrings.com/blk'" + responseC + """.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nBLK: " + responseC)
+        print("\nString: " + a)
+        input("\a\nContinue...")
+    except:
+        pass
+    
+#-----------------------------End Strings Dat--------------------------------    
+
 #-----------------------------StatsLN--------------------------------
 
 def stalnConn():
@@ -3944,6 +3969,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mD.\033[0;37;40m Quotes
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
+    \u001b[38;5;202mZ.\033[0;37;40m Bitcoin Strings
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6887,6 +6913,10 @@ def miscellaneousLOCALmenu(misce):
         clear()
         blogo()
         satoshiConn()
+    elif misce in ["Z", "z"]:
+        clear()
+        blogo()
+        decodeStrDat()      
     elif misce in ["R", "r"]:
         menuSelection()
 
@@ -6932,6 +6962,10 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         clear()
         blogo()
         satoshiConn()
+    elif misce in ["Z", "z"]:
+        clear()
+        blogo()
+        decodeStrDat()   
     elif misce in ["R", "r"]:
         menuSelection()
 
