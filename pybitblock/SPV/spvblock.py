@@ -3725,7 +3725,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mR.\033[0;37;40m Hashrate
+    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[33;1mR.\033[0;37;40m Return
@@ -6773,7 +6773,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["Z", "z"]:
         statsConn()
-    elif bcore in ["R", "r"]:
+    elif bcore in ["Q", "q"]:
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
@@ -6830,7 +6830,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
         statsConn()
-    elif bcore in ["R", "r"]:
+    elif bcore in ["Q", "q"]:
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
@@ -7332,7 +7332,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         bitcoincoremenuREMOTEOPRETURN()
     elif bcore in ["Z", "z"]:
         statsConn()
-    elif bcore in ["M", "m"]:
+    elif bcore in ["Q", "q"]:
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
