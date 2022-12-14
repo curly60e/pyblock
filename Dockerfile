@@ -8,6 +8,20 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# install ttyd dependencies
+RUN apt-get update \
+    && apt-get install -y build-essential cmake git libjson-c-dev libwebsockets-dev \
+    && && apt-get clean
+
+RUN git clone https://github.com/tsl0922/ttyd.git \
+    && cd ttyd \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make \
+    && make install \
+    && cd .. && rm -rf ttyd
+
 # install python dependencies
 COPY pyproject.toml poetry.lock ./
 RUN pip install --upgrade pip
@@ -18,4 +32,4 @@ RUN pip install poetry \
 # add app
 COPY . .
 
-ENTRYPOINT ["pyblock"]
+ENTRYPOINT ["ttyd", "-p", "8080", "pyblock"]
