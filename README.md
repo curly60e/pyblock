@@ -315,8 +315,6 @@ Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
 <img src="/pybitblock/images/bitcoin-donation.png" width="30%" />
 
-Nostr Pulic Channel 03ebf85adcf4cd02324c6bd7719cad5024cf5d8bb1da2a5cb54c6384291845a8
-
 Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK61yE17N2vgvQvKYokXktt6D6GZFTmocvDJhaUJfHt7ehEMmthjsT3NQHseFM
 
 <img src="/pybitblock/images/codeimage.png" width="30%" />
@@ -324,3 +322,5 @@ Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK
 Monero: 42jtb4dAfm6BQ8h6x56qGyAMMHVXGRwRMTSb2LwsBg1jVqD4TxfpD1pTK56tkrTMGhEKipZdDHfJrB1g8iQfvSyC7gZ9M8M
 
 <img src="/pybitblock/images/qrcode.png" width="20%" />
+
+Nostr Pulic Channel 03ebf85adcf4cd02324c6bd7719cad5024cf5d8bb1da2a5cb54c6384291845a8
