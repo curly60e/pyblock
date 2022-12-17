@@ -1088,39 +1088,17 @@ def callGitWardenTerminal():
     os.system("cd warden_terminal && python3 node_warden.py")
 
 #---------------------------------Nostr Terminal----------------------------------
-def callGitNostrMacTerminal():
-    try:
-        clear()
-        blogo()
-        output = render(
-            "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
-        )
-
-        print(output)
-        responseC = input("Paste your PrivateKey: ")
-    os.system("cd macOS && nostr_console_macOS -k {responseC}")
-def callGitNostrWinTerminal():
-    try:
-        clear()
-        blogo()
-        output = render(
-            "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
-        )
-
-        print(output)
-        responseC = input("Paste your PrivateKey: ")
-    os.system("cd Windows && nostr_console_win64.exe -k {responseC}")   
 def callGitNostrLinTerminal():
     try:
         clear()
         blogo()
         output = render(
-            "Nostr Console Debian", colors=['yellow'], align='left', font='tiny'
+            "Nostr Console", colors=['yellow'], align='left', font='tiny'
         )
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-    os.system("cd Debian && nostr_console_elf64 -k {responseC}")       
+    os.system("cd nostr_console && nostr_console_elf64 -k {responseC}")       
     
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
