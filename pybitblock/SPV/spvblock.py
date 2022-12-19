@@ -3685,7 +3685,7 @@ def callGitNostrLinTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")    
+        os.system(f"cd nostr_console_pyblock && chmod 744 nostr_console_elf64 && ./nostr_console_elf64 -k {responseC}")    
     except:
         menuSelection()
 
