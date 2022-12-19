@@ -230,7 +230,7 @@
 
 ### Created by
 
-[@Curly60e.](https://twitter.com/curly60e) ⚡️ curly60e@bitrefill.com
+[@Curly60e.](https://twitter.com/curly60e) ⚡️ curly60e@zbd.gg
 npub1a78zk8cnczxjudg888f9t3va29vxhevvhdkdqvwe7zk70qx488zsc8573s
 
 ### Pentester and contribution by
