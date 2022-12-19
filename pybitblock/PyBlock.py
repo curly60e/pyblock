@@ -6919,8 +6919,7 @@ def nostrConn():
     clear()
     blogo()
     sysinfo()
-    pathexec()
-    lndconnectexec()
+    
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -6934,7 +6933,6 @@ def nostrConn():
     
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -6942,7 +6940,7 @@ def nostrConn():
     \033[1;32;40mB.\033[0;37;40m Windows
     \033[1;32;40mC.\033[0;37;40m Mac
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -7097,7 +7095,7 @@ def introINIT():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
             pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -7110,6 +7108,6 @@ while True: # Loop
             introINIT()
         else:
             menuSelection()
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
