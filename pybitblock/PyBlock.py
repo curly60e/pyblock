@@ -1098,7 +1098,7 @@ def callGitNostrMacTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system("cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC}")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC}")
     except:
         menuSelection()
         
@@ -1112,7 +1112,7 @@ def callGitNostrWinTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system("cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}") 
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}") 
     except:
         menuSelection()
         
@@ -1126,7 +1126,7 @@ def callGitNostrLinTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system("cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")  
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")  
     except:
         menuSelection()
     
@@ -7095,7 +7095,7 @@ def introINIT():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
             pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -7108,6 +7108,6 @@ while True: # Loop
             introINIT()
         else:
             menuSelection()
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)
