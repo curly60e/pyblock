@@ -814,7 +814,7 @@ def decodeStrDat(): # show srings
 
         print(output)
         responseC = input("Blk Dat: ")
-        list = "curl -s 'https://bitcoinstrings.com/blk'" + responseC + """.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
+        list = f"""curl -s 'https://bitcoinstrings.com/blk'{responseC}.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
         a = os.popen(list).read()
         clear()
         blogo()
@@ -936,7 +936,7 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
+            list = f"curl '{lang}.wttr.in/{selectData2}?F&{unit}'"
         else:
             list = f'curl wttr.in/{selectData}?F'
         a = os.popen(list).read()
@@ -994,7 +994,7 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
+            list = f"curl 'v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'"
 
         else:
             list = f'curl v2.wttr.in/{selectData}?F'
@@ -1056,7 +1056,7 @@ def rateSXList():
         pass
     while True:
         try:
-            list = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
+            list = f"curl -s '{selectFiat}.rate.sx/?F&n=1'"
             a = os.popen(list).read()
             clear()
             blogo()
@@ -1111,7 +1111,7 @@ def rateSXGraph():
         pass
     while True:
         try:
-            list = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
+            list = f"curl -s '{selectFiat}.rate.sx/btc' | grep -v -E 'Use'"
             a = os.popen(list).read()
             clear()
             blogo()
@@ -2838,7 +2838,7 @@ def getinfo():
 
         print(output)
         responseC = input("Public Key: ")
-        list = "curl -s 'https://1ml.com/node/'"+ responseC +"""/json'"""
+        list = f"curl -s 'https://1ml.com/node/'{responseC}/json'"
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3379,7 +3379,7 @@ def readHexBlock():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = "curl -s 'https://mempool.space/api/tx/" + responseC + """/hex' """
+        list = f"curl -s 'https://mempool.space/api/tx/{responseC}/hex' "
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3419,7 +3419,7 @@ def console(): # get into the console from bitcoin-cli
 
         print(output)
         responseC = input("RPC Command: ")
-        list = "curl -s 'https://bitcoinexplorer.org/rpc-browser?method=" + responseC + """#Help-Content' | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links" """
+        list = f"""curl -s 'https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content' | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links" """
         a = os.popen(list).read()
         clear()
         blogo()
@@ -3990,7 +3990,10 @@ def decodeHex(): # show hex
 
         print(output)
         responseC = input("Block Height: ")
-        list = "curl -s 'https://bitcoinexplorer.org/api/block/'" + responseC + """ | jq -C '.[]' | tr -d '{|}|]|,'"""
+        list = (
+            f"curl -s 'https://bitcoinexplorer.org/api/block/'{responseC}"
+            + """ | jq -C '.[]' | tr -d '{|}|]|,'"""
+        )
         a = os.popen(list).read()
         clear()
         blogo()
