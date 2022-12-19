@@ -231,10 +231,12 @@
 ### Created by
 
 [@Curly60e.](https://twitter.com/curly60e) ⚡️ curly60e@bitrefill.com
+npub1a78zk8cnczxjudg888f9t3va29vxhevvhdkdqvwe7zk70qx488zsc8573s
 
 ### Pentester and contribution by
 
 [@SN.](https://twitter.com/__B__T__C__) ⚡️ sn@getalby.com
+npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 
 ### Contributor
 
@@ -320,3 +322,5 @@ Samourai Wallet Paynym: PM8TJhNTTq3YVocXuPtLjKx7pKkdUxqwTerWJ2j2a7dNitgyMmBPN6gK
 Monero: 42jtb4dAfm6BQ8h6x56qGyAMMHVXGRwRMTSb2LwsBg1jVqD4TxfpD1pTK56tkrTMGhEKipZdDHfJrB1g8iQfvSyC7gZ9M8M
 
 <img src="/pybitblock/images/qrcode.png" width="20%" />
+
+Nostr Pulic Channel 03ebf85adcf4cd02324c6bd7719cad5024cf5d8bb1da2a5cb54c6384291845a8
