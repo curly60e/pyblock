@@ -3680,7 +3680,7 @@ def callGitNostrLinTerminal():
         clear()
         blogo()
         output = render(
-            "Nostr Console Debian", colors=['yellow'], align='left', font='tiny'
+            "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
 
         print(output)
