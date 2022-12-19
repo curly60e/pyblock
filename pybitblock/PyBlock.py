@@ -1086,7 +1086,42 @@ def callGitWardenTerminal():
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
         os.system(git)
     os.system("cd warden_terminal && python3 node_warden.py")
+    
+#---------------------------------Nostr Terminal----------------------------------
+def callGitNostrMacTerminal():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
+        )
 
+        print(output)
+        responseC = input("Paste your PrivateKey: ")
+    os.system("cd nostr_console_pyblock && nostr_console_macOS -k {responseC}")
+def callGitNostrWinTerminal():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Paste your PrivateKey: ")
+    os.system("cd nostr_console_pyblock && nostr_console_win64.exe -k {responseC}")   
+def callGitNostrLinTerminal():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Nostr Console Debian", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Paste your PrivateKey: ")
+    os.system("cd nostr_console_pyblock && nostr_console_elf64 -k {responseC}")       
+    
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
     clear()
@@ -1691,6 +1726,7 @@ def APIMenuLOCAL():
     \033[1;32;40mK.\033[0;37;40m Weather     FREE
     \033[1;32;40mL.\033[0;37;40m Arcade      FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
+    \033[1;32;40mN.\033[0;37;40m Nostr       FREE
     \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
     \033[1;32;40mW.\033[0;37;40m CKPool      FREE
     \u001b[31;1mR.\033[0;37;40m Return
@@ -1738,6 +1774,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mK.\033[0;37;40m Weather       FREE
     \033[1;32;40mL.\033[0;37;40m Arcade        FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
+    \033[1;32;40mN.\033[0;37;40m Nostr         FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
     \033[1;32;40mW.\033[0;37;40m CKPool        FREE
     \u001b[31;1mR.\033[0;37;40m Return
@@ -6463,6 +6500,8 @@ def platfformsLOCALcontrol(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["N", "n"]:
+        nostrConn()        
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["W", "w"]:
@@ -6499,6 +6538,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         gameroom()
     elif platf in ["M", "m"]:
         whalalConn()
+    elif platf in ["N", "n"]:
+        nostrConn()        
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["W", "w"]:
@@ -6510,7 +6551,15 @@ def platfformsLOCALcontrolOnchainONLY(platf):
 def ckpool(menuch):
     if menuch in ["A", "a"]:
         ckpool()
-
+        
+        
+def nostrmenu(menunos):
+    if menunos in ["A", "a"]:
+        callGitNostrLinTerminal()
+    elif menunos in ["B", "b"]:
+        callGitNostrWinTerminal()
+    elif menunos in ["C", "c"]:
+        callGitNostrMacTerminal()    
 #----------------------------REMOTE MENUS
 
 def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
@@ -6857,6 +6906,49 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
     elif menuV in ["R", "r"]:
         menuSelection()
 #---------------------------------------------------------------------------------
+
+def nostrConn():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    lndconnectexec()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+
+        lncli = " getinfo"
+        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd0 = str(lsd)
+        alias = json.loads(lsd0)
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Linux
+    \033[1;32;40mB.\033[0;37;40m Windows
+    \033[1;32;40mC.\033[0;37;40m Mac
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+
 def testClockRemote():
     b = rpc('getblockcount')
     c = str(b)
