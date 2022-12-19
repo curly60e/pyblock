@@ -3657,7 +3657,7 @@ def callGitNostrMacTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-    os.system("cd nostr_console_pyblock && nostr_console_macOS -k {responseC}")
+    os.system("cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC}")
 def callGitNostrWinTerminal():
     try:
         clear()
@@ -3668,7 +3668,7 @@ def callGitNostrWinTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-    os.system("cd nostr_console_pyblock && nostr_console_win64.exe -k {responseC}")   
+    os.system("cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}")   
 def callGitNostrLinTerminal():
     try:
         clear()
@@ -3679,7 +3679,7 @@ def callGitNostrLinTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-    os.system("cd nostr_console_pyblock && nostr_console_elf64 -k {responseC}")    
+    os.system("cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")    
 
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
