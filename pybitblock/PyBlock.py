@@ -7095,7 +7095,7 @@ def introINIT():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    #try:
+    try:
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
             pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -7108,6 +7108,6 @@ while True: # Loop
             introINIT()
         else:
             menuSelection()
-    #except:
-    #    print("\n")
-    #    sys.exit(101)
+    except:
+        print("\n")
+        sys.exit(101)
