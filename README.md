@@ -309,7 +309,7 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 
 ## SUPPORT PyBLØCK.
 
-⚡️ pyblock@zbd.gg ⚡️
+⚡️ curly60e@zbd.gg ⚡️
 
 Bitcoin Address: bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv
 
