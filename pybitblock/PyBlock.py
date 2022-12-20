@@ -34,7 +34,7 @@ from PIL import Image
 from robohash import Robohash
 
 
-version = "2.0.8"
+version = "2.0.9"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -925,12 +925,12 @@ def epoch():
     b = block
     c = b
     oneh = 0 + int(c) / 2016
-    
+
     q = """
     \033[0;37;40m------------------- EPOCH CLOCK -------------------
 
             Epoch {} Status {}
-        
+
     ---------------------------------------------------
     """.format("0" if int(c) == 6930000 else oneh,"\033[1;32;40mON\033[0;37;40m")
     print(q)
@@ -1054,14 +1054,14 @@ def callGitSatSale():
         git = "git clone https://github.com/nickfarrow/SatSale.git"
         os.system(git)
     os.system("cd SatSale && python3 satsale.py")
-    
+
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
         git = "pip3 install cashu && mkdir Cashu"
         os.system(git)
-    os.system("cd Cashu && cashu")    
-    
+    os.system("cd Cashu && cashu")
+
 #-----------------------------Block Templates--------------------------------
 
 def blockTmpConn():
@@ -1078,15 +1078,15 @@ def blockTmpConn():
     except:
         pass
 
-#-----------------------------END Block Templates--------------------------------    
-    
+#-----------------------------END Block Templates--------------------------------
+
 #---------------------------------Warden Terminal----------------------------------
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
         os.system(git)
     os.system("cd warden_terminal && python3 node_warden.py")
-    
+
 #---------------------------------Nostr Terminal----------------------------------
 def callGitNostrMacTerminal():
     try:
@@ -1095,13 +1095,18 @@ def callGitNostrMacTerminal():
         output = render(
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
-
+        if os.path.isdir ('nostr_console_pyblock'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe && chmod 777 *")
+        clear()
+        blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
         os.system(f"cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC}")
     except:
         menuSelection()
-        
+
 def callGitNostrWinTerminal():
     try:
         clear()
@@ -1109,13 +1114,18 @@ def callGitNostrWinTerminal():
         output = render(
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
-
+        if os.path.isdir ('nostr_console_pyblock'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe && chmod 777 *")
+        clear()
+        blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}") 
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}")
     except:
         menuSelection()
-        
+
 def callGitNostrLinTerminal():
     try:
         clear()
@@ -1123,13 +1133,18 @@ def callGitNostrLinTerminal():
         output = render(
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
-
+        if os.path.isdir ('nostr_console_pyblock'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe && chmod 777 *")
+        clear()
+        blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")  
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")
     except:
         menuSelection()
-    
+
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
     clear()
@@ -5796,11 +5811,11 @@ def runTheNumbersControl(menuNumbers):
     elif menuNumbers in ["D", "d"]:
         clear()
         blogo()
-        blockTmpConn()     
+        blockTmpConn()
     elif menuNumbers in ["E", "e"]:
         clear()
         blogo()
-        epoch()     
+        epoch()
 
 def runTheNumbersControlOnchainONLY(menuNumbers):
     if menuNumbers in ["A", "a"]:
@@ -5833,12 +5848,12 @@ def runTheNumbersControlOnchainONLY(menuNumbers):
     elif menuNumbers in ["D", "d"]:
         clear()
         blogo()
-        blockTmpConn()     
+        blockTmpConn()
     elif menuNumbers in ["E", "e"]:
         clear()
         blogo()
-        epoch()  
-            
+        epoch()
+
 def runTheNumbersControlConn(menuNumbersconn):
     if menuNumbersconn in ["A", "a"]:
         clear()
@@ -5870,11 +5885,11 @@ def runTheNumbersControlConn(menuNumbersconn):
     elif menuNumbers in ["D", "d"]:
         clear()
         blogo()
-        blockTmpConn()   
+        blockTmpConn()
     elif menuNumbers in ["E", "e"]:
         clear()
         blogo()
-        epoch()     
+        epoch()
 
 def menuWeather(menuWD):
     if menuWD in ["A", "a"]:
@@ -5938,11 +5953,11 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     elif menuS in ["ss", "SS", "Ss", "sS"]:
         clear()
         blogo()
-        callGitSatSale() 
+        callGitSatSale()
     elif menuS in ["CA", "ca", "Ca", "cA"]:
         clear()
         blogo()
-        callGitCashu()     
+        callGitCashu()
 
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -5992,11 +6007,11 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     elif menuS in ["ss", "SS", "Ss", "sS"]:
         clear()
         blogo()
-        callGitSatSale() 
+        callGitSatSale()
     elif menuS in ["CA", "ca", "Ca", "cA"]:
         clear()
         blogo()
-        callGitCashu()      
+        callGitCashu()
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
@@ -6075,7 +6090,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
-        mtConn()     
+        mtConn()
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["Z", "z"]:
@@ -6132,7 +6147,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
-        mtConn()     
+        mtConn()
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURNOnchainONLY()
     elif bcore in ["W", "w"]:
@@ -6509,7 +6524,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["N", "n"]:
-        nostrConn()        
+        nostrConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["W", "w"]:
@@ -6547,7 +6562,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["N", "n"]:
-        nostrConn()        
+        nostrConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["W", "w"]:
@@ -6559,15 +6574,15 @@ def platfformsLOCALcontrolOnchainONLY(platf):
 def ckpool(menuch):
     if menuch in ["A", "a"]:
         ckpool()
-        
-        
+
+
 def nostrmenu(menunos):
     if menunos in ["A", "a"]:
         callGitNostrLinTerminal()
     elif menunos in ["B", "b"]:
         callGitNostrWinTerminal()
     elif menunos in ["C", "c"]:
-        callGitNostrMacTerminal()    
+        callGitNostrMacTerminal()
 #----------------------------REMOTE MENUS
 
 def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
@@ -6627,7 +6642,7 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
     elif menuS in ["ss", "SS", "Ss", "sS"]:
         clear()
         blogo()
-        callGitSatSale()      
+        callGitSatSale()
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
@@ -6658,7 +6673,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
     elif bcore in ["E", "e"]:
         miscellaneousLOCAL()
     elif bcore in ["M", "m"]:
-        mtConn()     
+        mtConn()
     elif bcore in ["O", "o"]:
         bitcoincoremenuREMOTEOPRETURN()
     elif bcore in ["Z", "z"]:
@@ -6919,7 +6934,7 @@ def nostrConn():
     clear()
     blogo()
     sysinfo()
-    
+
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
@@ -6930,7 +6945,7 @@ def nostrConn():
         a = "Local" if path['bitcoincli'] else "Remote"
         blk = rpc('getblockchaininfo')
         d = blk
-    
+
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
