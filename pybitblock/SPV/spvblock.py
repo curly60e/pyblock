@@ -33,7 +33,7 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 
-version = "2.0.8"
+version = "2.0.9"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
@@ -49,7 +49,7 @@ def sysinfo():  #Cpu and memory usage
     )
 
     print("    \033[0;37;40m----------------------")
-    
+
 def tmp():
     t.sleep(15)
 
@@ -823,8 +823,8 @@ def decodeStrDat(): # show srings
         input("\a\nContinue...")
     except:
         pass
-    
-#-----------------------------End Strings Dat--------------------------------    
+
+#-----------------------------End Strings Dat--------------------------------
 
 #-----------------------------StatsLN--------------------------------
 
@@ -3174,8 +3174,8 @@ def ckpoolpoolLOCALOnchainONLY():
 
         except:
             break
-            
-            
+
+
 def kanopoolpoolLOCALOnchainONLY():
 
     s = ""
@@ -3237,7 +3237,7 @@ def kanopoolpoolLOCALOnchainONLY():
 
         except:
             break
-            
+
 
 def getblock():
     try:
@@ -3274,7 +3274,7 @@ def searchTXS():
         input("\n")
     except:
         pass
-    
+
 def untxsConn():
     try:
         conn = """curl -s https://mempool.space/api/mempool/txids | jq -C '.[]' """
@@ -3288,7 +3288,7 @@ def untxsConn():
         input("\a\nContinue...")
     except:
         pass
-    
+
 def getnewaddressOnchain():
     try:
         clear()
@@ -3645,7 +3645,7 @@ def callGitWardenTerminal():
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
         os.system(git)
     os.system("cd warden_terminal && python3 node_warden.py")
-    
+
 #---------------------------------Nostr Terminal----------------------------------
 def callGitNostrMacTerminal():
     try:
@@ -3654,13 +3654,18 @@ def callGitNostrMacTerminal():
         output = render(
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
-
+        if os.path.isdir ('nostr_console_pyblock'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe && chmod 777 *")
+        clear()
+        blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
         os.system(f"cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC}")
     except:
         menuSelection()
-        
+
 def callGitNostrWinTerminal():
     try:
         clear()
@@ -3668,13 +3673,18 @@ def callGitNostrWinTerminal():
         output = render(
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
-
+        if os.path.isdir ('nostr_console_pyblock'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe && chmod 777 *")
+        clear()
+        blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}")   
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}")
     except:
         menuSelection()
-        
+
 def callGitNostrLinTerminal():
     try:
         clear()
@@ -3682,10 +3692,15 @@ def callGitNostrLinTerminal():
         output = render(
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
-
+        if os.path.isdir ('nostr_console_pyblock'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe && chmod 777 *")
+        clear()
+        blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && chmod 744 nostr_console_elf64 && ./nostr_console_elf64 -k {responseC}")    
+        os.system(f"cd nostr_console_pyblock && chmod 744 nostr_console_elf64 && ./nostr_console_elf64 -k {responseC}")
     except:
         menuSelection()
 
@@ -3695,7 +3710,7 @@ def callGitCashu():
         git = "pip3 install cashu && mkdir Cashu"
         os.system(git)
     os.system("cd Cashu && cashu")
-    
+
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
     clear()
@@ -3987,7 +4002,7 @@ def APIMenuLOCAL():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def decodeHex(): # show hex
     try:
         clear()
@@ -5073,7 +5088,7 @@ def colorsSelectRainbowEnd():
     \033[1;36;40mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 def nostrConn():
     clear()
     blogo()
@@ -5095,7 +5110,7 @@ def nostrConn():
     \033[1;32;40mC.\033[0;37;40m Mac
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
-    nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))  
+    nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
@@ -6607,7 +6622,7 @@ def runTheNumbersControl(menuNumbers):
     elif menuNumbers in ["U", "u"]:
         clear()
         blogo()
-        unspendableConn()     
+        unspendableConn()
 
 def runTheNumbersControlOnchainONLY(menuNumbers):
     if menuNumbers in ["A", "a"]:
@@ -6648,7 +6663,7 @@ def runTheNumbersControlOnchainONLY(menuNumbers):
     elif menuNumbers in ["U", "u"]:
         clear()
         blogo()
-        unspendableConn()     
+        unspendableConn()
 
 def runTheNumbersControlConn(menuNumbersconn):
     if menuNumbersconn in ["A", "a"]:
@@ -6689,7 +6704,7 @@ def runTheNumbersControlConn(menuNumbersconn):
     elif menuNumbers in ["U", "u"]:
         clear()
         blogo()
-        unspendableConn()     
+        unspendableConn()
 
 def menuWeather(menuWD):
     if menuWD in ["A", "a"]:
@@ -6753,7 +6768,7 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     elif menuS in ["CA", "ca", "Ca", "cA"]:
         clear()
         blogo()
-        callGitCashu()     
+        callGitCashu()
 
 def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -6803,7 +6818,7 @@ def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu o
     elif menuS in ["CA", "ca", "Ca", "cA"]:
         clear()
         blogo()
-        callGitCashu()     
+        callGitCashu()
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
@@ -6870,7 +6885,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
-        mtConn()    
+        mtConn()
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURN()
     elif bcore in ["Z", "z"]:
@@ -6925,7 +6940,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
-        mtConn()     
+        mtConn()
     elif bcore in ["O", "o"]:
         bitcoincoremenuLOCALOPRETURNOnchainONLY()
     elif bcore in ["W", "w"]:
@@ -7018,7 +7033,7 @@ def miscellaneousLOCALmenu(misce):
     elif misce in ["Z", "z"]:
         clear()
         blogo()
-        decodeStrDat()      
+        decodeStrDat()
     elif misce in ["R", "r"]:
         menuSelection()
 
@@ -7067,7 +7082,7 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
     elif misce in ["Z", "z"]:
         clear()
         blogo()
-        decodeStrDat()   
+        decodeStrDat()
     elif misce in ["R", "r"]:
         menuSelection()
 
@@ -7299,7 +7314,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["N", "n"]:
-        nostrConn()     
+        nostrConn()
     elif platf in ["P", "p"]:
         kanopoolpoolLOCALOnchainONLY()
     elif platf in ["S", "s"]:
@@ -7339,7 +7354,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["M", "m"]:
         whalalConn()
     elif platf in ["N", "n"]:
-        nostrConn()    
+        nostrConn()
     elif platf in ["P", "p"]:
         kanopoolpoolLOCALOnchainONLY()
     elif platf in ["S", "s"]:
@@ -7696,7 +7711,7 @@ def nostrmenu(menunos):
     elif menunos in ["B", "b"]:
         callGitNostrWinTerminal()
     elif menunos in ["C", "c"]:
-        callGitNostrMacTerminal()  
+        callGitNostrMacTerminal()
 
 def testClockRemote():
     b = rpc('getblockcount')
