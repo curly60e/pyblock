@@ -28,6 +28,7 @@ googleapis-common-protos==1.52.0
 pdfminer
 html2text
 jq
+embit
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
