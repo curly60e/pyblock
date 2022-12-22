@@ -37,7 +37,7 @@ from embit import bip39
 from embit.wordlists.bip39 import WORDLIST
 
 
-version = "2.0.9"
+version = "2.0.10"
 
 def close():
     print("<<< Ctrl + C.\n\n")
