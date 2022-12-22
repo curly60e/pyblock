@@ -1163,7 +1163,7 @@ def callGitNostrSeedTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey to convert into 24 BIP39 Seed words and vice-versa: ")
+        responseC = input("Hex to BIP39 & BIP39 to Hex: ")
         os.system(f"cd nostr_seed && python3 nostr_seed.py {responseC}")
         input("\a\nContinue...")
     except:
