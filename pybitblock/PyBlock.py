@@ -1099,11 +1099,12 @@ def callGitNostrMacTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            print("...pass...")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS")
         clear()
         blogo()
+
         print(output)
         responseC = input("Paste your PrivateKey: ")
         os.system(f"cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC}")
@@ -1118,7 +1119,7 @@ def callGitNostrWinTerminal():
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            print("...pass...")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_win64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe")
         clear()
@@ -1137,7 +1138,7 @@ def callGitNostrLinTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            print("...pass...")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
         clear()
@@ -1147,6 +1148,7 @@ def callGitNostrLinTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")
     except:
         menuSelection()
+
 def callGitNostrSeedTerminal():
     try:
         clear()
@@ -1165,7 +1167,7 @@ def callGitNostrSeedTerminal():
         os.system(f"cd nostr_seed && python3 nostr_seed.py {responseC}")
         input("\a\nContinue...")
     except:
-        menuSelection()        
+        menuSelection()
 
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
@@ -6607,7 +6609,7 @@ def nostrmenu(menunos):
         callGitNostrMacTerminal()
     elif menunos in ["S", "s"]:
         callGitNostrSeedTerminal()
-        
+
 #----------------------------REMOTE MENUS
 
 def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
