@@ -291,6 +291,7 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 [@0xB10C,](https://twitter.com/0xB10C)
 [@BitRawr,](https://twitter.com/bitrawr)
 [@Vishalxl,](https://twitter.com/vishalxl)
+[@Odudex,](https://twitter.com/odudex)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
