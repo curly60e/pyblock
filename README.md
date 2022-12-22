@@ -247,11 +247,13 @@
 ### Created by
 
 [@Curly60e.](https://twitter.com/curly60e) ⚡️ curly60e@zbd.gg
+
 npub1a78zk8cnczxjudg888f9t3va29vxhevvhdkdqvwe7zk70qx488zsc8573s
 
 ### Pentester and contribution by
 
 [@SN.](https://twitter.com/__B__T__C__) ⚡️ sn@getalby.com
+
 npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 
 ### Contributor
@@ -323,7 +325,7 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 
 <br />
 
-<img src="https://pbs.twimg.com/media/FRN-iRAXMAEY7uQ.jpg" width="50%" />
+<img src="https://pbs.twimg.com/media/Fj4xKy0X0AAcBqN.jpg" width="50%" />
 
 ## SUPPORT PyBLØCK.
 
