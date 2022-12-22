@@ -32,6 +32,9 @@ from nodeconnection import *
 from terminal_matrix.matrix import *
 from PIL import Image
 from robohash import Robohash
+from binascii import unhexlify
+from embit import bip39
+from embit.wordlists.bip39 import WORDLIST
 
 
 version = "2.0.9"
@@ -1144,6 +1147,25 @@ def callGitNostrLinTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")
     except:
         menuSelection()
+def callGitNostrSeedTerminal():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Nostr BIP39", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('nostr_seed'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_seed && cd nostr_seed && wget https://gist.githubusercontent.com/odudex/93cfb5628b22f8675ab1939fd43133f4/raw/b48f047c0358a9ae50c2027106bdf5e37ee1fe5c/nostr_seed.py")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Paste your PrivateKey to convert into 24 BIP39 Seed words and vice-versa: ")
+        os.system(f"cd nostr_seed && python3 nostr_seed.py {responseC}")
+        input("\a\nContinue...")
+    except:
+        menuSelection()        
 
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
@@ -6583,6 +6605,9 @@ def nostrmenu(menunos):
         callGitNostrWinTerminal()
     elif menunos in ["C", "c"]:
         callGitNostrMacTerminal()
+    elif menunos in ["S", "s"]:
+        callGitNostrSeedTerminal()
+        
 #----------------------------REMOTE MENUS
 
 def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
@@ -6954,6 +6979,7 @@ def nostrConn():
     \033[1;32;40mA.\033[0;37;40m Linux
     \033[1;32;40mB.\033[0;37;40m Windows
     \033[1;32;40mC.\033[0;37;40m Mac
+    \033[1;32;40mS.\033[0;37;40m Bip39
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
