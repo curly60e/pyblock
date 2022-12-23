@@ -651,7 +651,7 @@ def dumppk(): #
         print(output)
         responseC = input("Bitcoin Address: ")
         bitcoincli = " dumpprivkey"
-        os.system(path['bitcoincli'] + bitcoincli f{responseC})
+        os.system(f(path['bitcoincli'] + bitcoincli {responseC}))
         input("\a\nContinue...")
     except:
         walletmenuLOCALOnchainONLY()
