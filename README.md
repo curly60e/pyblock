@@ -339,4 +339,4 @@ Monero: 42jtb4dAfm6BQ8h6x56qGyAMMHVXGRwRMTSb2LwsBg1jVqD4TxfpD1pTK56tkrTMGhEKipZd
 
 <img src="/pybitblock/images/qrcode.png" width="20%" />
 
-PyBLØCK [Pulic Channel Nostr](https://anigma.io/?channel=ddadf6518d23d5e82a112b7965807ea2adfb22ec353a124fbf5f342e8403fdcb)
+PyBLØCK [Nostr Pulic Channel](https://anigma.io/?channel=ddadf6518d23d5e82a112b7965807ea2adfb22ec353a124fbf5f342e8403fdcb)
