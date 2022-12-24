@@ -642,8 +642,8 @@ def gettransactionsOnchain():
             input("\nRefresh...")
     except:
         walletmenuLOCALOnchainONLY()
-        
-def dumppk(): # 
+
+def dumppk(): #
     try:
         clear()
         blogo()
@@ -651,11 +651,11 @@ def dumppk(): #
         print(output)
         responseC = input("Bitcoin Address: ")
         bitcoincli = " dumpprivkey"
-        os.system(f(path['bitcoincli'] + bitcoincli {responseC}))
+        os.system(path['bitcoincli'] + bitcoincli + f"{responseC}")
         input("\a\nContinue...")
     except:
         walletmenuLOCALOnchainONLY()
-    
+
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
@@ -6208,7 +6208,7 @@ def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     elif walletmnu in ["B", "b"]:
         gettransactionsOnchain()
     elif walletmnu in ["C", "c"]:
-        dumppk()    
+        dumppk()
 
 def bitcoincoremenuLOCALcontrolO(oreturn):
     if oreturn in ["A", "a"]:
