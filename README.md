@@ -260,7 +260,7 @@ WORKDIR /pyblock
 
 RUN pip3 install -r requirements.txt
 
-WORKDIR /pybitblock
+WORKDIR /pyblock/pybitblock
 
 CMD python3 PyBlock.py
 ```
