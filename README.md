@@ -272,19 +272,19 @@ Ctrl + x
 
 3. Build:
 ```
-docker build --tag PyBlock .
+docker build --tag pyblock .
 ```
 
 4. Verify:
 ```
-docker run -it --network=host PyBlock bash
+docker run -it --network=host pyblock bash
 apt install net-tools
 ifconfig
 ```
 
 5. Running PyBlock Docker:
 ```
-docker run -it --network=host PyBlock
+docker run -it --network=host pyblock
 ```
 
 <br />
