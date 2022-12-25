@@ -238,6 +238,58 @@
 ## How to execute
 
   - python3 PyBlock.py
+  
+  
+## PyBLØCK Docker
+
+## Tutorial
+
+1. Make:
+```
+nano dockerfile
+```
+
+```
+FROM ubuntu:latest
+
+RUN apt upgrade && apt upgrade -y && apt install python3 -y && apt install python3-pip -y && apt install git -y && apt autoremove -y
+
+RUN git clone https://github.com/curly60e/pyblock.git
+
+WORKDIR /pyblock
+
+RUN pip3 install -r requirements.txt
+
+WORKDIR /pybitblock
+
+CMD python3 PyBlock.py
+```
+
+2. Save:
+```
+Ctrl + x
+```
+
+3. Build:
+```
+docker build --tag PyBlock .
+```
+
+4. Verify:
+```
+docker run -it --network=host PyBlock bash
+apt install net-tools
+ifconfig
+```
+
+5. Running PyBlock Docker:
+```
+docker run -it --network=host PyBlock
+```
+
+<br />
+
+<img src="https://pbs.twimg.com/media/Fj4xKy0X0AAcBqN.jpg" width="50%" />  
 
 
 ### Created by
