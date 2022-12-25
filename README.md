@@ -252,7 +252,13 @@ nano dockerfile
 ```
 FROM ubuntu:latest
 
-RUN apt upgrade && apt upgrade -y && apt install python3 -y && apt install python3-pip -y && apt install git -y && apt autoremove -y
+FROM python:3.8-slim-buster
+
+FROM bitnami/jenkins:latest 
+
+FROM python3 -m pip install --upgrade pip
+
+RUN apt-get update && apt upgrade -y && apt-get install net-tools -y && apt-get install git -y && apt-get autoremove -y
 
 RUN git clone https://github.com/curly60e/pyblock.git
 
