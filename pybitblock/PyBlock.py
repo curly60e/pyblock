@@ -1121,7 +1121,7 @@ def callGitNostrMacTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC}")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
 
@@ -1140,7 +1140,7 @@ def callGitNostrWinTerminal():
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC}")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
 
@@ -1159,7 +1159,7 @@ def callGitNostrLinTerminal():
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC}")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
 
