@@ -1124,9 +1124,9 @@ def callGitNostrMacTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS_x64")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macOS_x64")
         clear()
         blogo()
 
@@ -1144,9 +1144,9 @@ def callGitNostrWinTerminal():
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_win64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_win64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_x64")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_win64.exe")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_x64")
         clear()
         blogo()
         print(output)
@@ -1163,9 +1163,9 @@ def callGitNostrLinTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_ubuntu_x64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_ubuntu_x64 && chmod 777 *")
         clear()
         blogo()
         print(output)
@@ -1182,9 +1182,9 @@ def callGitNostrMacarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_arm64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_umacos_arm64 && chmod 777 *")
         clear()
         blogo()
         print(output)
@@ -1201,9 +1201,9 @@ def callGitNostrLinarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_ubuntu_arm64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_ubuntu_arm64 && chmod 777 *")
         clear()
         blogo()
         print(output)
@@ -1220,9 +1220,9 @@ def callGitNostrWinarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_arm64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_arm64 && chmod 777 *")
         clear()
         blogo()
         print(output)
