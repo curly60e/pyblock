@@ -3746,7 +3746,7 @@ def callGitNostrLinarmTerminal():
     except:
         menuSelection()
         
-def callGitNostrWinLinarmTerminal():
+def callGitNostrWinarmTerminal():
     try:
         clear()
         blogo()
