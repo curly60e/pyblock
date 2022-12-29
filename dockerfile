@@ -1,4 +1,3 @@
-
 FROM ubuntu:latest
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,13 +15,9 @@ RUN git clone https://github.com/tsl0922/ttyd.git \
     && make \
     && make install \
     && cd .. && rm -rf ttyd
-COPY pyproject.toml poetry.lock ./
-COPY pybitblock ./
 RUN pip3 install --upgrade pip
-RUN pip install poetry \
-    && poetry export -f requirements.txt > requirements.txt --with dev --without-hashes \
-    && pip install -r requirements.txt
-COPY . .
-CMD cd pybitblock
-CMD python3 PyBlock.py
-CMD ttyd -p 6969 -c Running:PyBLOCK python3 PyBlock.py
+RUN pip3 install embit
+RUN pip3 install requests
+RUN pip3 install pybitblock
+CMD pyblock
+CMD ttyd -p 6969 -c Running:PyBLOCK pyblock
