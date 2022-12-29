@@ -238,6 +238,22 @@
 ## How to execute
 
   - python3 PyBlock.py
+  
+  
+## Running PyBLOCK using Docker
+
+First check out or [unzip](https://github.com/curly60e/pyblock/archive/refs/heads/master.zip) the code to a directory, cd to that directory, and from there type the following commands: 
+(Make sure Docker desktop is running in the background "sudo service docker start".)
+
+  - docker build -t pyblock .
+  
+Run it using
+
+  - docker run -p 6969:6969 -it pyblock start
+  
+Then open http://localhost:6969 with a browser, you will get the PyBLOCK Docker App.
+
+Credentials: "Running:PyBLOCK" ("User:Pass")
 
 
 ### Created by
