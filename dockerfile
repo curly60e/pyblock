@@ -19,5 +19,4 @@ RUN pip3 install --upgrade pip
 RUN pip3 install embit
 RUN pip3 install requests
 RUN pip3 install pybitblock
-CMD pyblock
 CMD ttyd -p 6969 -c Running:PyBLOCK pyblock
