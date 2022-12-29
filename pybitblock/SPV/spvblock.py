@@ -3707,7 +3707,45 @@ def callGitNostrLinTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
-
+        
+def callGitNostrMacarmTerminal():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('nostr_console_pyblock'):
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Paste your PrivateKey: ")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
+    except:
+        menuSelection()
+        
+def callGitNostrLinarmTerminal():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('nostr_console_pyblock'):
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Paste your PrivateKey: ")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
+    except:
+        menuSelection()
+        
 def callGitNostrSeedTerminal():
     try:
         clear()
@@ -5128,9 +5166,11 @@ def nostrConn():
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
-    \033[1;32;40mA.\033[0;37;40m Linux
-    \033[1;32;40mB.\033[0;37;40m Windows
-    \033[1;32;40mC.\033[0;37;40m Mac
+    \033[1;32;40mA.\033[0;37;40m Linux   x64
+    \033[1;32;40mB.\033[0;37;40m Mac     x64
+    \033[1;32;40mC.\033[0;37;40m Linux   arm64
+    \033[1;32;40mD.\033[0;37;40m Mac     arm64
+    \033[1;32;40mE.\033[0;37;40m Windows
     \033[1;32;40mS.\033[0;37;40m Bip39
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
@@ -7732,12 +7772,16 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
 def nostrmenu(menunos):
     if menunos in ["A", "a"]:
         callGitNostrLinTerminal()
-    elif menunos in ["B", "b"]:
+    elif menunos in ["E", "e"]:
         callGitNostrWinTerminal()
-    elif menunos in ["C", "c"]:
+    elif menunos in ["B", "b"]:
         callGitNostrMacTerminal()
+    elif menunos in ["D", "d"]:
+        callGitNostrMacarmTerminal()
+    elif menunos in ["C", "c"]:
+        callGitNostrLinarmTerminal()
     elif menunos in ["S", "s"]:
-        callGitNostrSeedTerminal()
+        callGitNostrSeedTerminal()    
 
 def testClockRemote():
     b = rpc('getblockcount')
