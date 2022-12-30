@@ -1173,7 +1173,7 @@ def callGitNostrLinTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
-        
+
 def callGitNostrMacarmTerminal():
     try:
         clear()
@@ -1192,7 +1192,7 @@ def callGitNostrMacarmTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
-        
+
 def callGitNostrLinarmTerminal():
     try:
         clear()
@@ -1201,9 +1201,9 @@ def callGitNostrLinarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm644 && chmod 777 *")
         clear()
         blogo()
         print(output)
@@ -1211,7 +1211,7 @@ def callGitNostrLinarmTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
-        
+
 def callGitNostrSeedTerminal():
     try:
         clear()
@@ -6260,7 +6260,7 @@ def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     elif walletmnu in ["C", "c"]:
         dumppk()
     elif walletmnu in ["D", "d"]:
-        wallmenu()    
+        wallmenu()
 
 def bitcoincoremenuLOCALcontrolO(oreturn):
     if oreturn in ["A", "a"]:
@@ -6677,11 +6677,11 @@ def nostrmenu(menunos):
     elif menunos in ["B", "b"]:
         callGitNostrMacTerminal()
     elif menunos in ["D", "d"]:
-        callGitNostrMacarmTerminal()
+        nostrConn()
     elif menunos in ["C", "c"]:
         callGitNostrLinarmTerminal()
     elif menunos in ["S", "s"]:
-        callGitNostrSeedTerminal() 
+        callGitNostrSeedTerminal()
 
 #----------------------------REMOTE MENUS
 
@@ -7054,7 +7054,7 @@ def nostrConn():
     \033[1;32;40mA.\033[0;37;40m Linux   x64
     \033[1;32;40mB.\033[0;37;40m Mac     x64
     \033[1;32;40mC.\033[0;37;40m Linux   arm64
-    \033[1;32;40mD.\033[0;37;40m Mac     arm64
+    \033[1;32;40mD.\033[0;37;40m Mac     arm64 (SOON)
     \033[1;32;40mE.\033[0;37;40m Windows
     \033[1;32;40mS.\033[0;37;40m Bip39
     \u001b[31;1mR.\033[0;37;40m Return
