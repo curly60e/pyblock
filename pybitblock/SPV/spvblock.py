@@ -3658,7 +3658,7 @@ def callGitNostrMacTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_macOS && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_macos_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64")
         clear()
@@ -3666,7 +3666,7 @@ def callGitNostrMacTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_macOS -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_macos_amd64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
 
@@ -3678,14 +3678,14 @@ def callGitNostrWinTerminal():
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_win64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_windows_amd64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe")
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_win64.exe -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_windows_amd64.exe -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
 
@@ -3697,14 +3697,14 @@ def callGitNostrLinTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_amd64 && chmod 777 *")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_linux_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_amd64 && chmod 777 *")
+            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *")
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_amd64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
 
@@ -3735,14 +3735,14 @@ def callGitNostrLinarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
+            os.system("cd nostr_console_pyblock && rm -rf nostr_console_linux_arm64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
+        os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_arm64 -k {responseC} -r wss://relay.stoner.com,wss://nostr.w3ird.tech,wss://nostr.bongbong.com,wss://nostr.hugo.md,wss://nostr.slothy.win,wss://nostr.robotechy.com,wss://nostr.nodeofsven.com,wss://nostrrelay.com,wss://nostr.mwmdev.com,wss://nostr.sandwich.farm -l")
     except:
         menuSelection()
 
@@ -3765,7 +3765,6 @@ def callGitNostrSeedTerminal():
         input("\a\nContinue...")
     except:
         menuSelection()
-
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
