@@ -5169,7 +5169,7 @@ def nostrConn():
     \033[1;32;40mA.\033[0;37;40m Linux   x64
     \033[1;32;40mB.\033[0;37;40m Mac     x64
     \033[1;32;40mC.\033[0;37;40m Linux   arm64
-    \033[1;32;40mD.\033[0;37;40m Mac     arm64
+    \033[1;32;40mD.\033[0;37;40m Mac     arm64 (SOON)
     \033[1;32;40mE.\033[0;37;40m Windows
     \033[1;32;40mS.\033[0;37;40m Bip39
     \u001b[31;1mR.\033[0;37;40m Return
@@ -7777,7 +7777,7 @@ def nostrmenu(menunos):
     elif menunos in ["B", "b"]:
         callGitNostrMacTerminal()
     elif menunos in ["D", "d"]:
-        callGitNostrMacarmTerminal()
+        nostrConn()
     elif menunos in ["C", "c"]:
         callGitNostrLinarmTerminal()
     elif menunos in ["S", "s"]:
