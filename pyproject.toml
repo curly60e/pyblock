@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pybitblock"
-version = "2.0.13"
+version = "2.0.14"
 description = "Python Bitcoin block dashboard, transactions, send message to Space and more"
 license="MIT"
 authors = ["curly60e <curly60e@piserver.xyz>", "SatoshiNakamotoBitcoin"]
