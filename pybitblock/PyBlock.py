@@ -35,6 +35,7 @@ from robohash import Robohash
 from binascii import unhexlify
 from embit import bip39
 from embit.wordlists.bip39 import WORDLIST
+from io import StringIO
 
 
 version = "2.0.14"
@@ -1232,6 +1233,26 @@ def callGitNostrSeedTerminal():
         input("\a\nContinue...")
     except:
         menuSelection()
+        
+def callGitNostrQRSeedTerminal():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "QR", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('nostr_QRseed'):
+            print("...pass...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir nostr_QRseed && cd nostr_QRseed && wget https://gist.githubusercontent.com/odudex/9e848a91d23e967309bd1719910021e6/raw/dbe04893f4ee2e0aa020735528f7f19bb2d13a7e/nostr_c_seed_qr.py")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
+        os.system(f"cd nostr_QRseed && python3 nostr_c_seed_qr.py {responseC}")
+        input("\a\nContinue...")
+    except:
+        menuSelection()        
 
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
@@ -6683,6 +6704,8 @@ def nostrmenu(menunos):
         callGitNostrWinTerminal()
     elif menunos in ["S", "s"]:
         callGitNostrSeedTerminal()
+    elif menunos in ["W", "w"]:
+        callGitNostrQRSeedTerminal()
 
 #----------------------------REMOTE MENUS
 
@@ -7058,6 +7081,7 @@ def nostrConn():
     \033[1;32;40mD.\033[0;37;40m Mac     arm64 (SOON)
     \033[1;32;40mE.\033[0;37;40m Windows
     \033[1;32;40mS.\033[0;37;40m Bip39
+    \033[1;32;40mW.\033[0;37;40m QR
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
