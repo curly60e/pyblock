@@ -8,6 +8,7 @@ RUN apt-get update \
     && apt-get install python3 -y \
     && apt install curl \
     && apt install jq -y \
+    && apt install wget -y \
     && apt-get install python3-pip -y
 RUN git clone https://github.com/tsl0922/ttyd.git \
     && cd ttyd \
