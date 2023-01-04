@@ -249,7 +249,7 @@ First check out or [unzip](https://github.com/curly60e/pyblock/archive/refs/head
   
 Run it using
 
-  - docker run -p 6969:6969 -it pyblock start
+  - docker run -p 6969:6969 -it pyblock
   
 Then open http://localhost:6969 with a browser, you will get the PyBLOCK Docker App.
 
