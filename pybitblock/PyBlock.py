@@ -661,9 +661,34 @@ def wallmenu(): #
     try:
         clear()
         blogo()
-        output = render("Wallet info", colors=['yellow'], align='left', font='tiny')
+        output = render("Your Wallet info", colors=['yellow'], align='left', font='tiny')
         print(output)
         bitcoincli = " getwalletinfo"
+        os.system(path['bitcoincli'] + bitcoincli)
+        input("\a\nContinue...")
+    except:
+        walletmenuLOCALOnchainONLY()
+        
+def inffmenu(): #
+    try:
+        clear()
+        blogo()
+        output = render("Address info", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        responseC = input("Bitcoin Address: ")
+        bitcoincli = " getaddressinfo"
+        os.system(path['bitcoincli'] + bitcoincli)
+        input("\a\nContinue...")
+    except:
+        walletmenuLOCALOnchainONLY()
+
+def miningmenu(): #
+    try:
+        clear()
+        blogo()
+        output = render("Minning info", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        bitcoincli = " getmininginfo"
         os.system(path['bitcoincli'] + bitcoincli)
         input("\a\nContinue...")
     except:
@@ -1485,7 +1510,9 @@ def walletmenuLOCALOnchainONLY():
     \u001b[38;5;202mA.\033[0;37;40m Deposit
     \u001b[38;5;202mB.\033[0;37;40m Show transactions
     \u001b[38;5;202mC.\033[0;37;40m Dump Private Key
-    \u001b[38;5;202mD.\033[0;37;40m Info
+    \u001b[38;5;202mD.\033[0;37;40m Wallet Info
+    \u001b[38;5;202mE.\033[0;37;40m Address Info
+    \u001b[38;5;202mF.\033[0;37;40m Mining Info
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     walletmenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6283,6 +6310,10 @@ def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
         dumppk()
     elif walletmnu in ["D", "d"]:
         wallmenu()
+    elif walletmnu in ["E", "e"]:
+        inffmenu()
+    elif walletmnu in ["F", "f"]:
+        miningmenu()    
 
 def bitcoincoremenuLOCALcontrolO(oreturn):
     if oreturn in ["A", "a"]:
