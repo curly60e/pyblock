@@ -679,7 +679,7 @@ def inffmenu(): #
         print(output)
         responseC = input("Bitcoin Address: ")
         bitcoincli = " getaddressinfo"
-        os.system(path['bitcoincli'] + bitcoincli)
+        os.system(path['bitcoincli'] + bitcoincli + f"{responseC}")
         input("\a\nContinue...")
     except:
         walletmenuLOCALOnchainONLY()
