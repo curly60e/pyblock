@@ -7,6 +7,8 @@ import os.path
 import time as t
 import pickle
 import psutil
+import html2text
+import jq
 import qrcode
 import random
 import xmltodict
