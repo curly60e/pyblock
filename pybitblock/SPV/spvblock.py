@@ -3792,12 +3792,11 @@ def callGitNostrQRSeedTerminal():
         
 def callGitNostrBija():
     if not os.path.isdir('bija'):
-            os.system("mkdir bija && cd bija && wget https://github.com/BrightonBTC/bija/releases/download/v0.0.6-alpha/bija-v0.0.6-alpha && chmod 777 *")
+        git = "git clone https://github.com/BrightonBTC/bija.git")
         clear()
         blogo()
         print(output)
-        responseC = input("Type --setup to configure or Press Enter to continue: ")
-        os.system(f"cd bija && ./bija-v0.0.6-alpha {responseC}")
+        os.system(f"cd bija && docker-compose up")
         input("\a\nContinue...")
     except:
         menuSelection() 
