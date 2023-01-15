@@ -3793,13 +3793,8 @@ def callGitNostrQRSeedTerminal():
 def callGitNostrBija():
     if not os.path.isdir('bija'):
         git = "git clone https://github.com/BrightonBTC/bija.git")
-        clear()
-        blogo()
-        print(output)
-        os.system(f"cd bija && docker-compose up")
-        input("\a\nContinue...")
-    except:
-        menuSelection() 
+        os.system(git)
+    os.system(f"cd bija && docker-compose up")
         
 #---------------------------------Cashu----------------------------------
 
