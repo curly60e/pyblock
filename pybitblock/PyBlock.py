@@ -1279,6 +1279,15 @@ def callGitNostrQRSeedTerminal():
         os.system(f"cd nostr_QRseed && python3 nostr_c_seed_qr.py {responseC}")
         input("\a\nContinue...")
     except:
+        menuSelection()
+        
+def callGitBija():
+    if not os.path.isdir('bija'):
+        git = "git clone https://github.com/BrightonBTC/bija.git"
+        os.system(git)
+    os.system("cd bija && docker-compose up")
+    input("\a\nYou can now access Bija at http://localhost:5000")
+    except:
         menuSelection()        
 
 #---------------------------------ColdCore-----------------------------------------
@@ -6739,6 +6748,8 @@ def nostrmenu(menunos):
         callGitNostrSeedTerminal()
     elif menunos in ["W", "w"]:
         callGitNostrQRSeedTerminal()
+    elif menunos in ["Z", "z"]:
+        callGitBija()      
 
 #----------------------------REMOTE MENUS
 
@@ -7115,6 +7126,7 @@ def nostrConn():
     \033[1;32;40mE.\033[0;37;40m Windows
     \033[1;32;40mS.\033[0;37;40m Bip39
     \033[1;32;40mW.\033[0;37;40m QR
+    \033[1;32;40mZ.\033[0;37;40m Bija
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate()))
     nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
