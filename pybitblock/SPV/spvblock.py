@@ -3790,7 +3790,20 @@ def callGitNostrQRSeedTerminal():
     except:
         menuSelection()           
         
+def callGitNostrBija():
+    if not os.path.isdir('bija'):
+            os.system("mkdir bija && cd bija && wget https://github.com/BrightonBTC/bija/releases/download/v0.0.6-alpha/bija-v0.0.6-alpha && chmod 777 *")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Type --setup to configure or Press Enter to continue: ")
+        os.system(f"cd bija && ./bija-v0.0.6-alpha {responseC}")
+        input("\a\nContinue...")
+    except:
+        menuSelection() 
+        
 #---------------------------------Cashu----------------------------------
+
 def callGitCashu():
     if not os.path.isdir('Cashu'):
         git = "pip3 install cashu && mkdir Cashu"
