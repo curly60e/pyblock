@@ -3792,7 +3792,7 @@ def callGitNostrQRSeedTerminal():
         
 def callGitBija():
     if not os.path.isdir('bija'):
-        git = "git clone https://github.com/BrightonBTC/bija.git"
+        git = "git clone --recurse-submodules https://github.com/BrightonBTC/bija"
         os.system(git)
     os.system("cd bija && docker-compose up")
     input("\a\nYou can now access Bija at http://localhost:5000")
