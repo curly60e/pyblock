@@ -1287,7 +1287,7 @@ def callGitBija():
         os.system(git)
     os.system("cd bija && docker-compose up")
     input("\a\nYou can now access Bija at http://localhost:5000")
-    except:
+   except:
         menuSelection()        
 
 #---------------------------------ColdCore-----------------------------------------
