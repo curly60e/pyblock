@@ -1047,6 +1047,18 @@ def pdfconvert():
         close()
         os.system("pdf2txt.py bitcoin.pdf")
         input("Continue...")
+        
+def bip39convert():
+    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    path = pathv # Copy the variable pathv to 'path'
+    else:
+        clear()
+        blogo()
+        close()
+        os.system("pdf2txt.py BIP39_Tinyseed_io.pdf")
+        input("Continue...")
+        
 #--------------------------------- NYMs -----------------------------------
 
 def get_ansi_color_code(r, g, b):
