@@ -1883,22 +1883,23 @@ def APIMenuLOCAL():
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
-    \033[1;32;40mA.\033[0;37;40m TippinMe    FREE
-    \033[1;32;40mB.\033[0;37;40m Tallycoin   FREE
-    \033[1;32;40mC.\033[0;37;40m Mempool     FREE
-    \033[1;32;40mD.\033[0;37;40m CoinGecko   FREE
-    \033[1;32;40mE.\033[0;37;40m Rate.sx     FREE
-    \033[1;32;40mF.\033[0;37;40m BWT         FREE
-    \033[1;32;40mG.\033[0;37;40m LNBits      \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mH.\033[0;37;40m LNPay       \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mI.\033[0;37;40m OpenNode    \033[3;35;40m{opennodepaid}\033[0;37;40m
-    \033[1;32;40mJ.\033[0;37;40m SatNode     FREE
-    \033[1;32;40mK.\033[0;37;40m Weather     FREE
-    \033[1;32;40mL.\033[0;37;40m Arcade      FREE
-    \033[1;32;40mM.\033[0;37;40m Whale Alert FREE
-    \033[1;32;40mN.\033[0;37;40m Nostr       FREE
-    \033[1;32;40mS.\033[0;37;40m Slush Pool  FREE
-    \033[1;32;40mW.\033[0;37;40m CKPool      FREE
+    \033[1;32;40mA.\033[0;37;40m TippinMe     FREE
+    \033[1;32;40mB.\033[0;37;40m Tallycoin    FREE
+    \033[1;32;40mC.\033[0;37;40m Mempool      FREE
+    \033[1;32;40mD.\033[0;37;40m CoinGecko    FREE
+    \033[1;32;40mE.\033[0;37;40m Rate.sx      FREE
+    \033[1;32;40mF.\033[0;37;40m BWT          FREE
+    \033[1;32;40mG.\033[0;37;40m LNBits       \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \033[1;32;40mH.\033[0;37;40m LNPay        \033[3;35;40m{lnpaypaid}\033[0;37;40m
+    \033[1;32;40mI.\033[0;37;40m OpenNode     \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mJ.\033[0;37;40m SatNode      FREE
+    \033[1;32;40mK.\033[0;37;40m Weather      FREE
+    \033[1;32;40mL.\033[0;37;40m Arcade       FREE
+    \033[1;32;40mM.\033[0;37;40m Whale Alert  FREE
+    \033[1;32;40mN.\033[0;37;40m Nostr        FREE
+    \033[1;32;40mS.\033[0;37;40m Braiins Pool FREE
+    \033[1;32;40mT.\033[0;37;40m TinySeed     FREE
+    \033[1;32;40mW.\033[0;37;40m CKPool       FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1946,6 +1947,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
     \033[1;32;40mN.\033[0;37;40m Nostr         FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
+    \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mW.\033[0;37;40m CKPool        FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
@@ -6682,6 +6684,8 @@ def platfformsLOCALcontrol(platf):
         nostrConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["T", "t"]:
+        bip39convert()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
@@ -6720,6 +6724,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         nostrConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["T", "t"]:
+        bip39convert()    
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
