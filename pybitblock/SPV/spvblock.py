@@ -2366,6 +2366,15 @@ def tippinmeGetInvoice():
         pass
 
 #-----------------------------END TIPPINME--------------------------------
+
+def bip39convert():
+    else:
+        clear()
+        blogo()
+        close()
+        os.system("pdf2txt.py BIP39_Tinyseed_io.pdf")
+        input("Continue...")
+
 #-----------------------------TALLYCOIN------------------------------
 def loadFileConnTallyCo(tallycoLoad):
     tallycoLoad = {"tallyco.conf":"","id":""}
@@ -4091,6 +4100,7 @@ def APIMenuLOCAL():
     \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
     \033[1;32;40mN.\033[0;37;40m Nostr         FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
+    \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mW.\033[0;37;40m CKPool        FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
@@ -7417,6 +7427,8 @@ def platfformsLOCALcontrol(platf):
         kanopoolpoolLOCALOnchainONLY()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
+    elif platf in ["T", "t"]:
+        bip39convert()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
@@ -7455,8 +7467,10 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         nostrConn()
     elif platf in ["P", "p"]:
         kanopoolpoolLOCALOnchainONLY()
-    elif platf in ["S", "s"]:
+    elif platf in ["S", "s"]: 
         slushpoolLOCALOnchainONLY()
+    elif platf in ["T", "t"]:
+        bip39convert()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
