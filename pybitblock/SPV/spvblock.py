@@ -2368,12 +2368,11 @@ def tippinmeGetInvoice():
 #-----------------------------END TIPPINME--------------------------------
 
 def bip39convert():
-    else:
-        clear()
-        blogo()
-        close()
-        os.system("pdf2txt.py BIP39_Tinyseed_io.pdf")
-        input("Continue...")
+    clear()
+    blogo()
+    close()
+    os.system("pdf2txt.py BIP39_Tinyseed_io.pdf")
+    input("Continue...")
 
 #-----------------------------TALLYCOIN------------------------------
 def loadFileConnTallyCo(tallycoLoad):
