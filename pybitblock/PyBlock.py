@@ -1052,12 +1052,11 @@ def bip39convert():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
-    else:
-        clear()
-        blogo()
-        close()
-        os.system("pdf2txt.py BIP39_Tinyseed_io.pdf")
-        input("Continue...")
+    clear()
+    blogo()
+    close()
+    os.system("pdf2txt.py BIP39_Tinyseed_io.pdf")
+    input("Continue...")
         
 #--------------------------------- NYMs -----------------------------------
 
