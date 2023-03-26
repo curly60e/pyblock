@@ -1053,7 +1053,7 @@ def bip39convert():
         clear()
         blogo()
         output = render(
-            "QR", colors=['yellow'], align='left', font='tiny'
+            "TinySeed", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('TinySeed'):
             print("...pass...")
