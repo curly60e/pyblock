@@ -39,7 +39,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.0.16"
+version = "2.0.17"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
