@@ -3,8 +3,10 @@
 let req = new Request("https://mempool.space/api/blocks/tip/height");
 let blockHeight = await req.loadString();
 
-let cRequest = new Request("https://bitcoinexplorer.org/api/mempool/count");
-let tx = await cRequest.loadString();
+let cRequest = new Request("https://bitcoinexplorer.org/api/mempool/summary");
+let tx = await cRequest.loadJSON();
+
+number = tx.size.toString();
 
 let make = new Request('https://mempool.space/api/v1/fees/recommended');
 let json = await make.loadJSON();
@@ -14,13 +16,19 @@ halfHour = json.halfHourFee.toString();
 hour = json.hourFee.toString();
 
 let call = new Request('https://bitcoinexplorer.org/api/blockchain/coins');
-let supply = await call.loadString();
+let supply = await call.loadJSON();
+
+coins = supply.supply.toString();
 
 let get = new Request('https://bitcoinexplorer.org/api/price/usd/sats');
-let MoscowTime = await get.loadString();
+let MoscowTime = await get.loadJSON();
 
-let prin = new Request('https://bitcoinexplorer.org/api/price/usd');
-let Price = await prin.loadString();
+psats = MoscowTime.usd.toString();
+
+let prin = new Request('https://bitcoinexplorer.org/api/price');
+let Price = await prin.loadJSON();
+
+pusd = Price.usd.toString();
 
 let widget = await createWidget();
 
@@ -64,7 +72,7 @@ async function createWidget()
   heading.centerAlignText();
   heading.font = Font.boldSystemFont(70);
   heading.textColor = new Color("#0aff17");
-  let txs = listwidget.addText("▁▂▃▄▅▆▇ " + tx + " ▇▆▅▄▃▂▁");
+  let txs = listwidget.addText("▁▂▃▄▅▆▇ " + number + " ▇▆▅▄▃▂▁");
   txs.centerAlignText();
   txs.font = Font.boldSystemFont(13);
   txs.textColor = new Color("#FFFFFF");
@@ -88,17 +96,17 @@ async function createWidget()
   wdgDesc.textColor = new Color("#EEEEEE");
   mem.textColor = new Color("#0aff17");
   
-  let pr = listwidget.addText(Price + " $ = 1 ₿itcoin");
+  let pr = listwidget.addText(pusd + " $ = 1 ₿itcoin");
   pr.centerAlignText();
   pr.font = Font.boldSystemFont(11);
   pr.textColor = new Color("#eeeeee")
   
-  let ms = listwidget.addText(MoscowTime +" Șats = 1 $");
+  let ms = listwidget.addText(psats +" Șats = 1 $");
   ms.centerAlignText();
   ms.font = Font.boldSystemFont(11);
   ms.textColor = new Color("#0aff17")
   
-  let coin = listwidget.addText(supply + " Supply");
+  let coin = listwidget.addText(coins + " Supply");
   coin.centerAlignText();
   coin.font = Font.boldSystemFont(10);
   coin.textColor = new Color("#EEEEEE")
