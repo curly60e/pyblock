@@ -64,7 +64,7 @@ async function createWidget()
 
   // Add widget heading
   let sns = new Request('https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/resources/images/Logo.PNG');
-let pyp = await sns.loadImage();
+  let pyp = await sns.loadImage();
 
   let tt = listwidget.addImage(pyp).centerAlignImage()
 
@@ -79,7 +79,7 @@ let pyp = await sns.loadImage();
   let wdgDesc = listwidget.addText("🟥           🟨           🟩");
 
   // Add widget heading  
-   let mem = listwidget.addText(fast + "    " + halfHour + "    " + hour);    
+  let mem = listwidget.addText(fast + "    " + halfHour + "    " + hour);    
 
   wdgDesc.centerAlignText();
   mem.centerAlignText();
