@@ -101,7 +101,7 @@ async function createWidget()
   pr.font = Font.boldSystemFont(13);
   pr.textColor = new Color("#EEEEEE")
   
-  let ms = listwidget.addText(psats +" Șats = 1 $");
+  let ms = listwidget.addText(psats + " Șats = 1 $");
   ms.centerAlignText();
   ms.font = Font.boldSystemFont(22);
   ms.textColor = new Color("#0aff17")
