@@ -3,8 +3,8 @@
 let req = new Request("https://mempool.space/api/blocks/tip/height");
 let blockHeight = await req.loadString();
 
-let cRequest = new Request("https://bitcoinexplorer.org/api/mempool/summary");
-let tx = await cRequest.loadJSON();
+let count = new Request('https://bitcoinexplorer.org/api/mempool/summary');
+let tx = await count.loadJSON();
 
 number = tx.size.toString();
 
@@ -20,7 +20,7 @@ let supply = await call.loadJSON();
 
 coins = supply.supply.toString();
 
-let get = new Request('https://bitcoinexplorer.org/api/price/usd/sats');
+let get = new Request('https://bitcoinexplorer.org/api/price/sats');
 let MoscowTime = await get.loadJSON();
 
 psats = MoscowTime.usd.toString();
@@ -64,7 +64,7 @@ async function createWidget()
 
   // Add widget heading
   let sns = new Request('https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/resources/images/Logo.PNG');
-  let pyp = await sns.loadImage();
+let pyp = await sns.loadImage();
 
   let tt = listwidget.addImage(pyp).centerAlignImage()
 
@@ -98,17 +98,17 @@ async function createWidget()
   
   let pr = listwidget.addText(pusd + " $ = 1 ₿itcoin");
   pr.centerAlignText();
-  pr.font = Font.boldSystemFont(11);
-  pr.textColor = new Color("#eeeeee")
+  pr.font = Font.boldSystemFont(13);
+  pr.textColor = new Color("#EEEEEE")
   
   let ms = listwidget.addText(psats +" Șats = 1 $");
   ms.centerAlignText();
-  ms.font = Font.boldSystemFont(11);
+  ms.font = Font.boldSystemFont(22);
   ms.textColor = new Color("#0aff17")
   
   let coin = listwidget.addText(coins + " Supply");
   coin.centerAlignText();
-  coin.font = Font.boldSystemFont(10);
+  coin.font = Font.boldSystemFont(13);
   coin.textColor = new Color("#EEEEEE")
   
   
