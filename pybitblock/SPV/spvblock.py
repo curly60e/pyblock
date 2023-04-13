@@ -88,7 +88,7 @@ def counttxs():
         an = din
         bs = str(an)
         a = bs
-        r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
+        r = requests.get("https://bitcoinexplorer.org/api/mempool/summary")
         r.headers['Content-Type']
         n = r.text
         di = json.loads(n)
@@ -117,7 +117,7 @@ def counttxs():
             din = json.loads(qs)
             an = din
             bs = str(an)
-            r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
+            r = requests.get("https://bitcoinexplorer.org/api/mempool/summary")
             r.headers['Content-Type']
             n = r.text
             di = json.loads(n)
@@ -146,7 +146,7 @@ def counttxs():
                 din = json.loads(qs)
                 an = din
                 bs = str(an)
-                r = requests.get("https://bitcoinexplorer.org/api/mempool/count")
+                r = requests.get("https://bitcoinexplorer.org/api/mempool/summary")
                 print("\n\n\n")
                 output = render(
                     bs,
@@ -657,7 +657,7 @@ def mtclock():
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
     clear()
-    r = requests.get('https://bitcoinexplorer.org/api/price/usd/sats')
+    r = requests.get('https://bitcoinexplorer.org/api/price/sats')
     r.headers['Content-Type']
     n = r.text
     di = json.loads(n)
@@ -669,7 +669,7 @@ def mtclock():
     print("\033[0;37;40m\x1b[?25l" + output)
     while True:
         x = b
-        r = requests.get('https://bitcoinexplorer.org/api/price/usd/sats')
+        r = requests.get('https://bitcoinexplorer.org/api/price/sats')
         r.headers['Content-Type']
         n = r.text
         di = json.loads(n)
