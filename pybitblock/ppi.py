@@ -352,7 +352,7 @@ def mtclock():
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
     clear()
-    r = requests.get('https://bitcoinexplorer.org/api/price/usd/sats')
+    r = requests.get('https://bitcoinexplorer.org/api/price/sats/')
     r.headers['Content-Type']
     n = r.text
     di = json.loads(n)
@@ -360,11 +360,11 @@ def mtclock():
     b = str(a)
     clear()
     close()
-    output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    output = render(str(a['usd']), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
     print("\033[0;37;40m\x1b[?25l" + output)
     while True:
         x = b
-        r = requests.get('https://bitcoinexplorer.org/api/price/usd/sats')
+        r = requests.get('https://bitcoinexplorer.org/api/price/sats/')
         r.headers['Content-Type']
         n = r.text
         di = json.loads(n)
@@ -375,7 +375,7 @@ def mtclock():
             output5 = subprocess.check_output(['sudo', 'iwgetid'])
             z = str(output5)
             pp = random.choice(list(faceshappy.values())).encode('utf-8').decode('latin-1')
-            output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            output = render(str(a['usd']), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\033[0;37;40m\x1b[?25l" + output)
             b = str(a)    #try:
 
