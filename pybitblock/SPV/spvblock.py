@@ -93,7 +93,7 @@ def counttxs():
         n = r.text
         di = json.loads(n)
         s = di
-        e = int(s)
+        e = int(s['size'])
         n = e / 10
         nn = n
         clear()
@@ -122,7 +122,7 @@ def counttxs():
             n = r.text
             di = json.loads(n)
             s = di
-            e = int(s)
+            e = int(s['size'])
             n = e / 10
             if e > nn:
                 clear()
@@ -662,7 +662,7 @@ def mtclock():
     n = r.text
     di = json.loads(n)
     a = di
-    b = str(a)
+    b = str(a['usd'])
     clear()
     close()
     output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
@@ -674,7 +674,7 @@ def mtclock():
         n = r.text
         di = json.loads(n)
         a = di
-        if x < str(a):
+        if x < str(a['size']):
             clear()
             close()
             output5 = subprocess.check_output(['sudo', 'iwgetid'])
@@ -2631,7 +2631,7 @@ def remoteconsole(): # get into the console from bitcoin-cli
 
 def runthenumbersConn():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | grep -E "supply""""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -2645,7 +2645,7 @@ def runthenumbersConn():
 
 def channelbalance():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | grep -E "supply""""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -2682,7 +2682,7 @@ def listonchaintxs():
 
 def balanceOC():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | grep -E "supply""""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -3544,7 +3544,7 @@ def getrawtx(): # show confirmations from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins"""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | grep -E "supply""""
         a = os.popen(conn).read()
         clear()
         blogo()
