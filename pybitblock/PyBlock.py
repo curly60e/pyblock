@@ -1308,6 +1308,13 @@ def callGitBija():
         os.system(git)
     os.system("cd bija && docker-compose up")
     input("\a\nYou can now access Bija at http://localhost:5000")
+
+#---------------------------------Bpytop----------------------------------
+def callGitBpytop():
+    if not os.path.isdir('Bpytop'):
+        git = "pip3 install bpytop && mkdir Bpytop"
+        os.system(git)
+    os.system("cd Bpytop && bpytop")
     
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
