@@ -2631,7 +2631,7 @@ def remoteconsole(): # get into the console from bitcoin-cli
 
 def runthenumbersConn():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | grep -E "supply""""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -2645,7 +2645,7 @@ def runthenumbersConn():
 
 def channelbalance():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | grep -E "supply""""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -2682,7 +2682,7 @@ def listonchaintxs():
 
 def balanceOC():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | grep -E "supply""""
+        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
         a = os.popen(conn).read()
         clear()
         blogo()
