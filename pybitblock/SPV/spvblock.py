@@ -6892,6 +6892,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["tt", "TT", "Tt", "tT"]:
+        clear()
+        blogo()
+        callGitBpytop()    
     elif menuS in ["CA", "ca", "Ca", "cA"]:
         clear()
         blogo()
