@@ -6131,6 +6131,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitSatSale()
+    elif menuS in ["tt", "TT", "Tt", "tT"]:
+        clear()
+        blogo()
+        callGitBpytop()    
     elif menuS in ["CA", "ca", "Ca", "cA"]:
         clear()
         blogo()
@@ -6188,7 +6192,7 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     elif menuS in ["tt", "TT", "Tt", "tT"]:
         clear()
         blogo()
-        callGitBpytop()    
+        callGitBpytop()
     elif menuS in ["CA", "ca", "Ca", "cA"]:
         clear()
         blogo()
