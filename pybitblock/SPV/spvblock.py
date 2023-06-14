@@ -88,7 +88,7 @@ def counttxs():
         an = din
         bs = str(an)
         a = bs
-        r = requests.get("https://bitcoinexplorer.org/api/mempool/summary | jq | grep -E "size" | awk '{print $2}' | tr -d '"' | tr -d ','")
+        r = requests.get("https://bitcoinexplorer.org/api/mempool/summary | jq | grep -E 'size' | awk '{print $2}' | tr -d '"' | tr -d ','")
         r.headers['Content-Type']
         n = r.text
         di = json.loads(n)
@@ -117,7 +117,7 @@ def counttxs():
             din = json.loads(qs)
             an = din
             bs = str(an)
-            r = requests.get("https://bitcoinexplorer.org/api/mempool/summary | jq | grep -E "size" | awk '{print $2}' | tr -d '"' | tr -d ','")
+            r = requests.get("https://bitcoinexplorer.org/api/mempool/summary | jq | grep -E 'size' | awk '{print $2}' | tr -d '"' | tr -d ','")
             r.headers['Content-Type']
             n = r.text
             di = json.loads(n)
@@ -146,7 +146,7 @@ def counttxs():
                 din = json.loads(qs)
                 an = din
                 bs = str(an)
-                r = requests.get("https://bitcoinexplorer.org/api/mempool/summary | jq | grep -E "size" | awk '{print $2}' | tr -d '"' | tr -d ','")
+                r = requests.get("https://bitcoinexplorer.org/api/mempool/summary | jq | grep -E 'size' | awk '{print $2}' | tr -d '"' | tr -d ','")
                 print("\n\n\n")
                 output = render(
                     bs,
