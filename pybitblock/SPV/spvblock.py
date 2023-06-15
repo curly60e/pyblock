@@ -663,7 +663,7 @@ def mtclock():
         n = r.text
         di = json.loads(n)
         s = di
-        e = int(s['size'])
+        e = int(s['usd'])
         n = e / 10
         nn = n
         clear()
