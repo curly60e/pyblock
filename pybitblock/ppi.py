@@ -360,7 +360,7 @@ def mtclock():
     b = str(a)
     clear()
     close()
-    output = render(str(a['usd']), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
     print("\033[0;37;40m\x1b[?25l" + output)
     while True:
         x = b
