@@ -3820,10 +3820,10 @@ def callGitBija():
 
 #---------------------------------Bpytop----------------------------------
 def callGitBpytop():
-    if not os.path.isdir('Bpytop'):
-        git = "pip3 install bpytop && mkdir Bpytop"
+    if not os.path.isdir('bpytop'):
+        git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
         os.system(git)
-    os.system("cd Bpytop && bpytop")
+    os.system("cd bpytop && sudo make install && bpytop")
         
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
