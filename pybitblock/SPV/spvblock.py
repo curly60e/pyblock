@@ -651,88 +651,20 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
 
 def mtclock():
     try:
-        rr = requests.get('https://bitcoinexplorer.org/api/price/sats')
-        rr.json["usd"]
-        qs = rr.text
-        din = json.loads(qs)
-        an = din
-        bs = str(an)
-        a = bs
-        r = requests.get("https://bitcoinexplorer.org/api/price/sats")
-        r.json()["usd"]
-        n = r.text
-        di = json.loads(n)
-        s = di
-        e = int(s['usd'])
-        n = e / 10
-        nn = n
+        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','  """
+        a = os.popen(conn).read()
         clear()
-        outputtxs = render(
-            f'{e} Moscow Time',
-            colors=[settingsClock['colorA'], settingsClock['colorB']],
-            align='center',
-            font='tiny',
+        blogo()
+        closed()
+        output = render(
+            "Moscow Time.", colors=['green'], align='left', font='console'
         )
 
-        print("\x1b[?25l" + outputtxs)
-        shq = int(n)
-        ss = str(rectangle(shq))
-        qq = ss.replace("None","")
-        print(f"\033[A{qq}\033[A")
-        while True:
-            x = a
-            rr = requests.get('https://bitcoinexplorer.org/api/price/sats')
-            rr.json["usd"]
-            qs = rr.text
-            din = json.loads(qs)
-            an = din
-            bs = str(an)
-            r = requests.get("https://bitcoinexplorer.org/api/price/sats")
-            r.json()["usd"]
-            n = r.text
-            di = json.loads(n)
-            s = di
-            e = int(s["usd"])
-            n = e / 10
-            if e > nn:
-                clear()
-                outputtxs = render(
-                    f'{e} Moscow Time',
-                    colors=[settingsClock['colorA'], settingsClock['colorB']],
-                    align='center',
-                    font='tiny',
-                )
-
-                print("\x1b[?25l" + outputtxs)
-                shq = int(n)
-                ss = str(rectangle(shq))
-                qq = ss.replace("None","")
-                print(f"\033[A{qq}\033[A")
-                nn = e
-            if bs > a:
-                rr = requests.get('https://bitcoinexplorer.org/api/price/sats')
-                rr.json["usd"]
-                qs = rr.text
-                din = json.loads(qs)
-                an = din
-                bs = str(an)
-                r = requests.get("https://bitcoinexplorer.org/api/price/sats")
-                print("\n\n\n")
-                output = render(
-                    bs,
-                    colors=[settingsClock['colorA'], settingsClock['colorB']],
-                    align='center',
-                    font='tiny',
-                )
-
-                print("\a\x1b[?25l" + output)
-                t.sleep(5)
-                clear()
-                a = bs
-                nn = e
+        print(output)
+        print(a)
+        input("\a\nContinue...")
     except:
         pass
-
 #-----------------------------END MT--------------------------------
 
 #-----------------------------Satoshi--------------------------------
