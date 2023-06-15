@@ -641,7 +641,7 @@ def pgpConn():
 
 #-----------------------------MT--------------------------------
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
-    while True:
+    while False:
         try:
             clear()
             close()
