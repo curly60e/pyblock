@@ -658,7 +658,7 @@ def mtclock():
         pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
     clear()
     r = requests.get('https://bitcoinexplorer.org/api/price/sats')
-    r.json()["usd"]
+    r.json()['usd']
     n = r.text
     di = json.loads(n)
     a = di
@@ -670,11 +670,11 @@ def mtclock():
     while True:
         x = b
         r = requests.get('https://bitcoinexplorer.org/api/price/sats')
-        r.json()["usd"]
+        r.json()['usd']
         n = r.text
         di = json.loads(n)
         a = di
-        if x < str(a['usd']):
+        if x < str(a):
             clear()
             close()
             output5 = subprocess.check_output(['sudo', 'iwgetid'])
