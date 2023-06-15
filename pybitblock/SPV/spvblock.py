@@ -647,7 +647,7 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
             close()
             mtclock()
         except:
-            pass
+            break
 
 def mtclock():
     try:
