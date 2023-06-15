@@ -647,7 +647,7 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
             close()
             mtclock()
         except:
-            break
+            pass
 
 def mtclock():
     try:
@@ -656,11 +656,10 @@ def mtclock():
         clear()
         blogo()
         closed()
-        output = render("Moscow Time", colors=['yellow'], align='left', font='tiny')
-        outputT = render(f"{a} MT", colors=['green'], align='left', font='tiny')
+        output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
+        outputT = render(f"{a} O'Clock", colors=['green'], align='center', font='tiny')
         print(output)
         print(outputT)
-        input("\a\nContinue...")
     except:
         pass
 #-----------------------------END MT--------------------------------
