@@ -650,39 +650,88 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
             break
 
 def mtclock():
-    if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
-        settingsClock = settingsv # Copy the variable pathv to 'path'
-    else:
-        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
-    clear()
-    r = requests.get('https://bitcoinexplorer.org/api/price/sats')
-    r.json()['usd']
-    n = r.text
-    di = json.loads(n)
-    a = di
-    b = str(a['usd'])
-    clear()
-    close()
-    output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-    print("\033[0;37;40m\x1b[?25l" + output)
-    while True:
-        x = b
-        r = requests.get('https://bitcoinexplorer.org/api/price/sats')
-        r.json()['usd']
+    try:
+        rr = requests.get('https://bitcoinexplorer.org/api/price/sats')
+        rr.json["usd"]
+        qs = rr.text
+        din = json.loads(qs)
+        an = din
+        bs = str(an)
+        a = bs
+        r = requests.get("https://bitcoinexplorer.org/api/price/sats")
+        r.json()["usd"]
         n = r.text
         di = json.loads(n)
-        a = di
-        if x < str(a):
-            clear()
-            close()
-            output5 = subprocess.check_output(['sudo', 'iwgetid'])
-            z = str(output5)
-            pp = random.choice(list(faceshappy.values())).encode('utf-8').decode('latin-1')
-            output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\033[0;37;40m\x1b[?25l" + output)
-            b = str(a)    #try:
+        s = di
+        e = int(s['size'])
+        n = e / 10
+        nn = n
+        clear()
+        outputtxs = render(
+            f'{e} Moscow Time',
+            colors=[settingsClock['colorA'], settingsClock['colorB']],
+            align='center',
+            font='tiny',
+        )
+
+        print("\x1b[?25l" + outputtxs)
+        shq = int(n)
+        ss = str(rectangle(shq))
+        qq = ss.replace("None","")
+        print(f"\033[A{qq}\033[A")
+        while True:
+            x = a
+            rr = requests.get('https://bitcoinexplorer.org/api/price/sats')
+            rr.json["usd"]
+            qs = rr.text
+            din = json.loads(qs)
+            an = din
+            bs = str(an)
+            r = requests.get("https://bitcoinexplorer.org/api/price/sats")
+            r.json()["usd"]
+            n = r.text
+            di = json.loads(n)
+            s = di
+            e = int(s["usd"])
+            n = e / 10
+            if e > nn:
+                clear()
+                outputtxs = render(
+                    f'{e} Moscow Time',
+                    colors=[settingsClock['colorA'], settingsClock['colorB']],
+                    align='center',
+                    font='tiny',
+                )
+
+                print("\x1b[?25l" + outputtxs)
+                shq = int(n)
+                ss = str(rectangle(shq))
+                qq = ss.replace("None","")
+                print(f"\033[A{qq}\033[A")
+                nn = e
+            if bs > a:
+                rr = requests.get('https://bitcoinexplorer.org/api/price/sats')
+                rr.json["usd"]
+                qs = rr.text
+                din = json.loads(qs)
+                an = din
+                bs = str(an)
+                r = requests.get("https://bitcoinexplorer.org/api/price/sats")
+                print("\n\n\n")
+                output = render(
+                    bs,
+                    colors=[settingsClock['colorA'], settingsClock['colorB']],
+                    align='center',
+                    font='tiny',
+                )
+
+                print("\a\x1b[?25l" + output)
+                t.sleep(5)
+                clear()
+                a = bs
+                nn = e
+    except:
+        pass
 
 #-----------------------------END MT--------------------------------
 
