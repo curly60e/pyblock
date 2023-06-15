@@ -89,7 +89,7 @@ def counttxs():
         bs = str(an)
         a = bs
         r = requests.get("https://bitcoinexplorer.org/api/mempool/summary").json()['size']
-        r.headers['Content-Type']
+        r.headers['Content-Type':'application/json']
         n = r.text
         di = json.loads(n)
         s = di
@@ -118,7 +118,7 @@ def counttxs():
             an = din
             bs = str(an)
             r = requests.get("https://bitcoinexplorer.org/api/mempool/summary").json()['size']
-            r.headers['Content-Type']
+            r.headers['Content-Type':'application/json']
             n = r.text
             di = json.loads(n)
             s = di
