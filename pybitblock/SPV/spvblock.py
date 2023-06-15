@@ -674,7 +674,7 @@ def mtclock():
         n = r.text
         di = json.loads(n)
         a = di
-        if x < str(a['size']):
+        if x < str(a['usd']):
             clear()
             close()
             output5 = subprocess.check_output(['sudo', 'iwgetid'])
