@@ -37,7 +37,7 @@ typer = "^0.4.0"
 jq = "1.2.2"
 html2text = "2020.1.16"
 pdf2text = "1.0.0"
-pdf2txt = "0.7.3"
+pdf2txt = "0.7.14"
 embit = "0.6.1"
 
 
