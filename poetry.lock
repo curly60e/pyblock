@@ -452,13 +452,13 @@ PDFMiner = "*"
 
 [[package]]
 name = "pdf2txt"
-version = "0.7.3"
+version = "0.7.14"
 description = "A better pdf to text extraction toolkit"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "pdf2txt-0.7.3-py3-none-any.whl", hash = "sha256:47271b28d46698eb5ee9d7869548721cef744b5b1838480622d7bb3086cd2df4"},
+    {file = "pdf2txt-0.7.14-py3-none-any.whl", hash = "sha256:3d6c3ad404da3095191ddb2c6b4491dfed4d255ef08faa821af68f1e7e68bb25"},
 ]
 
 [package.dependencies]
