@@ -1485,6 +1485,8 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
+    \u001b[38;5;202mCM.\033[0;37;40m Core Miner
+    \u001b[38;5;202mONW.\033[0;37;40m Own Node Miner
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1523,6 +1525,8 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
+    \u001b[38;5;202mCM.\033[0;37;40m Core Miner
+    \u001b[38;5;202mONW.\033[0;37;40m Own Node Miner  
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6288,6 +6292,10 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         searchTXS()
     elif bcore in ["S", "s"]:
         counttxs()
+    elif bcore in ["CM", "cm"]:
+        CoreMiner()
+    elif bcore in ["ONM", "onm"]:
+        OwnNodeMiner()
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -6347,6 +6355,10 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         searchTXS()
     elif bcore in ["S", "s"]:
         counttxs()
+    elif bcore in ["CM", "cm"]:
+        CoreMiner()
+    elif bcore in ["ONM", "onm"]:
+        OwnNodeMiner()
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
@@ -6890,6 +6902,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
+    elif bcore in ["ONM", "onm"]:
+        OwnNodeMiner()
 
 def bitcoincoremenuREMOTEcontrolO(oreturn):
     if oreturn in ["A", "a"]:
