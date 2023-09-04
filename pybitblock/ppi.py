@@ -533,6 +533,44 @@ def trustednode():
         pass
 #-----------------------------END GAMES--------------------------------
 
+#-----------------------------Node Miner--------------------------------
+
+def CoreMiner(): 
+try:
+clear()
+blogo()
+output = render("Core Miner", colors=['yellow'], align='left', font='tiny')
+print(output)
+bitcoincli = " -generate 1 2147483647"
+os.system(path['bitcoincli'] + bitcoincli)
+input("\a\nContinue...")
+except:
+pass
+
+def OwnNodeMiner():
+try:
+clear()
+blogo()
+output = render(
+"Own Node Miner", colors=['yellow'], align='left', font='tiny'
+)
+if os.path.isdir ('OwnNodeMiner'):
+print("...pass...")
+else: # Check if the file 'bclock.conf' is in the same folder
+os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && git clone https://github.com/pooler/cpuminer.git")
+clear()
+blogo()
+print(output)
+responseC = input("Your RPC User: ")
+responseD = input("Your RPC Pass: ")
+responseE = input("Your Bitcoin Address: ")
+responseF = input("Select Your Threads, 2, 4, 6, 8, 10, ..: ")
+os.system(f"cd OwnNodeMiner && cd cpuminer && ./minerd -a sha256d -O {responseC}:{responseD} -o http://127.0.0.1:8332 —coinbase-addr={responseE} -t {responseF}")
+input("\a\nContinue...")
+except:
+pass
+#-----------------------------Node Miner--------------------------------
+
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
     try:
