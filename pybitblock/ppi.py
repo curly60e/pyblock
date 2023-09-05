@@ -555,12 +555,12 @@ def OwnNodeMiner():
         "Own Node Miner", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('OwnNodeMiner'):
-        print("...pass...")
+            print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-        os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && git clone https://github.com/pooler/cpuminer.git")
-        clear()
-        blogo()
-        print(output)
+            os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && git clone https://github.com/pooler/cpuminer.git")
+            clear()
+            blogo()
+            print(output)
         responseC = input("Your RPC User: ")
         responseD = input("Your RPC Pass: ")
         responseE = input("Your Bitcoin Address: ")
