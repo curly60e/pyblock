@@ -897,7 +897,8 @@ def CroppedMiner():
             print(output)
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
-        os.system(f"cd CroppedMiner && cd cpuminer && ./minerd -o stratum+tcp://pool.pyblock.xyz:3333 -u {responseC}.PyBLOCK -p {responseD}")
+        responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
+        os.system(f"cd CroppedMiner && cd cpuminer && ./minerd -o stratum+tcp://pool.pyblock.xyz:3333 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
         input("\a\nContinue...")
     except:
         pass
