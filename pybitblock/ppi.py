@@ -557,7 +557,7 @@ def OwnNodeMiner():
         if os.path.isdir ('OwnNodeMiner'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && git clone https://github.com/pooler/cpuminer.git")
+            os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz")
             clear()
             blogo()
             print(output)
@@ -565,7 +565,7 @@ def OwnNodeMiner():
         responseD = input("Your RPC Pass: ")
         responseE = input("Your Bitcoin Address: ")
         responseF = input("Select Your Threads, 2, 4, 6, 8, 10, ..: ")
-        os.system(f"cd OwnNodeMiner && cd cpuminer && ./minerd -a sha256d -O {responseC}:{responseD} -o http://127.0.0.1:8332 —coinbase-addr={responseE} -t {responseF}")
+        os.system(f"cd OwnNodeMiner && ./minerd -a sha256d -O {responseC}:{responseD} -o http://127.0.0.1:8332 —coinbase-addr={responseE} -t {responseF}")
         input("\a\nContinue...")
     except:
         pass
