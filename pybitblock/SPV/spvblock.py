@@ -886,7 +886,7 @@ def CroppedMiner():
         clear()
         blogo()
         output = render(
-        "Be a Bitcoin Miner", colors=['yellow'], align='left', font='tiny'
+        "Bitcoin Miner", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('CroppedMiner'):
             print("...pass...")
