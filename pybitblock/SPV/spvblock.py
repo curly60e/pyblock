@@ -889,7 +889,7 @@ def CroppedMiner():
         "Bitcoin Miner", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('CroppedMiner'):
-            print("...pass...")
+            print("...Follow the steps...")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir CroppedMiner && cd CroppedMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz")
             clear()
