@@ -569,7 +569,7 @@ def OwnNodeMiner():
         responseD = input("Your RPC Pass: ")
         responseE = input("Your Bitcoin Address: ")
         responseF = input("Select Your Threads, 2, 4, 6, 8, 10, ..: ")
-        os.system(f"cd OwnNodeMiner && ./minerd -a sha256d -O {responseC}:{responseD} -o http://127.0.0.1:8332 —coinbase-addr={responseE} -t {responseF}")
+        os.system(f"cd OwnNodeMiner && ./minerd -a sha256d -O {responseC}:{responseD} -o http://127.0.0.1:8332 --coinbase-addr={responseE} -t {responseF}")
         input("\a\nContinue...")
     except:
         pass
