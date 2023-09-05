@@ -891,14 +891,14 @@ def CroppedMiner():
         if os.path.isdir ('CroppedMiner'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir CroppedMiner && cd CroppedMiner && git clone https://github.com/pooler/cpuminer.git")
+            os.system("mkdir CroppedMiner && cd CroppedMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz")
             clear()
             blogo()
             print(output)
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        os.system(f"cd CroppedMiner && cd cpuminer && ./minerd -o stratum+tcp://pool.pyblock.xyz:3333 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
+        os.system(f"cd CroppedMiner && ./minerd -o stratum+tcp://pool.pyblock.xyz:3333 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
         input("\a\nContinue...")
     except:
         pass
