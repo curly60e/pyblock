@@ -543,6 +543,10 @@ def CoreMiner():
         print(output)
         bitcoincli = " -generate 1 2147483647"
         os.system(path['bitcoincli'] + bitcoincli)
+        clear()
+        blogo()
+        input("\a\n...Mining...")
+        print(output)
         input("\a\nContinue...")
     except:
         pass
@@ -555,7 +559,7 @@ def OwnNodeMiner():
         "Own Node Miner", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('OwnNodeMiner'):
-            print("...pass...")
+            print("...Follow the steps...")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz")
             clear()
