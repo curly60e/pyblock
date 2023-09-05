@@ -39,7 +39,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.1"
+version = "2.2"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
@@ -643,7 +643,7 @@ def pgpConn():
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
+            conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
             a = os.popen(conn).read()
             clear()
             blogo()
@@ -660,7 +660,7 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
 
 def mtclock():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
+        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -878,6 +878,32 @@ def trustednode():
     except:
         pass
 #-----------------------------END GAMES--------------------------------
+
+#-----------------------------MINER POOL--------------------------------
+
+def CroppedMiner():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "Bitcoin Miner", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('CroppedMiner'):
+            print("...Follow the steps...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir CroppedMiner && cd CroppedMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz")
+            clear()
+            blogo()
+            print(output)
+        responseC = input("Your Bitcoin Address: ")
+        responseD = input("Your Pass x: ")
+        responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
+        os.system(f"cd CroppedMiner && ./minerd -a sha256d -o stratum+tcp://pool.pyblock.xyz:3333 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------MINER POOL--------------------------------
 
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
@@ -3912,6 +3938,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
+    \u001b[38;5;202mPP.\033[0;37;40m PyBLOCK PooL
     \u001b[33;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -7018,6 +7045,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         untxsConn()
     elif bcore in ["S", "s"]:
         counttxs()
+    elif bcore in ["PP", "pp"]:
+        CroppedMiner()
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -7075,6 +7104,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         untxsConn()
     elif bcore in ["S", "s"]:
         searchTXS()
+    elif bcore in ["PP", "pp"]:
+        CroppedMiner()
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:

@@ -338,7 +338,7 @@ def pgpConn():
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
+            conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
             a = os.popen(conn).read()
             clear()
             blogo()
@@ -355,7 +355,7 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
 
 def mtclock():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
+        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -532,6 +532,48 @@ def trustednode():
     except:
         pass
 #-----------------------------END GAMES--------------------------------
+
+#-----------------------------Node Miner--------------------------------
+
+def CoreMiner(): 
+    try:
+        clear()
+        blogo()
+        output = render("Core Miner", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        bitcoincli = " -generate 1 2147483647"
+        os.system(path['bitcoincli'] + bitcoincli)
+        clear()
+        blogo()
+        input("\a\n...Mining...")
+        print(output)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def OwnNodeMiner():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "Own Node Miner", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('OwnNodeMiner'):
+            print("...Follow the steps...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz")
+            clear()
+            blogo()
+            print(output)
+        responseC = input("Your RPC User: ")
+        responseD = input("Your RPC Pass: ")
+        responseE = input("Your Bitcoin Address: ")
+        responseF = input("Select Your Threads, 2, 4, 6, 8, 10, ..: ")
+        os.system(f"cd OwnNodeMiner && ./minerd -a sha256d -O {responseC}:{responseD} -o http://127.0.0.1:8332 --coinbase-addr={responseE} -t {responseF}")
+        input("\a\nContinue...")
+    except:
+        pass
+#-----------------------------Node Miner--------------------------------
 
 #-----------------------------wttr.in--------------------------------
 def wttrDataV1():
