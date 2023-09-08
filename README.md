@@ -344,6 +344,22 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 
 <img src="https://pbs.twimg.com/media/Fj4xKy0X0AAcBqN.jpg" width="50%" />
 
+## PyBLØCK SOLO MINING POOL
+
+Are you a Bitcoin Miner? 
+
+stratum+tcp://pool.pyblock.xyz:3333
+
+Note that if you do not find a BITCOIN Block, you get no reward at all with Solo Mining.
+
+0.4 % goes to PyBLØCK to operate the Pool.
+
+<br />
+
+<img src="https://pbs.twimg.com/media/F5eok13XUAAS1fD.jpg" width="50%" />
+
+## [More info:](https://t.me/pyblockpool)
+
 ## SUPPORT PyBLØCK.
 
 ⚡️ curly60e@zbd.gg ⚡️
