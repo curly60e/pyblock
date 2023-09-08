@@ -349,7 +349,7 @@ Are you a Bitcoin Miner?
 
 stratum+tcp://pool.pyblock.xyz:3333
 
-Note that if you do not find a BITCOIN Block, you get no reward at all with Solo Mining.
+Note that if you do not find a Block, you get no reward at all with Solo Mining.
 
 0.4 % goes to PyBLØCK to operate the Pool.
 
