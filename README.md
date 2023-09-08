@@ -358,7 +358,7 @@ Note that if you do not find a BITCOIN Block, you get no reward at all with Solo
 
 <img src="https://pbs.twimg.com/media/F5eok13XUAAS1fD.jpg" width="50%" />
 
-## [More info:](https://t.me/pyblockpool)
+## [Click here for more info](https://t.me/pyblockpool)
 
 ## SUPPORT PyBLØCK.
 
