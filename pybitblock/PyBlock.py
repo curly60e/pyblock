@@ -1531,6 +1531,46 @@ def bitcoincoremenuLOCALOnchainONLY():
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def OwnNodeMiner():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    lndconnectexec()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+
+        lncli = " getinfo"
+        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd0 = str(lsd)
+        alias = json.loads(lsd0)
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Computer Miner
+    \033[1;32;40mB.\033[0;37;40m Reaspberry Miner
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    OwnNodeMinerControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def walletmenuLOCALOnchainONLY():
     clear()
     blogo()
@@ -5729,6 +5769,14 @@ def menuDesignOnchainONLY(menuDSN):
         testlogo()
 
 #------------API---------------------
+
+def OwnNodeMinerControl(menuMem):
+    if menuMem in ["A", "a"]:
+        OwnNodeMiner()
+    elif menuMem in ["B", "b"]:
+        OwnNodeMinerRaspberry()
+    elif menuMem in ["R", "r"]:
+        menuSelection()
 
 def mempoolmenuS(menuMem):
     if menuMem in ["A", "a"]:
