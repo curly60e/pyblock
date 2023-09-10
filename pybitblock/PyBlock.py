@@ -5772,7 +5772,7 @@ def menuDesignOnchainONLY(menuDSN):
 
 def OwnNodeMinerControl(menuMem):
     if menuMem in ["A", "a"]:
-        OwnNodeMiner()
+        OwnNodeMinerComputer()
     elif menuMem in ["B", "b"]:
         OwnNodeMinerRaspberry()
     elif menuMem in ["R", "r"]:
