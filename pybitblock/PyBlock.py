@@ -5770,12 +5770,12 @@ def menuDesignOnchainONLY(menuDSN):
 
 #------------API---------------------
 
-def OwnNodeMinerControl(menuMem):
-    if menuMem in ["A", "a"]:
+def OwnNodeMinerControl(menuMin):
+    if menuMin in ["A", "a"]:
         OwnNodeMinerComputer()
-    elif menuMem in ["B", "b"]:
+    elif menuMin in ["B", "b"]:
         OwnNodeMinerRaspberry()
-    elif menuMem in ["R", "r"]:
+    elif menuMin in ["R", "r"]:
         menuSelection()
 
 def mempoolmenuS(menuMem):
