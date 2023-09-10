@@ -573,6 +573,29 @@ def OwnNodeMiner():
         input("\a\nContinue...")
     except:
         pass
+
+def OwnNodeMinerRaspberryPi():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "Own Node Miner", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('OwnNodeMiner'):
+            print("...Follow the steps...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir OwnNodeMiner && cd OwnNodeMiner && git clone https://github.com/jojapoppa/cpuminer-multi-arm.git")
+            clear()
+            blogo()
+            print(output)
+        responseC = input("Your RPC User: ")
+        responseD = input("Your RPC Pass: ")
+        responseE = input("Your Bitcoin Address: ")
+        responseF = input("Select Your Threads, 2, 4, 6, 8, 10, ..: ")
+        os.system(f"cd OwnNodeMiner && cd cpuminer-multi-arm && ./cpuminer -a sha256d -O {responseC}:{responseD} -o http://127.0.0.1:8332 --coinbase-addr={responseE} -t {responseF}")
+        input("\a\nContinue...")
+    except:
+        pass
 #-----------------------------Node Miner--------------------------------
 
 #-----------------------------wttr.in--------------------------------
