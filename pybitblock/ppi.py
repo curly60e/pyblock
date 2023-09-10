@@ -551,7 +551,7 @@ def CoreMiner():
     except:
         pass
 
-def OwnNodeMiner():
+def OwnNodeMinerComputer():
     try:
         clear()
         blogo()
@@ -574,7 +574,7 @@ def OwnNodeMiner():
     except:
         pass
 
-def OwnNodeMinerRaspberryPi():
+def OwnNodeMinerRaspberry():
     try:
         clear()
         blogo()
