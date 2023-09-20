@@ -1571,7 +1571,7 @@ def OwnNodeMiner(menuMin):
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     OwnNodeMinerControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def OwnNodeMinerONCHAIN(menuMin):
+def OwnNodeMinerONCHAIN(menuMino):
     clear()
     blogo()
     sysinfo()
@@ -5801,12 +5801,12 @@ def OwnNodeMinerControl(menuMin):
     elif menuMin in ["R", "r"]:
         menuSelection()
 
-def OwnNodeMinerONCHAINONCHAIN(menuMin):
-    if menuMin in ["A", "a"]:
+def OwnNodeMinerONCHAINControl(menuMino):
+    if menuMino in ["A", "a"]:
         OwnNodeMinerComputer()
-    elif menuMin in ["B", "b"]:
+    elif menuMino in ["B", "b"]:
         OwnNodeMinerRaspberry()
-    elif menuMin in ["R", "r"]:
+    elif menuMino in ["R", "r"]:
         menuSelection()
 
 def mempoolmenuS(menuMem):
@@ -6437,7 +6437,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
-        OwnNodeMinerONCHAIN()
+        OwnNodeMiner()
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
