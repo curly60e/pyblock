@@ -542,11 +542,8 @@ def CoreMiner():
         output = render("Core Miner", colors=['yellow'], align='left', font='tiny')
         print(output)
         bitcoincli = " -generate 1 2147483647"
-        os.system(path['bitcoincli'] + bitcoincli)
-        clear()
-        blogo()
         input("\a\n...Mining...")
-        print(output)
+        os.system(path['bitcoincli'] + bitcoincli)
         input("\a\nContinue...")
     except:
         pass
