@@ -6374,7 +6374,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
-        OwnNodeMinerONCHAIN()
+        OwnNodeMiner()
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
