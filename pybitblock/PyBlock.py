@@ -1577,6 +1577,11 @@ def OwnNodeMinerONCHAIN(menuMino):
     sysinfo()
     pathexec()
     #lndconnectexec()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
     
     print("""\t\t
     \033[1;32;40mA.\033[0;37;40m Computer Miner
