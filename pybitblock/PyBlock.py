@@ -1577,16 +1577,12 @@ def OwnNodeMinerONCHAIN(menuMin):
     sysinfo()
     pathexec()
     #lndconnectexec()
-    if path['bitcoincli']:
-        n = "Local" if path['bitcoincli'] else "Remote"
-        bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
-        b = json.loads(a)
-        d = b
-    else:
-        a = "Local" if path['bitcoincli'] else "Remote"
-        blk = rpc('getblockchaininfo')
-        d = blk
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+    
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -1609,7 +1605,7 @@ def walletmenuLOCALOnchainONLY():
     a = os.popen(path['bitcoincli'] + bitcoincli).read()
     b = json.loads(a)
     d = b
-
+    
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
@@ -5797,7 +5793,7 @@ def menuDesignOnchainONLY(menuDSN):
 
 #------------API---------------------
 
-def OwnNodeMiner(menuMin):
+def OwnNodeMinerControl(menuMin):
     if menuMin in ["A", "a"]:
         OwnNodeMinerComputer()
     elif menuMin in ["B", "b"]:
@@ -5805,7 +5801,7 @@ def OwnNodeMiner(menuMin):
     elif menuMin in ["R", "r"]:
         menuSelection()
 
-def OwnNodeMinerONCHAIN(menuMin):
+def OwnNodeMinerONCHAINONCHAIN(menuMin):
     if menuMin in ["A", "a"]:
         OwnNodeMinerComputer()
     elif menuMin in ["B", "b"]:
