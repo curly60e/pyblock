@@ -5793,7 +5793,7 @@ def menuDesignOnchainONLY(menuDSN):
 
 #------------API---------------------
 
-def OwnNodeMinerControl(menuMin):
+def OwnNodeMiner(menuMin):
     if menuMin in ["A", "a"]:
         OwnNodeMinerComputer()
     elif menuMin in ["B", "b"]:
@@ -5801,7 +5801,7 @@ def OwnNodeMinerControl(menuMin):
     elif menuMin in ["R", "r"]:
         menuSelection()
 
-def OwnNodeMinerControlONCHAIN(menuMin):
+def OwnNodeMinerONCHAIN(menuMin):
     if menuMin in ["A", "a"]:
         OwnNodeMinerComputer()
     elif menuMin in ["B", "b"]:
