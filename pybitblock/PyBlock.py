@@ -1531,7 +1531,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \n\n\x1b[?25h""".format(n,d['blocks'], version, checkupdate()))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
-def OwnNodeMiner():
+def OwnNodeMiner(menuMin):
     clear()
     blogo()
     sysinfo()
@@ -1570,6 +1570,29 @@ def OwnNodeMiner():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
     OwnNodeMinerControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def OwnNodeMinerONCHAIN(menuMin):
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    #lndconnectexec()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    b = json.loads(a)
+    d = b
+
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Computer Miner
+    \033[1;32;40mB.\033[0;37;40m Reaspberry Miner
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, checkupdate()))
+    OwnNodeMinerControlONCHAIN(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def walletmenuLOCALOnchainONLY():
     clear()
@@ -5771,6 +5794,14 @@ def menuDesignOnchainONLY(menuDSN):
 #------------API---------------------
 
 def OwnNodeMinerControl(menuMin):
+    if menuMin in ["A", "a"]:
+        OwnNodeMinerComputer()
+    elif menuMin in ["B", "b"]:
+        OwnNodeMinerRaspberry()
+    elif menuMin in ["R", "r"]:
+        menuSelection()
+
+def OwnNodeMinerControlONCHAIN(menuMin):
     if menuMin in ["A", "a"]:
         OwnNodeMinerComputer()
     elif menuMin in ["B", "b"]:
