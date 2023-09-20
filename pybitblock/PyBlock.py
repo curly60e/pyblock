@@ -5801,7 +5801,7 @@ def OwnNodeMinerControl(menuMin):
     elif menuMin in ["R", "r"]:
         menuSelection()
 
-def OwnNodeMinerONCHAINControl(menuMino):
+def OwnNodeMinerControlONCHAIN(menuMino):
     if menuMino in ["A", "a"]:
         OwnNodeMinerComputer()
     elif menuMino in ["B", "b"]:
