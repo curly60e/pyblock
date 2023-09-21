@@ -40,7 +40,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.2.2"
+version = "2.2.3"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -976,21 +976,28 @@ def localHalving():
 
 
 def epoch():
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block
-    c = b
-    oneh = 0 + int(c) / 2016
+    while True:
+        try:
+            clear()
+            blogo()
+            bitcoinclient = f'{path["bitcoincli"]} getblockcount'
+            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+            b = block
+            c = b
+            oneh = 0 + int(c) / 2016
 
-    q = """
-    \033[0;37;40m------------------- EPOCH CLOCK -------------------
+            q = """
+            \033[0;37;40m------------------- EPOCH CLOCK -------------------
 
-            Epoch {} Status {}
+                    Epoch {} Status {}
 
-    ---------------------------------------------------
-    """.format("0" if int(c) == 6930000 else oneh,"\033[1;32;40mON\033[0;37;40m")
-    print(q)
-    input("\nContinue...")
+            ---------------------------------------------------
+            """.format("0" if int(c) == 6930000 else oneh,"\033[1;32;40mON\033[0;37;40m")
+            print(q)
+            t.sleep(2)
+        except:
+            menuSelection()
+            #input("\nContinue...")
 
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
