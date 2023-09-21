@@ -1335,7 +1335,7 @@ def callGitUTXOracle():
         if os.path.isdir ('utxoracle'):
             print("...Reading UTXOSet...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir utxoracle && cd utxoracle && wget https://utxo.live/oracle/UTXOracle.py")
+            os.system("mkdir utxoracle && cd utxoracle && wget https://raw.githubusercontent.com/Unbesteveable/UTXOracle/main/UTXOracle.py")
         clear()
         blogo()
         print(output)
