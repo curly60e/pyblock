@@ -3862,22 +3862,20 @@ def callGitBpytop():
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
+        conn = """curl -s 'https://utxo.live/oracle/' | html2text | grep -E "Date" -A 77 | grep -v "Date""""
+        a = os.popen(conn).read()
         clear()
         blogo()
+        closed()
         output = render(
-            "UTXORACLE", colors=['yellow'], align='left', font='tiny'
+            "utxoracle", colors=['yellow'], align='left', font='tiny'
         )
-        if os.path.isdir ('utxoracle'):
-            print("...Reading UTXOSet...")
-        else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir utxoracle && cd utxoracle && wget https://utxo.live/oracle/UTXOracle.py")
-        clear()
-        blogo()
+
         print(output)
-        os.system(f"cd utxoracle && python3 UTXOracle.py")
+        print(a)
         input("\a\nContinue...")
     except:
-        menuSelection()
+        pass
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
