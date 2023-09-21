@@ -980,6 +980,8 @@ def epoch():
         try:
             clear()
             blogo()
+            output = render("EPOCH", colors=['yellow'], align='left', font='tiny')
+            print(output)
             bitcoinclient = f'{path["bitcoincli"]} getblockcount'
             block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
             b = block
