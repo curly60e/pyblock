@@ -1315,7 +1315,25 @@ def callGitBpytop():
         git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
         os.system(git)
     os.system("cd bpytop && sudo make install && bpytop")
-
+#---------------------------------UTXOracle----------------------------------
+def callGitUTXOracle():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "UTXORACLE", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('utxoracle'):
+            print("...Reading UTXOSet...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir utxoracle && cd utxoracle && wget https://utxo.live/oracle/UTXOracle.py")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd utxoracle && python3 UTXOracle.py")
+        input("\a\nContinue...")
+    except:
+        menuSelection()
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
     clear()
@@ -1994,6 +2012,7 @@ def APIMenuLOCAL():
     \033[1;32;40mN.\033[0;37;40m Nostr        FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool FREE
     \033[1;32;40mT.\033[0;37;40m TinySeed     FREE
+    \033[1;32;40mU.\033[0;37;40m UTXOracle    FREE
     \033[1;32;40mW.\033[0;37;40m CKPool       FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
@@ -2043,6 +2062,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mN.\033[0;37;40m Nostr         FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
     \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
+    \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
     \033[1;32;40mW.\033[0;37;40m CKPool        FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
@@ -6813,6 +6833,8 @@ def platfformsLOCALcontrol(platf):
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
         bip39convert()
+    elif platf in ["U", "u"]:
+        callGitUTXOracle()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
@@ -6853,6 +6875,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
         bip39convert()
+    elif platf in ["U", "u"]:
+        callGitUTXOracle()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
