@@ -3862,7 +3862,7 @@ def callGitBpytop():
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
-        conn = """curl -s 'https://utxo.live/oracle/' | html2text | grep -E "Date" -A 77 | grep -v "Date" """"
+        conn = """curl -s 'https://utxo.live/oracle/' | html2text | grep -E "Date" -A 77 | grep -v "Date" """
         a = os.popen(conn).read()
         clear()
         blogo()
