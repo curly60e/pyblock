@@ -3728,7 +3728,7 @@ def callGitNostrLinTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_amd64 -k {responseC} -l")
     except:
         menuSelection()
-        
+
 def callGitNostrLinarmTerminal():
     try:
         clear()
@@ -3747,7 +3747,7 @@ def callGitNostrLinarmTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_arm64 -k {responseC} -l")
     except:
         menuSelection()
-        
+
 def callGitNostrMacTerminal():
     try:
         clear()
@@ -3786,7 +3786,7 @@ def callGitNostrMacarmTerminal():
         os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -l")
     except:
         menuSelection()
-        
+
 def callGitNostrWinTerminal():
     try:
         clear()
@@ -3825,7 +3825,7 @@ def callGitNostrSeedTerminal():
         input("\a\nContinue...")
     except:
         menuSelection()
-        
+
 def callGitNostrQRSeedTerminal():
     try:
         clear()
@@ -3845,7 +3845,7 @@ def callGitNostrQRSeedTerminal():
         input("\a\nContinue...")
     except:
         menuSelection()
-        
+
 def callGitBija():
     if not os.path.isdir('bija'):
         git = "git clone --recurse-submodules https://github.com/BrightonBTC/bija"
@@ -3859,7 +3859,7 @@ def callGitBpytop():
         git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
         os.system(git)
     os.system("cd bpytop && sudo make install && bpytop")
-        
+
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
@@ -3925,7 +3925,7 @@ def MainMenuCROPPED(): #Main Menu
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
     \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCAL():
@@ -3963,7 +3963,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mPPC.\033[0;37;40m PyBLOCK PooL Computer
     \u001b[38;5;202mPPR.\033[0;37;40m PyBLOCK PooL Raspberry
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def bitcoincoremenuLOCALOPRETURN():
@@ -3986,7 +3986,7 @@ def bitcoincoremenuLOCALOPRETURN():
     \u001b[38;5;202mB.\033[0;37;40m View OP_RETURN
     \u001b[38;5;202mC.\033[0;37;40m View Decoded Coinbase
     \u001b[33;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     bitcoincoremenuLOCALcontrolO(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def lightningnetworkLOCAL():
@@ -4026,7 +4026,7 @@ def lightningnetworkLOCAL():
     \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate(), lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
+    \n\n\x1b[?25h""".format(n,b, version , lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def chatConn():
@@ -4049,7 +4049,7 @@ def chatConn():
     \u001b[38;5;202mB.\033[0;37;40m Close
     \u001b[38;5;202mC.\033[0;37;40m Hidden
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     chatConnA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATA():
@@ -4073,7 +4073,7 @@ def pyCHATA():
     \u001b[38;5;202mB.\033[0;37;40m Read
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     chatConnB(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATB():
@@ -4097,7 +4097,7 @@ def pyCHATB():
     \u001b[38;5;202mB.\033[0;37;40m Read
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     chatConnC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def pyCHATC():
@@ -4121,7 +4121,7 @@ def pyCHATC():
     \u001b[38;5;202mB.\033[0;37;40m Read
     \u001b[38;5;202mC.\033[0;37;40m List
     \u001b[31;1mQ.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     chatConnD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -4159,7 +4159,7 @@ def APIMenuLOCAL():
     \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mW.\033[0;37;40m CKPool        FREE
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate(),lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    \n\n\x1b[?25h""".format(n,b, version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def decodeHex(): # show hex
@@ -4210,7 +4210,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
     \u001b[38;5;202mZ.\033[0;37;40m Bitcoin Strings
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolREMOTEOnchainONLY():
@@ -4235,7 +4235,7 @@ def slushpoolREMOTEOnchainONLY():
     \u001b[38;5;202mD.\033[0;37;40m History
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     slushpoolLOCALOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolLOCALOnchainONLY():
@@ -4260,7 +4260,7 @@ def slushpoolLOCALOnchainONLY():
     \u001b[38;5;202mD.\033[0;37;40m History
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     slushpoolLOCALOnchainONLYMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenu():
@@ -4286,7 +4286,7 @@ def runTheNumbersMenu():
     \033[1;32;40mE.\033[0;37;40m Missing Transactions
     \033[1;32;40mU.\033[0;37;40m Bitcoin Unspendable
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def runTheNumbersMenuConn():
@@ -4312,7 +4312,7 @@ def runTheNumbersMenuConn():
     \033[1;32;40mE.\033[0;37;40m Missing Transactions
     \033[1;32;40mU.\033[0;37;40m Bitcoin Unspendable
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def weatherMenuOnchainONLY():
@@ -4334,7 +4334,7 @@ def weatherMenuOnchainONLY():
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuWeatherOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def weatherMenu():
@@ -4356,7 +4356,7 @@ def weatherMenu():
     \033[1;32;40mA.\033[0;37;40m Version 1
     \033[1;32;40mB.\033[0;37;40m Version 2
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     menuWeather(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dnt(): # Donation selection menu
@@ -4378,7 +4378,7 @@ def dnt(): # Donation selection menu
     \u001b[38;5;15mA.\033[0;37;40m Developers Donation
     \u001b[38;5;15mB.\033[0;37;40m Testers Donation
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     menuC(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntOnchainONLY(): # Donation selection menu
@@ -4400,7 +4400,7 @@ def dntOnchainONLY(): # Donation selection menu
     \u001b[38;5;15mA.\033[0;37;40m Developers Donation
     \u001b[38;5;15mB.\033[0;37;40m Testers Donation
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     menuCOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -4425,7 +4425,7 @@ def dntDev(): # Dev Donation Menu
     \u001b[38;5;202mB.\033[0;37;40m Bitcoin Address
     \u001b[33;1mC.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     menuE(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntDevOnchainONLY(): # Dev Donation Menu
@@ -4448,7 +4448,7 @@ def dntDevOnchainONLY(): # Dev Donation Menu
     \u001b[38;5;202mB.\033[0;37;40m Bitcoin Address
     \u001b[33;1mC.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuEOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntTst(): # Tester Donation Menu
@@ -4470,7 +4470,7 @@ def dntTst(): # Tester Donation Menu
     \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
     \u001b[33;1mB.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuF(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def dntTstOnchainONLY(): # Tester Donation Menu
@@ -4492,7 +4492,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
     \u001b[38;5;202mA.\033[0;37;40m Bitcoin Address
     \u001b[33;1mB.\033[0;37;40m Lightning Network
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     menuFOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -4517,7 +4517,7 @@ def satnodeMenu(): # Satnode Menu
     \033[1;32;40mC.\033[0;37;40m Setup
     \033[1;34;40mS.\033[0;37;40m Send a Message to Space
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def satnodeMenuOnchainONLY(): # Satnode Menu
@@ -4541,7 +4541,7 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
     \033[1;32;40mC.\033[0;37;40m Setup
     \033[1;34;40mS.\033[0;37;40m Send a Message to Space
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     menuD(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def rateSX():
@@ -4563,7 +4563,7 @@ def rateSX():
     \033[1;32;40mA.\033[0;37;40m Rate
     \033[1;32;40mB.\033[0;37;40m Chart
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     rateSXMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def rateSXOncainONLY():
@@ -4585,7 +4585,7 @@ def rateSXOncainONLY():
     \033[1;32;40mA.\033[0;37;40m Rate
     \033[1;32;40mB.\033[0;37;40m Chart
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version ))
     rateSXMenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def mempoolmenu():
@@ -4607,7 +4607,7 @@ def mempoolmenu():
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def mempoolmenuOnchainONLY():
@@ -4629,7 +4629,7 @@ def mempoolmenuOnchainONLY():
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     mempoolmenuSOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 
@@ -4663,7 +4663,7 @@ def APILnbit():
     \033[1;32;40mF.\033[0;37;40m Create LNURL
     \033[1;32;40mG.\033[0;37;40m List LNURL
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
     menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnbitOnchainONLY():
@@ -4696,7 +4696,7 @@ def APILnbitOnchainONLY():
     \033[1;32;40mF.\033[0;37;40m Create LNURL
     \033[1;32;40mG.\033[0;37;40m List LNURL
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n, b, version, bitLN['NN'] ))
     menuLNBPIOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnPay():
@@ -4727,7 +4727,7 @@ def APILnPay():
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
     menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APILnPayOnchainONLY():
@@ -4758,7 +4758,7 @@ def APILnPayOnchainONLY():
     \033[1;32;40mD.\033[0;37;40m List Invoices
     \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
     menuLNPAYOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNode():
@@ -4789,7 +4789,7 @@ def APIOpenNode():
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;32;40mS.\033[0;37;40m Status
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
     menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APIOpenNodeOnchainONLY():
@@ -4820,7 +4820,7 @@ def APIOpenNodeOnchainONLY():
     \033[1;32;40mD.\033[0;37;40m List Payments
     \033[1;32;40mS.\033[0;37;40m Status
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'], checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
     menuOpenNodeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITippinMe():
@@ -4843,7 +4843,7 @@ def APITippinMe():
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuTippinMe(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITippinMeOnchainONLY():
@@ -4866,7 +4866,7 @@ def APITippinMeOnchainONLY():
 
     \033[1;32;40mA.\033[0;37;40m New Invoice
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuTippinMeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITallyCo():
@@ -4890,7 +4890,7 @@ def APITallyCo():
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuTallyCo(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def APITallyCoOnchainONLY():
@@ -4914,7 +4914,7 @@ def APITallyCoOnchainONLY():
     \033[1;32;40mA.\033[0;37;40m Get Payment
     \033[1;32;40mB.\033[0;37;40m Tip User
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuTallyCoOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 #-------------------------------- SETTINGS -----------------------------------------------
 
@@ -4939,7 +4939,7 @@ def settings4Local():
     \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
     \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuSettingsLocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designQ():
@@ -4971,7 +4971,7 @@ def designQ():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuDesign(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def designC():
@@ -5003,7 +5003,7 @@ def designC():
     \033[1;31;40mK.\033[0;37;40m Simple 3D
     \033[1;31;40mL.\033[0;37;40m Huge
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuDesignClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colors():
@@ -5026,7 +5026,7 @@ def colors():
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;31;40mC.\033[0;37;40m Rainbow
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColors(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsC():
@@ -5048,7 +5048,7 @@ def colorsC():
     \033[1;32;40mA.\033[0;37;40m Front Color
     \033[1;31;40mB.\033[0;37;40m Back Color
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColorsClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFront():
@@ -5077,7 +5077,7 @@ def colorsSelectFront():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColorsSelectFront(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectFrontClock():
@@ -5106,7 +5106,7 @@ def colorsSelectFrontClock():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColorsSelectFrontClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBack():
@@ -5135,7 +5135,7 @@ def colorsSelectBack():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColorsSelectBack(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectBackClock():
@@ -5164,7 +5164,7 @@ def colorsSelectBackClock():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n ,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n ,b, version ))
     menuColorsSelectBackClock(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbow():
@@ -5186,7 +5186,7 @@ def colorsSelectRainbow():
     \033[1;32;40mA.\033[0;37;40m Start Color
     \033[1;31;40mB.\033[0;37;40m End Color
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColorsSelectRainbow(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowStart():
@@ -5216,7 +5216,7 @@ def colorsSelectRainbowStart():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColorsSelectRainbowStart(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def colorsSelectRainbowEnd():
@@ -5245,7 +5245,7 @@ def colorsSelectRainbowEnd():
     \033[1;31;40mH.\033[0;37;40m White
     \033[1;31;40mI.\033[0;37;40m Gray
     \033[1;36;40mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def nostrConn():
@@ -5273,7 +5273,7 @@ def nostrConn():
     \033[1;32;40mW.\033[0;37;40m QR
     \033[1;32;40mZ.\033[0;37;40m Bija
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, checkupdate()))
+    \n\n\x1b[?25h""".format(n,b, version ))
     nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
@@ -5524,18 +5524,6 @@ def aaccPPiTallyCo():
         APITallyCo()
     else:
         createFileConnTallyCo()
-
-def checkupdate():
-    r = requests.get('https://raw.githubusercontent.com/curly60e/pyblock/master/ver.txt')
-    r.headers['Content-Type']
-    n = r.text
-    di = json.loads(n)
-    if di['version'] == version:
-        q = print(" ")
-    else:
-        print("\n    ------------------------------------------")
-        q = print("    \033[1;31;40mNew version available\033[0;37;40m > Exit and $pip3 install pybitblock -U ")
-        print("    ------------------------------------------")
 
 def testlogo():
     output = render('PyBLOCK', colors=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -7539,7 +7527,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         nostrConn()
     elif platf in ["P", "p"]:
         kanopoolpoolLOCALOnchainONLY()
-    elif platf in ["S", "s"]: 
+    elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
         bip39convert()
@@ -7893,11 +7881,11 @@ def nostrmenu(menunos):
     if menunos in ["A", "a"]:
         callGitNostrLinTerminal()
     elif menunos in ["B", "b"]:
-        callGitNostrLinarmTerminal()    
+        callGitNostrLinarmTerminal()
     elif menunos in ["C", "c"]:
         callGitNostrMacTerminal()
     elif menunos in ["D", "d"]:
-        nostrConn()    
+        nostrConn()
     elif menunos in ["E", "e"]:
         callGitNostrWinTerminal()
     elif menunos in ["S", "s"]:
@@ -7905,7 +7893,7 @@ def nostrmenu(menunos):
     elif menunos in ["W", "w"]:
         callGitNostrQRSeedTerminal()
     elif menunos in ["Z", "z"]:
-        callGitBija()      
+        callGitBija()
 
 def testClockRemote():
     b = rpc('getblockcount')
