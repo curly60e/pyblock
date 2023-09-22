@@ -364,6 +364,9 @@ def mtclock():
         outputT = render(f"{a} O'Clock", colors=['green'], align='center', font='tiny')
         print(output)
         print(outputT)
+        clear()
+        close()
+        mtConn()
     except:
         pass
 
