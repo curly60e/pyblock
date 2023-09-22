@@ -649,8 +649,9 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
             blogo()
             closed()
             output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-            outputT = render(f"{a} O'Clock", colors=['green'], align='center', font='tiny')
+            outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
             print(output)
+            print(a)
             print(outputT)
             clear()
             close()
@@ -660,12 +661,15 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
 
 def mtclock():
     try:
+        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C '.[]' | head -n 1 """
+        a = os.popen(conn).read()
         clear()
         blogo()
         closed()
         output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
         outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
         print(output)
+        print(a)
         print(outputT)
     except:
         pass
