@@ -651,7 +651,7 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
             e = int(s['usd'])
             n = e
             output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-            sn = render(f"{e}", colors=['green'], align='center', font='tiny')
+            sn = render(f"{e}", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
             print(output)
             print(sn)
@@ -672,7 +672,7 @@ def mtclock():
         e = int(s['usd'])
         n = e
         output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-        sn = render(f"{e}", colors=['green'], align='center', font='tiny')
+        sn = render(f"{e}", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
         outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
         print(output)
         print(sn)
