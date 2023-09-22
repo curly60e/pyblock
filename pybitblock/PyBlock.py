@@ -1595,7 +1595,7 @@ def OwnNodeMiner(menuMin):
     \033[1;32;40mA.\033[0;37;40m Computer Miner
     \033[1;32;40mB.\033[0;37;40m Raspberry Miner
     \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ))
     OwnNodeMinerControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def OwnNodeMinerONCHAIN():
