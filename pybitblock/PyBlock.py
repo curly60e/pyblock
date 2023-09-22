@@ -1407,7 +1407,7 @@ def MainMenuLOCAL(): #Main Menu
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
     \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ()))
+    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ))
     mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def MainMenuLOCALChainONLY(): #Main Menu
