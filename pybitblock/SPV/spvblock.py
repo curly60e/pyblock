@@ -643,7 +643,7 @@ def pgpConn():
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
+            conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C '.[]' | head -n 1"""
             a = os.popen(conn).read()
             clear()
             blogo()
@@ -660,7 +660,7 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
 
 def mtclock():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C | grep -E "usd" | awk '{print $2}' | tr -d '"' | tr -d ','"""
+        conn = """curl -s https://bitcoinexplorer.org/api/price/sats | jq -C '.[]' | head -n 1"""
         a = os.popen(conn).read()
         clear()
         blogo()
@@ -669,9 +669,6 @@ def mtclock():
         outputT = render(f"{a} O'Clock", colors=['green'], align='center', font='tiny')
         print(output)
         print(outputT)
-        clear()
-        close()
-        mtConn()
     except:
         pass
 #-----------------------------END MT--------------------------------
