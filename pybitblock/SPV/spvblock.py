@@ -643,13 +643,15 @@ def pgpConn():
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            conn = """curl -s https://bitcoinexplorer.org/api/price/sats  | html2text | jq -C '.[]' | head -n 1 """
-            a = os.popen(conn).read()
-            clear()
-            blogo()
-            closed()
+            r = requests.get("https://bitcoinexplorer.org/api/price/sats")
+            r.json()["usd"]
+            n = r.text
+            di = json.loads(n)
+            s = di
+            e = int(s['usd'])
+            n = e
             output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-            sn = render(f"{a}", colors=['green'], align='center', font='tiny')
+            sn = render(f"{e}", colors=['green'], align='center', font='tiny')
             outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
             print(output)
             print(sn)
@@ -662,13 +664,15 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
 
 def mtclock():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/price/sats  | html2text | jq -C '.[]' | head -n 1 """
-        a = os.popen(conn).read()
-        clear()
-        blogo()
-        closed()
+        r = requests.get("https://bitcoinexplorer.org/api/price/sats")
+        r.json()["usd"]
+        n = r.text
+        di = json.loads(n)
+        s = di
+        e = int(s['usd'])
+        n = e
         output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-        sn = render(f"{a}", colors=['green'], align='center', font='tiny')
+        sn = render(f"{e}", colors=['green'], align='center', font='tiny')
         outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
         print(output)
         print(sn)
