@@ -998,8 +998,7 @@ def epoch():
             print(q)
             t.sleep(2)
         except:
-            menuSelection()
-            #input("\nContinue...")
+            break
 
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
