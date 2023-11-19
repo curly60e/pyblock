@@ -7123,7 +7123,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
-        miscellaneousLOCALOnchainONLY()
+        miscellaneousLOCALmenuOnchainONLY(misce)
     elif bcore in ["I", "i"]:
         callColdCore()
     elif bcore in ["J", "j"]:
