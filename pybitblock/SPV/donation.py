@@ -48,7 +48,7 @@ def donationLN():
     )
     amt = input("Amount: ")
     curl = (
-        'curl -X POST https://lnbits.com/api/v1/payments -d '
+        'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
         + "'{"
         + f""""out": false, "amount": {amt}, "memo": "Donation" """
         + "}'"
@@ -72,7 +72,7 @@ def donationLN():
         dn = str(d['checking_id'])
         t.sleep(10)
         checkcurl = (
-            f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+            f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
             + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
         )
 

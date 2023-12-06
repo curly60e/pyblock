@@ -40,7 +40,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.2.3"
+version = "2.2.4"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -4663,7 +4663,7 @@ def aaccPPiLNBits():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = 'curl -X POST https://legend.lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -4680,7 +4680,7 @@ def aaccPPiLNBits():
                 print("Lightning Invoice: " + c)
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = 'curl -X GET https://legend.lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -4718,7 +4718,7 @@ def aaccPPiLNPay():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = 'curl -X POST https://legend.lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -4735,7 +4735,7 @@ def aaccPPiLNPay():
                 print("Lightning Invoice: " + c)
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = 'curl -X GET https://legend.lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()
@@ -4774,7 +4774,7 @@ def aaccPPiOpenNode():
             border=4,
             )
             bitLN['NN'] = randrange(10000000)
-            curl = 'curl -X POST https://lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
+            curl = 'curl -X POST https://legend.lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             sh = os.popen(curl).read()
             clear()
             blogo()
@@ -4791,7 +4791,7 @@ def aaccPPiOpenNode():
                 print("Lightning Invoice: " + c)
                 dn = str(d['checking_id'])
                 t.sleep(10)
-                checkcurl = 'curl -X GET https://lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
+                checkcurl = 'curl -X GET https://legend.lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
                 rsh = os.popen(checkcurl).read()
                 clear()
                 blogo()

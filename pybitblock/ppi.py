@@ -938,7 +938,7 @@ def lnbitCreateNewInvoice():
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
         curl = (
-            'curl -X POST https://lnbits.com/api/v1/payments -d '
+            'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
             + "'{"
             + f""""out": false, "amount": {amt}, "memo": "{memo} -PyBLOCK" """
             + "}'"
@@ -975,7 +975,7 @@ def lnbitCreateNewInvoice():
                 t.sleep(10)
                 dn = str(d['checking_id'])
                 checkcurl = (
-                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                    f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
                     + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
                 )
 
@@ -1001,7 +1001,7 @@ def lnbitPayInvoice():
     a = loadFileConnLNBits(['admin_key'])
     b = str(a['admin_key'])
     curl = (
-        'curl -X POST https://lnbits.com/api/v1/payments -d '
+        'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
         + "'{"
         + f""""out": true, "bolt11": "{bolt}" """
         + "}'"
@@ -1017,7 +1017,7 @@ def lnbitPayInvoice():
         b = str(a['invoice_read_key'])
         while True:
             checkcurl = (
-                f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
+                f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
                 + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
             )
 
@@ -1051,7 +1051,7 @@ def lnbitCreatePayWall():
                 remember = "false"
             b = str(a['admin_key'])
             curl = (
-                'curl -X POST https://lnbits.com/paywall/api/v1/paywalls -d '
+                'curl -X POST https://legend.lnbits.com/paywall/api/v1/paywalls -d '
                 + "'{"
                 + f""""url": "{url}", "memo": "{memo}", "description": "{desc}", "amount": {amt}, "remembers": {remember} """
                 + "}'"
@@ -1068,7 +1068,7 @@ def lnbitCreatePayWall():
             clear()
             aa = loadFileConnLNBits(['invoice_read_key'])
             bb = str(a['invoice_read_key'])
-            checkcurl = f"""curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H "X-Api-Key: {bb}" """
+            checkcurl = f"""curl -X GET https://.legend.lnbits.com/paywall/api/v1/paywalls -H "X-Api-Key: {bb}" """
 
 
             sh = os.popen(checkcurl).read()
@@ -1122,7 +1122,7 @@ def lnbitListPawWall():
     a = loadFileConnLNBits(['invoice_read_key'])
     b = str(a['invoice_read_key'])
     checkcurl = (
-        'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H'
+        'curl -X GET https://legend.lnbits.com/paywall/api/v1/paywalls -H'
         + f""" "X-Api-Key: {b}" """
     )
 
@@ -1168,7 +1168,7 @@ def lnbitDeletePayWall():
             a = loadFileConnLNBits(['invoice_read_key'])
             b = str(a['invoice_read_key'])
             checkcurl = (
-                'curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H'
+                'curl -X GET https://legend.lnbits.com/paywall/api/v1/paywalls -H'
                 + f""" "X-Api-Key: {b}" """
             )
 
@@ -1211,7 +1211,7 @@ def lnbitDeletePayWall():
             b = str(a['admin_key'])
             id = input("Insert PayWall ID: ")
             curl = (
-                f"curl -X DELETE https://lnbits.com/paywall/api/v1/paywalls/{id}"
+                f"curl -X DELETE https://legend.lnbits.com/paywall/api/v1/paywalls/{id}"
                 + f""" -H "X-Api-Key: {b}" """
             )
 
@@ -1242,7 +1242,7 @@ def lnbitsLNURLw():
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
             curl = (
-                'curl -X POST https://lnbits.com/withdraw/api/v1/links -d '
+                'curl -X POST https://legend.lnbits.com/withdraw/api/v1/links -d '
                 + """'{"title":"""
                 + f'"{title}", "min_withdrawable": {minwith}, "max_withdrawable": {maxwith}, "uses": {usesw}, "wait_time": {waittime}, "is_unique": {isunique}'
                 + "}'"
@@ -1258,7 +1258,7 @@ def lnbitsLNURLw():
             t.sleep(2)
             clear()
             while True:
-                checkcurl = f'curl -X GET https://lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
+                checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
 
                 sh = os.popen(checkcurl).read()
                 clear()
@@ -1298,7 +1298,7 @@ def lnbitsLNURLwList():
         while True:
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            checkcurl = f'curl -X GET https://lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
+            checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
 
             sh = os.popen(checkcurl).read()
             clear()
