@@ -997,7 +997,7 @@ def lnbitPayInvoice():
     a = loadFileConnLNBits(['admin_key'])
     b = str(a['admin_key'])
     curl = (
-        "curl -X POST https://legend.lnbits.com/api/v1/payments -d "+ "'{"+ "out": true, "bolt11:" + f"{bolt}"""+ "}'"+ f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """,
+        "curl -X POST https://legend.lnbits.com/api/v1/payments -d "+ "'{out: true, bolt11:" + f"{bolt}"""+ "}'"+ f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """,
     )
 
     try:
