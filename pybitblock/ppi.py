@@ -997,7 +997,7 @@ def lnbitPayInvoice():
     a = loadFileConnLNBits(['admin_key'])
     b = str(a['admin_key'])
     curl = (
-        'curl -X POST https://legend.lnbits.com/api/v1/payments -d '+ "'{"+ f""""out": true, "bolt11": "{bolt}" """"""+ "}'"+ f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """,
+        "curl -X POST https://legend.lnbits.com/api/v1/payments -d "+ "'{"+ "out": true, "bolt11:" + f"{bolt}"""+ "}'"+ f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """,
     )
 
     try:
@@ -1043,7 +1043,7 @@ def lnbitCreatePayWall():
                 remember = "false"
             b = str(a['admin_key'])
             curl = (
-                'curl -X POST https://legend.lnbits.com/paywall/api/v1/paywalls -d '+ "'{"+ f""""url": "{url}", "memo": "{memo}", "description": "{desc}", "amount": {amt}, "remembers": {remember} """"""+ "}'"+ f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """,
+                "curl -X POST https://legend.lnbits.com/paywall/api/v1/paywalls -d "+ "'{"+ "url:" + f"{url}", "memo:"+ f"{memo},"+ "description:"+ f"{desc}," +"amount:"+ f"{amt}," + "remembers:" + f"{remember}" """"""+ "}'"+ f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """,
             )
 
             sh = os.popen(curl).read()
