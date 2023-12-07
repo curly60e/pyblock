@@ -8,7 +8,7 @@ import pickle
 import os
 import os.path
 import qrcode
-import lnpay_py
+#import lnpay_py
 import requests
 import xmltodict
 import time as t
