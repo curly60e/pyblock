@@ -938,11 +938,7 @@ def lnbitCreateNewInvoice():
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
         curl = (
-            'curl -X POST https://legend.lnbits.com/api/v1/payments -d ',
-            + "'{",
-            + f""""out": false, "amount": {amt}, "memo": "{memo} -PyBLOCK" """""",
-            + "}'"
-            + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json" """,
+            "curl -X POST https://legend.lnbits.com/api/v1/payments -d " + "'{" + f"""out: false, "amount": {amt}, "memo": "{memo} -PyBLOCK"""} + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json""",
         )
 
         sh = os.popen(curl).read()
