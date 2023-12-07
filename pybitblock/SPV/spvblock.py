@@ -31,7 +31,6 @@ from termcolor import colored, cprint
 from terminal_matrix.matrix import *
 from PIL import Image
 from robohash import Robohash
-from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 from binascii import unhexlify
 from embit import bip39
