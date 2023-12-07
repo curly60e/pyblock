@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pybitblock"
-version = "2.2.4"
+version = "2.2.6"
 description = "Python Bitcoin block dashboard, transactions, send message to Space and more"
 license="MIT"
 authors = ["curly60e <curly60e@piserver.xyz>", "SatoshiNakamotoBitcoin"]
@@ -29,7 +29,7 @@ protobuf = "3.18.3"
 six = "1.15.0"
 robohash = "1.1"
 Pillow = "8.4"
-numpy = "1.23.0"
+numpy = "1.26.2"
 googleapis-common-protos = "1.52.0"
 pdfminer = "20191125"
 typer = "0.4.0"
