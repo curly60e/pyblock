@@ -18,7 +18,7 @@ from cfonts import render, say
 from nodeconnection import *
 from pblogo import *
 from logos import *
-from lnpay_py.wallet import LNPayWallet
+#from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 def clear(): # clear the screen
@@ -940,7 +940,7 @@ def lnbitCreateNewInvoice():
         curl = (
             'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
             + "'{"
-            + f""""out": false, "amount": {amt}, "memo": "{memo} -PyBLOCK" """
+            + f""""out": false, "amount": {amt}, "memo": "{memo} -PyBLOCK" """"""
             + "}'"
             + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json" """
         )
@@ -1003,7 +1003,7 @@ def lnbitPayInvoice():
     curl = (
         'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
         + "'{"
-        + f""""out": true, "bolt11": "{bolt}" """
+        + f""""out": true, "bolt11": "{bolt}" """"""
         + "}'"
         + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
     )
@@ -1053,7 +1053,7 @@ def lnbitCreatePayWall():
             curl = (
                 'curl -X POST https://legend.lnbits.com/paywall/api/v1/paywalls -d '
                 + "'{"
-                + f""""url": "{url}", "memo": "{memo}", "description": "{desc}", "amount": {amt}, "remembers": {remember} """
+                + f""""url": "{url}", "memo": "{memo}", "description": "{desc}", "amount": {amt}, "remembers": {remember} """"""
                 + "}'"
                 + f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """
             )
@@ -1369,221 +1369,6 @@ def createFileConnLNPay():
     lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
     pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
 
-def lnpayGetBalance():
-    a = loadFileConnLNPay(['key'])
-    b = str(a['key'])
-    n = loadFileConnLNPay(['wallet_key_id'])
-    q = str(n['wallet_key_id'])
-    lnpay_py.initialize(b)
-    clear()
-    blogo()
-    my_wallet = LNPayWallet(q)
-    info = my_wallet.get_info()
-    print("\n---------------------------------------------------------------------------------------------------")
-    print("""
-    \tLNPAY WALLET BALANCE
-
-    Wallet ID: {}
-    Wallet Name: {}
-    Balance: {} sats
-    """.format(info['id'], info['user_label'], info['balance']))
-    print("---------------------------------------------------------------------------------------------------\n")
-    input("\nContinue... ")
-
-def lnpayCreateInvoice():
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    a = loadFileConnLNPay(['key'])
-    b = str(a['key'])
-    n = loadFileConnLNPay(['wallet_key_id'])
-    q = str(n['wallet_key_id'])
-    lnpay_py.initialize(b)
-    clear()
-    blogo()
-    my_wallet = LNPayWallet(q)
-    amt = input("\nAmount in Sats: ")
-    memo = input("Memo: ")
-    invoice_params = {'num_satoshis': amt, 'memo': f'{memo} -PyBLOCK'}
-    try:
-        invoice = my_wallet.create_invoice(invoice_params)
-        clear()
-        blogo()
-        node_not = input("Do you want to pay this invoice with your node? Y/n: ")
-        while True:
-            if node_not in ["Y", "y"]:
-                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-                if lndconnectload['ip_port']:
-                    print("\nInvoice: " + invoice['payment_request'] + "\n")
-                    payinvoice()
-                elif lndconnectload['ln']:
-                    print("\nInvoice: " + invoice['payment_request'] + "\n")
-                    localpayinvoice()
-            elif node_not in ["N", "n"]:
-                print("\033[1;30;47m")
-                qr.add_data(invoice['payment_request'])
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print(f'Lightning Invoice: {invoice["payment_request"]}')
-                t.sleep(10)
-                curl = f'curl -u {b}: https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis'
-
-                rsh = os.popen(curl).read()
-                clear()
-                blogo()
-                nn = str(rsh)
-                dd = json.loads(nn)
-                db = dd['settled']
-                if db != 1:
-                    continue
-                clear()
-                blogo()
-                tick()
-                t.sleep(2)
-                break
-    except:
-        pass
-
-def lnpayGetTransactions():
-    qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-    )
-    a = loadFileConnLNPay(['key'])
-    b = str(a['key'])
-    n = loadFileConnLNPay(['wallet_key_id'])
-    q = str(n['wallet_key_id'])
-    lnpay_py.initialize(b)
-    clear()
-    blogo()
-    my_wallet = LNPayWallet(q)
-
-    transactions = my_wallet.get_transactions()
-    while True:
-        try:
-            print("\n\tLNPAY LIST PAYMENTS\n")
-            for transaction_ in transactions:
-                s = transaction_
-                q = s['lnTx']
-
-                print(f'ID: {s["id"]}')
-            nd = input("\nSelect ID: ")
-            for transaction in transactions:
-                s = transaction
-                nn = s['id']
-                if nd == nn:
-                    print("\n----------------------------------------------------------------------------------------------------")
-                    nnn = s['lnTx']
-                    print("""
-                    \tLNPAY LIST PAYMENT DECODED
-
-                    ID: {}
-                    Amount: {} sats
-                    Memo: {}
-                    Invoice: {}
-                    RHash: {}
-                    """.format(nnn['id'], nnn['num_satoshis'], nnn['memo'], nnn['payment_request'], nnn['r_hash_decoded']))
-                    print("----------------------------------------------------------------------------------------------------\n")
-                    print("\033[1;30;47m")
-                    qr.add_data(nnn['payment_request'])
-                    qr.print_ascii()
-                    print("\033[0;37;40m")
-                    qr.clear()
-            input("Continue...")
-            clear()
-            blogo()
-        except:
-            break
-    clear()
-    blogo()
-
-def lnpayPayInvoice():
-    a = loadFileConnLNPay(['key'])
-    b = str(a['key'])
-    n = loadFileConnLNPay(['wallet_key_id'])
-    q = str(n['wallet_key_id'])
-    lnpay_py.initialize(b)
-    clear()
-    blogo()
-    my_wallet = LNPayWallet(q)
-    try:
-        print("\n\tLNPAY PAY INVOICE\n")
-        inv = input("\nInvoice: ")
-        curl = f'curl -u{b}: https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}'
-
-        clear()
-        rsh = os.popen(curl).read()
-        nn = str(rsh)
-        dd = json.loads(nn)
-        clear()
-        blogo()
-        print("\n----------------------------------------------------------------------------------------------------")
-        print("""
-        \tLNPAY INVOICE DECODED
-
-        Destination: {}
-        Amount: {} sats
-        Memo: {}
-        Invoice: {}
-        """.format(dd['destination'], dd['num_satoshis'], dd['description'], inv))
-        print("----------------------------------------------------------------------------------------------------\n")
-        print("<<< Cancel Control + C")
-        input("\nEnter to Continue... ")
-        invoice_params = {
-            'payment_request': inv
-        }
-        pay_result = my_wallet.pay_invoice(invoice_params)
-    except:
-        pass
-
-def lnpayTransBWallets():
-    a = loadFileConnLNPay(['key'])
-    b = str(a['key'])
-    n = loadFileConnLNPay(['wallet_key_id'])
-    q = str(n['wallet_key_id'])
-    lnpay_py.initialize(b)
-    clear()
-    blogo()
-    print("""\n\tLNPAY TRANSFER BETWEEN WALLETS
-    \nCaution: If you Transfer to another of your LNPay wallets
-    you will only access to your funds via Web.\n""")
-    try:
-        wall = input("Wallet destination ID: ")
-        amt = input("Amount in Sats: ")
-        memo = input("Memo: ")
-        my_wallet = LNPayWallet(q)
-        transfer_params = {
-            'dest_wallet_id': wall,
-            'num_satoshis': amt,
-            'memo': memo
-        }
-        transfer_result = my_wallet.internal_transfer(transfer_params)
-        p = transfer_result['wtx_transfer_in']
-        e = transfer_result['wtx_transfer_out']
-        f = e['wal']
-        v = p['wal']
-        print("\n----------------------------------------------------------------------------------------------------")
-        print("""
-        \tLNPAY TRANSFER BETEWWN WALLETS INFORMATION
-
-        ID: {}
-        Amount: {} sats
-        Memo: {}
-        To Wallet: {}
-        From Wallet: {}
-        """.format(p['id'], p['num_satoshis'], p['user_label'], v['user_label'], f['user_label']))
-        print("----------------------------------------------------------------------------------------------------\n")
-        input("Continue...")
-    except:
-        pass
 
 #-----------------------------END LNPAY--------------------------------
 #-----------------------------OPENNODE--------------------------------
