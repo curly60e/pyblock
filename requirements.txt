@@ -14,7 +14,6 @@ python-gnupg
 requests
 sseclient-py
 urllib3
-lnpay-py
 xmltodict
 python-cfonts
 termcolor
