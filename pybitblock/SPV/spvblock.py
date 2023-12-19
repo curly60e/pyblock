@@ -4239,6 +4239,7 @@ def APIMenuLOCAL():
     \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
     \033[1;32;40mW.\033[0;37;40m CKPool        FREE
+    \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
