@@ -392,6 +392,64 @@ def ckpoolpoolLOCALOnchainONLY():
         except:
             break
 
+def pyblockpoolpoolLOCALOnchainONLY():
+
+    s = ""
+    sq = s
+
+    api = ""
+    try:
+        if os.path.isfile("config/PYBLOCKPOOLAPI.conf"):
+            apiv = pickle.load(open("config/PYBLOCKPOOLAPI.conf", "rb"))
+            api = apiv
+        else:
+            clear()
+            blogo()
+            api = input("Insert PyBLOCK Pool Wallet.Worker: ")
+            pickle.dump(api, open("config/PYBLOCKPOOLAPI.conf", "wb"))
+    except:
+        pass
+
+    while True:
+        try:
+            pyblockpool = f"curl https://pool.pyblock.xyz/users/{api} 2>/dev/null"
+
+
+            b = os.popen(pyblockpool)
+            c = b.read()
+            d = json.loads(c)
+            f = d['worker']
+            e = f[0]
+
+            clear()
+            blogo()
+            print("""\033[A
+
+    --------------------------------------------------------------------------------------------
+
+                        \033[0;37;40mPYBLOCK Pool BTC
+
+                        Username: {}
+                        Hash Rate 1m: {}
+                        Hash Rate 5m: {}
+                        Hash Rate 1h: {}
+                        Hash Rate 1d: {}
+                        Hash Rate 7d: {}
+                        Last Share: \u001b[38;5;27m{}\033[0;37;40m
+                        Shares: {}
+                        Best Share: {}
+                        Best Ever: {}
+                        Workers: {}
+
+    --------------------------------------------------------------------------------------------
+
+            \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
+
+            t.sleep(10)
+
+        except:
+            break
+
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
         try:
@@ -2022,6 +2080,7 @@ def APIMenuLOCAL():
     \033[1;32;40mT.\033[0;37;40m TinySeed     FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle    FREE
     \033[1;32;40mW.\033[0;37;40m CKPool       FREE
+    \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2072,6 +2131,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
     \033[1;32;40mW.\033[0;37;40m CKPool        FREE
+    \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6343,6 +6403,18 @@ def ckpoolREMOTEOnchainONLYMenu(slush):
         blogo()
         getPoolCKCheck()
 
+def pyblockpoolLOCALOnchainONLYMenu(slush):
+    if pyblockpool in ["A", "a"]:
+        clear()
+        blogo()
+        getPoolPYBLOCKCheck()
+
+def pyblockpoolREMOTEOnchainONLYMenu(slush):
+    if pyblockpool in ["A", "a"]:
+        clear()
+        blogo()
+        getPoolPYBLOCKCheck()
+
 def bitcoincoremenuLOCALcontrolA(bcore):
     if bcore in ["A", "a"]:
         while True:
@@ -6845,6 +6917,8 @@ def platfformsLOCALcontrol(platf):
         callGitUTXOracle()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
+    elif platf in ["Z", "z"]:
+        pyblockpoolpoolLOCALOnchainONLY()   
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -6887,6 +6961,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         callGitUTXOracle()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
+    elif platf in ["Z", "z"]:
+        pyblockpoolpoolLOCALOnchainONLY()    
     elif platf in ["R", "r"]:
         menuSelection()
 
@@ -6894,6 +6970,10 @@ def platfformsLOCALcontrolOnchainONLY(platf):
 def ckpool(menuch):
     if menuch in ["A", "a"]:
         ckpool()
+
+def pyblockpool(menuchh):
+    if menuchh in ["A", "a"]:
+        pyblockpool()
 
 
 def nostrmenu(menunos):
