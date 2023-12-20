@@ -4267,7 +4267,7 @@ def decodeHex(): # show hex
     except:
         pass
 
-def miscellaneousLOCAL():
+def miscellaneousLOCALmenu():
     clear()
     blogo()
     sysinfo()
