@@ -4293,7 +4293,7 @@ def miscellaneousLOCALmenu():
     \u001b[38;5;202mZ.\033[0;37;40m Bitcoin Strings
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, b, version ))
-    miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    miscellaneousLOCAL(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolREMOTEOnchainONLY():
     clear()
@@ -7710,7 +7710,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         except:
             pass
     elif bcore in ["E", "e"]:
-        miscellaneousLOCALmenu()
+        miscellaneousLOCAL()
     elif bcore in ["O", "o"]:
         bitcoincoremenuREMOTEOPRETURN()
     elif bcore in ["Z", "z"]:
