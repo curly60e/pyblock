@@ -7121,7 +7121,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
-        miscellaneousLOCALmenuOnchainONLY()
+        miscellaneousLOCALmenu()
     elif bcore in ["I", "i"]:
         callColdCore()
     elif bcore in ["J", "j"]:
@@ -7180,7 +7180,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
-        miscellaneousLOCALmenuOnchainONLY(misce)
+        miscellaneousLOCALmenu(misce)
     elif bcore in ["I", "i"]:
         callColdCore()
     elif bcore in ["J", "j"]:
@@ -7710,7 +7710,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         except:
             pass
     elif bcore in ["E", "e"]:
-        miscellaneousLOCALmenuOnchainONLY()
+        miscellaneousLOCALmenu()
     elif bcore in ["O", "o"]:
         bitcoincoremenuREMOTEOPRETURN()
     elif bcore in ["Z", "z"]:
