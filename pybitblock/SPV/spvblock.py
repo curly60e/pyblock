@@ -4267,7 +4267,7 @@ def decodeHex(): # show hex
     except:
         pass
 
-def miscellaneousLOCALmenu():
+def miscellaneousLOCAL():
     clear()
     blogo()
     sysinfo()
@@ -4293,7 +4293,7 @@ def miscellaneousLOCALmenu():
     \u001b[38;5;202mZ.\033[0;37;40m Bitcoin Strings
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, b, version ))
-    miscellaneousLOCAL(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolREMOTEOnchainONLY():
     clear()
@@ -7121,7 +7121,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
-        miscellaneousLOCALmenu()
+        miscellaneousLOCAL()
     elif bcore in ["I", "i"]:
         callColdCore()
     elif bcore in ["J", "j"]:
@@ -7180,7 +7180,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
-        miscellaneousLOCALmenu(misce)
+        miscellaneousLOCAL(misce)
     elif bcore in ["I", "i"]:
         callColdCore()
     elif bcore in ["J", "j"]:
