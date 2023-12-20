@@ -7710,7 +7710,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         except:
             pass
     elif bcore in ["E", "e"]:
-        miscellaneousLOCAL()
+        miscellaneousLOCALmenuOnchainONLY()
     elif bcore in ["O", "o"]:
         bitcoincoremenuREMOTEOPRETURN()
     elif bcore in ["Z", "z"]:
