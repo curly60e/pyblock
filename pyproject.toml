@@ -9,7 +9,7 @@ repository="https://github.com/curly60e/pyblock"
 homepage="https://github.com/curly60e/pyblock"
 
 [tool.poetry.dependencies]
-python = "3.12"
+python = "3.8"
 art = "5.3"
 qrcode = "7.3.1"
 requests = "2.26.0"
