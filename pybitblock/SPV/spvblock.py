@@ -18,6 +18,7 @@ import requests
 import json
 import simplejson as json
 import numpy as np
+from sha256 import *
 from cfonts import render, say
 from clone import *
 from donation import *
@@ -38,7 +39,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.2.7"
+version = "2.3"
 
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
@@ -3301,7 +3302,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
         except:
             break
-            
+
 def kanopoolpoolLOCALOnchainONLY():
 
     s = ""
@@ -4280,7 +4281,6 @@ def miscellaneousLOCAL():
     b = str(a)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
@@ -4288,9 +4288,9 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mB.\033[0;37;40m System
     \u001b[38;5;202mC.\033[0;37;40m Dates
     \u001b[38;5;202mD.\033[0;37;40m Quotes
+    \u001b[38;5;202mH.\033[0;37;40m SHA256
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
-    \u001b[38;5;202mZ.\033[0;37;40m Bitcoin Strings
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, b, version ))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -7272,6 +7272,10 @@ def miscellaneousLOCALmenu(misce):
         clear()
         blogo()
         quotesConn()
+    elif misce in ["H", "h"]:
+        clear()
+        blogo()
+        ex()
     elif misce in ["P", "p"]:
         clear()
         blogo()
@@ -7321,6 +7325,10 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         clear()
         blogo()
         datesConn()
+    elif misce in ["C", "c"]:
+        clear()
+        blogo()
+        ex()
     elif misce in ["P", "p"]:
         clear()
         blogo()
@@ -7622,7 +7630,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
     elif platf in ["Z", "z"]:
-        pyblockpoolpoolLOCALOnchainONLY()    
+        pyblockpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
         menuSelection()
 
