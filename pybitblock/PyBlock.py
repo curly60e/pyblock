@@ -428,7 +428,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
     --------------------------------------------------------------------------------------------
 
-                        \033[0;37;40mPYBLOCK Pool BTC
+                        \033[0;37;40mPYBLOCK Pool Miner Stats
 
                         Username: {}
                         Hash Rate 1m: {}
