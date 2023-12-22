@@ -38,6 +38,7 @@ html2text = "2020.1.16"
 pdf2text = "1.0.0"
 pdf2txt = "0.7.14"
 embit = "0.6.1"
+requests = "2.31.0"
 
 
 
