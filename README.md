@@ -359,6 +359,12 @@ Note that if you do not find a Block, you get no reward at all with Solo Mining.
 
 ## [Click here for more info](https://t.me/pyblockpool)
 
+## [WEBSITE](https://pool.pyblock.xyz)
+
+<br />
+
+<img src="https://pbs.twimg.com/media/GBF4KIoWAAEYCJ8.jpg" width="50%" />
+
 ## SUPPORT PyBLØCK.
 
 ⚡️ curly60e@zbd.gg ⚡️
