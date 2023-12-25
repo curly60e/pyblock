@@ -3258,7 +3258,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
         else:
             clear()
             blogo()
-            api = input("Insert PyBLOCK Pool Wallet.Worker: ")
+            api = input("Insert your PyBLOCK Pool Wallet: ")
             pickle.dump(api, open("config/PYBLOCKPOOLAPI.conf", "wb"))
     except:
         pass
