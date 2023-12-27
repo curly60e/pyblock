@@ -5,17 +5,9 @@ import time
 import curses
 
 def sha256_hash(input_data):
-    try:
-        clear()
-        blogo()
-        output = render(
-            "sha256", colors=['yellow'], align='left', font='tiny'
-        )
-
-        print(output)
-        sha256 = hashlib.sha256()
-        sha256.update(input_data.encode())
-        return sha256.hexdigest()
+    sha256 = hashlib.sha256()
+    sha256.update(input_data.encode())
+    return sha256.hexdigest()
 
 def binario_de_hexadecimal(hex_string):
     """Convierte una cadena hexadecimal en una cadena binaria."""
@@ -96,6 +88,3 @@ def mainSHA(stdscr):
 def ex():
     # Ejecutar el proceso en un bucle de `curses`
     curses.wrapper(mainSHA)
-    input("\a\nContinue...")
-    except:
-        pass
