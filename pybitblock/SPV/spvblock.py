@@ -1173,6 +1173,20 @@ def rateSXGraph():
 #-----------------------------END RATE.SX--------------------------------
 
 
+#-----------------------------TEMPLATE--------------------------------
+
+def PyBLOCKTemplate():
+    while True:
+        try:
+            list = f"curl -s 'pool.pyblock.xyz/getblocktemplate.php' | jq -C "
+            a = os.popen(list).read()
+            clear()
+            blogo()
+            closed()
+            print(a)
+            t.sleep(20)
+        except:
+            break
 
 #-----------------------------COINGECKO--------------------------------
 
@@ -4222,25 +4236,26 @@ def APIMenuLOCAL():
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}
 
-    \033[1;32;40mA.\033[0;37;40m TippinMe      FREE
-    \033[1;32;40mB.\033[0;37;40m Tallycoin     FREE
-    \033[1;32;40mC.\033[0;37;40m Mempool       FREE
-    \033[1;32;40mD.\033[0;37;40m CoinGecko     FREE
-    \033[1;32;40mE.\033[0;37;40m Rate.sx       FREE
-    \033[1;32;40mF.\033[0;37;40m BWT           FREE
+    \033[1;32;40mA.\033[0;37;40m TippinMe
+    \033[1;32;40mB.\033[0;37;40m Tallycoin
+    \033[1;32;40mC.\033[0;37;40m Mempool
+    \033[1;32;40mD.\033[0;37;40m CoinGecko
+    \033[1;32;40mE.\033[0;37;40m Rate.sx
+    \033[1;32;40mF.\033[0;37;40m BWT
     \033[1;32;40mG.\033[0;37;40m LNBits        \033[3;35;40m{lnbitspaid}\033[0;37;40m
     \033[1;32;40mH.\033[0;37;40m LNPay         \033[3;35;40m{lnpaypaid}\033[0;37;40m
     \033[1;32;40mI.\033[0;37;40m OpenNode      \033[3;35;40m{opennodepaid}\033[0;37;40m
-    \033[1;32;40mJ.\033[0;37;40m SatNode       FREE
-    \033[1;32;40mK.\033[0;37;40m Weather       FREE
-    \033[1;32;40mL.\033[0;37;40m Arcade        FREE
-    \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
-    \033[1;32;40mN.\033[0;37;40m Nostr         FREE
-    \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
-    \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
-    \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
-    \033[1;32;40mW.\033[0;37;40m CKPool        FREE
-    \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool  FREE
+    \033[1;32;40mJ.\033[0;37;40m SatNode
+    \033[1;32;40mK.\033[0;37;40m Weather
+    \033[1;32;40mL.\033[0;37;40m Arcade
+    \033[1;32;40mM.\033[0;37;40m Whale Alert
+    \033[1;32;40mN.\033[0;37;40m Nostr
+    \033[1;32;40mS.\033[0;37;40m Braiins Pool
+    \033[1;32;40mT.\033[0;37;40m TinySeed
+    \033[1;32;40mU.\033[0;37;40m UTXOracle
+    \033[1;32;40mW.\033[0;37;40m CKPool
+    \033[1;32;40mX.\033[0;37;40m Template
+    \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -7583,6 +7598,8 @@ def platfformsLOCALcontrol(platf):
         callGitUTXOracle()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
+    elif platf in ["X", "x"]:
+        PyBLOCKTemplate()
     elif platf in ["Z", "z"]:
         pyblockpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
@@ -7629,6 +7646,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         callGitUTXOracle()
     elif platf in ["W", "w"]:
         ckpoolpoolLOCALOnchainONLY()
+    elif platf in ["X", "x"]:
+        PyBLOCKTemplate()
     elif platf in ["Z", "z"]:
         pyblockpoolpoolLOCALOnchainONLY()
     elif platf in ["R", "r"]:
