@@ -1178,13 +1178,15 @@ def rateSXGraph():
 def PyBLOCKTemplate():
     while True:
         try:
-            list = f"""curl -s https://pool.pyblock.xyz/getblocktemplate.php | jq -C """
-            a = os.popen(list).read()
+            conn = """curl -s "https://pool.pyblock.xyz/getblocktemplate.php" | jq -C '.transactions[]' | xargs -L 1  | tr -d '{|}|]|,' | tr -d '"' | grep -E ' '"""
+            a = os.popen(conn).read()
             clear()
             blogo()
             closed()
+            output = render("pyblock block template", colors=['yellow'], align='left', font='tiny')
+            print(output)
             print(a)
-            t.sleep(20)
+            input("\a\nRefreshing...")
         except:
             break
 
