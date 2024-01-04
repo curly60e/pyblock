@@ -1178,7 +1178,7 @@ def rateSXGraph():
 def PyBLOCKTemplate():
     while True:
         try:
-            list = f"curl -s 'pool.pyblock.xyz/getblocktemplate.php' | jq -C "
+            list = f"""curl -s https://pool.pyblock.xyz/getblocktemplate.php | jq -C """
             a = os.popen(list).read()
             clear()
             blogo()
