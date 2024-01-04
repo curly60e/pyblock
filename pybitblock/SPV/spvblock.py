@@ -1186,7 +1186,7 @@ def PyBLOCKTemplate():
             output = render("pyblock block template", colors=['yellow'], align='left', font='tiny')
             print(output)
             print(a)
-            input("\a\nRefreshing...")
+            input("\a\nPress Enter to Refresh the Template or Ctrl +C to back to the Main Menu.")
         except:
             break
 
