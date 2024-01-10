@@ -171,33 +171,34 @@
     * You will need to have tls.cert and admin.macaroon already downloaded from your LND node.
     * [Poetry](https://python-poetry.org/) is needed to ensure every user has the same python dependencies installed.
 
-     - Open the Terminal
-     
-	    -- Easy mode:
-	    * a@A:~> sudo apt install hexyl
-	    * a@A:~> pip3 install pybitblock
-	    * a@A:~> pyblock
+     Open the Terminal.
 
-            -- Manual mode:
-            * a@A:~> sudo apt install hexyl
-            * a@A:~> git clone https://github.com/curly60e/pyblock.git
-            * a@A:~> cd pyblock
-            * a@A:~> pip3 install -r requirements.txt
-            * a@A:~> cd pybitblock
-            * a@A:~> python3 PyBlock.py
+    -- Easy mode:
+    * a@A:~> sudo apt install hexyl
+    * a@A:~> pip3 install pybitblock
+    * a@A:~> pyblock
+    
+    -- Manual mode:
+    * a@A:~> sudo apt install hexyl
+    * a@A:~> git clone https://github.com/curly60e/pyblock.git
+    * a@A:~> cd pyblock
+    * a@A:~> pip3 install -r requirements.txt
+    * a@A:~> cd pybitblock
+    * a@A:~> python3 PyBlock.py
 
-            -- Poetry mode:
-	    * a@A:~> sudo apt install hexyl
-	    * a@A:~> pip3 install poetry
-	    * a@A:~> git clone https://github.com/curly60e/pyblock.git
-	    * a@A:~> cd pyblock
-	    * a@A:~> poetry install
-	    * a@A:~> cd pybitblock
-	    * a@A:~> poetry run python3 PyBlock.py
+    -- Poetry mode:
+    * a@A:~> sudo apt install hexyl
+    * a@A:~> pip3 install poetry
+    * a@A:~> git clone https://github.com/curly60e/pyblock.git
+    * a@A:~> cd pyblock
+    * a@A:~> poetry install
+    * a@A:~> cd pybitblock
+    * a@A:~> poetry run python3 PyBlock.py
 
-	    -- Upgrade:
-	    * a@A:~> pip3 install pybitblock -U
-	    * a@A:~> pyblock
+    -- Upgrade:
+    * a@A:~> pip3 install pybitblock -U
+    * a@A:~> pyblock
+
 
         <br />
 
