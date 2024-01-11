@@ -1178,7 +1178,7 @@ def rateSXGraph():
 def PyBLOCKTemplate():
     while True:
         try:
-            conn = """curl -s "https://pool.pyblock.xyz/getblocktemplate.php" | jq -C '.transactions[]' | xargs -L 1  | tr -d '{|}|]|,' | tr -d '"' | grep -E ' '"""
+            conn = """curl -s "https://pool.pyblock.xyz/getblocktemplate.php" | jq -C '.transactions[]' | xargs -L 1  | tr -d '{|}|]|,' | tr -d '"' | grep -E ' ' | grep -vE 'depends'"""
             a = os.popen(conn).read()
             clear()
             blogo()
