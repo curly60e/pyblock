@@ -7463,12 +7463,12 @@ def fullbtc():
     else:
         blogo()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-        print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
+        print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in 𝗕𝗟𝗔𝗡𝗞.\n")
         path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
         path['rpcuser'] = input("RPC User: ")
         path['rpcpass'] = input("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
-        path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
+        path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
         pickle.dump(path, open("config/bclock.conf", "wb"))
     menuSelection()
 
