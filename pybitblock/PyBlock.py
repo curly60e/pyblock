@@ -7513,6 +7513,8 @@ def fullbtclnd():
                 print("\n\tLocal Lightning Node connection.\n")
                 lndconnectload["ln"] = input("Insert the Path to Lncli. Normally you just need to type 𝙡𝙣𝙘𝙡𝙞: ")
                 pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+            if yesno in ["NO", "no", "nO", "No"]:
+                pickle.dump(path, open("config/bclock.conf", "wb"))
     menuSelection()
 
 
