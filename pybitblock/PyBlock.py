@@ -7514,7 +7514,7 @@ def fullbtclnd():
                 lndconnectload["ln"] = input("Insert the Path to Lncli. Normally you just need to type 𝙡𝙣𝙘𝙡𝙞: ")
                 pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb")) # Save the file 'bclock.conf'
             if yesno in ["NO", "no", "nO", "No"]:
-                pickle.dump(path, open("config/bclock.conf", "wb"))
+                print("\n\tPress Crtl + C and Select PyBLOCK B.\n")
     menuSelection()
 
 
