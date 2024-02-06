@@ -7493,8 +7493,8 @@ def fullbtclnd():
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
         pickle.dump(path, open("config/bclock.conf", "wb"))
 
-    if os.path.isfile('config/blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    if os.path.isfile('config/blndconnect.conf'):
+        lndconnectData= pickle.load(open("config/blndconnect.conf", "rb"))
         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -7507,14 +7507,14 @@ def fullbtclnd():
             pickle.dump(yesno, open("config/init.conf", "wb"))
             if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
                 print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in 𝗕𝗟𝗔𝗡𝗞.\n")
-                lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
+                lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") 
                 lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
                 lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
                 print("\n\tLocal Lightning Node connection.\n")
                 lndconnectload["ln"] = input("Insert the Path to Lncli. Normally you just need to type 𝙡𝙣𝙘𝙡𝙞: ")
-                pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+                pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb"))
             if yesno in ["NO", "no", "nO", "No"]:
-                pickle.dump(lndconnectload, open("config/bclock.conf", "wb"))
+                pickle.dump(path, open("config/bclock.conf", "wb"))
     menuSelection()
 
 
