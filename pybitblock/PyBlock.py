@@ -7503,8 +7503,10 @@ def fullbtclnd():
             pqr = pickle.load(open("config/init.conf", "rb"))
             yesno = pqr
         else:
-            yesno = input("Do you want to connect your Lightning Node? yes/no: ")
+            yesno = input("Do you want to connect your Lightning Node? yes: ")
+            yesnon = input("Are you sure? no: ")
             pickle.dump(yesno, open("config/init.conf", "wb"))
+            pickle.dump(yesnon, open("config/bclock.conf", "wb"))
             if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
                 print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in 𝗕𝗟𝗔𝗡𝗞.\n")
                 lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
@@ -7513,8 +7515,8 @@ def fullbtclnd():
                 print("\n\tLocal Lightning Node connection.\n")
                 lndconnectload["ln"] = input("Insert the Path to Lncli. Normally you just need to type 𝙡𝙣𝙘𝙡𝙞: ")
                 pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb")) # Save the file 'bclock.conf'
-            if yesno in ["NO", "no", "nO", "No"]:
-                pickle.dump(lndconnectload, open("config/bclock.conf", "wb"))
+            if yesnon in ["NO", "no", "nO", "No"]:
+                pickle.dump(path, open("config/bclock.conf", "wb"))
     menuSelection()
 
 
