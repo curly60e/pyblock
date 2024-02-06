@@ -7503,7 +7503,7 @@ def fullbtclnd():
             pqr = pickle.load(open("config/init.conf", "rb"))
             yesno = pqr
         else:
-            yesno = input("𝐘𝐨𝐮 𝐚𝐫𝐞 𝐠𝐨𝐢𝐧𝐠 𝐭𝐨 𝐜𝐨𝐧𝐧𝐞𝐜𝐭 𝐲𝐨𝐮𝐫 𝐋𝐢𝐠𝐡𝐭𝐧𝐢𝐧𝐠 𝐍𝐨𝐝𝐞, 𝐭𝐲𝐩𝐞 𝐘𝐞𝐬 𝐭𝐨 𝐜𝐨𝐧𝐭𝐢𝐧𝐮𝐞.: ")
+            yesno = input("You are going to 𝐜𝐨𝐧𝐧𝐞𝐜𝐭 your 𝐋𝐢𝐠𝐡𝐭𝐧𝐢𝐧𝐠 𝐍𝐨𝐝𝐞, type 𝐘𝐞𝐬 to continue.: ")
             pickle.dump(yesno, open("config/init.conf", "wb"))
             if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
                 print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in 𝗕𝗟𝗔𝗡𝗞.\n")
