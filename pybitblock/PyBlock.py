@@ -7515,8 +7515,7 @@ def fullbtclnd():
                 pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb")) # Save the file 'bclock.conf'
             if yesno in ["NO", "no", "nO", "No"]:
                 pickle.dump(path, open("config/bclock.conf", "wb"))
-                pickle.dump(path, open("config/bclock.conf", "rb"))
-    menuSelection()
+            menuSelection()
 
 
 def introINIT():
