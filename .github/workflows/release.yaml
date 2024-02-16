@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@main
     - uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.12.0'
         architecture: 'x64'
     - run: pip3 install poetry
     - run: poetry build
