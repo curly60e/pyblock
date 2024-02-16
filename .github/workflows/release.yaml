@@ -6,15 +6,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
-    - uses: actions/setup-python@v4
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
       with:
-        python-version: '3.12.0'
+        python-version: '3.x'
         architecture: 'x64'
-    - run: pip3 install poetry
+    - run: pip install poetry==1.1.12
     - run: poetry build
-    - name: Publish a Python distribution to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_TOKEN }}
+    - run: poetry publish --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
