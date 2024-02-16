@@ -12,7 +12,7 @@ jobs:
       with:
         python-version: '3.x'
         architecture: 'x64'
-    - run: pip install poetry==1.1.12
+    - run: pip3 install poetry
     - run: >-
         poetry version patch &&
         version=$(poetry version | awk '{print $2}') &&
