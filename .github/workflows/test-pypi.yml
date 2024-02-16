@@ -7,7 +7,7 @@ jobs:
   test_pypi:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@main
     - uses: actions/setup-python@v4
       with:
         python-version: '3.x'
