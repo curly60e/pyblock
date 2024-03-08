@@ -3129,22 +3129,22 @@ def getPoolSlushCheck():
 
     api = ""
     try:
-        if os.path.isfile("config/slushAPI.conf"):
-            apiv = pickle.load(open("config/slushAPI.conf", "rb"))
+        if os.path.isfile("config/braiinsAPI.conf"):
+            apiv = pickle.load(open("config/braiinsAPI.conf", "rb"))
             api = apiv
         else:
             clear()
             blogo()
-            api = input("Insert SlushPool API KEY: ")
-            pickle.dump(api, open("config/slushAPI.conf", "wb"))
+            api = input("Insert Braiins API KEY: ")
+            pickle.dump(api, open("config/braiinsAPI.conf", "wb"))
     except:
         pass
 
     while True:
         try:
-            slushpoolbtc = f"curl https://slushpool.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+            slushpoolbtc = f"curl https://pool.braiins.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
 
-            slushpoolbtcblock = f"curl https://slushpool.com/stats/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+            slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
 
 
             b = os.popen(slushpoolbtc)
