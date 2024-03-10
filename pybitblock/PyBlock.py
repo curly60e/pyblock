@@ -274,9 +274,9 @@ def getPoolSlushCheck():
 
     while True:
         try:
-            slushpoolbtc = f"curl https://pool.braiins.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+            slushpoolbtc = f"curl https://pool.braiins.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
 
-            slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+            slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
 
 
             b = os.popen(slushpoolbtc)
