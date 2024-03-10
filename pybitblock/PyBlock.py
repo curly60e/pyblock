@@ -430,7 +430,6 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
                         \033[0;37;40mPYBLOCK Pool Miner Stats
 
-                        Username: {}
                         Hash Rate 1m: {}
                         Hash Rate 5m: {}
                         Hash Rate 1h: {}
@@ -444,7 +443,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
     --------------------------------------------------------------------------------------------
 
-            \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
+            \033[A""".format(e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
 
             t.sleep(10)
 
