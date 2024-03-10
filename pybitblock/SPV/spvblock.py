@@ -3142,9 +3142,9 @@ def getPoolSlushCheck():
 
     while True:
         try:
-            slushpoolbtc = f"curl https://pool.braiins.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+            slushpoolbtc = f"curl https://pool.braiins.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
 
-            slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token: {api}' 2>/dev/null"
+            slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
 
 
             b = os.popen(slushpoolbtc)
@@ -3178,8 +3178,8 @@ def getPoolSlushCheck():
                         \033[0;37;40mBraiins Pool
 
                         Username: {}
-                        Confirmed reward: \u001b[38;5;40m{}\033[0;37;40m BTC
-                        Unconfirmed reward: \u001b[33;1m{}\033[0;37;40m BTC
+                        All Time reward: \u001b[38;5;40m{}\033[0;37;40m BTC
+                        Today reward: \u001b[33;1m{}\033[0;37;40m BTC
                         Estimated reward: {} BTC
                         All Time reward: {} BTC
                         Hash Rate 5m: {} Gh/s
@@ -3193,7 +3193,7 @@ def getPoolSlushCheck():
 
     --------------------------------------------------------------------------------------------
 
-            \033[A""".format(d['username'], f['confirmed_reward'], f['unconfirmed_reward'], f['estimated_reward'], f['all_time_reward'], f['hash_rate_5m'], f['hash_rate_60m'], f['hash_rate_24h'], f['hash_rate_scoring'], f['hash_rate_yesterday'], f['ok_workers'], f['off_workers'],newblock))
+            \033[A""".format(d['username'], f['all_time_reward'], f['today_reward'], f['estimated_reward'], f['all_time_reward'], f['hash_rate_5m'], f['hash_rate_60m'], f['hash_rate_24h'], f['shares_yesterday'], f['hash_rate_yesterday'], f['ok_workers'], f['off_workers'],newblock))
 
             t.sleep(10)
 
