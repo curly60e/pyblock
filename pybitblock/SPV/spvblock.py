@@ -3267,7 +3267,9 @@ def pyblockpoolpoolLOCALOnchainONLY():
         blogo()
         output = render(
         responseC = input("Your Bitcoin Address: ")
-        os.system(f"""curl -s https://pool.pyblock.xyz/users/{responseC} | jq -C '.[]' | tr -d '\{|}|]|,' | xargs -L 1 | grep -E " """""
+        conn = """curl -s https://pool.pyblock.xyz/users/{responseC} | jq -C '.[]' | tr -d '\{|}|]|,' | xargs -L 1 | grep -E " """""
+        a = os.popen(conn).read()
+        print(a)
         input("\a\nContinue...")
     except:
         pass
