@@ -394,24 +394,62 @@ def ckpoolpoolLOCALOnchainONLY():
             break
 
 def pyblockpoolpoolLOCALOnchainONLY():
-    try:
-        clear()
-        blogo()
-        output = render(
-            "pyblock miner", colors=['yellow'], align='left', font='tiny'
-        )
 
-        print(output)
-        responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s https://pool.pyblock.xyz/users/{responseC} | jq -C '.[]' | tr -d '\{|}|]|,' | xargs -L 1 | grep -E " """""
-        a = os.popen(list).read()
-        clear()
-        blogo()
-        print("\nUSER: " + responseC)
-        print("\nStats: " + a)
-        input("\a\nContinue...")
+    s = ""
+    sq = s
+
+    api = ""
+    try:
+        if os.path.isfile("config/PYBLOCKPOOLAPI.conf"):
+            apiv = pickle.load(open("config/PYBLOCKPOOLAPI.conf", "rb"))
+            api = apiv
+        else:
+            clear()
+            blogo()
+            api = input("Insert your PyBLOCK Pool Wallet: ")
+            pickle.dump(api, open("config/PYBLOCKPOOLAPI.conf", "wb"))
     except:
         pass
+
+    while True:
+        try:
+            pyblockpool = f"curl https://pool.pyblock.xyz/users/{api} 2>/dev/null"
+
+
+            b = os.popen(pyblockpool)
+            c = b.read()
+            d = json.loads(c)
+            f = d['worker']
+            e = f[0]
+
+            clear()
+            blogo()
+            print("""\033[A
+
+    --------------------------------------------------------------------------------------------
+
+                        \033[0;37;40mPYBLOCK Pool Miner Stats
+
+                        Username: {}
+                        Hash Rate 1m: {}
+                        Hash Rate 5m: {}
+                        Hash Rate 1h: {}
+                        Hash Rate 1d: {}
+                        Hash Rate 7d: {}
+                        Last Share: \u001b[38;5;27m{}\033[0;37;40m
+                        Shares: {}
+                        Best Share: {}
+                        Best Ever: {}
+                        Workers: {}
+
+    --------------------------------------------------------------------------------------------
+
+            \033[A""".format(e['workername'], e['hashrate1m'], e['hashrate5m'], e['hashrate1hr'], e['hashrate1d'], e['hashrate7d'], e['lastshare'], e['shares'], e['bestshare'], e['bestever'], d['workers']))
+
+            t.sleep(10)
+
+        except:
+            break
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
