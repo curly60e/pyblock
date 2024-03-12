@@ -398,10 +398,17 @@ def pyblockpoolpoolLOCALOnchainONLY():
         clear()
         blogo()
         output = render(
+            "pyblock miner", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
         responseC = input("Your Bitcoin Address: ")
-        conn = """curl -s https://pool.pyblock.xyz/users/{responseC} | jq -C '.[]' | tr -d '\{|}|]|,' | xargs -L 1 | grep -E " """""
-        a = os.popen(conn).read()
-        print(a)
+        list = f"""curl -s https://pool.pyblock.xyz/users/{responseC} | jq -C '.[]' | tr -d '\{|}|]|,' | xargs -L 1 | grep -E " """""
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nUSER: " + responseC)
+        print("\nStats: " + a)
         input("\a\nContinue...")
     except:
         pass
