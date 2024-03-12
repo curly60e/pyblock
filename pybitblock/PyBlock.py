@@ -188,38 +188,13 @@ def slDIFFConn():
         b = json.loads(a)
         print(f"""\n
 
-            Block epoch: {b['blocks_epoch']}
+            Block epoch: {b['block_epoch']}
             Difficulty: {b['difficulty']}
             Epoch block time: {b['epoch_block_time']}
             Estimated adjustment: {b['estimated_adjustment']}
             Estimated adjustemnt date: {b['estimated_adjustment_date']}
             Estimated next differece: {b['estimated_next_diff']}
             Previous adjustment: {b['previous_adjustment']}
-
-        """)
-        input("\a\nContinue...")
-    except:
-        pass
-
-def slHASHConn():
-    try:
-        conn = """curl -s https://insights.braiins.com/api/v1.0/hash-rate-stats"""
-        a = os.popen(conn).read()
-        clear()
-        blogo()
-        closed()
-        output = render("hash rate", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        b = json.loads(a)
-        print(f"""\n
-
-            Averiage fees per block: {b['avg_fees_per_block']}
-            Current hashrate: {b['current_hashrate']}
-            Fees percent: {b['fees_percent']}
-            Hash price: {b['hash_price']}
-            Hash rate 30: {b['hash_rate_30']}
-            Hash value: {b['hash_value']}
-            Rev. USD: {b['rev_usd']}
 
         """)
         input("\a\nContinue...")
@@ -234,20 +209,6 @@ def slPOOLConn():
         blogo()
         closed()
         output = render("pool", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        print(a)
-        input("\a\nContinue...")
-    except:
-        pass
-
-def slHISTConn():
-    try:
-        conn = """curl -s https://insights.braiins.com/api/v1.0/hashrate-and-difficulty-history?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
-        a = os.popen(conn).read()
-        clear()
-        blogo()
-        closed()
-        output = render("history", colors=['yellow'], align='left', font='tiny')
         print(output)
         print(a)
         input("\a\nContinue...")
@@ -2302,9 +2263,7 @@ def slushpoolREMOTEOnchainONLY():
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \u001b[38;5;202mA.\033[0;37;40m Difficulty
-    \u001b[38;5;202mB.\033[0;37;40m Hash Rate
     \u001b[38;5;202mC.\033[0;37;40m Pool
-    \u001b[38;5;202mD.\033[0;37;40m History
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
@@ -2339,9 +2298,7 @@ def slushpoolLOCALOnchainONLY():
     \033[1;37;40mVersion\033[0;37;40m: {}
 
     \u001b[38;5;202mA.\033[0;37;40m Difficulty
-    \u001b[38;5;202mB.\033[0;37;40m Hash Rate
     \u001b[38;5;202mC.\033[0;37;40m Pool
-    \u001b[38;5;202mD.\033[0;37;40m History
     \u001b[38;5;202mE.\033[0;37;40m Miner
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
@@ -6377,18 +6334,10 @@ def slushpoolLOCALOnchainONLYMenu(slush):
         clear()
         blogo()
         slDIFFConn()
-    elif slush in ["B", "b"]:
-        clear()
-        blogo()
-        slHASHConn()
     elif slush in ["C", "c"]:
         clear()
         blogo()
         slPOOLConn()
-    elif slush in ["D", "d"]:
-        clear()
-        blogo()
-        slHISTConn()
     elif slush in ["E", "e"]:
         clear()
         blogo()
