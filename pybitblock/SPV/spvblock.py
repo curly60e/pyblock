@@ -734,6 +734,28 @@ def bwtConn():
         pass
 
 #-----------------------------END bwt.dev--------------------------------
+
+#-----------------------------STRLuxor--------------------------------
+def luxorstats():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Luxor Pool", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('luxor'):
+            os.system("cd luxor && rm -rf graphql-python-client && git clone https://github.com/LuxorLabs/graphql-python-client.git")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git")
+        clear()
+        blogo()
+
+        print(output)
+        os.system(f"cd luxor && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion && python3 luxor.py --help")
+    except:
+        menuSelection()
+#-----------------------------ENDLuxor--------------------------------
+
 #-----------------------------Dates--------------------------------
 
 def datesConn():
