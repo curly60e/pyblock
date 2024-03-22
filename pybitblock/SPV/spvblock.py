@@ -564,6 +564,86 @@ def gameroom():
         pass
 #----------------------------------------------------------------------
 
+#----------------------------------------------------------------------PhoenixSta
+
+def callPhoenixLin():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix Linux", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip && unzip -j phoenix-0.1.1-linux-x64.zip")
+        clear()
+        blogo()
+
+        print(output)
+        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
+        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+    except:
+        menuSelection()
+
+def callPhoenixWin():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix Windows", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf nostr_console_elf64 && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip && unzip -j v0.1.1.zip")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
+        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+    except:
+        menuSelection()
+
+def callPhoenixMacX64():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix MacOSX64", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf nostr_console_windows_amd64.exe && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip && unzip -j phoenix-0.1.1-macos-x64.zip")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
+        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+    except:
+        menuSelection()
+
+def callPhoenixMacARM():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix MacOSARM", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf nostr_console_windows_amd64.exe && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip && unzip -j phoenix-0.1.1-macos-arm64.zip")
+        clear()
+        blogo()
+        print(output)
+        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
+        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+    except:
+        menuSelection()
+
+#----------------------------------------------------------------------PhoenixEnd
 #-----------------------------Stats--------------------------------
 
 def statsConn():
@@ -4235,6 +4315,7 @@ def APIMenuLOCAL():
     \033[1;32;40mL.\033[0;37;40m Arcade
     \033[1;32;40mM.\033[0;37;40m Whale Alert
     \033[1;32;40mN.\033[0;37;40m Nostr
+    \033[1;32;40mO.\033[0;37;40m Phoenix
     \033[1;32;40mS.\033[0;37;40m Braiins Pool
     \033[1;32;40mT.\033[0;37;40m TinySeed
     \033[1;32;40mU.\033[0;37;40m UTXOracle
@@ -5353,6 +5434,30 @@ def nostrConn():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def PhoenixConn():
+    clear()
+    blogo()
+    sysinfo()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Linux
+    \033[1;32;40mB.\033[0;37;40m Mac   arm64
+    \033[1;32;40mC.\033[0;37;40m Mac     x64
+    \033[1;32;40mD.\033[0;37;40m Windows
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n,b, version ))
+    phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
@@ -7561,6 +7666,8 @@ def platfformsLOCALcontrol(platf):
         whalalConn()
     elif platf in ["N", "n"]:
         nostrConn()
+    elif platf in ["O", "o"]:
+        PhoenixConn()
     elif platf in ["P", "p"]:
         kanopoolpoolLOCALOnchainONLY()
     elif platf in ["S", "s"]:
@@ -7609,6 +7716,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         whalalConn()
     elif platf in ["N", "n"]:
         nostrConn()
+    elif platf in ["O", "o"]:
+        PhoenixConn()
     elif platf in ["P", "p"]:
         kanopoolpoolLOCALOnchainONLY()
     elif platf in ["S", "s"]:
@@ -7984,6 +8093,20 @@ def nostrmenu(menunos):
         callGitNostrQRSeedTerminal()
     elif menunos in ["Z", "z"]:
         callGitBija()
+    elif platf in ["R", "r"]:
+        menuSelection()
+
+def phoenixmenu(menunos):
+    if menunos in ["A", "a"]:
+        callPhoenixLin()
+    elif menunos in ["B", "b"]:
+        callPhoenixMacARM()
+    elif menunos in ["C", "c"]:
+        callPhoenixMacX64()
+    elif menunos in ["D", "d"]:
+        callPhoenixWin()
+    elif platf in ["R", "r"]:
+        menuSelection()
 
 def testClockRemote():
     b = rpc('getblockcount')
