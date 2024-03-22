@@ -574,7 +574,7 @@ def callPhoenixLin():
             "Phoenix Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip")
+            os.system("cd phoenixwallet && rm -rf phoenix-0.1.1-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip && unzip -j phoenix-0.1.1-linux-x64.zip")
         clear()
@@ -594,7 +594,7 @@ def callPhoenixWin():
             "Phoenix Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf nostr_console_elf64 && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip")
+            os.system("cd phoenixwallet && rm -rf v0.1.1.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip && unzip -j v0.1.1.zip")
         clear()
@@ -613,7 +613,7 @@ def callPhoenixMacX64():
             "Phoenix MacOSX64", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf nostr_console_windows_amd64.exe && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip")
+            os.system("cd phoenixwallet && rm -rf phoenix-0.1.1-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip && unzip -j phoenix-0.1.1-macos-x64.zip")
         clear()
@@ -632,7 +632,7 @@ def callPhoenixMacARM():
             "Phoenix MacOSARM", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf nostr_console_windows_amd64.exe && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip")
+            os.system("cd phoenixwallet && rm -rf phoenix-0.1.1-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip && unzip -j phoenix-0.1.1-macos-arm64.zip")
         clear()
