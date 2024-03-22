@@ -340,6 +340,8 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 [@Vishalxl,](https://twitter.com/vishalxl)
 [@Odudex,](https://twitter.com/odudex)
 [@UTXOracle,](https://twitter.com/UTXOracle)
+[@Acinq,](https://twitter.com/acinq_co)
+[@PhoenixWallet,](https://twitter.com/PhoenixWallet)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
