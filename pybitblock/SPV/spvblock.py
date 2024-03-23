@@ -660,6 +660,12 @@ def callPhoenixMacARM():
 
 def callPhoenix():
     try:
+        qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+        )
         clear()
         blogo()
         output = render(
@@ -671,24 +677,44 @@ def callPhoenix():
         os.system(f"cd phoenixwallet && ./phoenix-cli --help")
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         responseC = input("\a\nCType a command of the list: ")
         os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
         input("\a\nContinue...")
     except:
         menuSelection()
