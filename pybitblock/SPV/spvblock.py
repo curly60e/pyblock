@@ -579,10 +579,9 @@ def callPhoenixLin():
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip && unzip -j phoenix-0.1.1-linux-x64.zip")
         clear()
         blogo()
-
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue, open another Terminal and Select Manage in the Phoenix Menu.")
         print(output)
-        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
-        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+        os.system(f"cd phoenixwallet && ./phoenixd")
     except:
         menuSelection()
 
@@ -599,9 +598,9 @@ def callPhoenixWin():
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip && unzip -j v0.1.1.zip")
         clear()
         blogo()
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue, open another Terminal and Select Manage in the Phoenix Menu.")
         print(output)
-        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
-        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+        os.system(f"cd phoenixwallet && ./phoenixd")
     except:
         menuSelection()
 
@@ -618,9 +617,9 @@ def callPhoenixMacX64():
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip && unzip -j phoenix-0.1.1-macos-x64.zip")
         clear()
         blogo()
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue, open another Terminal and Select Manage in the Phoenix Menu.")
         print(output)
-        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
-        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+        os.system(f"cd phoenixwallet && ./phoenixd")
     except:
         menuSelection()
 
@@ -637,9 +636,44 @@ def callPhoenixMacARM():
             os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip && unzip -j phoenix-0.1.1-macos-arm64.zip")
         clear()
         blogo()
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue, open another Terminal and Select Manage in the Phoenix Menu.")
         print(output)
-        responseC = input("Type 𝒈𝒆𝒕𝒊𝒏𝒇𝒐: ")
-        os.system(f"cd phoenixwallet && ./phoenixd && ./phoenix-cli {responseC}")
+        os.system(f"cd phoenixwallet && ./phoenixd")
+    except:
+        menuSelection()
+
+def callPhoenix():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Manage your Phoenix", colors=['yellow'], align='left', font='tiny'
+        )
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd phoenixwallet && ./phoenix-cli --help")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        responseC = input("\a\nCType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        input("\a\nContinue...")
     except:
         menuSelection()
 
@@ -5455,6 +5489,7 @@ def PhoenixConn():
     \033[1;32;40mB.\033[0;37;40m Mac   arm64
     \033[1;32;40mC.\033[0;37;40m Mac     x64
     \033[1;32;40mD.\033[0;37;40m Windows
+    \033[1;32;40mE.\033[0;37;40m Manage
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -8105,6 +8140,8 @@ def phoenixmenu(menunos):
         callPhoenixMacX64()
     elif menunos in ["D", "d"]:
         callPhoenixWin()
+    elif menunos in ["E", "e"]:
+        callPhoenix()
     elif platf in ["R", "r"]:
         menuSelection()
 
