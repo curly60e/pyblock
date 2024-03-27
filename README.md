@@ -92,11 +92,13 @@
 
     -- Easy mode:
     * a@A:~> sudo apt install hexyl
+    * a@A:~> sudo apt install jq
     * a@A:~> pip3 install pybitblock
     * a@A:~> pyblock
     
     -- Manual mode:
     * a@A:~> sudo apt install hexyl
+    * a@A:~> sudo apt install jq
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
     * a@A:~> pip3 install -r requirements.txt
@@ -105,6 +107,7 @@
 
     -- Poetry mode:
     * a@A:~> sudo apt install hexyl
+    * a@A:~> sudo apt install jq
     * a@A:~> pip3 install poetry
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
@@ -175,11 +178,13 @@
 
     -- Easy mode:
     * a@A:~> sudo apt install hexyl
+    * a@A:~> sudo apt install jq
     * a@A:~> pip3 install pybitblock
     * a@A:~> pyblock
     
     -- Manual mode:
     * a@A:~> sudo apt install hexyl
+    * a@A:~> sudo apt install jq
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
     * a@A:~> pip3 install -r requirements.txt
@@ -188,6 +193,7 @@
 
     -- Poetry mode:
     * a@A:~> sudo apt install hexyl
+    * a@A:~> sudo apt install jq
     * a@A:~> pip3 install poetry
     * a@A:~> git clone https://github.com/curly60e/pyblock.git
     * a@A:~> cd pyblock
