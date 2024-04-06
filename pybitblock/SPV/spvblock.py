@@ -908,10 +908,33 @@ def luxorstats():
 
         print(output)
         os.system(f"cd luxor && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion && python3 luxor.py --help")
+        input("\a\nContinue...")
     except:
         menuSelection()
 #-----------------------------ENDLuxor--------------------------------
 
+#-----------------------------STRPickaxe--------------------------------
+def PickaxeCon():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "Foreman Pickaxe", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('Pickaxe'):
+            print("...Follow the steps...")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir Pickaxe && cd Pickaxe")
+            clear()
+            blogo()
+            print(output)
+        responseC = input("Your Foreman apiKey: ")
+        responseD = input("Your Foreman clientId: ")
+        os.system(f"cd Pickaxe && curl https://tinyurl.com/service-install -Ls --output install.sh; sudo bash install.sh {responseD} {responseC}")
+        input("\a\nContinue...")
+    except:
+        pass
+#-----------------------------ENDPickaxe--------------------------------
 #-----------------------------Dates--------------------------------
 
 def datesConn():
@@ -4391,7 +4414,8 @@ def APIMenuLOCAL():
     \033[1;32;40mL.\033[0;37;40m Arcade
     \033[1;32;40mM.\033[0;37;40m Whale Alert
     \033[1;32;40mN.\033[0;37;40m Nostr
-    \033[1;32;40mO.\033[0;37;40m Phoenix
+    \033[1;32;40mO.\033[0;37;40m PhoenixD
+    \033[1;32;40mP.\033[0;37;40m Pickaxe
     \033[1;32;40mS.\033[0;37;40m Braiins Pool
     \033[1;32;40mT.\033[0;37;40m TinySeed
     \033[1;32;40mU.\033[0;37;40m UTXOracle
@@ -7746,7 +7770,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["O", "o"]:
         PhoenixConn()
     elif platf in ["P", "p"]:
-        kanopoolpoolLOCALOnchainONLY()
+        PickaxeCon()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
@@ -7796,7 +7820,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["O", "o"]:
         PhoenixConn()
     elif platf in ["P", "p"]:
-        kanopoolpoolLOCALOnchainONLY()
+        PickaxeCon()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
