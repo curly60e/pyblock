@@ -348,6 +348,7 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 [@UTXOracle,](https://twitter.com/UTXOracle)
 [@Acinq,](https://twitter.com/acinq_co)
 [@PhoenixWallet,](https://twitter.com/PhoenixWallet)
+[@ForemanMining,](https://twitter.com/foremanmining)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
