@@ -18,6 +18,7 @@ import requests
 import json
 import simplejson as json
 import numpy as np
+from datetime import datetime, timedelta
 from sha256 import *
 from SPV.spvblock import *
 from cfonts import render, say
@@ -41,7 +42,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.4"
+version = "2.5"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -960,39 +961,40 @@ def countdownblockConn():
 
 
 def localHalving():
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
-    b = block
-    c = b
-    oneh = 0 - int(c) + 210000
-    twoh = 210000 - int(c) + 210000
-    thrh = 420000 - int(c) + 210000
-    forh = 630000 - int(c) + 210000
-    fifh = 840000 - int(c) + 210000
-    sixh = 1050000 - int(c) + 210000
-    sevh = 1260000 - int(c) + 210000
-    eith = 1470000 - int(c) + 210000
-    ninh = 1680000 - int(c) + 210000
-    tenh = 1890000 - int(c) + 210000
+    bitcoincli = f'{path["bitcoincli"]} getblockcount'
+    block_count = int(os.popen(bitcoincli).read().strip())  # Leer y convertir el conteo de bloques directamente a int
 
-    q = """
+    # Suponemos 64 halvings, aunque técnicamente podrían ser más
+    max_halvings = 64
+    blocks_per_halving = 210000
+    halving_interval = timedelta(days=365 * 4)  # 4 años entre cada halving
+    next_halving_date = datetime(2024, 4, 20)  # Fecha del próximo halving conocido
+
+    halving_blocks = [(blocks_per_halving * i, next_halving_date + halving_interval * (i - (block_count // blocks_per_halving + 1))) for i in range(1, max_halvings + 1)]
+    block_messages = []
+
+    for index, (halving_point, halving_date) in enumerate(halving_blocks, start=1):
+        blocks_to_halving = halving_point - block_count
+        if block_count >= halving_point:
+            status = f"\033[1;32;40mCOMPLETE {halving_date.year}\033[0;37;40m"
+            blocks_to_halving = 0
+        else:
+            status = f"\033[1;35;40mPENDING {halving_date.year}\033[0;37;40m"
+
+        block_messages.append(f"{index}th Halving: in {blocks_to_halving} Blocks {status}, Est. Date: {halving_date.strftime('%Y-%m-%d')}")
+
+    halving_info = "\n            ".join(block_messages)
+
+    q = f"""
     \033[0;37;40m------------------- HALVING CLOCK -------------------
 
-            1st  Halving: in {} Blocks {}
-            2nd  Halving: in {} Blocks {}
-            3rd  Halving: in {} Blocks {}
-            4th  Halving: in {} Blocks {}
-            5th  Halving: in {} Blocks {}
-            6th  Halving: in {} Blocks {}
-            7th  Halving: in {} Blocks {}
-            8th  Halving: in {} Blocks {}
-            9th  Halving: in {} Blocks {}
-            10th Halving: in {} Blocks {}
+            {halving_info}
 
     -------------------------------------------------------
-    """.format("0" if int(c) == 210000 else oneh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 420000 else twoh,"\033[1;32;40mCOMPLETE\033[0;37;40m", "0" if int(c) == 630000 else thrh,"\033[1;32;40mCOMPLETE\033[0;37;40m","0" if int(c) == 840000 else forh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 840000 else "\033[1;35;40mPENDING\033[0;37;40m", "0" if int(c) >= 1050000 else fifh , "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1050000 else "\033[1;35;40mPENDING\033[0;37;40m", sixh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1260000 else "\033[1;35;40mPENDING\033[0;37;40m", sevh,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1470000 else "\033[1;35;40mPENDING\033[0;37;40m", eith,"\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1680000 else "\033[1;35;40mPENDING\033[0;37;40m", ninh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m", tenh, "\033[1;32;40mCOMPLETE\033[0;37;40m" if int(c) >= 1890000 else "\033[1;35;40mPENDING\033[0;37;40m")
+    """
     print(q)
     input("\nContinue...")
+
 
 
 def epoch():
@@ -7456,7 +7458,7 @@ def fullbtclnd():
             pickle.dump(yesno, open("config/init.conf", "wb"))
             if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
                 print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in 𝗕𝗟𝗔𝗡𝗞.\n")
-                lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") 
+                lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ")
                 lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
                 lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
                 print("\n\tLocal Lightning Node connection.\n")
