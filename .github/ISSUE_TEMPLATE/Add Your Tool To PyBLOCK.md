@@ -7,11 +7,10 @@ assignees: ''
 
 ---
 
-**Describe the App**
+**Describe your App**
+
 
 ---
-title: '
-
 def NAMEAPP():
     try:
         clear()
@@ -32,7 +31,6 @@ def NAMEAPP():
         os.system(f"cd FOLDERAPP && ./APP {responseC} {responseD} {responseE}")
         input("\a\nContinue...")
     except:
-        pass'
+        pass
 
----
 ---
