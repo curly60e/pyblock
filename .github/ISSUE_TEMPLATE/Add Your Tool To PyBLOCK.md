@@ -1,6 +1,6 @@
 ---
-name: Tools Name
-about: Add a App
+name: Add Your Tool to PyBLOCK.
+about: Change the AAAA with your parameters.
 title: ''
 labels: ''
 assignees: ''
