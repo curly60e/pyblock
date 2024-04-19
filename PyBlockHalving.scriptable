@@ -1,0 +1,31 @@
+// PyBLØCK Halving by SN
+let req = new Request("https://mempool.space/api/blocks/tip/height");
+let blockHeight = await req.loadString();
+let widget = await createWidget();
+if (config.runsInWidget) 
+{
+Script.setWidget(widget);
+} 
+else 
+{
+widget.presentLarge();
+}
+Script.complete();
+async function createWidget() 
+{
+let listwidget = new ListWidget();
+listwidget.backgroundColor = new Color("#000000");
+let nextRefresh = Date.now() + 1000*10 
+listwidget.refreshAfterDate = new Date(nextRefresh)
+listwidget.refreshAfterDate = new Date(nextRefresh)
+let sns = new Request('https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/resources/images/Logo.PNG');
+let pyp = await sns.loadImage();
+let tt = listwidget.addImage(pyp).centerAlignImage()
+let heading = listwidget.addText(840000
+     + blockHeight + 
+    (840000 - blockHeight));
+heading.centerAlignText();
+heading.font = Font.boldSystemFont(70);
+heading.textColor = new Color("#0aff17");
+return listwidget;
+}
