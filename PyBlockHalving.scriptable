@@ -21,11 +21,17 @@ listwidget.refreshAfterDate = new Date(nextRefresh)
 let sns = new Request('https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/resources/images/Logo.PNG');
 let pyp = await sns.loadImage();
 let tt = listwidget.addImage(pyp).centerAlignImage()
-let heading = listwidget.addText(840000
-     + blockHeight + 
-    (840000 - blockHeight));
+let heading = listwidget.addText(blockHeight);
 heading.centerAlignText();
 heading.font = Font.boldSystemFont(70);
 heading.textColor = new Color("#0aff17");
+let halving = listwidget.addText("1050000");
+halving.centerAlignText();
+halving.font = Font.boldSystemFont(55);
+halving.textColor = new Color("#0aff17");
+let target = listwidget.addText("" + (1050000 - blockHeight));
+target.centerAlignText();
+target.font = Font.boldSystemFont(70);
+target.textColor = new Color("#0aff17");
 return listwidget;
 }
