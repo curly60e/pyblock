@@ -1345,6 +1345,162 @@ def callGitBpytop():
         git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
         os.system(git)
     os.system("cd bpytop && sudo make install && bpytop")
+
+#----------------------------------------------------------------------PhoenixSta
+def callPhoenixLin():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix Linux", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf phoenix-0.1.1-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-linux-x64.zip && unzip -j phoenix-0.1.1-linux-x64.zip")
+        clear()
+        blogo()
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
+        input("\a\nDon't close this window to stay Online. Press Enter to Continue.")
+        input("\a\nOpen another Terminal and Select Manage in the Phoenix Menu. Press Enter to Continue.")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd phoenixwallet && ./phoenixd")
+    except:
+        menuSelection()
+
+def callPhoenixWin():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix Windows", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf v0.1.1.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.1.1.zip && unzip -j v0.1.1.zip")
+        clear()
+        blogo()
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
+        input("\a\nDon't close this window to stay Online. Press Enter to Continue.")
+        input("\a\nOpen another Terminal and Select Manage in the Phoenix Menu. Press Enter to Continue.")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd phoenixwallet && ./phoenixd")
+    except:
+        menuSelection()
+
+def callPhoenixMacX64():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix MacOSX64", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf phoenix-0.1.1-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-x64.zip && unzip -j phoenix-0.1.1-macos-x64.zip")
+        clear()
+        blogo()
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
+        input("\a\nDon't close this window to stay Online. Press Enter to Continue.")
+        input("\a\nOpen another Terminal and Select Manage in the Phoenix Menu. Press Enter to Continue.")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd phoenixwallet && ./phoenixd")
+    except:
+        menuSelection()
+
+def callPhoenixMacARM():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Phoenix MacOSARM", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('phoenixwallet'):
+            os.system("cd phoenixwallet && rm -rf phoenix-0.1.1-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.1.1/phoenix-0.1.1-macos-arm64.zip && unzip -j phoenix-0.1.1-macos-arm64.zip")
+        clear()
+        blogo()
+        input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
+        input("\a\nDon't close this window to stay Online. Press Enter to Continue.")
+        input("\a\nOpen another Terminal and Select Manage in the Phoenix Menu. Press Enter to Continue.")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd phoenixwallet && ./phoenixd")
+    except:
+        menuSelection()
+
+def callPhoenix():
+    try:
+        qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+        )
+        clear()
+        blogo()
+        output = render(
+            "Manage your Phoenix", colors=['yellow'], align='left', font='tiny'
+        )
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd phoenixwallet && ./phoenix-cli --help")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        responseC = input("\a\nCType a command of the list: ")
+        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC} | jq -C")
+        qr.add_data(output)
+        qr.print_ascii()
+        input("\a\nContinue...")
+    except:
+        menuSelection()
+
+#----------------------------------------------------------------------PhoenixEnd
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
@@ -2091,6 +2247,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mL.\033[0;37;40m Arcade        FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
     \033[1;32;40mN.\033[0;37;40m Nostr         FREE
+    \033[1;32;40mP.\033[0;37;40m PhoenixD      FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
     \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
@@ -2235,6 +2392,43 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
     miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def PhoenixConn():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    #lndconnectexec()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \u001b[38;5;202mA.\033[0;37;40m Linux
+    \u001b[38;5;202mB.\033[0;37;40m Mac  arm64
+    \u001b[38;5;202mC.\033[0;37;40m Mac    x64
+    \u001b[38;5;202mD.\033[0;37;40m Windows
+    \u001b[38;5;202mE.\033[0;37;40m Manage
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
+    phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolREMOTEOnchainONLY():
     clear()
@@ -6916,6 +7110,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         whalalConn()
     elif platf in ["N", "n"]:
         nostrConn()
+    elif platf in ["P", "p"]:
+        PhoenixConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
@@ -6929,6 +7125,19 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["R", "r"]:
         menuSelection()
 
+def phoenixmenu(menunos):
+    if menunos in ["A", "a"]:
+        callPhoenixLin()
+    elif menunos in ["B", "b"]:
+        callPhoenixMacARM()
+    elif menunos in ["C", "c"]:
+        callPhoenixMacX64()
+    elif menunos in ["D", "d"]:
+        callPhoenixWin()
+    elif menunos in ["E", "e"]:
+        callPhoenix()
+    elif platf in ["R", "r"]:
+        menuSelection()
 
 def ckpool(menuch):
     if menuch in ["A", "a"]:
