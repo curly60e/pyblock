@@ -719,6 +719,21 @@ def callPhoenix():
     except:
         menuSelection()
 
+def wallPhoenix():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "PhoenixD Invoice Maker", colors=['yellow'], align='left', font='tiny'
+        )
+        responseC = input("Your PhoenixD Password: ")
+        responseD = input("Your Description: ")
+        responseE = input("Amount in Sats: ")
+        os.system(f"curl -X 'POST' 'http://localhost:9740/createinvoice' \ -u :{responseC} \ -d 'description={responseD}' \ -d 'amountSat={responseE}'")
+        input("\a\nContinue...")
+    except:
+        pass
+        
 #----------------------------------------------------------------------PhoenixEnd
 #-----------------------------Stats--------------------------------
 
@@ -5556,6 +5571,7 @@ def PhoenixConn():
     \033[1;32;40mC.\033[0;37;40m Mac     x64
     \033[1;32;40mD.\033[0;37;40m Windows
     \033[1;32;40mE.\033[0;37;40m Manage
+    \033[1;32;40mF.\033[0;37;40m Invoice Maker
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -8208,6 +8224,8 @@ def phoenixmenu(menunos):
         callPhoenixWin()
     elif menunos in ["E", "e"]:
         callPhoenix()
+    elif menunos in ["F", "f"]:
+        wallPhoenix()
     elif platf in ["R", "r"]:
         menuSelection()
 
