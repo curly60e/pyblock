@@ -729,7 +729,7 @@ def wallPhoenix():
         responseC = input("Your PhoenixD Password: ")
         responseD = input("Your Description: ")
         responseE = input("Amount in Sats: ")
-        os.system(f"curl -X 'POST' 'http://localhost:9740/createinvoice' \ -u :{responseC} \ -d 'description={responseD}' \ -d 'amountSat={responseE}'")
+        os.system(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'")
         input("\a\nContinue...")
     except:
         pass
