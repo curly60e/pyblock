@@ -918,9 +918,9 @@ def luxorstats():
             os.system("cd luxor && rm -rf graphql-python-client && git clone https://github.com/LuxorLabs/graphql-python-client.git")
         else: # Check if the file 'bclock.conf' is in the same folder
             os.system("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git")
+        input("\a\nYou need to EDIT the file .env.example with your Luxor API Key. Press Enter to Continue.")
         clear()
         blogo()
-
         print(output)
         os.system(f"cd luxor && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion && python3 luxor.py --help")
         input("\a\nContinue...")
@@ -4431,6 +4431,7 @@ def APIMenuLOCAL():
     \033[1;32;40mN.\033[0;37;40m Nostr
     \033[1;32;40mO.\033[0;37;40m PhoenixD
     \033[1;32;40mP.\033[0;37;40m Pickaxe
+    \033[1;32;40mR.\033[0;37;40m Luxor
     \033[1;32;40mS.\033[0;37;40m Braiins Pool
     \033[1;32;40mT.\033[0;37;40m TinySeed
     \033[1;32;40mU.\033[0;37;40m UTXOracle
@@ -7837,6 +7838,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         PhoenixConn()
     elif platf in ["P", "p"]:
         PickaxeCon()
+    elif platf in ["R", "r"]:
+        luxorstats()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
