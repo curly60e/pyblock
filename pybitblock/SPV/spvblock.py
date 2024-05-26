@@ -925,7 +925,7 @@ def luxorstats():
         os.system(f"cd luxor && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion && python3 luxor.py --help")
         input("\a\nContinue...")
     except:
-        menuSelection()
+        pass
 #-----------------------------ENDLuxor--------------------------------
 
 #-----------------------------STRPickaxe--------------------------------
