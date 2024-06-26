@@ -102,7 +102,7 @@ def counttxs():
                 txs = str(mm['nTx'])
                 if txs == "1":
                     try:
-                        p = subprocess.Popen(['curl', 'https://poptart.spinda.net'])
+                        p = subprocess.Popen(['curl', 'http://ascii.live/forrest'])
                         p.wait(5)
                     except subprocess.TimeoutExpired:
                         p.kill()
