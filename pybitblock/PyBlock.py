@@ -42,7 +42,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.5"
+version = "2.6"
 
 def close():
     print("<<< Ctrl + C.\n\n")
