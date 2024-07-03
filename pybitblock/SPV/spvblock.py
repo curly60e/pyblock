@@ -733,6 +733,19 @@ def wallPhoenix():
         input("\a\nContinue...")
     except:
         pass
+
+def wallPhoenixBOLT12():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
+        )
+        responseC = input("Your PhoenixD Password: ")
+        os.system(f"curl -X 'POST' 'http://localhost:9740/getoffer' -u :{responseC}")
+        input("\a\nContinue...")
+    except:
+        pass
         
 #----------------------------------------------------------------------PhoenixEnd
 #-----------------------------Stats--------------------------------
@@ -2663,6 +2676,7 @@ def bip39convert():
         menuSelection()
 
 #-----------------------------TALLYCOIN------------------------------
+
 def loadFileConnTallyCo(tallycoLoad):
     tallycoLoad = {"tallyco.conf":"","id":""}
 
@@ -5573,6 +5587,7 @@ def PhoenixConn():
     \033[1;32;40mD.\033[0;37;40m Windows
     \033[1;32;40mE.\033[0;37;40m Manage
     \033[1;32;40mF.\033[0;37;40m Invoice Maker
+    \033[1;32;40mG.\033[0;37;40m BOLT12
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -8229,6 +8244,8 @@ def phoenixmenu(menunos):
         callPhoenix()
     elif menunos in ["F", "f"]:
         wallPhoenix()
+    elif menunos in ["G", "g"]:
+        wallPhoenixBOLT12()
     elif platf in ["R", "r"]:
         menuSelection()
 
