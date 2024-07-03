@@ -732,7 +732,7 @@ def wallPhoenix():
         os.system(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'")
         input("\a\nContinue...")
     except:
-        pass
+        menuSelection()
 
 def wallPhoenixBOLT12():
     try:
@@ -742,10 +742,10 @@ def wallPhoenixBOLT12():
         "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
         )
         responseC = input("Your PhoenixD Password: ")
-        os.system(f"curl -X 'POST' 'http://localhost:9740/getoffer' -u :{responseC}")
+        os.system(f"curl -s 'http://localhost:9740/getoffer' -u :{responseC}")
         input("\a\nContinue...")
     except:
-        pass
+        menuSelection()
         
 #----------------------------------------------------------------------PhoenixEnd
 #-----------------------------Stats--------------------------------
