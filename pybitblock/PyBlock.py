@@ -1500,6 +1500,34 @@ def callPhoenix():
     except:
         menuSelection()
 
+def wallPhoenix():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "PhoenixD Invoice Maker", colors=['yellow'], align='left', font='tiny'
+        )
+        responseC = input("Your PhoenixD Password: ")
+        responseD = input("Your Description: ")
+        responseE = input("Amount in Sats: ")
+        os.system(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'")
+        input("\a\nContinue...")
+    except:
+        pass
+
+def wallPhoenixBOLT12():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
+        )
+        responseC = input("Your PhoenixD Password: ")
+        os.system(f"curl -X 'POST' 'http://localhost:9740/getoffer' -u :{responseC}")
+        input("\a\nContinue...")
+    except:
+        pass
+
 #----------------------------------------------------------------------PhoenixEnd
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
@@ -2426,6 +2454,8 @@ def PhoenixConn():
     \u001b[38;5;202mC.\033[0;37;40m Mac    x64
     \u001b[38;5;202mD.\033[0;37;40m Windows
     \u001b[38;5;202mE.\033[0;37;40m Manage
+    \u001b[38;5;202mF.\033[0;37;40m Invoice Maker
+    \u001b[38;5;202mG.\033[0;37;40m BOLT12
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
     phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -7136,6 +7166,10 @@ def phoenixmenu(menunos):
         callPhoenixWin()
     elif menunos in ["E", "e"]:
         callPhoenix()
+    elif menunos in ["F", "f"]:
+        wallPhoenix()
+    elif menunos in ["G", "g"]:
+        wallPhoenixBOLT12()
     elif platf in ["R", "r"]:
         menuSelection()
 
