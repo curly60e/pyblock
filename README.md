@@ -396,6 +396,12 @@ Note that if you do not find a Block, you get no reward at all with Solo Mining.
 
 <img src="https://pbs.twimg.com/media/GB5nZ-oXQAAsYDQ.jpg" width="50%" />
 
+## PyBLOCK BOLT12
+
+<br />
+
+<img src="https://pbs.twimg.com/media/GRwZpFlacAAwZ9b.jpg" width="50%" />
+
 ## SUPPORT PyBLØCK.
 
 ⚡️ curly60e@zbd.gg ⚡️
