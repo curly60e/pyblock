@@ -7797,6 +7797,8 @@ def platfformsLOCALcontrol(platf):
         PhoenixConn()
     elif platf in ["P", "p"]:
         PickaxeCon()
+    elif platf in ["R", "r"]:
+        luxorstats()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
