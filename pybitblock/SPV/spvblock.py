@@ -902,11 +902,17 @@ def luxorstats():
         output = render(
             "Luxor Pool", colors=['yellow'], align='left', font='tiny'
         )
+        if os.path.isdir ('luxor'):
+            os.system("cd luxor && cd graphql-python-client && python3 luxor.py --help")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion")
+        clear()
+        blogo()
         input("\a\nYou need to EDIT the file .env.example with your Luxor API Key. Press Enter to Continue.")
         clear()
         blogo()
         print(output)
-        os.system(f"mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion && python3 luxor.py --help")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py --help")
         responseC = input("\a\nType a command of the list: ")
         os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
         responseC = input("\a\nType a command of the list: ")
