@@ -3905,7 +3905,7 @@ def localHalving():
 
 def pdfconvert():
     try:
-        conn = """curl -s https://nakamotoinstitute.org/library/bitcoin | html2text | grep October -A 428"""
+        conn = """curl -s https://nakamotoinstitute.org/library/bitcoin | html2text | grep October -A 449"""
         a = os.popen(conn).read()
         clear()
         blogo()
