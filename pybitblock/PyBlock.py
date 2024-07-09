@@ -1503,6 +1503,52 @@ def wallPhoenixBOLT12():
         menuSelection()
 
 #----------------------------------------------------------------------PhoenixEnd
+#-----------------------------STRLuxor--------------------------------
+
+def luxorstats():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Luxor Pool", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('luxor'):
+            os.system("cd luxor && cd graphql-python-client && python3 luxor.py --help")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion")
+        clear()
+        blogo()
+        input("\a\nYou need to COPY the lines inside the file .env.example and create a NEW file .env with your Luxor API Key. Press Enter to Continue.")
+        input("\a\nOther way is this 2 commands: 1 - mv .env.example .env 2 - nano .env and paste your Luxor Api Key. Press Enter to Continue.")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py --help")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        responseC = input("\a\nCType a command of the list: ")
+        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        input("\a\nContinue...")
+    except:
+        menuSelection()
+        
+#-----------------------------ENDLuxor--------------------------------
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
@@ -2250,6 +2296,7 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
     \033[1;32;40mN.\033[0;37;40m Nostr         FREE
     \033[1;32;40mP.\033[0;37;40m PhoenixD      FREE
+    \033[1;32;40mR.\033[0;37;40m Luxor         FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
     \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
@@ -7116,6 +7163,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         nostrConn()
     elif platf in ["P", "p"]:
         PhoenixConn()
+    elif platf in ["R", "r"]:
+        luxorstats(
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
