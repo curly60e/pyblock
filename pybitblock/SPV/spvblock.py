@@ -7889,7 +7889,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["P", "p"]:
         PickaxeCon()
     elif platf in ["Q", "q"]:
-        oceanConn()
+        OceanConn()
     elif platf in ["R", "r"]:
         luxorstats()
     elif platf in ["S", "s"]:
@@ -7943,7 +7943,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["P", "p"]:
         PickaxeCon()
     elif platf in ["Q", "q"]:
-        oceanConn()
+        OceanConn()
     elif platf in ["R", "r"]:
         luxorstats()
     elif platf in ["S", "s"]:
