@@ -1198,7 +1198,7 @@ def oceanH(): # show srings
 
         print(output)
         responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        list = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
         a = os.popen(list).read()
         clear()
         blogo()
