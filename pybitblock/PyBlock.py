@@ -1186,8 +1186,70 @@ def blockTmpConn():
         pass
 
 #-----------------------------END Block Templates--------------------------------
+#---------------------------------ocean pool----------------------------------
+        
+def oceanH(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Ocean Hashrate", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Your Bitcoin Address: ")
+        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nAddress: " + responseC)
+        print("\nHashrate: " + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def oceanB(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Ocean Blocks", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C """
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nBlocks: " + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def oceanE(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Ocean Earnings", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Your Bitcoin Address: ")
+        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nAddress: " + responseC)
+        print("\nEarnings: " + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#---------------------------------ocean pool end----------------------------------
 
 #---------------------------------Warden Terminal----------------------------------
+
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
@@ -2247,7 +2309,7 @@ def APIMenuLOCAL():
     \033[1;32;40mS.\033[0;37;40m Braiins Pool FREE
     \033[1;32;40mT.\033[0;37;40m TinySeed     FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle    FREE
-    \033[1;32;40mW.\033[0;37;40m CKPool       FREE
+    \033[1;32;40mW.\033[0;37;40m CK Pool      FREE
     \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
@@ -2296,11 +2358,12 @@ def APIMenuLOCALOnchainONLY():
     \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
     \033[1;32;40mN.\033[0;37;40m Nostr         FREE
     \033[1;32;40mP.\033[0;37;40m PhoenixD      FREE
-    \033[1;32;40mR.\033[0;37;40m Luxor         FREE
+    \033[1;32;40mQ.\033[0;37;40m Ocean Pool    FREE
+    \033[1;32;40mR.\033[0;37;40m Luxor Pool    FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
     \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
-    \033[1;32;40mW.\033[0;37;40m CKPool        FREE
+    \033[1;32;40mW.\033[0;37;40m CK Pool       FREE
     \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool  FREE
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
@@ -2480,6 +2543,41 @@ def PhoenixConn():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
     phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def OceanConn():
+    clear()
+    blogo()
+    sysinfo()
+    pathexec()
+    #lndconnectexec()
+    if path['bitcoincli']:
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        b = json.loads(a)
+        d = b
+    else:
+        a = "Local" if path['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Earnings
+    \033[1;32;40mB.\033[0;37;40m Hashrate
+    \033[1;32;40mC.\033[0;37;40m Blocks
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
+    oceanMstats(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def slushpoolREMOTEOnchainONLY():
     clear()
@@ -7117,6 +7215,8 @@ def platfformsLOCALcontrol(platf):
         whalalConn()
     elif platf in ["N", "n"]:
         nostrConn()
+    elif platf in ["Q", "q"]:
+        oceanConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
@@ -7163,6 +7263,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         nostrConn()
     elif platf in ["P", "p"]:
         PhoenixConn()
+    elif platf in ["Q", "q"]:
+        oceanConn()
     elif platf in ["R", "r"]:
         luxorstats(
     elif platf in ["S", "s"]:
@@ -7193,6 +7295,16 @@ def phoenixmenu(menunos):
         wallPhoenix()
     elif menunos in ["G", "g"]:
         wallPhoenixBOLT12()
+    elif platf in ["R", "r"]:
+        menuSelection()
+
+def oceanMstats(menuunos):
+    if menuunos in ["A", "a"]:
+        oceanE()
+    elif menuunos in ["B", "b"]:
+        oceanH()
+    elif menuunos in ["C", "c"]:
+        oceanB()
     elif platf in ["R", "r"]:
         menuSelection()
 
