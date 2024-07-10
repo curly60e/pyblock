@@ -1072,7 +1072,7 @@ def oceanH(): # show srings
         clear()
         blogo()
         print("\nAddress: " + responseC)
-        print("\nHashrate: " + a)
+        print("\nHashrate:\n " + a)
         input("\a\nContinue...")
     except:
         pass
@@ -1086,11 +1086,11 @@ def oceanB(): # show srings
         )
 
         print(output)
-        list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C """
+        list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
         a = os.popen(list).read()
         clear()
         blogo()
-        print("\nBlocks: " + a)
+        print("\nBlocks:\n " + a)
         input("\a\nContinue...")
     except:
         pass
@@ -1110,7 +1110,7 @@ def oceanE(): # show srings
         clear()
         blogo()
         print("\nAddress: " + responseC)
-        print("\nEarnings: " + a)
+        print("\nEarnings:\n " + a)
         input("\a\nContinue...")
     except:
         pass
