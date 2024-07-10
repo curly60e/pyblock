@@ -7216,7 +7216,7 @@ def platfformsLOCALcontrol(platf):
     elif platf in ["N", "n"]:
         nostrConn()
     elif platf in ["Q", "q"]:
-        oceanConn()
+        OceanConn()
     elif platf in ["S", "s"]:
         slushpoolLOCALOnchainONLY()
     elif platf in ["T", "t"]:
@@ -7264,7 +7264,7 @@ def platfformsLOCALcontrolOnchainONLY(platf):
     elif platf in ["P", "p"]:
         PhoenixConn()
     elif platf in ["Q", "q"]:
-        oceanConn()
+        OceanConn()
     elif platf in ["R", "r"]:
         luxorstats()
     elif platf in ["S", "s"]:
