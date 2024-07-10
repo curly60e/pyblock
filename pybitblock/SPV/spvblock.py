@@ -1055,7 +1055,67 @@ def decodeStrDat(): # show srings
         pass
 
 #-----------------------------End Strings Dat--------------------------------
+#---------------------------------ocean pool----------------------------------
+        
+def oceanH(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Ocean Hashrate", colors=['yellow'], align='left', font='tiny'
+        )
 
+        print(output)
+        responseC = input("Your Bitcoin Address: ")
+        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nAddress: " + responseC)
+        print("\nHashrate: " + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def oceanB(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Ocean Blocks", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C """
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nBlocks: " + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def oceanE(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Ocean Earnings", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Your Bitcoin Address: ")
+        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        a = os.popen(list).read()
+        clear()
+        blogo()
+        print("\nAddress: " + responseC)
+        print("\nEarnings: " + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#---------------------------------ocean pool end----------------------------------
 #-----------------------------StatsLN--------------------------------
 
 def stalnConn():
@@ -4446,11 +4506,12 @@ def APIMenuLOCAL():
     \033[1;32;40mN.\033[0;37;40m Nostr
     \033[1;32;40mO.\033[0;37;40m PhoenixD
     \033[1;32;40mP.\033[0;37;40m Pickaxe
-    \033[1;32;40mR.\033[0;37;40m Luxor
+    \033[1;32;40mQ.\033[0;37;40m Ocean Pool
+    \033[1;32;40mR.\033[0;37;40m Luxor Pool
     \033[1;32;40mS.\033[0;37;40m Braiins Pool
     \033[1;32;40mT.\033[0;37;40m TinySeed
     \033[1;32;40mU.\033[0;37;40m UTXOracle
-    \033[1;32;40mW.\033[0;37;40m CKPool
+    \033[1;32;40mW.\033[0;37;40m CK Pool
     \033[1;32;40mX.\033[0;37;40m Template
     \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool
     \u001b[31;1mR.\033[0;37;40m Return
@@ -5592,6 +5653,29 @@ def PhoenixConn():
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
+def OceanConn():
+    clear()
+    blogo()
+    sysinfo()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Earnings
+    \033[1;32;40mB.\033[0;37;40m Hashrate
+    \033[1;32;40mC.\033[0;37;40m Blocks
+    \u001b[31;1mR.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n,b, version ))
+    oceanMstats(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
@@ -7804,6 +7888,8 @@ def platfformsLOCALcontrol(platf):
         PhoenixConn()
     elif platf in ["P", "p"]:
         PickaxeCon()
+    elif platf in ["Q", "q"]:
+        oceanConn()
     elif platf in ["R", "r"]:
         luxorstats()
     elif platf in ["S", "s"]:
@@ -7856,6 +7942,8 @@ def platfformsLOCALcontrolOnchainONLY(platf):
         PhoenixConn()
     elif platf in ["P", "p"]:
         PickaxeCon()
+    elif platf in ["Q", "q"]:
+        oceanConn()
     elif platf in ["R", "r"]:
         luxorstats()
     elif platf in ["S", "s"]:
@@ -8249,6 +8337,16 @@ def phoenixmenu(menunos):
         wallPhoenix()
     elif menunos in ["G", "g"]:
         wallPhoenixBOLT12()
+    elif platf in ["R", "r"]:
+        menuSelection()
+
+def oceanMstats(menuunos):
+    if menuunos in ["A", "a"]:
+        oceanE()
+    elif menuunos in ["B", "b"]:
+        oceanH()
+    elif menuunos in ["C", "c"]:
+        oceanB()
     elif platf in ["R", "r"]:
         menuSelection()
 
