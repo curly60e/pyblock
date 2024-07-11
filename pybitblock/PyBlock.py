@@ -1417,9 +1417,9 @@ def callPhoenixLin():
             "Phoenix Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.2.0-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.2.0/phoenix-0.2.0-linux-x64.zip")
+            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.2.0/phoenix-0.2.0-linux-x64.zip && unzip -j phoenix-0.2.0-linux-x64.zip")
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip && unzip -j phoenix-0.3.0-linux-x64.zip")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -1440,9 +1440,9 @@ def callPhoenixWin():
             "Phoenix Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf v0.2.0.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.2.0.zip")
+            os.system("cd phoenixwallet && rm -rf v0.3.0.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.2.0.zip && unzip -j v0.2.0.zip")
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip && unzip -j v0.3.0.zip")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -1463,9 +1463,9 @@ def callPhoenixMacX64():
             "Phoenix MacOSX64", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.2.0-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.2.0/phoenix-0.2.0-macos-x64.zip")
+            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.2.0/phoenix-0.2.0-macos-x64.zip && unzip -j phoenix-0.2.0-macos-x64.zip")
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip && unzip -j phoenix-0.3.0-macos-x64.zip")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -1486,9 +1486,9 @@ def callPhoenixMacARM():
             "Phoenix MacOSARM", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.2.0-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.2.0/phoenix-0.2.0-macos-arm64.zip")
+            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.2.0/phoenix-0.2.0-macos-arm64.zip && unzip -j phoenix-0.2.0-macos-arm64.zip")
+            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip && unzip -j phoenix-0.3.0-macos-arm64.zip")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
