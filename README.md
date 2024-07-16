@@ -349,22 +349,10 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 [@Acinq,](https://twitter.com/acinq_co)
 [@PhoenixWallet,](https://twitter.com/PhoenixWallet)
 [@ForemanMining,](https://twitter.com/foremanmining)
+[@@Ocean_Mining,](https://twitter.com/Ocean_Mining)
+[@LuxorTechnology,](https://twitter.com/LuxorTechnology)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
-
-## PyBLØCK Widget 
-
-## Tutorial
-
-1. Install the app "Scriptable" -> [Apple Appstore - Scriptable](https://apps.apple.com/ch/app/scriptable/id1405459188)
-2. Open the app and click the "+" sign on the top right corner.
-3. Copy or Download the following script created by [PyBLOCK](https://github.com/curly60e/pyblock/blob/master/PyBL%C3%98CK%20Widget.scriptable):
-4. Paste or Open in Scriptable.
-5. Run the script.
-6. Click and done.
-7. Go to the homescreen, press and hold for a few seconds to make the icons move. Tab on the top left corner the "+" symbol.
-8. Scroll down untill you find the "Scriptable" App. Select it and scroll to the right for the full sized version.
-9. Click "Add Widget" and tab the new created widget to edit it. Select the created script and you're done. 
 
 <br />
 
