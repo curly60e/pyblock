@@ -1200,10 +1200,8 @@ def oceanH(): # show srings
         responseC = input("Your Bitcoin Address: ")
         list = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
         a = os.popen(list).read()
-        clear()
-        blogo()
         print("\nAddress: " + responseC)
-        print("\nHashrate:\n " + a)
+        print("\nHashrate:\n" + a)
         input("\a\nContinue...")
     except:
         pass
@@ -1219,9 +1217,7 @@ def oceanB(): # show srings
         print(output)
         list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
         a = os.popen(list).read()
-        clear()
-        blogo()
-        print("\nBlocks:\n " + a)
+        print("\nBlocks:\n" + a)
         input("\a\nContinue...")
     except:
         pass
@@ -1238,10 +1234,8 @@ def oceanE(): # show srings
         responseC = input("Your Bitcoin Address: ")
         list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
         a = os.popen(list).read()
-        clear()
-        blogo()
         print("\nAddress: " + responseC)
-        print("\nEarnings:\n " + a)
+        print("\nEarnings:\n" + a)
         input("\a\nContinue...")
     except:
         pass
