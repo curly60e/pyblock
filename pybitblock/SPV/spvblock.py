@@ -2887,6 +2887,25 @@ def tallycoDonateid():
 #-----------------------------END TALLYCOIN------------------------------
 #-----------------------------MEMPOOL.SPACE------------------------------
 
+def MemShell():
+    try:
+        clear()
+        blogo()
+        output = render(
+        "Mempool Shell", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('mempoolshell'):
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir mempoolshell && cd mempoolshell")
+            clear()
+            blogo()
+            print(output)
+        os.system(f"cd mempoolshell && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvfz mempool-cli_2.0.4_Linux_x86_64.tar.gz && cd mempool-cli_2.0.4_Linux_x86_64 && ./mempool-cli ")
+        input("\a\nContinue...")
+    except:
+        pass
+
+
 def fee():
     try:
         while True:
@@ -4951,6 +4970,7 @@ def mempoolmenu():
 
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
+    \033[1;32;40mC.\033[0;37;40m Mempool Shell
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     mempoolmenuS(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -4973,6 +4993,7 @@ def mempoolmenuOnchainONLY():
 
     \033[1;32;40mA.\033[0;37;40m Blocks
     \033[1;32;40mB.\033[0;37;40m Recommended Fee
+    \033[1;32;40mC.\033[0;37;40m Mempool Shell
     \u001b[31;1mR.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     mempoolmenuSOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -6904,6 +6925,8 @@ def mempoolmenuS(menuMem):
         blocks()
     elif menuMem in ["B", "b"]:
         fee()
+    elif menuMem in ["C", "c"]:
+        MemShell()
     elif menuMem in ["R", "r"]:
         menuSelection()
 
@@ -6912,6 +6935,8 @@ def mempoolmenuSOnchainONLY(menuMem):
         blocks()
     elif menuMem in ["B", "b"]:
         fee()
+    elif menuMem in ["C", "c"]:
+        MemShell()
     elif menuMem in ["R", "r"]:
         menuSelection()
 
