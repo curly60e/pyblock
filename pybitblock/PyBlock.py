@@ -360,18 +360,18 @@ def MemShell():
         clear()
         blogo()
         output = render(
-        "Mempool Shell", colors=['yellow'], align='left', font='tiny'
+            "Mempool Shell", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('mempoolshell'):
+            os.system("cd mempoolshell && ./mempool-cli")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir mempoolshell && cd mempoolshell")
-            clear()
-            blogo()
-            print(output)
-        os.system(f"cd mempoolshell && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz && ./mempool-cli ")
-        input("\a\nContinue...")
+            os.system("mkdir mempoolshell && cd mempoolshell && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd mempoolshell && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz && ./mempool-cli")
     except:
-        pass
+        menuSelection()
 
 def pyblockpoolpoolLOCALOnchainONLY():
 
