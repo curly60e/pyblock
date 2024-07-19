@@ -359,19 +359,10 @@ def MemShell():
     try:
         clear()
         blogo()
-        output = render(
-            "Mempool Shell", colors=['yellow'], align='left', font='tiny'
-        )
-        if os.path.isdir ('mempoolshell'):
-            os.system("cd mempoolshell && ./mempool-cli")
-        else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir mempoolshell && cd mempoolshell && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz")
-        clear()
-        blogo()
-        print(output)
-        os.system(f"cd mempoolshell && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz && ./mempool-cli")
+        output = render("Mempool Shell", colors=['yellow'], align='left', font='tiny')
+        os.system(f"./mempool-cli ")
     except:
-        menuSelection()
+        pass
 
 def pyblockpoolpoolLOCALOnchainONLY():
 
@@ -1205,7 +1196,7 @@ def blockTmpConn():
 
 #-----------------------------END Block Templates--------------------------------
 #---------------------------------ocean pool----------------------------------
-        
+
 def oceanH(): # show srings
     try:
         clear()
@@ -1621,7 +1612,7 @@ def luxorstats():
         input("\a\nContinue...")
     except:
         menuSelection()
-        
+
 #-----------------------------ENDLuxor--------------------------------
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
