@@ -285,7 +285,7 @@ Credentials: "Running:PyBLOCK" ("User:Pass")
 
 ### Created by
 
-[@Curly60e.](https://twitter.com/curly60e) ⚡️ curly60e@zbd.gg
+[@Curly60e.](https://twitter.com/curly60e) ⚡️ holycherry05@phoenixwallet.me
 
 npub1a78zk8cnczxjudg888f9t3va29vxhevvhdkdqvwe7zk70qx488zsc8573s
 
