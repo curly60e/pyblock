@@ -360,7 +360,7 @@ def MemShell():
         clear()
         blogo()
         output = render("Mempool Shell", colors=['yellow'], align='left', font='tiny')
-        os.system(f"./mempool-cli ")
+        os.system(f"chmod +x mempool-cli && ./mempool-cli ")
     except:
         pass
 
