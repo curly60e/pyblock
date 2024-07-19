@@ -392,7 +392,7 @@ Note that if you do not find a Block, you get no reward at all with Solo Mining.
 
 ## SUPPORT PyBLØCK.
 
-⚡️ curly60e@zbd.gg ⚡️
+⚡️ holycherry05@phoenixwallet.me ⚡️
 
 Bitcoin Address: bc1prwjajvvax2rkm2wzelpfzzc2ncywht69pswnurhzdfj9qujhyxzsqpd3eg
 
