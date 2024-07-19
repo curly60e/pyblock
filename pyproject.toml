@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pybitblock"
-version = "2.7"
+version = "2.7.1"
 description = "ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔."
 license="MIT"
 authors = ["curly60e <curly60e@piserver.xyz>", "SN"]
