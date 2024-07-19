@@ -2900,7 +2900,7 @@ def MemShell():
             clear()
             blogo()
             print(output)
-        os.system(f"cd mempoolshell && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvfz mempool-cli_2.0.4_Linux_x86_64.tar.gz && cd mempool-cli_2.0.4_Linux_x86_64 && ./mempool-cli ")
+        os.system(f"cd mempoolshell && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz && ./mempool-cli ")
         input("\a\nContinue...")
     except:
         pass
