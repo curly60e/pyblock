@@ -88,12 +88,12 @@ def counttxs():
         an = din
         bs = str(an)
         a = bs
-        r = requests.get("https://bitcoinexplorer.org/api/mempool/summary")
-        r.json()["size"]
+        r = requests.get("https://blockchain.info/q/unconfirmedcount")
+        r.headers['Content-Type']
         n = r.text
         di = json.loads(n)
         s = di
-        e = int(s['size'])
+        e = str(s)
         n = e / 10
         nn = n
         clear()
@@ -117,12 +117,12 @@ def counttxs():
             din = json.loads(qs)
             an = din
             bs = str(an)
-            r = requests.get("https://bitcoinexplorer.org/api/mempool/summary")
-            r.json()["size"]
+            r = requests.get("https://blockchain.info/q/unconfirmedcount")
+            r.headers['Content-Type']
             n = r.text
             di = json.loads(n)
             s = di
-            e = int(s['size'])
+            e = str(s)
             n = e / 10
             if e > nn:
                 clear()
@@ -146,7 +146,7 @@ def counttxs():
                 din = json.loads(qs)
                 an = din
                 bs = str(an)
-                r = requests.get("https://bitcoinexplorer.org/api/mempool/summary")
+                r = requests.get("https://blockchain.info/q/unconfirmedcount")
                 print("\n\n\n")
                 output = render(
                     bs,
@@ -801,40 +801,32 @@ def pgpConn():
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            r = requests.get("https://bitcoinexplorer.org/api/price/sats")
-            r.json()["usd"]
-            n = r.text
-            di = json.loads(n)
-            s = di
-            e = int(s['usd'])
-            n = e
-            output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-            sn = render(f"{e}", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
-            print(output)
-            print(sn)
-            print(outputT)
+            conn = """curl -s https://blockchain.info/tobtc?currency=USD&value=1 """
+            a = os.popen(conn).read()
             clear()
-            close()
-            mtclock()
+            blogo()
+            closed()
+            output = render("Moscow Time", colors=['yellow'], align='left', font='tiny')
+            print(output)
+            print(a)
+            input("\a\nContinue...")
         except:
-            break
+            pass
 
 def mtclock():
     try:
-        r = requests.get("https://bitcoinexplorer.org/api/price/sats")
-        r.json()["usd"]
-        n = r.text
-        di = json.loads(n)
-        s = di
-        e = int(s['usd'])
-        n = e
-        output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-        sn = render(f"{e}", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-        outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
+        conn = """curl -s https://blockchain.info/tobtc?currency=USD&value=1 """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "Moscow Time", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        print(sn)
-        print(outputT)
+        print(a)
+        input("\a\nContinue...")
     except:
         pass
 #-----------------------------END MT--------------------------------
@@ -1018,7 +1010,7 @@ def quotesConn():
 
 def miningConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
+        conn = """curl -s "https://blockchain.info/q/hashrate" """
         a = os.popen(conn).read()
         clear()
         blogo()
