@@ -392,7 +392,7 @@ Note that if you do not find a Block, you get no reward at all with Solo Mining.
 
 ## SUPPORT PyBLØCK.
 
-⚡️ holycherry05@phoenixwallet.me ⚡️
+Bolt12: ⚡️ holycherry05@phoenixwallet.me ⚡️
 
 Bitcoin Address: bc1prwjajvvax2rkm2wzelpfzzc2ncywht69pswnurhzdfj9qujhyxzsqpd3eg
 
