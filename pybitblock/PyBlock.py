@@ -6877,7 +6877,7 @@ def bitcoincoremenuLOCALcontrolOOnchainONLY(oreturn):
     if oreturn in ["A", "a"]:
         clear()
         blogo()
-        opreturnOnchainONLY()
+        opreturn()
     elif oreturn in ["B", "b"]:
         clear()
         blogo()
