@@ -23,5 +23,5 @@ jobs:
         user: __token__
         password: ${{ secrets.TEST_PYPI_TOKEN }}
         repository-url: https://test.pypi.org/legacy/
-      permissions:
-        id-token: write
+        permissions:
+          id-token: write
