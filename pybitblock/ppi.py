@@ -338,40 +338,35 @@ def pgpConn():
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            r = requests.get("https://bitcoinexplorer.org/api/price/sats")
-            r.json()["usd"]
-            n = r.text
-            di = json.loads(n)
-            s = di
-            e = int(s['usd'])
-            n = e
-            output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-            sn = render(f"{e}", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
-            print(output)
-            print(sn)
-            print(outputT)
-            clear()
-            close()
-            mtclock()
-        except:
-            break
+        conn = """curl -s https://blockchain.info/tobtc?currency=USD&value=1 """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "Moscow Time", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
 
 def mtclock():
     try:
-        r = requests.get("https://bitcoinexplorer.org/api/price/sats")
-        r.json()["usd"]
-        n = r.text
-        di = json.loads(n)
-        s = di
-        e = int(s['usd'])
-        n = e
-        output = render("Moscow Time", colors=['yellow'], align='center', font='tiny')
-        sn = render(f"{e}", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-        outputT = render("O'Clock", colors=['green'], align='center', font='tiny')
+        conn = """curl -s https://blockchain.info/tobtc?currency=USD&value=1 """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render(
+            "Moscow Time", colors=['yellow'], align='left', font='tiny'
+        )
+
         print(output)
-        print(sn)
-        print(outputT)
+        print(a)
+        input("\a\nContinue...")
     except:
         pass
 
