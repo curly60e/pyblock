@@ -24,20 +24,23 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4  # Actualizado a v4
       with:
-        python-version: '3.x'
+        python-version: '3.12'
+
+    - name: Install Poetry
+      run: curl -sSL https://install.python-poetry.org | python3 -
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install build
-        pip install six  # Asegúrate de que `six` esté instalado
+        poetry install
+        poetry add six  # Asegurarse de que `six` esté instalado
 
     - name: Build the package
-      run: python -m build
+      run: poetry build
 
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
+
 
