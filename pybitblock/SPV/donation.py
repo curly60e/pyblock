@@ -15,7 +15,7 @@ def donationAddr():
     box_size=10,
     border=4,
     )
-    url = 'bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv'
+    url = 'bc1prwjajvvax2rkm2wzelpfzzc2ncywht69pswnurhzdfj9qujhyxzsqpd3eg'
     print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
@@ -38,7 +38,6 @@ def donationPayNym():
     qr.clear()
     print(f"PayNym: {url}")
 
-#Dev LN
 def donationLN():
     qr = qrcode.QRCode(
     version=1,
@@ -46,49 +45,13 @@ def donationLN():
     box_size=10,
     border=4,
     )
-    amt = input("Amount: ")
-    curl = (
-        'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
-        + "'{"
-        + f""""out": false, "amount": {amt}, "memo": "Donation" """
-        + "}'"
-        + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-    )
-
-    sh = os.popen(curl).read()
-    clear()
-    blogo()
-    n = str(sh)
-    d = json.loads(n)
-    q = d['payment_request']
-    c = q.lower()
-    while True:
-        print("\033[1;30;47m")
-        qr.add_data(c)
-        qr.print_ascii()
-        print("\033[0;37;40m")
-        qr.clear()
-        print(f"Lightning Invoice: {c}")
-        dn = str(d['checking_id'])
-        t.sleep(10)
-        checkcurl = (
-            f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
-            + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-        )
-
-        rsh = os.popen(checkcurl).read()
-        clear()
-        blogo()
-        nn = str(rsh)
-        dd = json.loads(nn)
-        db = dd['paid']
-        if db is not True:
-            continue
-
-        clear()
-        blogo()
-        tick()
-        bitLN['pd'] = "PAID"
+    url = 'holycherry05@phoenixwallet.me'
+    print("\033[1;30;47m")
+    qr.add_data(url)
+    qr.print_ascii()
+    print("\033[0;37;40m")
+    qr.clear()
+    print(f"Lightning Address: {url}")
 
 #Tester Address
 def donationAddrTst():
