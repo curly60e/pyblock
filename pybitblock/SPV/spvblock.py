@@ -88,80 +88,94 @@ def counttxs():
         an = din
         bs = str(an)
         a = bs
-        r = requests.get("https://blockchain.info/q/unconfirmedcount")
+
+        r = requests.get("https://mempool.space/api/mempool")
         r.headers['Content-Type']
-        n = r.text
-        di = json.loads(n)
-        s = di
+        mempool_data = r.json()
+        s = mempool_data['count']
         e = str(s)
-        n = e / 10
+        n = int(s) / 10
         nn = n
+
         clear()
         outputtxs = render(
             f'{e} txs',
-            colors=[settingsClock['colorA'], settingsClock['colorB']],
+            colors=['yellow', 'green'],  # Usando colores predeterminados
             align='center',
             font='tiny',
         )
 
         print("\x1b[?25l" + outputtxs)
+
         shq = int(n)
         ss = str(rectangle(shq))
-        qq = ss.replace("None","")
+        qq = ss.replace("None", "")
         print(f"\033[A{qq}\033[A")
+
         while True:
-            x = a
             rr = requests.get('https://mempool.space/api/blocks/tip/height')
             rr.headers['Content-Type']
             qs = rr.text
             din = json.loads(qs)
             an = din
             bs = str(an)
-            r = requests.get("https://blockchain.info/q/unconfirmedcount")
+            a = bs
+
+            r = requests.get("https://mempool.space/api/mempool")
             r.headers['Content-Type']
-            n = r.text
-            di = json.loads(n)
-            s = di
+            mempool_data = r.json()
+            s = mempool_data['count']
             e = str(s)
-            n = e / 10
-            if e > nn:
+            n = int(s) / 10
+            nn = n
+
+            if int(e) > int(nn):
                 clear()
                 outputtxs = render(
                     f'{e} txs',
-                    colors=[settingsClock['colorA'], settingsClock['colorB']],
+                    colors=['yellow', 'green'],  # Usando colores predeterminados
                     align='center',
                     font='tiny',
                 )
-
                 print("\x1b[?25l" + outputtxs)
                 shq = int(n)
                 ss = str(rectangle(shq))
-                qq = ss.replace("None","")
+                qq = ss.replace("None", "")
                 print(f"\033[A{qq}\033[A")
                 nn = e
-            if bs > a:
-                rr = requests.get('https://mempool.space/api/blocks/tip/height')
-                rr.headers['Content-Type']
-                qs = rr.text
-                din = json.loads(qs)
-                an = din
-                bs = str(an)
-                r = requests.get("https://blockchain.info/q/unconfirmedcount")
-                print("\n\n\n")
-                output = render(
-                    bs,
-                    colors=[settingsClock['colorA'], settingsClock['colorB']],
-                    align='center',
-                    font='tiny',
-                )
 
+            current_block = requests.get('https://mempool.space/api/blocks/tip/height').text.strip()
+            if int(current_block) > int(qs):
+                print("\n\n\n")
+                output = render(current_block, colors=['yellow', 'green'], align='center', font='tiny')
                 print("\a\x1b[?25l" + output)
+
+                block_hash = requests.get('https://mempool.space/api/blocks/tip/hash').text.strip()
+                block_info = requests.get(f'https://mempool.space/api/block/{block_hash}').json()
+                tx_count = block_info.get('tx_count', 0)
+
+                outputtxs = render(f'{tx_count} txs', colors=['yellow', 'green'], align='center', font='tiny')
+                print("\x1b[?25l" + outputtxs)
+                sh = int(tx_count) / 10
+                shq = int(sh)
+                ss = str(rectangle(shq))
+                print(ss.replace("None", ""))
                 t.sleep(5)
+
+                if tx_count == 1:
+                    try:
+                        p = subprocess.Popen(['curl', 'http://ascii.live/forrest'])
+                        p.wait(5)
+                    except subprocess.TimeoutExpired:
+                        p.kill()
+
+                print("\033[0;37;40m\x1b[?25l")
                 clear()
-                a = bs
+                qs = current_block
                 nn = e
     except:
         pass
+
 
 def blogo():
 
