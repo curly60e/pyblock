@@ -334,7 +334,7 @@ def pgpConn():
 
 #-----------------------------END PGP--------------------------------
 
-#-----------------------------MT--------------------------------
+#-----------------------------MoscowT--------------------------------
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
@@ -347,8 +347,8 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
             print(output)
             print(a)
             input("\a\nContinue...")
-        except:
-            pass
+        except KeyboardInterrupt:
+            break
 
 def mtclock():
     try:
