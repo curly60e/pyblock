@@ -2879,14 +2879,71 @@ def tallycoDonateid():
 #-----------------------------END TALLYCOIN------------------------------
 #-----------------------------MEMPOOL.SPACE------------------------------
 
-def MemShell():
+def callMemL():
     try:
         clear()
         blogo()
-        output = render("Mempool Shell", colors=['yellow'], align='left', font='tiny')
-        os.system(f"chmod +x mempool-cli && ./mempool-cli ")
+        output = render(
+            "Mempool-cli", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('mempoolcli'):
+            os.system("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_x86_64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd mempoolcli && ./mempool-cli")
     except:
-        pass
+        menuSelection()
+
+def callMemR():
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Mempool-cli", colors=['yellow'], align='left', font='tiny'
+        )
+        if os.path.isdir ('mempoolcli'):
+            os.system("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_arm64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz")
+        else: # Check if the file 'bclock.conf' is in the same folder
+            os.system("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_arm64.tar.gz")
+        clear()
+        blogo()
+        print(output)
+        os.system(f"cd mempoolcli && ./mempool-cli")
+    except:
+        menuSelection()
+
+def MemShellMenu(menunos):
+    if menunos in ["A", "a"]:
+        callMemL()
+    elif menunos in ["B", "b"]:
+        callMemR()
+    elif platf in ["R", "r"]:
+        menuSelection()
+
+def MemShell():
+    clear()
+    blogo()
+    sysinfo()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m Linux
+    \033[1;32;40mB.\033[0;37;40m Raspberry-Pi
+    \u001b[33;1mEnter.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n,b, version ))
+    MemShellMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def fee():
     try:
