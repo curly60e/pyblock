@@ -34,6 +34,12 @@ jobs:
       run: python -m build
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+    - name: Install DEP
+      run: poetry install
+
+    - name: Build the package
+      run: poetry build
+      
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
