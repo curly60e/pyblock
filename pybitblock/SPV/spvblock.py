@@ -3907,7 +3907,7 @@ def getrawtx(): # show confirmations from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ','"""
+        conn = """curl -s https://blockchain.info/q/totalbc """
         a = os.popen(conn).read()
         clear()
         blogo()
