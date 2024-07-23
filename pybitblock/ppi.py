@@ -344,8 +344,9 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
             blogo()
             closed()
             output = render("Moscow Time", colors=['yellow'], align='left', font='tiny')
+            outputT = render(f"{a} sats", colors=['green'], align='left', font='tiny')
             print(output)
-            print(a)
+            print(outputT)
             input("\a\nContinue...")
         except KeyboardInterrupt:
             break
@@ -357,15 +358,13 @@ def mtclock():
         clear()
         blogo()
         closed()
-        output = render(
-            "Moscow Time", colors=['yellow'], align='left', font='tiny'
-        )
-
+        output = render("Moscow Time", colors=['yellow'], align='left', font='tiny')
+        outputT = render(f"{a} sats", colors=['green'], align='left', font='tiny')
         print(output)
-        print(a)
+        print(outputT)
         input("\a\nContinue...")
     except:
-        pass
+        break
 
 #-----------------------------END MT--------------------------------
 
