@@ -801,7 +801,7 @@ def pgpConn():
 def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            conn = """curl -s https://blockchain.info/tobtc?currency=USD&value=1 """
+            conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
             a = os.popen(conn).read()
             clear()
             blogo()
@@ -815,7 +815,7 @@ def mtConn(): # here we convert the result of the command 'getblockcount' on a r
 
 def mtclock():
     try:
-        conn = """curl -s https://blockchain.info/tobtc?currency=USD&value=1 """
+        conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
         a = os.popen(conn).read()
         clear()
         blogo()
