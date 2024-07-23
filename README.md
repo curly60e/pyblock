@@ -72,7 +72,7 @@
 
 <br />
 
-<img src="https://ton.twitter.com/i/ton/data/dm/1814090186143191374/1814090167856095232/tXRnNXP7.jpg" width="50%" />
+<img src="https://pbs.twimg.com/media/GS5DEUfasAIh_P8.jpg" width="50%" />
 
 <br />
 
