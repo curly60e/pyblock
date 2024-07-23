@@ -364,7 +364,7 @@ def mtclock():
         print(outputT)
         input("\a\nContinue...")
     except:
-        break
+        pass
 
 #-----------------------------END MT--------------------------------
 
