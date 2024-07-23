@@ -1,4 +1,4 @@
-ame: Publish Python 🐍 distributions 📦 to PyPI
+name: Publish Python 🐍 distributions 📦 to PyPI
 
 on: [push, pull_request, workflow_dispatch]
 
