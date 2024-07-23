@@ -10,7 +10,7 @@ homepage="https://github.com/curly60e/pyblock"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-six = "^1.16.0"
+#six = "^1.16.0"
 art = "*"
 qrcode = "*"
 psutil = "*"
@@ -38,7 +38,7 @@ pdf2text = "*"
 pdf2txt = "*"
 embit = "*"
 requests = "*"
-typer-cli = "*"
+#typer-cli = "*"
 
 [tool.poetry.dev-dependencies]
 
