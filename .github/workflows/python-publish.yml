@@ -29,8 +29,9 @@ jobs:
     - name: Install Poetry
       run: curl -sSL https://install.python-poetry.org | python3 -
 
-    - name: Install six
-      run: pip install six
+    - name: Install six directly in Poetry environment
+      run: |
+        poetry run pip install six
 
     - name: Install dependencies
       run: poetry install
