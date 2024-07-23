@@ -335,20 +335,21 @@ def pgpConn():
 #-----------------------------END PGP--------------------------------
 
 #-----------------------------MoscowT--------------------------------
-def mtConn(): # here we convert the result of the command 'getblockcount' on a random art design
+def mtConn():  # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
             conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
-            a = os.popen(conn).read()
+            a = os.popen(conn).read().strip()  # Leer y eliminar espacios en blanco
+            sats = a.lstrip('0.')  # Eliminar ceros iniciales y el punto decimal
             clear()
             blogo()
             closed()
             output = render("Moscow Time", colors=['yellow'], align='left', font='tiny')
-            outputT = render(f"{a} sats", colors=['green'], align='left', font='tiny')
+            outputT = render(f"{sats[:4]} sats", colors=['green'], align='left', font='tiny')  # Mostrar solo los primeros 4 dígitos
             print(output)
             print(outputT)
             input("\a\nContinue...")
-        except KeyboardInterrupt:
+        except:
             break
 
 def mtclock():
