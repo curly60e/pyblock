@@ -14,7 +14,7 @@ def donationAddr():
     box_size=10,
     border=4,
     )
-    url = 'bc1qjzaz34nv2ev55vfdu9m5qh0zq0fwcn6c7pkcrv'
+    url = 'bc1prwjajvvax2rkm2wzelpfzzc2ncywht69pswnurhzdfj9qujhyxzsqpd3eg'
     print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
@@ -45,7 +45,7 @@ def donationLN():
     box_size=10,
     border=4,
     )
-    url = 'pyblock@zbd.gg'
+    url = 'holycherry05@phoenixwallet.me'
     print("\033[1;30;47m")
     qr.add_data(url)
     qr.print_ascii()
