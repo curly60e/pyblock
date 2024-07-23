@@ -3923,32 +3923,31 @@ def design():
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
     clear()
+    # Obtener el número de bloque actual
     r = requests.get('https://mempool.space/api/blocks/tip/height')
-    r.headers['Content-Type']
-    n = r.text
-    di = json.loads(n)
-    a = di
-    b = str(a)
+    r.raise_for_status()
+    current_block = r.json()
+    b = str(current_block)
+
     clear()
     close()
-    output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+    output = render(b, colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
     print("\033[0;37;40m\x1b[?25l" + output)
+
     while True:
         x = b
         r = requests.get('https://mempool.space/api/blocks/tip/height')
-        r.headers['Content-Type']
-        n = r.text
-        di = json.loads(n)
-        a = di
-        if x < str(a):
+        r.raise_for_status()
+        current_block = r.json()
+        a = str(current_block)
+
+        if x < a:
             clear()
             close()
-            output5 = subprocess.check_output(['sudo', 'iwgetid'])
-            z = str(output5)
-            pp = random.choice(list(faceshappy.values())).encode('utf-8').decode('latin-1')
-            output = render(str(a), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
+            output = render(a, colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\033[0;37;40m\x1b[?25l" + output)
-            b = str(a)    #try:
+            b = a
+        t.sleep(10)
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
 
