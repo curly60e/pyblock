@@ -26,7 +26,6 @@ python-cfonts = "*"
 termcolor = "*"
 pycoingecko = "*"
 protobuf = "*"
-six = "*"
 robohash = "*"
 Pillow = "*"
 numpy = "*"
@@ -46,6 +45,7 @@ typer-cli = "*"
 [build-system]
 requires = ["poetry-core>=1.7.0"]
 build-backend = "poetry.core.masonry.api"
+
 
 [tool.poetry.scripts]
 pyblock = "pybitblock.console:main"
