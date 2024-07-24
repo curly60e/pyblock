@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.0
+    - uses: actions/checkout@main
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
