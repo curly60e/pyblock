@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+permissions:
+  id-token: write
 jobs:
   test_pypi:
     runs-on: ubuntu-latest
