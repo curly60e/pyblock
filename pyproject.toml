@@ -38,7 +38,8 @@ pdf2text = "*"
 pdf2txt = "*"
 embit = "*"
 requests = "*"
-#typer-cli = "*"
+typer-cli = "*"
+term-image = "*"
 
 [tool.poetry.dev-dependencies]
 
