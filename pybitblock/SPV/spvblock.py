@@ -4627,6 +4627,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mC.\033[0;37;40m Dates
     \u001b[38;5;202mD.\033[0;37;40m Quotes
     \u001b[38;5;202mH.\033[0;37;40m SHA256
+    \u001b[38;5;202mM.\033[0;37;40m Bitaxe Block
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
     \u001b[33;1mEnter.\033[0;37;40m Return
@@ -7658,6 +7659,10 @@ def miscellaneousLOCALmenu(misce):
         clear()
         blogo()
         ex()
+    elif misce in ["M", "m"]:
+        clear()
+        blogo()
+        createimagebitaxe()
     elif misce in ["P", "p"]:
         clear()
         blogo()
@@ -7707,10 +7712,14 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         clear()
         blogo()
         datesConn()
-    elif misce in ["C", "c"]:
+    elif misce in ["H", "h"]:
         clear()
         blogo()
         ex()
+    elif misce in ["M", "m"]:
+        clear()
+        blogo()
+        createimagebitaxe()
     elif misce in ["P", "p"]:
         clear()
         blogo()
