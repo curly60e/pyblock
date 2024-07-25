@@ -18,6 +18,7 @@ import requests
 import json
 import simplejson as json
 import numpy as np
+from imgterminal import *
 from sha256 import *
 from cfonts import render, say
 from clone import *
