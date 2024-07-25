@@ -18,6 +18,7 @@ import requests
 import json
 import simplejson as json
 import numpy as np
+from imgterminal import *
 from datetime import datetime, timedelta
 from sha256 import *
 from SPV.spvblock import *
@@ -42,7 +43,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "2.7.2"
+version = "2.7.3"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -6997,9 +6998,12 @@ def miscellaneousLOCALmenu(misce):
         blogo()
         ex()
     elif misce in ["M", "m"]:
+        os.system('printf "\033[49m"')
         clear()
+        os.system('printf "\033[49m"')
         blogo()
         createimagebitaxe()
+        input("Continue...")
     elif misce in ["P", "p"]:
         clear()
         blogo()
@@ -7967,8 +7971,10 @@ while True: # Loop
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
         clear()
         if not os.path.isfile('config/intro.conf'):
+            set_terminal_background()
             introINIT()
         else:
+            set_terminal_background()
             menuSelection()
     except:
         print("\n")
