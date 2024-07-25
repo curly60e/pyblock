@@ -7665,6 +7665,8 @@ def miscellaneousLOCALmenu(misce):
         clear()
         os.system('printf "\033[49m"')
         blogo()
+        output = render("1st 𝕭𝖎𝖙𝖆𝖝𝖊 Block 853742", colors=['white'], align='center', font='console')
+        print(output)
         createimagebitaxe()
         input("Continue...")
     elif misce in ["P", "p"]:
@@ -7725,6 +7727,8 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         clear()
         os.system('printf "\033[49m"')
         blogo()
+        output = render("1st 𝕭𝖎𝖙𝖆𝖝𝖊 Block 853742", colors=['white'], align='center', font='console')
+        print(output)
         createimagebitaxe()
         input("Continue...")
     elif misce in ["P", "p"]:
