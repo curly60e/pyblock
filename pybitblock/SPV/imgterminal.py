@@ -11,7 +11,7 @@ def set_terminal_background(color="black"):
 
 
 def createimagebitaxe():
-    output = render("1st 𝕭𝖎𝖙𝖆𝖝𝖊 Block 853742", colors=['white'], align='center', font='console')
+    print = render("1st 𝕭𝖎𝖙𝖆𝖝𝖊 Block 853742", colors=['white'], align='center', font='console')
     # Ruta al archivo de imagen
     image_path = "bitaxe.jpg"
 
