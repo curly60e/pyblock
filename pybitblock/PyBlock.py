@@ -7055,9 +7055,12 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         blogo()
         ex()
     elif misce in ["M", "m"]:
+        os.system('printf "\033[49m"')
         clear()
+        os.system('printf "\033[49m"')
         blogo()
         createimagebitaxe()
+        input("Continue...")
     elif misce in ["P", "p"]:
         clear()
         blogo()
