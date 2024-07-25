@@ -32,6 +32,8 @@ pdf2text
 pdf2txt
 requests
 typer-cli
+term-image
+
 #
 ###### Requirements with Version Specifiers ######
 #   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
