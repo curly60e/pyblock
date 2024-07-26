@@ -38,6 +38,7 @@ threading
 rich
 urwid
 matplotlib
+asciimatics
 
 #
 ###### Requirements with Version Specifiers ######
