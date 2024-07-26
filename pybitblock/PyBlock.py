@@ -6919,9 +6919,15 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["S", "s"]:
         counttxs()
     elif bcore in ["L", "l"]:
-        lastblockdetail.run_urwid()
+        try:
+            lastblockdetail.run_urwid()
+        except:
+            pass
     elif bcore in ["V", "v"]:
-        execute_visualizer()
+        try:
+            execute_visualizer()
+        except:
+            pass
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
