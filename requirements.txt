@@ -33,6 +33,10 @@ pdf2txt
 requests
 typer-cli
 term_image
+asyncio
+threading
+rich
+urwid
 
 #
 ###### Requirements with Version Specifiers ######
