@@ -32,7 +32,7 @@ pdf2text
 pdf2txt
 requests
 typer-cli
-term-image
+term_image
 
 #
 ###### Requirements with Version Specifiers ######
