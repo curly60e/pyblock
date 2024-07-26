@@ -20,6 +20,7 @@ import term_image
 import simplejson as json
 import numpy as np
 import lastblockdetail
+import block_visualizer
 from imgterminal import *
 from datetime import datetime, timedelta
 from sha256 import *
@@ -871,6 +872,9 @@ def delay_print(s):
         sys.stdout.flush()
         time.sleep(0.25)
 #------------------------------------------------------
+
+def execute_visualizer():
+    block_visualizer.run_visualizer()
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
@@ -6916,6 +6920,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         counttxs()
     elif bcore in ["L", "l"]:
         lastblockdetail.run_urwid()
+    elif bcore in ["V", "v"]:
+        execute_visualizer()
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
