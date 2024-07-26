@@ -8,40 +8,44 @@ import subprocess
 import json
 import time
 import psutil
+from execute_load_config import load_config
+
+# Load configuration
+path, settings, settingsClock = load_config()
 
 def fetch_network_info():
-    raw_info = subprocess.run(["bitcoin-cli", "getnetworkinfo"], capture_output=True, text=True)
+    raw_info = subprocess.run([path["bitcoincli"], "getnetworkinfo"], capture_output=True, text=True)
     network_info = json.loads(raw_info.stdout)
     return network_info
 
 def fetch_blockchain_info():
-    raw_info = subprocess.run(["bitcoin-cli", "getblockchaininfo"], capture_output=True, text=True)
+    raw_info = subprocess.run([path["bitcoincli"], "getblockchaininfo"], capture_output=True, text=True)
     blockchain_info = json.loads(raw_info.stdout)
     return blockchain_info
 
 def fetch_net_totals():
-    raw_info = subprocess.run(["bitcoin-cli", "getnettotals"], capture_output=True, text=True)
+    raw_info = subprocess.run([path["bitcoincli"], "getnettotals"], capture_output=True, text=True)
     net_totals = json.loads(raw_info.stdout)
     return net_totals
 
 def fetch_peer_info():
-    raw_info = subprocess.run(["bitcoin-cli", "getpeerinfo"], capture_output=True, text=True)
+    raw_info = subprocess.run([path["bitcoincli"], "getpeerinfo"], capture_output=True, text=True)
     peer_info = json.loads(raw_info.stdout)
     return peer_info
 
 def fetch_mempool_info():
-    raw_info = subprocess.run(["bitcoin-cli", "getmempoolinfo"], capture_output=True, text=True)
+    raw_info = subprocess.run([path["bitcoincli"], "getmempoolinfo"], capture_output=True, text=True)
     mempool_info = json.loads(raw_info.stdout)
     return mempool_info
 
 def fetch_orphan_info():
-    raw_info = subprocess.run(["bitcoin-cli", "getchaintips"], capture_output=True, text=True)
+    raw_info = subprocess.run([path["bitcoincli"], "getchaintips"], capture_output=True, text=True)
     chaintips_info = json.loads(raw_info.stdout)
     orphan_blocks = [tip for tip in chaintips_info if tip['status'] in ['orphan', 'invalid', 'valid-fork']]
     return orphan_blocks
 
 def fetch_uptime():
-    raw_info = subprocess.run(["bitcoin-cli", "uptime"], capture_output=True, text=True)
+    raw_info = subprocess.run([path["bitcoincli"], "uptime"], capture_output=True, text=True)
     return int(raw_info.stdout.strip())
 
 def create_node_info_table(network_info, blockchain_info, uptime):

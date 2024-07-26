@@ -8,19 +8,23 @@ import subprocess
 import json
 import time
 import plotext as plt
+from execute_load_config import load_config
 
-def fetch_mempool_data():
-    raw_mempool = subprocess.run(["bitcoin-cli", "getmempoolinfo"], capture_output=True, text=True)
+# Load configuration
+path, settings, settingsClock = load_config()
+
+def fetch_mempool_data(path):
+    raw_mempool = subprocess.run([path["bitcoincli"], "getmempoolinfo"], capture_output=True, text=True)
     mempool_data = json.loads(raw_mempool.stdout)
     return mempool_data
 
-def fetch_mempool_transactions():
-    raw_mempool = subprocess.run(["bitcoin-cli", "getrawmempool", "true"], capture_output=True, text=True)
+def fetch_mempool_transactions(path):
+    raw_mempool = subprocess.run([path["bitcoincli"], "getrawmempool", "true"], capture_output=True, text=True)
     mempool_transactions = json.loads(raw_mempool.stdout)
     return mempool_transactions
 
-def fetch_blockchain_info():
-    raw_info = subprocess.run(["bitcoin-cli", "getblockchaininfo"], capture_output=True, text=True)
+def fetch_blockchain_info(path):
+    raw_info = subprocess.run([path["bitcoincli"], "getblockchaininfo"], capture_output=True, text=True)
     blockchain_info = json.loads(raw_info.stdout)
     return blockchain_info
 
@@ -60,20 +64,20 @@ def create_mempool_info_table(mempool_data, mempool_transactions):
 
     return table
 
-def create_recent_blocks_table():
+def create_recent_blocks_table(path):
     table = Table(title="Recent Blocks")
     table.add_column("Height", style="cyan")
     table.add_column("Transactions", style="magenta")
     table.add_column("Size", style="green")
     table.add_column("Time", style="yellow")
 
-    recent_blocks = fetch_blockchain_info()
+    recent_blocks = fetch_blockchain_info(path)
     latest_height = recent_blocks['blocks']
 
     for i in range(17):
         block_height = latest_height - i
-        block_hash = subprocess.run(["bitcoin-cli", "getblockhash", str(block_height)], capture_output=True, text=True).stdout.strip()
-        block_info = subprocess.run(["bitcoin-cli", "getblock", block_hash], capture_output=True, text=True)
+        block_hash = subprocess.run([path["bitcoincli"], "getblockhash", str(block_height)], capture_output=True, text=True).stdout.strip()
+        block_info = subprocess.run([path["bitcoincli"], "getblock", block_hash], capture_output=True, text=True)
         block_data = json.loads(block_info.stdout)
 
         table.add_row(
@@ -139,10 +143,10 @@ async def display_mempool_info():
 
     with Live(layout, refresh_per_second=1, screen=True):
         while True:
-            mempool_data = fetch_mempool_data()
-            mempool_transactions = fetch_mempool_transactions()
+            mempool_data = fetch_mempool_data(path)
+            mempool_transactions = fetch_mempool_transactions(path)
             mempool_info_table = create_mempool_info_table(mempool_data, mempool_transactions)
-            recent_blocks_table = create_recent_blocks_table()
+            recent_blocks_table = create_recent_blocks_table(path)
             mempool_transactions_table = create_mempool_transactions_table(mempool_transactions)
 
             current_time = time.time()
