@@ -46,6 +46,7 @@ rich = "*"
 urwid = "*"
 matplotlib = "*"
 asciimatics = "*"
+plotext = "*"
 
 [tool.poetry.dev-dependencies]
 
