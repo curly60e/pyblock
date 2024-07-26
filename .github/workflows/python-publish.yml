@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Clear cache
+      run: sudo rm -rf /usr/local/actions/checkout
+
     - name: Checkout repository
       uses: actions/checkout@v3
 
