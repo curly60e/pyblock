@@ -45,6 +45,7 @@ threading = "*"
 rich = "*"
 urwid = "*"
 matplotlib = "*"
+asciimatics = "*"
 
 [tool.poetry.dev-dependencies]
 
