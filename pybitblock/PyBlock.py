@@ -1888,6 +1888,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
+    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
     \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
     \u001b[38;5;202mCM.\033[0;37;40m Core Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
@@ -1931,6 +1932,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
+    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
     \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
     \u001b[38;5;202mCM.\033[0;37;40m Core Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
