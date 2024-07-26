@@ -17,6 +17,10 @@ path, settings, settingsClock = load_config()
 # Función para ejecutar comandos de bitcoin-cli y obtener resultados
 def bitcoin_cli(command):
     result = subprocess.run([path["bitcoincli"]] + command.split(), capture_output=True, text=True)
+    if result.returncode != 0:
+        console.print(f"[red]Error executing command:[/red] {command}")
+        console.print(result.stderr)
+        return None
     return result.stdout.strip()
 
 # Función para obtener los datos del último bloque y verificar cambios
@@ -24,9 +28,24 @@ async def fetch_block_data(rich_widget, urwid_loop):
     last_blockhash = None
     while True:
         blockhash = bitcoin_cli('getbestblockhash')
+        if not blockhash:
+            await asyncio.sleep(10)
+            continue
+
         if blockhash != last_blockhash:
             block_details = bitcoin_cli(f'getblock {blockhash} 2')
-            block_data = json.loads(block_details)
+            if not block_details:
+                await asyncio.sleep(10)
+                continue
+
+            try:
+                block_data = json.loads(block_details)
+            except json.JSONDecodeError as e:
+                console.print(f"[red]Error decoding JSON:[/red] {e}")
+                console.print(block_details)
+                await asyncio.sleep(10)
+                continue
+
             height = block_data.get("height", "Unknown")
 
             transactions = block_data['tx']
@@ -47,6 +66,8 @@ async def fetch_block_data(rich_widget, urwid_loop):
             rich_widget.update_text(new_renderable)
             urwid_loop.draw_screen()
             last_blockhash = blockhash
+
+        await asyncio.sleep(10)
 
 # Crear el bloque de transacciones usando rich
 def create_block_renderable(blockhash, height, tx_details) -> str:

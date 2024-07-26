@@ -7920,6 +7920,14 @@ def commandsINIT(initCONF):
             clear()
             menuSelection()
 
+    restart_script()
+
+def restart_script():
+    clear()
+    blogo()
+    print("Restarting PyBlock...")
+    os.execv(sys.executable, ['python'] + sys.argv)
+
 def fullbtc():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     if not os.path.isdir("config"):
