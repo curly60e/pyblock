@@ -48,7 +48,7 @@ urwid = "*"
 [tool.poetry.dev-dependencies]
 
 [build-system]
-requires = ["poetry-core>=1.7.0"]
+requires = ["poetry-core>=1.8.3"]
 build-backend = "poetry.core.masonry.api"
 
 
