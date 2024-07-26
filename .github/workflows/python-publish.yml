@@ -18,9 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clear cache
-      run: sudo rm -rf /usr/local/actions/checkout
-
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -42,7 +39,3 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: twine upload dist/*
-
-
-
-
