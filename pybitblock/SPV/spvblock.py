@@ -16,6 +16,7 @@ import sys
 import subprocess
 import requests
 import json
+import term_image
 import simplejson as json
 import numpy as np
 from imgterminal import *
