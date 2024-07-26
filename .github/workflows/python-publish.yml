@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Upload Python Package
+name: Publish to PyPI
 
 on:
   push:
@@ -14,36 +14,31 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the code
-      uses: actions/checkout@v3  # Actualizado a v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v4  # Actualizado a v4
+      uses: actions/setup-python@v3
       with:
-        python-version: '3.12'
-
-    - name: Install Poetry
-      run: curl -sSL https://install.python-poetry.org | python3 -
-
-    - name: Install six directly in Poetry environment
-      run: |
-        poetry run pip install six
+        python-version: '3.x'
 
     - name: Install dependencies
-      run: poetry install
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
 
-    - name: Build the package
-      run: poetry build
+    - name: Build package
+      run: python setup.py sdist bdist_wheel
 
-    - name: Publish package
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+    - name: Publish package to PyPI
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: twine upload dist/*
 
 
 
