@@ -2,7 +2,6 @@ import os
 import json
 import subprocess
 import asyncio
-import threading
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
@@ -83,7 +82,7 @@ def start_asyncio_loop(rich_widget, urwid_loop):
     loop.run_until_complete(fetch_block_data(rich_widget, urwid_loop))
 
 # Función principal para ejecutar la interfaz urwid
-def main():
+def run_urwid():
     rich_widget = RichWidget()
     scroll = urwid.LineBox(urwid.ListBox(urwid.SimpleFocusListWalker([rich_widget])))
     urwid_loop = urwid.MainLoop(scroll, unhandled_input=exit_on_q)
@@ -99,4 +98,4 @@ def exit_on_q(key):
         raise urwid.ExitMainLoop()
 
 if __name__ == "__main__":
-    main()
+    run_urwid()
