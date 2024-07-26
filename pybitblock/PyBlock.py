@@ -21,6 +21,8 @@ import simplejson as json
 import numpy as np
 import lastblockdetail
 import block_visualizer
+import mempool_monitor
+import asyncio
 from imgterminal import *
 from datetime import datetime, timedelta
 from sha256 import *
@@ -6926,6 +6928,11 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["V", "v"]:
         try:
             execute_visualizer()
+        except:
+            pass
+    elif bcore in ["Y", "y"]:
+        try:
+            asyncio.run(mempool_monitor.display_mempool_info())
         except:
             pass
     elif bcore in ["CM", "cm"]:
