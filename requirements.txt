@@ -39,6 +39,7 @@ rich
 urwid
 matplotlib
 asciimatics
+plotext
 
 #
 ###### Requirements with Version Specifiers ######
