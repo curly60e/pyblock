@@ -7,12 +7,16 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 import urwid
+from execute_load_config import load_config
 
 console = Console()
 
+# Load configuration
+path, settings, settingsClock = load_config()
+
 # Función para ejecutar comandos de bitcoin-cli y obtener resultados
 def bitcoin_cli(command):
-    result = subprocess.run(['bitcoin-cli'] + command.split(), capture_output=True, text=True)
+    result = subprocess.run([path["bitcoincli"]] + command.split(), capture_output=True, text=True)
     return result.stdout.strip()
 
 # Función para obtener los datos del último bloque y verificar cambios

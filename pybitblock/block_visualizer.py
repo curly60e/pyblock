@@ -4,10 +4,14 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 from asciimatics.screen import Screen
+from execute_load_config import load_config
+
+# Load configuration
+path, settings, settingsClock = load_config()
 
 # Función para ejecutar comandos de bitcoin-cli y obtener resultados
 def bitcoin_cli(command):
-    result = subprocess.run(['bitcoin-cli'] + command.split(), capture_output=True, text=True)
+    result = subprocess.run([path["bitcoincli"]] + command.split(), capture_output=True, text=True)
     return result.stdout.strip()
 
 # Función para obtener los datos del último bloque
