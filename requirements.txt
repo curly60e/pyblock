@@ -37,6 +37,7 @@ asyncio
 threading
 rich
 urwid
+matplotlib
 
 #
 ###### Requirements with Version Specifiers ######
