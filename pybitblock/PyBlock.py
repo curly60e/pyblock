@@ -23,6 +23,7 @@ import lastblockdetail
 import block_visualizer
 import mempool_monitor
 import asyncio
+from node_monitor import run_display_node_info
 from imgterminal import *
 from datetime import datetime, timedelta
 from sha256 import *
@@ -874,6 +875,10 @@ def delay_print(s):
         sys.stdout.flush()
         time.sleep(0.25)
 #------------------------------------------------------
+
+def some_other_function():
+    # Aquí puedes llamar a la función de node_monitor
+    run_display_node_info()
 
 def execute_visualizer():
     block_visualizer.run_visualizer()
@@ -6939,6 +6944,11 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["Y", "y"]:
         try:
             asyncio.run(mempool_monitor.display_mempool_info())
+        except:
+            pass
+    elif bcore in ["X", "x"]:
+        try:
+            some_other_function()
         except:
             pass
     elif bcore in ["CM", "cm"]:
