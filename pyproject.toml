@@ -44,6 +44,7 @@ asyncio = "*"
 threading = "*"
 rich = "*"
 urwid = "*"
+matplotlib = "*"
 
 [tool.poetry.dev-dependencies]
 
