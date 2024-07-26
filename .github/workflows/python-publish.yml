@@ -16,14 +16,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/checkout@v4.2.0
-    - uses: actions/checkout@main
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
     - name: Set up Python
       uses: actions/setup-python@v3
-    steps:
       with:
         python-version: '3.x'
 
@@ -40,3 +39,4 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: twine upload dist/*
+
