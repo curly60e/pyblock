@@ -2,6 +2,7 @@ import os
 import json
 import subprocess
 import asyncio
+import threading
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel

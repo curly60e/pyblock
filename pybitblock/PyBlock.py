@@ -19,6 +19,7 @@ import json
 import term_image
 import simplejson as json
 import numpy as np
+import lastblockdetail
 from imgterminal import *
 from datetime import datetime, timedelta
 from sha256 import *
@@ -434,7 +435,7 @@ def MemShell():
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
     MemShellMenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
-    
+
 
 def pyblockpoolpoolLOCALOnchainONLY():
 
@@ -6913,6 +6914,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         searchTXS()
     elif bcore in ["S", "s"]:
         counttxs()
+    elif bcore in ["L", "l"]:
+        lastblockdetail.run_urwid()
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
