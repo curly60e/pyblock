@@ -40,6 +40,10 @@ embit = "*"
 requests = "*"
 typer-cli = "*"
 term-image = "*"
+asyncio = "*"
+threading = "*"
+rich = "*"
+urwid = "*"
 
 [tool.poetry.dev-dependencies]
 
