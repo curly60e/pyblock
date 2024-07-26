@@ -1875,12 +1875,15 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mL.\033[0;37;40m Latest Block
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
+    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
+    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
     \u001b[38;5;202mCM.\033[0;37;40m Core Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
     \u001b[33;1mEnter.\033[0;37;40m Return
@@ -1914,13 +1917,16 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mL.\033[0;37;40m Latest Block
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
     \u001b[38;5;202mS.\033[0;37;40m Mempool
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
+    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
+    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
     \u001b[38;5;202mCM.\033[0;37;40m Core Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
     \u001b[33;1mEnter.\033[0;37;40m Return
