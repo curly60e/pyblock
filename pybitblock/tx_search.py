@@ -69,7 +69,7 @@ def draw_search(win, search_query):
     win.refresh()
     logging.debug("Search panel drawn and window refreshed")
 
-def draw_transaction_details(win, transaction, mined):
+def draw_transaction_details(win, transaction, mined, scroll_offset):
     logging.debug("Drawing transaction details")
     win.clear()
     height, width = win.getmaxyx()
@@ -98,10 +98,10 @@ def draw_transaction_details(win, transaction, mined):
 
         color_pair = curses.color_pair(6) if mined else curses.color_pair(7)
 
-        for idx, detail in enumerate(details):
+        for idx, detail in enumerate(details[scroll_offset:], start=1):
             if idx >= height - 2:
                 break
-            win.addstr(idx + 1, 1, detail, color_pair)
+            win.addstr(idx, 1, detail, color_pair)
     else:
         win.addstr(2, 2, "No transaction selected", curses.color_pair(3))
 
@@ -142,11 +142,11 @@ def draw_footer(win):
     win.refresh()
     logging.debug("Footer drawn and window refreshed")
 
-def refresh_screen(title_win, search_win, details_win, footer_win, search_query, transaction, mined):
+def refresh_screen(title_win, search_win, details_win, footer_win, search_query, transaction, mined, scroll_offset):
     logging.debug("Refreshing screen")
     draw_title(title_win)
     draw_search(search_win, search_query)
-    draw_transaction_details(details_win, transaction, mined)
+    draw_transaction_details(details_win, transaction, mined, scroll_offset)
     draw_footer(footer_win)
     logging.debug("Screen refreshed")
 
@@ -166,9 +166,10 @@ def main(stdscr):
     search_query = ""
     selected_transaction = None
     mined = False
+    scroll_offset = 0
 
     # Initial screen refresh
-    refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined)
+    refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined, scroll_offset)
 
     # Main loop
     logging.debug("Entering main loop")
@@ -184,11 +185,11 @@ def main(stdscr):
         elif key == ord('h'):  # Press 'h' to show help
             logging.debug("Help key pressed")
             draw_help(stdscr)
-            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined)
+            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined, scroll_offset)
         elif key in (curses.KEY_BACKSPACE, 127, curses.KEY_DC):
             logging.debug("Backspace/Delete key pressed")
             search_query = search_query[:-1]
-            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined)
+            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined, scroll_offset)
         elif key == curses.KEY_ENTER or key in [10, 13]:
             logging.debug("Enter key pressed")
             mempool = fetch_mempool(path)
@@ -199,18 +200,29 @@ def main(stdscr):
                     selected_transaction = fetch_transaction_details(path, txid)
                     mined = False
                     found_in_mempool = True
+                    scroll_offset = 0
                     break
             if not found_in_mempool:
                 try:
                     selected_transaction, block_info = fetch_transaction_in_block(path, search_query)
                     mined = block_info is not None
+                    scroll_offset = 0
                 except subprocess.CalledProcessError:
                     selected_transaction = None
                     mined = False
-            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined)
+            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined, scroll_offset)
+        elif key == curses.KEY_UP:
+            if scroll_offset > 0:
+                scroll_offset -= 1
+                refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined, scroll_offset)
+        elif key == curses.KEY_DOWN:
+            if selected_transaction:
+                if scroll_offset < len(selected_transaction['vin']) + len(selected_transaction['vout']) + 5:
+                    scroll_offset += 1
+                    refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined, scroll_offset)
         elif key != -1:
             search_query += chr(key)
-            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined)
+            refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined, scroll_offset)
 
 def search_tx():
     logging.debug("Starting searching engine")
