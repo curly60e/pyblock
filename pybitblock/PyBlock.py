@@ -23,6 +23,8 @@ import lastblockdetail
 import block_visualizer
 import mempool_monitor
 import asyncio
+import peers_monitor
+import tx_search
 from node_monitor import run_display_node_info
 from imgterminal import *
 from datetime import datetime, timedelta
@@ -49,7 +51,7 @@ from embit.wordlists.bip39 import WORDLIST
 from io import StringIO
 
 
-version = "3.0"
+version = "3.1"
 
 def close():
     print("<<< Ctrl + C.\n\n")
@@ -875,6 +877,7 @@ def delay_print(s):
         sys.stdout.flush()
         time.sleep(0.25)
 #------------------------------------------------------
+
 
 def some_other_function():
     # Aquí puedes llamar a la función de node_monitor
@@ -6953,6 +6956,16 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
             some_other_function()
         except:
             pass
+    elif bcore in ["K", "k"]:
+        try:
+            peers_monitor.run_peers_monitor()()
+        except:
+            pass
+    elif bcore in ["N", "n"]:
+        try:
+            tx_search.search_tx()
+        except:
+            pass
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
@@ -8017,7 +8030,7 @@ def introINIT():
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 while True: # Loop
-    try:
+    #try:
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
             pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
@@ -8032,6 +8045,6 @@ while True: # Loop
         else:
             set_terminal_background()
             menuSelection()
-    except:
-        print("\n")
-        sys.exit(101)
+    #except:
+    #    print("\n")
+    #    sys.exit(101)

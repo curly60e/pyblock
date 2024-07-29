@@ -212,5 +212,9 @@ def main(stdscr):
             search_query += chr(key)
             refresh_screen(title_win, search_win, details_win, footer_win, search_query, selected_transaction, mined)
 
-if __name__ == "__main__":
+def search_tx():
+    logging.debug("Starting searching engine")
     curses.wrapper(main)
+
+if __name__ == "__main__":
+    search_tx()
