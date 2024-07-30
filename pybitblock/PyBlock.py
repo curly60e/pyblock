@@ -1889,6 +1889,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mN.\033[0;37;40m Mempool Search
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[38;5;202mP.\033[0;37;40m Block Monitor
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
     \u001b[38;5;202mS.\033[0;37;40m Mempool
@@ -1934,6 +1935,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mN.\033[0;37;40m Mempool Search
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[38;5;202mP.\033[0;37;40m Block Monitor
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
@@ -6843,9 +6845,9 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["C", "c"]:
         getblock()
     elif bcore in ["D", "d"]:
-        runTheNumbersMenu()
+        runTheNumbersMenuOnchainONLY()
     elif bcore in ["E", "e"]:
-        decodeHex()
+        decodeHexOnchainONLY()
     elif bcore in ["F", "f"]:
         try:
             clear()
@@ -6859,7 +6861,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
-        miscellaneousLOCAL()
+        miscellaneousLOCALOnchainONLY()
     elif bcore in ["I", "i"]:
         callColdCore()
     elif bcore in ["J", "j"]:
@@ -6867,7 +6869,9 @@ def bitcoincoremenuLOCALcontrolA(bcore):
     elif bcore in ["M", "m"]:
         mtConn()
     elif bcore in ["O", "o"]:
-        bitcoincoremenuLOCALOPRETURN()
+        bitcoincoremenuLOCALOPRETURNOnchainONLY()
+    elif bcore in ["W", "w"]:
+        walletmenuLOCALOnchainONLY()
     elif bcore in ["Z", "z"]:
         statsConn()
     elif bcore in ["Q", "q"]:
@@ -6878,6 +6882,44 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         searchTXS()
     elif bcore in ["S", "s"]:
         counttxs()
+    elif bcore in ["L", "l"]:
+        try:
+            lastblockdetail.run_urwid()
+        except:
+            pass
+    elif bcore in ["V", "v"]:
+        try:
+            clear()
+            execute_visualizer()
+        except:
+            pass
+    elif bcore in ["Y", "y"]:
+        try:
+            asyncio.run(mempool_monitor.display_mempool_info())
+        except:
+            pass
+    elif bcore in ["X", "x"]:
+        try:
+            clear()
+            some_other_function()
+        except:
+            pass
+    elif bcore in ["K", "k"]:
+        try:
+            peers_monitor.run_peers_monitor()()
+        except:
+            pass
+    elif bcore in ["N", "n"]:
+        try:
+            tx_search.search_tx()
+        except:
+            pass
+    elif bcore in ["P", "p"]:
+        try:
+            clear()
+            call_blocks()
+        except:
+            pass
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
@@ -6948,6 +6990,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
             pass
     elif bcore in ["V", "v"]:
         try:
+            clear()
             execute_visualizer()
         except:
             pass
@@ -6958,6 +7001,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
             pass
     elif bcore in ["X", "x"]:
         try:
+            clear()
             some_other_function()
         except:
             pass
@@ -6973,6 +7017,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
             pass
     elif bcore in ["P", "p"]:
         try:
+            clear()
             call_blocks()
         except:
             pass
