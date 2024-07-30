@@ -25,6 +25,7 @@ import mempool_monitor
 import asyncio
 import peers_monitor
 import tx_search
+from block_explorer import call_blocks
 from node_monitor import run_display_node_info
 from imgterminal import *
 from datetime import datetime, timedelta
@@ -6968,6 +6969,11 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     elif bcore in ["N", "n"]:
         try:
             tx_search.search_tx()
+        except:
+            pass
+    elif bcore in ["P", "p"]:
+        try:
+            call_blocks()
         except:
             pass
     elif bcore in ["CM", "cm"]:
