@@ -1883,8 +1883,10 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
     \u001b[38;5;202mL.\033[0;37;40m Latest Block
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
+    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mZ.\033[0;37;40m Stats
     \u001b[38;5;202mQ.\033[0;37;40m Hashrate
@@ -1926,8 +1928,10 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
     \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
     \u001b[38;5;202mL.\033[0;37;40m Latest Block
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
+    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
     \u001b[38;5;202mW.\033[0;37;40m Wallet
     \u001b[38;5;202mZ.\033[0;37;40m Stats
