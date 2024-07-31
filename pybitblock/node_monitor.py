@@ -127,7 +127,7 @@ async def display_node_info():
         Layout(name="orphan_info"),
     )
     layout["right"].split(Layout(name="net_totals"), Layout(name="peer_info"))
-    layout["footer"].update(Text("Loading..."))
+    layout["footer"].update(Text("Cypherpunk style..."))
 
     layout["node_info"].update(Panel(Text("Loading..."), title="Node Information"))
     layout["net_totals"].update(Panel(Text("Loading..."), title="Network Traffic"))

@@ -132,11 +132,11 @@ async def display_mempool_info():
     )
     layout["left"].split(Layout(name="mempool_info"), Layout(name="recent_blocks"))
     layout["right"].split(Layout(name="mempool_chart"), Layout(name="mempool_transactions"))
-    layout["footer"].update(Text("Loading..."))
+    layout["footer"].update(Text("Cypherpunk Style loading..."))
 
-    layout["mempool_info"].update(Panel(Text("Loading..."), title="General Information"))
-    layout["mempool_chart"].update(Panel(Text("Loading..."), title="Mempool Flow"))
-    layout["recent_blocks"].update(Panel(Text("Loading..."), title="Last Blocks"))
+    layout["mempool_info"].update(Panel(Text("Cypherpunk Style loading..."), title="General Information"))
+    layout["mempool_chart"].update(Panel(Text("Cypherpunk Style loading..."), title="Mempool Flow"))
+    layout["recent_blocks"].update(Panel(Text("Cypherpunk Style loading..."), title="Last Blocks"))
     layout["header"].update(Text("Mempool Monitor", style="bold magenta"))
 
     mempool_data_points = []
@@ -162,7 +162,7 @@ async def display_mempool_info():
             layout["mempool_transactions"].update(Panel(mempool_transactions_table, title="Recent Transactions"))
             layout["mempool_chart"].update(Panel(mempool_flow_chart, title="Mempool Flow"))
 
-            layout["footer"].update(Text(""))
+            layout["footer"].update(Text("Running the node."))
 
 if __name__ == "__main__":
     asyncio.run(display_mempool_info())

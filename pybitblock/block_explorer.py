@@ -77,9 +77,9 @@ async def display_blocks_info():
     layout["main"].split_row(
         Layout(name="recent_blocks", ratio=1),
     )
-    layout["footer"].update(Text("Cypherpunk style..."))
+    layout["footer"].update(Text("Cypherpunk style loading..."))
 
-    layout["recent_blocks"].update(Panel(Text("Loading..."), title="Recent Blocks"))
+    layout["recent_blocks"].update(Panel(Text("Cypherpunk Style loading..."), title="Recent Blocks"))
     layout["header"].update(Text("Block Monitor", style="bold cyan"))
 
     block_tables = []

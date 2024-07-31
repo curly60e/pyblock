@@ -6,7 +6,7 @@ import numpy as np
 from execute_load_config import load_config
 
 # Configura el archivo de registro
-logging.basicConfig(filename='debug.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
+logging.basicConfig(filename='debug_tx_search.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 # Load configuration
 path, settings, settingsClock = load_config()
