@@ -127,12 +127,12 @@ async def display_node_info():
         Layout(name="orphan_info"),
     )
     layout["right"].split(Layout(name="net_totals"), Layout(name="peer_info"))
-    layout["footer"].update(Text("Cypherpunk style..."))
+    layout["footer"].update(Text("Cypherpunk Style loading..."))
 
-    layout["node_info"].update(Panel(Text("Loading..."), title="Node Information"))
-    layout["net_totals"].update(Panel(Text("Loading..."), title="Network Traffic"))
-    layout["peer_info"].update(Panel(Text("Loading..."), title="Peer Info"))
-    layout["orphan_info"].update(Panel(Text("Loading..."), title="Orphan Blocks Info"))
+    layout["node_info"].update(Panel(Text("Cypherpunk Style loading..."), title="Node Information"))
+    layout["net_totals"].update(Panel(Text("Cypherpunk Style loading..."), title="Network Traffic"))
+    layout["peer_info"].update(Panel(Text("Cypherpunk Style loading..."), title="Peer Info"))
+    layout["orphan_info"].update(Panel(Text("Cypherpunk Style loading..."), title="Orphan Blocks Info"))
     layout["header"].update(Text("Node Monitor", style="bold magenta"))
 
     with Live(layout, refresh_per_second=1, screen=True):
@@ -154,7 +154,7 @@ async def display_node_info():
             layout["peer_info"].update(Panel(peer_info_table, title="Peer Info"))
             layout["orphan_info"].update(Panel(orphan_info_table, title="Orphan Blocks Info"))
 
-            layout["footer"].update(Text(""))
+            layout["footer"].update(Text("Running the Node."))
 
 def run_display_node_info():
     asyncio.run(display_node_info())
