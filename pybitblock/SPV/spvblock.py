@@ -4264,7 +4264,7 @@ def callGitRES():
     if not os.path.isdir('res'):
         wget = "wget https://github.com/ktecho/resurrection-wallet/releases/download/app-v0.3.0/resurrection_wallet_0.3.0_amd64.AppImage"
         os.system(wget)
-    os.system("cd res && chmod +x resurrection_wallet_0.3.0_amd64.AppImage && ./resurrection_wallet_0.3.0_amd64.AppImage")
+    os.system("chmod +x resurrection_wallet_0.3.0_amd64.AppImage && ./resurrection_wallet_0.3.0_amd64.AppImage")
     input("\a\nFollow the Steps by Resurrection Wallet")
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
