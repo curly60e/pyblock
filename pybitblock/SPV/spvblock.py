@@ -4259,6 +4259,13 @@ def callGitBpytop():
         git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
         os.system(git)
     os.system("cd bpytop && sudo make install && bpytop")
+
+def callGitRES():
+    if not os.path.isdir('res'):
+        wget = "wget https://github.com/ktecho/resurrection-wallet/releases/download/app-v0.3.0/resurrection_wallet_0.3.0_amd64.AppImage"
+        os.system(wget)
+    os.system("cd res && chmod +x resurrection_wallet_0.3.0_amd64.AppImage && ./resurrection_wallet_0.3.0_amd64.AppImage")
+    input("\a\nFollow the Steps by Resurrection Wallet")
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
@@ -8429,6 +8436,8 @@ def phoenixmenu(menunos):
         wallPhoenix()
     elif menunos in ["G", "g"]:
         wallPhoenixBOLT12()
+    elif menunos in ["W", "w"]:
+        callGitRES()
     elif platf in ["R", "r"]:
         menuSelection()
 
