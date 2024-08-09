@@ -4261,11 +4261,12 @@ def callGitBpytop():
     os.system("cd bpytop && sudo make install && bpytop")
 
 def callGitRES():
-    if not os.path.isdir('res'):
+    if not os.path.isdir('resurrection_wallet_0.3.0_amd64.AppImage'):
         wget = "wget https://github.com/ktecho/resurrection-wallet/releases/download/app-v0.3.0/resurrection_wallet_0.3.0_amd64.AppImage"
         os.system(wget)
     os.system("chmod +x resurrection_wallet_0.3.0_amd64.AppImage && ./resurrection_wallet_0.3.0_amd64.AppImage")
     input("\a\nFollow the Steps by Resurrection Wallet")
+    
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
