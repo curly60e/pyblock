@@ -11,7 +11,6 @@ certifi
 chardet
 idna
 python-gnupg
-requests
 sseclient-py
 urllib3
 xmltodict
@@ -30,7 +29,6 @@ jq
 embit
 pdf2text
 pdf2txt
-requests
 typer-cli
 term_image
 asyncio
