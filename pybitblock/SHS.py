@@ -15,7 +15,7 @@ host    = 'pool.pyblock.xyz'
 port    = 3333
 
 def main():
-    print("Satoshi:{}\nNonce:{}\n".format(address,nonce))
+    print("Satoshi:{}\n\nNonce:{}\n".format(address,nonce))
 
     sock    = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host,port))
@@ -39,7 +39,7 @@ def main():
         = responses[0]['params']
    
     target = (nbits[2:]+'00'*(int(nbits[:2],16) - 3)).zfill(64)
-    print('\nNbits:{}\nTarget:{}\n'.format(nbits,target))
+    print('\nNbits:{}\n\nTarget:{}\n'.format(nbits,target))
    
     extranonce2 = hex(random.randint(0,2**32-1))[2:].zfill(2*extranonce2_size)
    
