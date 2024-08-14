@@ -76,7 +76,7 @@ def main():
    
     for k in range(33333333):
         noncework()
-    print("\nSymbolic-Hash-Satoshi Finished with 33M Attempts.\nTrying Again...")
+    print("\nSymbolic-Hash-Satoshi Finished with 33M Attempts.\n\nTrying Again...\n")
     sock.close()
     main()
 
