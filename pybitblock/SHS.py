@@ -15,7 +15,7 @@ host    = 'pool.pyblock.xyz'
 port    = 3333
 
 def main():
-    print("\nSatoshi:{}\n\nNonce:{}\n".format(address,nonce))
+    print("\nSatoshi: {}\n\nNonce: {}\n".format(address,nonce))
 
     sock    = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host,port))
@@ -39,14 +39,14 @@ def main():
         = responses[0]['params']
    
     target = (nbits[2:]+'00'*(int(nbits[:2],16) - 3)).zfill(64)
-    print('\nNbits:{}\n\nTarget:{}\n'.format(nbits,target))
+    print('\nNbits: {}\n\nTarget: {}\n'.format(nbits,target))
    
     extranonce2 = hex(random.randint(0,2**32-1))[2:].zfill(2*extranonce2_size)
    
     coinbase = coinb1 + extranonce1 + extranonce2 + coinb2
     coinbase_hash_bin = hashlib.sha256(hashlib.sha256(binascii.unhexlify(coinbase)).digest()).digest()
    
-    print('Coinbase:\n{}\n\nCoinbase Hash:{}\n'.format(coinbase,binascii.hexlify(coinbase_hash_bin)))
+    print('Coinbase: {}\n\nCoinbase Hash: {}\n'.format(coinbase,binascii.hexlify(coinbase_hash_bin)))
     merkle_root = coinbase_hash_bin
     for h in merkle_branch:
         merkle_root = hashlib.sha256(hashlib.sha256(merkle_root + binascii.unhexlify(h)).digest()).digest()
