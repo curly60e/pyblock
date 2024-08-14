@@ -409,6 +409,16 @@ def MemShellMenu(menunos):
     elif platf in ["R", "r"]:
         menuSelection()
 
+def SHS():
+    try:
+        clear()
+        blogo()
+        output = render("SHS - Symbolic Hash Satoshi", colors=['yellow'], align='left', font='tiny')
+        os.system(f"python3 SHS.py")
+        input("\a\nContinue...")
+    except:
+        menuSelection()
+
 def MemShell():
     clear()
     blogo()
@@ -2567,6 +2577,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mM.\033[0;37;40m Block Bitaxe
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
+    \u001b[38;5;202mSHS.\033[0;37;40m SHS
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ))
     miscellaneousLOCALmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2607,6 +2618,7 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[38;5;202mM.\033[0;37;40m Block Bitaxe
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
+    \u001b[38;5;202mSHS.\033[0;37;40m SHS
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
     miscellaneousLOCALmenuOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -7123,6 +7135,10 @@ def miscellaneousLOCALmenu(misce):
         clear()
         blogo()
         satoshiConn()
+    elif misce in ["SHS", "shs"]:
+        clear()
+        blogo()
+        SHS()
     elif misce in ["R", "r"]:
         menuSelection()
 
@@ -7182,6 +7198,10 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         clear()
         blogo()
         satoshiConn()
+    elif misce in ["SHS", "shs"]:
+        clear()
+        blogo()
+        SHS()
     elif misce in ["R", "r"]:
         menuSelection()
 
