@@ -15,7 +15,7 @@ host    = 'pool.pyblock.xyz'
 port    = 3333
 
 def main():
-    print("Satoshi:{}\n\nNonce:{}\n".format(address,nonce))
+    print("\nSatoshi:{}\n\nNonce:{}\n".format(address,nonce))
 
     sock    = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host,port))
@@ -64,7 +64,7 @@ def main():
        
         hash = hashlib.sha256(hashlib.sha256(binascii.unhexlify(blockheader)).digest()).digest()
         hash = binascii.hexlify(hash).decode()
-        if(hash[:5] == '00000'): print('Hash: {}\n'.format(hash))
+        if(hash[:5] == '00000'): print('Hash: {}'.format(hash))
         if hash < target :
             print('\nSuccess!!\n')
             print('\nHash: {}\n'.format(hash))
