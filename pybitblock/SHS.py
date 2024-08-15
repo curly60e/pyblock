@@ -55,7 +55,7 @@ def main():
    
     merkle_root = ''.join([merkle_root[i]+merkle_root[i+1] for i in range(0,len(merkle_root),2)][::-1])
    
-    print('Merkle Root:{}\n'.format(merkle_root))
+    print('Merkle Root: {}\n'.format(merkle_root))
    
     def noncework():
         nonce   = hex(random.randint(0,2**32-1))[2:].zfill(8)
