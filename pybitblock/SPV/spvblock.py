@@ -797,6 +797,7 @@ def SHS():
         clear()
         blogo()
         output = render("SHS - Symbolic Hash Satoshi", colors=['yellow'], align='left', font='tiny')
+        print(output)
         os.system(f"python3 SHS.py")
         input("\a\nContinue...")
     except:
