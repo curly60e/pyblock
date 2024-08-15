@@ -7,7 +7,9 @@ import hashlib
 import binascii
 from pprint import pprint
 import random
-
+import signal
+import sys
+signal.signal(signal.SIGINT, lambda x, y: sys.exit(0))
 
 address = '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
 nonce   = hex(random.randint(0,2**32-1))[2:].zfill(8)
