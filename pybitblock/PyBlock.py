@@ -1667,6 +1667,23 @@ def wallPhoenixBOLT12():
         menuSelection()
 
 #----------------------------------------------------------------------PhoenixEnd
+#-----------------------------STARTBLOCKS--------------------------------
+
+def allblocksConn():
+    try:
+        conn = """curl -s https://raw.githubusercontent.com/jlopp/bitcoin-blocks-by-mining-pool/master/blocks.csv """
+        a = os.popen(conn).read()
+        clear()
+        blogo()
+        closed()
+        output = render("All Blocks", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        print(a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+#-----------------------------ENDBLOCKS--------------------------------
 #-----------------------------STRLuxor--------------------------------
 
 def luxorstats():
@@ -2578,6 +2595,7 @@ def miscellaneousLOCAL():
     \u001b[38;5;202mM.\033[0;37;40m Block Bitaxe
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
+    \u001b[38;5;202mX.\033[0;37;40m All Blocks
     \u001b[38;5;202mSHS.\033[0;37;40m SHS
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ))
@@ -2619,6 +2637,7 @@ def miscellaneousLOCALOnchainONLY():
     \u001b[38;5;202mM.\033[0;37;40m Block Bitaxe
     \u001b[38;5;202mP.\033[0;37;40m PGP
     \u001b[38;5;202mS.\033[0;37;40m Satoshi Nakamoto
+    \u001b[38;5;202mX.\033[0;37;40m All Blocks
     \u001b[38;5;202mSHS.\033[0;37;40m SHS
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
@@ -7136,6 +7155,10 @@ def miscellaneousLOCALmenu(misce):
         clear()
         blogo()
         satoshiConn()
+    elif misce in ["X", "x"]:
+        clear()
+        blogo()
+        allblocksConn()
     elif misce in ["SHS", "shs"]:
         clear()
         blogo()
@@ -7199,6 +7222,10 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         clear()
         blogo()
         satoshiConn()
+    elif misce in ["X", "x"]:
+        clear()
+        blogo()
+        allblocksConn()
     elif misce in ["SHS", "shs"]:
         clear()
         blogo()
