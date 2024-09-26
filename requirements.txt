@@ -27,7 +27,6 @@ pdf2txt
 typer-cli
 term_image
 asyncio
-threading
 rich
 urwid
 matplotlib
