@@ -7437,6 +7437,13 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitCashu()
+    elif menuS in ["7"]:
+        clear()
+        blogo()
+        output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 7Blocks.py")
+        input("\a\nContinue...")
 
 def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -7491,6 +7498,13 @@ def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu o
         clear()
         blogo()
         callGitCashu()
+    elif menuS in ["7"]:
+        clear()
+        blogo()
+        output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 7Blocks.py")
+        input("\a\nContinue...")
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
