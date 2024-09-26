@@ -8162,6 +8162,13 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         callGitWardenTerminal()
+    elif menuS in ["7"]:
+        clear()
+        blogo()
+        output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 7Blocks.py")
+        input("\a\nContinue...")
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
