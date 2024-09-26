@@ -1,7 +1,3 @@
-#
-####### example-requirements.txt #######
-#
-###### Requirements without Version Specifiers ######
 art
 qrcode
 requests
@@ -25,7 +21,6 @@ numpy
 googleapis-common-protos==1.52.0
 pdfminer
 html2text
-jq
 embit
 pdf2text
 pdf2txt
@@ -39,19 +34,4 @@ matplotlib
 asciimatics
 plotext
 blessings
-
-#
-###### Requirements with Version Specifiers ######
-#   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
-
-#
-###### Refer to other requirements files ######
-
-#
-#
-###### A particular file ######
-#
-###### Additional Requirements without Version Specifiers ######
-#   Same as 1st section, just here to show that you can put things in any order.
-
-#
+asciimatics
