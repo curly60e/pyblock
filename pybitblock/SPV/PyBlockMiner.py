@@ -1,3 +1,5 @@
+##SN PyBlock Miner##
+
 import requests
 import hashlib
 import binascii
