@@ -6766,6 +6766,13 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         print(output)
         os.system(f"cd SPV && python3 7Blocks.py")
         input("\a\nContinue...")
+    elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
+        clear()
+        blogo()
+        output = render("PyBLOCK Solo Mining POOL", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 PyBlockMiner.py")
+        input("\a\nContinue...")
 
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -6830,6 +6837,13 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
         os.system(f"cd SPV && python3 7Blocks.py")
+        input("\a\nContinue...")
+    elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
+        clear()
+        blogo()
+        output = render("PyBLOCK Solo Mining POOL", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
 
 def slushpoolLOCALOnchainONLYMenu(slush):
@@ -7671,6 +7685,13 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
         os.system(f"cd SPV && python3 7Blocks.py")
+        input("\a\nContinue...")
+    elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
+        clear()
+        blogo()
+        output = render("PyBLOCK Solo Mining POOL", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
 
 def bitcoincoremenuREMOTEcontrol(bcore):
