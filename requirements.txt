@@ -35,3 +35,4 @@ plotext
 blessings
 asciimatics
 thread6
+colorthon
