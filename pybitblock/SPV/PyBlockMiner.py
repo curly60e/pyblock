@@ -45,11 +45,11 @@ def delay_print(s):
 print(Fore.RED, solopyblockminer, Fore.RESET)
 cHeight = 0
 inpAdd = input(
-    f'{Fore.MAGENTA}[*]{Fore.RESET}{Fore.WHITE} INSERT HERE YOUR ADDRESS BITCOIN WALLET{Fore.RESET} : ')
+    f'{Fore.MAGENTA}[*]{Fore.RESET}{Fore.WHITE} INSERT HERE YOUR BITCOIN WALLET ADDRESS{Fore.RESET} : ')
 address = str(inpAdd)
 print(f'\n{Fore.GREY}Bitcoin Wallet Address{Fore.RESET} ===>> {Fore.MAGENTA}{address}{Fore.RESET}')
 print(f"{Fore.GREY}{'-' * 66}{Fore.RESET}")
-delay_print('Bitcoin Wallet Address Added For Mining Now ...')
+delay_print('Bitcoin Wallet Address Added. ... Mining Now ...')
 print(f"\n{Fore.GREY}{'-' * 66}{Fore.RESET}")
 
 time.sleep(3)
