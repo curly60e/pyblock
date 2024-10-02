@@ -8,6 +8,7 @@ import time
 from threading import Thread
 from colorthon import Colors as Fore
 import sys, logging
+import signal
 signal.signal(signal.SIGINT, lambda x, y: sys.exit(0))
 
 # Define your Bitcoin address
