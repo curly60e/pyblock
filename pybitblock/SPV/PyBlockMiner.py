@@ -112,7 +112,7 @@ def BitcoinMiner(restart=False):
     merkle_root = ''.join([merkle_root[i] + merkle_root[i + 1] for i in range(0, len(merkle_root), 2)][::-1])
 
     work_on = get_current_block_height()
-    print(Fore.GREEN, 'Working on current Network height', Fore.WHITE, work_on)
+    print(Fore.GREEN, '\n\n Working on current Network height', Fore.WHITE, work_on)
     print(Fore.YELLOW, 'Current TARGET =', Fore.RED, target)
     z = 0
     while True:
