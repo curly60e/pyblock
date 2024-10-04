@@ -9,7 +9,7 @@ import multiprocessing
 
 witness_type = 'segwit'
 
-def address_search(search_for='l200wd'):
+def address_search(search_for='1BTC'):
     global witness_type
     privkey = random.randrange(2**256)
     address = ''
