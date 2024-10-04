@@ -6769,7 +6769,7 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
-        output = render("PyBLOCK Solo Mining POOL", colors=['yellow'], align='left', font='tiny')
+        output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
         os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
@@ -6841,7 +6841,7 @@ def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
-        output = render("PyBLOCK Solo Mining POOL", colors=['yellow'], align='left', font='tiny')
+        output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
         os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
@@ -7689,7 +7689,7 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
-        output = render("PyBLOCK Solo Mining POOL", colors=['yellow'], align='left', font='tiny')
+        output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
         os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
