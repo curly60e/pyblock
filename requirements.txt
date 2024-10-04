@@ -36,3 +36,4 @@ blessings
 asciimatics
 thread6
 colorthon
+bitcoinlib
