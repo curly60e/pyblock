@@ -8,6 +8,7 @@ import multiprocessing
 
 
 witness_type = 'segwit'
+#witness_type = 'legacy'
 
 def address_search(search_for='1BTC'):
     global witness_type
@@ -29,6 +30,7 @@ def address_search(search_for='1BTC'):
         raise ValueError(f"This is not a valid base58 or bech32 search string: {search_for}")
     if is_base58 and not is_bech32:
         witness_type = 'p2sh-segwit'
+        #witness_type = 'legacy'
 
     print(f"PyBLOCK Searching for {search_for}, witness_type is {witness_type} (pid {os.getpid()})")
 
