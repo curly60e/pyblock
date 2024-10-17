@@ -1,0 +1,44 @@
+## PyBLOCK Bitaxe Widget by PyBLOCK Crew ##
+## Change BITAXE-IP x Your-Bitaxe-IP ##
+
+let device = new Request("http://BITAXE-IP/api/system/info");
+let pyblock = await device.loadString();
+let cuts = pyblock.split(',');
+let visibleString = [
+cuts[1],
+cuts[8],
+cuts[9],
+cuts[16],
+cuts[20]
+].join('\n');
+console.log(visibleString);
+let widget = await createWidget();
+if (config.runsInWidget)
+{
+Script.setWidget(widget);
+}
+else
+{
+widget.presentLarge();
+}
+Script.complete();
+async function createWidget()
+{
+let listwidget = new ListWidget();
+listwidget.backgroundColor = new Color("#000000");
+let nextRefresh = Date.now() + 1000*10
+listwidget.refreshAfterDate = new Date(nextRefresh)
+listwidget.backgroundColor = new Color("#000000");
+let req = new Request('https://pbs.twimg.com/media/GBBj4bIWUAAq3vK.jpg');
+let SN = await req.loadImage();
+let gn = listwidget.addImage(SN).centerAlignImage(SN)
+let mem = listwidget.addText(visibleString);
+mem.centerAlignText();
+mem.font = Font.boldSystemFont(15);
+mem.textColor = new Color("#0aff17");
+let logo = new Request('https://static.wixstatic.com/media/bf9129_6f52f6b1a0b74609b9afc93388a1baf5~mv2.png/v1/fill/w_560,h_314,al_c,q_85,usm_1.20_1.00_0.01,enc_auto/bitaxewhite.png');
+let BT = await logo.loadImage();
+let ng = listwidget.addImage(BT).centerAlignImage(BT);
+return listwidget;
+}
+
