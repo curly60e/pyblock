@@ -774,7 +774,7 @@ def dumppk(): #
         output = render("Dumpprivkey", colors=['yellow'], align='left', font='tiny')
         print(output)
         responseC = input("Bitcoin Address: ")
-        bitcoincli = " dumpprivkey"
+        bitcoincli = " dumpprivkey "
         os.system(path['bitcoincli'] + bitcoincli + f"{responseC}")
         input("\a\nContinue...")
     except:
@@ -799,7 +799,7 @@ def inffmenu(): #
         output = render("Address info", colors=['yellow'], align='left', font='tiny')
         print(output)
         responseC = input("Bitcoin Address: ")
-        bitcoincli = " getaddressinfo"
+        bitcoincli = " getaddressinfo "
         os.system(path['bitcoincli'] + bitcoincli + f"{responseC}")
         input("\a\nContinue...")
     except:
