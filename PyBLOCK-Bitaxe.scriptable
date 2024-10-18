@@ -1,5 +1,5 @@
-## PyBLOCK Bitaxe Widget by PyBLOCK Crew ##
-## Change BITAXE-IP x Your-Bitaxe-IP ##
+// PyBLOCK Bitaxe Widget by PyBLOCK Crew //
+// Change BITAXE-IP x Your-Bitaxe-IP //
 
 let device = new Request("http://BITAXE-IP/api/system/info");
 let pyblock = await device.loadString();
