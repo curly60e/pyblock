@@ -64,14 +64,14 @@ def main():
     console.clear()
 
     # Seleccionar tipo de dirección
-    witness_type = console.input("Type address (segwit/legacy/p2sh-segwit): ").strip()
+    witness_type = console.input("Type your address format (legacy/segwit/p2sh-segwit): ").strip()
 
     # Seleccionar texto deseado en la dirección
-    search_for = console.input("Put your word for the vanity address: ").strip()
+    search_for = console.input("Put your Word/Target for your Vanity addresses: ").strip()
     # Iniciar los procesos
     processors = 4
     console.print(f"[green]Starting {processors} processes[/green]")
-    logging.info(f"Starting {processors} processes for vanity address search")
+    logging.info(f"Starting {processors} processes for your Vanity addresses search")
 
     layout = Layout()
     layout.split(
