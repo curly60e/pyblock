@@ -7733,7 +7733,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
     elif bcore in ["U", "u"]:
         untxsConn()
     elif bcore in ["ONM", "onm"]:
-        OwnNodeMinerControl()
+        OwnNodeMinerControlONCHAIN(menuMino)
 
 def bitcoincoremenuREMOTEcontrolO(oreturn):
     if oreturn in ["A", "a"]:
