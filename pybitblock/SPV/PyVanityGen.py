@@ -84,7 +84,7 @@ def main():
     layout["progress"].update(progress_panel)
     layout["results"].update(result_panel)
 
-    with Live(layout, console=console, refresh_per_second=4) as live:
+    with Live(layout, console=console, refresh_per_second=10) as live:
         progress_queue = multiprocessing.Queue()
         ps = []
         for i in range(processors):
@@ -99,7 +99,7 @@ def main():
             result_messages = []
             while True:
                 try:
-                    message = progress_queue.get(timeout=1)
+                    message = progress_queue.get(timeout=0.1)
                     if "Found Address" in message:
                         result_messages.append(message)
                         if len(result_messages) > 10:
