@@ -210,10 +210,6 @@
     * a@A:~> cd pybitblock
     * a@A:~> poetry run python3 PyBlock.py
 
-    -- Upgrade:
-    * a@A:~> pip3 install pybitblock -U
-    * a@A:~> pyblock
-
 
         <br />
 
