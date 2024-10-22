@@ -47,7 +47,7 @@ def address_search(search_for, witness_type, progress_queue, console):
             k = HDKey(key=privkey.to_bytes(32, 'big'), witness_type=witness_type)
             address = k.address()
             count += 1
-            progress_queue.put(f"Searched {count} addresses (pid {os.getpid()})")
+            progress_queue.put(f"Searched {count} Vanity addresses (pid {os.getpid()})")
             if search_for in address:
                 wif_key = privkey_to_wif(privkey)
                 result_message = f"Found Address: {address}\nPrivate Key WIF: {wif_key}"
@@ -64,7 +64,7 @@ def main():
     console.clear()
 
     # Seleccionar tipo de dirección
-    witness_type = console.input("Type your address format (legacy/segwit/p2sh-segwit): ").strip()
+    witness_type = console.input("Type the address format you want to get (legacy/segwit/p2sh-segwit): ").strip()
 
     # Seleccionar texto deseado en la dirección
     search_for = console.input("Put your Word/Target for your Vanity addresses: ").strip()
