@@ -4413,6 +4413,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mS.\033[0;37;40m Mempool
     \u001b[38;5;202mPPC.\033[0;37;40m PyBLOCK PooL Computer
     \u001b[38;5;202mPPR.\033[0;37;40m PyBLOCK PooL Raspberry
+    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -7592,6 +7593,13 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         CroppedMinerComputer()
     elif bcore in ["PPR", "ppr"]:
         CroppedMinerRaspberry()
+    elif bcore in ["VG", "vg"]:
+        clear()
+        blogo()
+        output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 PyVanityGen.py")
+        input("\a\nContinue...")
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -7653,6 +7661,13 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         CroppedMiner()
     elif bcore in ["PPR", "ppr"]:
         CroppedMinerRaspberry()
+    elif bcore in ["VG", "vg"]:
+        clear()
+        blogo()
+        output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
+        print(output)
+        os.system(f"cd SPV && python3 PyVanityGen.py")
+        input("\a\nContinue...")
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
