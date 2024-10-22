@@ -122,6 +122,11 @@
     -- Upgrade:
     * a@A:~> pip3 install pybitblock -U
     * a@A:~> pyblock
+    * Or
+    * a@A:~> cd pyblock
+    * a@A:~> git pull origin master
+    * a@A:~> cd pybitblock
+    * a@A:~> python3 PyBlock.py
 
     <br />
 
