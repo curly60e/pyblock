@@ -61,10 +61,9 @@ def address_search(search_for, witness_type, progress_queue, console):
 
 def main():
     console = Console()
-    console.clear()
 
     # Seleccionar tipo de dirección
-    witness_type = console.input("Type the address format you want to get (legacy/segwit/p2sh-segwit): ").strip()
+    witness_type = console.input("\nType the address format you want to get (legacy/segwit/p2sh-segwit): ").strip()
 
     # Seleccionar texto deseado en la dirección
     search_for = console.input("Put your Word/Target for your Vanity addresses: ").strip()
