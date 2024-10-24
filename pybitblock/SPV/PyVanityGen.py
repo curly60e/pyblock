@@ -62,7 +62,7 @@ def address_search(search_for, witness_type, progress_queue, console):
 def main():
     console = Console()
 
-    console.input("\nLegacy ONLY Base58 = 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz.\nSegwit ONLY Bech32 = qpzry9x8gf2tvdw0s3jn54khce6mua7l.\nP2SH-Segwit ONLY Base58 = 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz.\n\nPress Enter to Continue.")
+    console.input("\nLegacy ONLY Base58 = 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz.\n\nSegwit ONLY Bech32 = qpzry9x8gf2tvdw0s3jn54khce6mua7l.\n\nP2SH-Segwit ONLY Base58 = 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz.\n\n\nPress Enter to Continue.")
     # Seleccionar tipo de dirección
     witness_type = console.input("\nType the address format you want to get (legacy/segwit/p2sh-segwit): ").strip()
 
