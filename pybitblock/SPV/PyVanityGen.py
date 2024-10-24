@@ -62,12 +62,12 @@ def address_search(search_for, witness_type, progress_queue, console):
 def main():
     console = Console()
 
+    console.input("\nLegacy ONLY Base58 = 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz.\nSegwit ONLY Bech32 = qpzry9x8gf2tvdw0s3jn54khce6mua7l.\nP2SH-Segwit ONLY Base58 = 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz.\n\nPress Enter to Continue.")
     # Seleccionar tipo de dirección
     witness_type = console.input("\nType the address format you want to get (legacy/segwit/p2sh-segwit): ").strip()
 
     # Seleccionar texto deseado en la dirección
     search_for = console.input("\nPut your Word/Target for your Vanity addresses: ").strip()
-    console.input("\nPlease check if your Choice contains the following supported characters, otherwise your Vanity will not be able to be generated:\n\nBech32 = qpzry9x8gf2tvdw0s3jn54khce6mua7l.\nBase58 = 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz.\n\nPress Enter to Continue or Crtl+C to Start again.")
     # Iniciar los procesos
     processors = 4
     console.print(f"[green]Starting {processors} processes[/green]")
