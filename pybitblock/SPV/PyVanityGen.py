@@ -76,7 +76,7 @@ def main():
     layout = Layout()
     layout.split(
         Layout(name="progress", ratio=1),
-        Layout(name="results", ratio=1),
+        Layout(name="results", ratio=5),
     )
 
     progress_panel = Panel("Starting search...", title="Progress", border_style="yellow")
@@ -102,7 +102,7 @@ def main():
                     message = progress_queue.get(timeout=0.1)
                     if "Found Address" in message:
                         result_messages.append(message)
-                        if len(result_messages) > 10:
+                        if len(result_messages) > 33:
                             result_messages.pop(0)  # Keep only the last 10 results
                         result_panel = Panel(Text("\n".join(result_messages)), title="Results", border_style="green")
                         layout["results"].update(result_panel)
