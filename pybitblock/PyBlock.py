@@ -1927,7 +1927,6 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
     \u001b[38;5;202mCM.\033[0;37;40m Core Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ))
     bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -1975,7 +1974,6 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
     \u001b[38;5;202mCM.\033[0;37;40m Core Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,d['blocks'], version ))
     bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -2440,6 +2438,7 @@ def APIMenuLOCAL():
     \033[1;32;40mL.\033[0;37;40m Arcade       FREE
     \033[1;32;40mM.\033[0;37;40m Whale Alert  FREE
     \033[1;32;40mN.\033[0;37;40m Nostr        FREE
+    \033[1;32;40mQ.\033[0;37;40m Ocean        FREE
     \033[1;32;40mS.\033[0;37;40m Braiins Pool FREE
     \033[1;32;40mT.\033[0;37;40m TinySeed     FREE
     \033[1;32;40mU.\033[0;37;40m UTXOracle    FREE
@@ -6986,13 +6985,6 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
         OwnNodeMinerONCHAIN()
-    elif bcore in ["VG", "vg"]:
-        clear()
-        blogo()
-        output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 PyVanityGen.py")
-        input("\a\nContinue...")
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
     if bcore in ["A", "a"]:
@@ -7094,13 +7086,6 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
         OwnNodeMinerONCHAIN()
-    elif bcore in ["VG", "vg"]:
-        clear()
-        blogo()
-        output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 PyVanityGen.py")
-        input("\a\nContinue...")
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
@@ -7750,13 +7735,6 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         untxsConn()
     elif bcore in ["ONM", "onm"]:
         OwnNodeMinerONCHAIN()
-    elif bcore in ["VG", "vg"]:
-        clear()
-        blogo()
-        output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 PyVanityGen.py")
-        input("\a\nContinue...")
 
 def bitcoincoremenuREMOTEcontrolO(oreturn):
     if oreturn in ["A", "a"]:
