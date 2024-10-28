@@ -37,3 +37,4 @@ asciimatics
 thread6
 colorthon
 bitcoinlib
+vanity_address
