@@ -2,9 +2,6 @@
 
 from vanity_address.vanity_address import VanityAddressGenerator
 from pprint import pprint
-import signal
-import sys
-signal.signal(signal.SIGINT, lambda x, y: sys.exit(0))
 
 def callback(address):
     return address.startswith(b'1X')
