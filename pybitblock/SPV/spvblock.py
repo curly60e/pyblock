@@ -589,7 +589,7 @@ def bitaxeB(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -s 'http://{responseC}/api/system/info' """
+        list = f"""curl -s 'http://{responseC}/api/system/info' | jq -C """
         a = os.popen(list).read()
         print("\nBitAxe ip: " + responseC)
         print("\nSystem Info:\n" + a)
@@ -607,7 +607,7 @@ def bitaxeC(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -s 'http://{responseC}/api/swarm/info' """
+        list = f"""curl -s 'http://{responseC}/api/swarm/info' | jq -C """
         a = os.popen(list).read()
         print("\nBitAxe ip: " + responseC)
         print("\nSwarm:\n" + a)
