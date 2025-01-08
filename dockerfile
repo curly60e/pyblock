@@ -18,8 +18,8 @@ RUN git clone https://github.com/tsl0922/ttyd.git \
     && make \
     && make install \
     && cd .. && rm -rf ttyd
-RUN pip3 install --upgrade pip
-RUN pip3 install embit
-RUN pip3 install requests
-RUN pip3 install pybitblock
-CMD ttyd -p 6969 -c Running:PyBLOCK pyblock
+RUN pip3 install --upgrade pip --break-package-system
+RUN pip3 install embit --break-package-system
+RUN pip3 install requests --break-package-system
+RUN pip3 install pybitblock --break-package-system
+CMD ttyd -W -p 6969 -c Running:PyBLOCK pyblock
