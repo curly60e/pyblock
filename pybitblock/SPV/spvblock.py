@@ -559,6 +559,61 @@ def opretminer():
     except:
         pass
 
+#------------------------------------------------------------------
+
+def bitaxeA(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Bitaxe Logs", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
+        list = f"""curl -s 'http://{responseC}/api/ws' """
+        a = os.popen(list).read()
+        print("\nBitAxe ip: " + responseC)
+        print("\nLogs:\n" + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def bitaxeB(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Bitaxe System Info", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
+        list = f"""curl -s 'http://{responseC}/api/system/info' """
+        a = os.popen(list).read()
+        print("\nBitAxe ip: " + responseC)
+        print("\nSystem Info:\n" + a)
+        input("\a\nContinue...")
+    except:
+        pass
+
+def bitaxeC(): # show srings
+    try:
+        clear()
+        blogo()
+        output = render(
+            "Bitaxe Swarm", colors=['yellow'], align='left', font='tiny'
+        )
+
+        print(output)
+        responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
+        list = f"""curl -s 'http://{responseC}/api/swarm/info' """
+        a = os.popen(list).read()
+        print("\nBitAxe ip: " + responseC)
+        print("\nSwarm:\n" + a)
+        input("\a\nContinue...")
+    except:
+        pass
 #-----------------------------GAMES--------------------------------
 #------------------------------------------------------------------
 
@@ -5785,6 +5840,29 @@ def OceanConn():
     \n\n\x1b[?25h""".format(n,b, version ))
     oceanMstats(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
+def BitaxeConn():
+    clear()
+    blogo()
+    sysinfo()
+    n = "CROPPED"
+    r = requests.get('https://mempool.space/api/blocks/tip/height')
+    r.headers['Content-Type']
+    nn = r.text
+    di = json.loads(nn)
+    a = di
+    b = str(a)
+    print("""\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}
+
+    \033[1;32;40mA.\033[0;37;40m BitAxe Logs
+    \033[1;32;40mB.\033[0;37;40m BitAxe System
+    \033[1;32;40mC.\033[0;37;40m BitAxe Swarm
+    \u001b[33;1mEnter.\033[0;37;40m Return
+    \n\n\x1b[?25h""".format(n,b, version ))
+    bitaxeMstats(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+
 def menuSelection():
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
     if os.path.isfile('config/intro.conf'):
@@ -7452,6 +7530,10 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         print(output)
         os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
+    elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
+        clear()
+        blogo()
+        BitaxeConn()
 
 def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:
@@ -7520,6 +7602,10 @@ def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu o
         print(output)
         os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
+    elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
+        clear()
+        blogo()
+        BitaxeConn()
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
@@ -8219,6 +8305,10 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         print(output)
         os.system(f"cd SPV && python3 PyBlockMiner.py")
         input("\a\nContinue...")
+    elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
+        clear()
+        blogo()
+        BitaxeConn()
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
@@ -8551,6 +8641,16 @@ def oceanMstats(menuunos):
         oceanH()
     elif menuunos in ["C", "c"]:
         oceanB()
+    elif platf in ["R", "r"]:
+        menuSelection()
+
+def bitaxeMstats(menuunos):
+    if menuunos in ["A", "a"]:
+        bitaxeA()
+    elif menuunos in ["B", "b"]:
+        bitaxeB()
+    elif menuunos in ["C", "c"]:
+        bitaxeC()
     elif platf in ["R", "r"]:
         menuSelection()
 
