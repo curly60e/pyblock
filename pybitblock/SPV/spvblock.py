@@ -572,9 +572,10 @@ def bitaxeA(): # show srings
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
         list = f"""curl -s 'http://{responseC}/api/ws' """
-        a = os.popen(list).read()
+        a = os.popen(str(list)).read()
+        b = a
         print("\nBitAxe ip: " + responseC)
-        print("\nLogs:\n" + a)
+        print("\nLogs:\n" + b)
         input("\a\nContinue...")
     except:
         pass
@@ -584,7 +585,7 @@ def bitaxeB(): # show srings
         clear()
         blogo()
         output = render(
-            "Bitaxe System Info", colors=['yellow'], align='left', font='tiny'
+            "Bitaxe System", colors=['yellow'], align='left', font='tiny'
         )
 
         print(output)
@@ -602,12 +603,12 @@ def bitaxeC(): # show srings
         clear()
         blogo()
         output = render(
-            "Bitaxe Swarm", colors=['yellow'], align='left', font='tiny'
+            "Bitaxe Restart", colors=['yellow'], align='left', font='tiny'
         )
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -s 'http://{responseC}/api/swarm/info' | jq -C """
+        list = f"""curl -X POST 'http://{responseC}/api/system/restart' | jq -C """
         a = os.popen(list).read()
         print("\nBitAxe ip: " + responseC)
         print("\nSwarm:\n" + a)
@@ -5858,7 +5859,7 @@ def BitaxeConn():
 
     \033[1;32;40mA.\033[0;37;40m BitAxe Logs
     \033[1;32;40mB.\033[0;37;40m BitAxe System
-    \033[1;32;40mC.\033[0;37;40m BitAxe Swarm
+    \033[1;32;40mC.\033[0;37;40m BitAxe Restart
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n,b, version ))
     bitaxeMstats(input("\033[1;32;40mSelect option: \033[0;37;40m"))
