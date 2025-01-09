@@ -571,11 +571,12 @@ def bitaxeA(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -s 'http://{responseC}/api/ws' """
-        a = os.popen(str(list)).read()
-        b = a
-        print("\nBitAxe ip: " + responseC)
-        print("\nLogs:\n" + b)
+        ip = "http://"
+        ep = responseC
+        pi = "/api/ws"        
+        list = subprocess.Popen(['curl', ip+ep+pi])
+        input("\a\n...Loading Logs...\n\n")
+        a = os.popen(list)
         input("\a\nContinue...")
     except:
         pass
