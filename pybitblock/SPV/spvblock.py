@@ -609,10 +609,10 @@ def bitaxeC(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -X POST 'http://{responseC}/api/system/restart' | jq -C """
+        list = f"""curl -X POST 'http://{responseC}/api/system/restart' """
         a = os.popen(list).read()
         print("\nBitAxe ip: " + responseC)
-        print("\nSwarm:\n" + a)
+        print("\nBitAxe Restarting:\n" + a)
         input("\a\nContinue...")
     except:
         pass
