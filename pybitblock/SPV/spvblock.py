@@ -609,7 +609,7 @@ def bitaxeC(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -X POST 'http://{responseC}/api/system/restart' """
+        list = f"""curl -s -X POST 'http://{responseC}/api/system/restart' """
         a = os.popen(list).read()
         print("\nBitAxe ip: " + responseC)
         print("\nBitAxe Restarting:\n" + a)
