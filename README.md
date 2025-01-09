@@ -356,6 +356,7 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 [@ForemanMining,](https://twitter.com/foremanmining)
 [@@Ocean_Mining,](https://twitter.com/Ocean_Mining)
 [@LuxorTechnology,](https://twitter.com/LuxorTechnology)
+[@Skot9000,](https://twitter.com/Skot9000)
 [@PyPi,](https://pypi.org/project/pybitblock/)
 ...
 
