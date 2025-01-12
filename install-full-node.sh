@@ -482,6 +482,9 @@ checklevel=0
 
 disablewallet=1
 uacomment=PyBLOCK Crew
+txindex=0
+prune=1000
+server=1
 
 rpccookiefile=$TARGET_DIR/.bitcoin/.cookie
 rpcbind=127.0.0.1
