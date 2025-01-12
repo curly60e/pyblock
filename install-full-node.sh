@@ -477,12 +477,13 @@ listen=1
 port=$PORT
 maxconnections=64
 
-dbcache=64
+dbcache=128
 par=2
 checkblocks=24
 checklevel=0
 
 disablewallet=1
+uacomment=PyBLOCK Crew
 
 rpccookiefile=$TARGET_DIR/.bitcoin/.cookie
 rpcbind=127.0.0.1
