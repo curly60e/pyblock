@@ -688,7 +688,7 @@ else
         print_success "\nMeanwhile you can install PyBLOCK to Manage your Bitcoin Node copying and pasting this commands:"
         print_success "\ngit clone https://github.com/curly60e/pyblock.git \ncd pyblock \npip3 install -r requirements.txt \ncd pybitblock \npython3 PyBlock.py"
         print_success "\nSelect the Option B."
-        print_success "\nLeave in BLANK ip:port, rpcuser, rpcpass and paste this Path to Bitcoin-cli: ./../../../../../..$TARGET_DIR/bin/bitcoin-cli"
+        print_success "\nLeave in BLANK ip:port, rpcuser, rpcpass and paste this Path to Bitcoin-cli: ./../../../..$TARGET_DIR/bin/bitcoin-cli"
         print_success "\nPyBLOCK Crew!"
         print_success "\nInstallation completed!"
     fi
