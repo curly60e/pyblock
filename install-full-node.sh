@@ -685,10 +685,10 @@ else
         print_readme > $TARGET_DIR/README.md
         cat $TARGET_DIR/README.md
         print_success "If this is your first install, Bitcoin Core may take several hours/days to download a full copy of the blockchain."
-        print_success "\nMeanwhile you can install PyBLOCK to Manage your Bitcoin Node with copying and pasting this commands:"
+        print_success "\nMeanwhile you can install PyBLOCK to Manage your Bitcoin Node copying and pasting this commands:"
         print_success "\ngit clone https://github.com/curly60e/pyblock.git \ncd pyblock \npip3 install -r requirements.txt \ncd pybitblock \npython3 PyBlock.py"
         print_success "\nSelect the Option B."
-        print_success "\nLeave in BLANK ip:port, rpcuser, rpcpass and paste this Path to Bitcoin-cli: ./../../../../../../$TARGET_DIR/bin/bitcoin-cli"
+        print_success "\nLeave in BLANK ip:port, rpcuser, rpcpass and paste this Path to Bitcoin-cli: ./../../../../../..$TARGET_DIR/bin/bitcoin-cli"
         print_success "\nPyBLOCK Crew!"
         print_success "\nInstallation completed!"
     fi
