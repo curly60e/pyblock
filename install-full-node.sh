@@ -140,8 +140,6 @@ To uninstall Bitcoin Core:
 
     ./install-full-node.sh -u
 
-To uninstall Bitcoin Core without a local copy of the install script:
-
 EOF
 }
 
