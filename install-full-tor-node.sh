@@ -2,7 +2,7 @@
 
 ###############################################################################
 #
-#                             install-full-node.sh
+#                             install-full-tor-node.sh
 #
 # This is the install script for Bitcoin full node based on Bitcoin Core.
 #
@@ -138,7 +138,7 @@ To view Bitcoin Core log file:
 
 To uninstall Bitcoin Core:
 
-    ./install-full-node.sh -u
+    ./install-full-tor-node.sh -u
 
 EOF
 }
@@ -558,8 +558,8 @@ check_bitcoin_core() {
     if [ -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
         if [ -f $TARGET_DIR/bin/bitcoin-cli ]; then
             print_info "\nChecking Bitcoin Core.."
-            sleep 5
-            $TARGET_DIR/bin/bitcoin-cli -conf=$TARGET_DIR/.bitcoin/bitcoin.conf -datadir=$TARGET_DIR/.bitcoin -getinfo
+            sleep 7
+            $TARGET_DIR/bin/bitcoin-cli -conf=$TARGET_DIR/.bitcoin/bitcoin.conf -datadir=$TARGET_DIR/.bitcoin getnetworkinfo
         fi
 
         reachable=$(curl -I https://bitnodes.io/api/v1/nodes/me-$PORT/ 2> /dev/null | head -n 1 | cut -d ' ' -f2)
@@ -646,7 +646,7 @@ After the installation, it may take several hours for your node to download a
 full copy of the blockchain.
 
 If you wish to uninstall Bitcoin Core later, you can download this script and
-run "sh install-full-node.sh -u".
+run "sh install-full-tor-node.sh -u".
 
 EOF
 )
