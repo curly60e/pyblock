@@ -468,8 +468,6 @@ upnp=0
 proxy=127.0.0.1:9050
 bind=127.0.0.1
 onlynet=onion
-cjdnsreachable=1
-onlynet=cjdns
 
 listen=1
 port=$PORT
