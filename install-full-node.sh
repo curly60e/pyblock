@@ -552,7 +552,7 @@ check_bitcoin_core() {
     if [ -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
         if [ -f $TARGET_DIR/bin/bitcoin-cli ]; then
             print_info "\nChecking Bitcoin Core in 30 seconds.."
-            sleep 5
+            sleep 30
             $TARGET_DIR/bin/bitcoin-cli -conf=$TARGET_DIR/.bitcoin/bitcoin.conf -datadir=$TARGET_DIR/.bitcoin -getinfo
         fi
 
