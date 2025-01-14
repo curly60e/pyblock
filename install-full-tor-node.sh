@@ -468,12 +468,8 @@ upnp=0
 proxy=127.0.0.1:9050
 bind=127.0.0.1
 onlynet=onion
-
 cjdnsreachable=1
 onlynet=cjdns
-i2pacceptincoming=1
-i2psam=127.0.0.1:7656
-onlynet=i2p
 
 listen=1
 port=$PORT
