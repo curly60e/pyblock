@@ -555,7 +555,7 @@ check_bitcoin_core() {
         if [ -f $TARGET_DIR/bin/bitcoin-cli ]; then
             print_info "\nChecking Bitcoin Core in 30 seconds.."
             sleep 30 
-            $TARGET_DIR/bin/bitcoin-cli -conf=$TARGET_DIR/.bitcoin/bitcoin.conf -datadir=$TARGET_DIR/.bitcoin -getinfo
+            $TARGET_DIR/bin/bitcoin-cli -conf=$TARGET_DIR/.bitcoin/bitcoin.conf -datadir=$TARGET_DIR/.bitcoin getnetworkinfo
         fi
 
         reachable=$(curl -I https://bitnodes.io/api/v1/nodes/me-$PORT/ 2> /dev/null | head -n 1 | cut -d ' ' -f2)
