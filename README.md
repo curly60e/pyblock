@@ -400,8 +400,10 @@ Note that if you do not find a Block, you get no reward at all with Solo Mining.
 
 Address:
 “1Lovez8UtyFvr35wxDJeC23GryPR3q4cMo”
+
 Message:
 “The 1Love address it’s managed by PyBLØCK Crew.”
+
 Signature:
 “G36i/w72LGkUFSrA+/IuaCeRvXUjWIhgMw3FkNucXA3GQRn5RZPFVQ3nJscq1nRjtyK4JoMVG/pM1wQfqS+2+TQ=”
 
