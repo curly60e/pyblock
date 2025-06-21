@@ -3685,7 +3685,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
     while True:
         try:
-            pyblockpool = f"curl https://pool.pyblock.xyz/users/{api} 2>/dev/null"
+            pyblockpool = f"curl https://pyblock.xyz:8443/users/{api} 2>/dev/null"
 
 
             b = os.popen(pyblockpool)
