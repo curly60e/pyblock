@@ -413,13 +413,13 @@ install_bitcoin_core() {
         # Install compiled binaries.
         cp "$TARGET_DIR/bitcoin/src/bitcoind" "$TARGET_DIR/bin/" &&
             cp "$TARGET_DIR/bitcoin/src/bitcoin-cli" "$TARGET_DIR/bin/" &&
-            print_success "Bitcoin Core v$VERSION (compiled) installed successfully!"
+            print_success "Bitcoin KNOTS v$VERSION (compiled) installed successfully!"
     elif [ -f "$TARGET_DIR/bitcoin-$VERSION/bin/bitcoind" ]; then
         # Install downloaded binaries.
         cp "$TARGET_DIR/bitcoin-$VERSION/bin/bitcoind" "$TARGET_DIR/bin/" &&
             cp "$TARGET_DIR/bitcoin-$VERSION/bin/bitcoin-cli" "$TARGET_DIR/bin/" &&
                 rm -rf "$TARGET_DIR/bitcoin-$VERSION"
-            print_success "Bitcoin Core v$VERSION (binaries) installed successfully!"
+            print_success "Bitcoin KNOTS v$VERSION (binaries) installed successfully!"
     else
         print_error "Cannot find files to install."
         exit 1
@@ -481,7 +481,7 @@ EOF
 
 start_bitcoin_core() {
     if [ ! -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
-        print_info "\nStarting Bitcoin Core.."
+        print_info "\nStarting Bitcoin KNOTS.."
         cd $TARGET_DIR/bin && ./start.sh
 
         timer=0
@@ -655,6 +655,7 @@ else
         cat $TARGET_DIR/README.md
         print_success "If this is your first install, Bitcoin KNOTS may take several hours/days to download a full copy of the blockchain."
         print_success "\nMeanwhile you can install PyBLOCK to Manage your Bitcoin Node copying and pasting this commands:"
+        print_success "\nCopy and save this route before proceeding: ./../../../..$TARGET_DIR/bin/bitcoin-cli"
         print_success "\ngit clone https://github.com/curly60e/pyblock.git \ncd pyblock \npip3 install -r requirements.txt \ncd pybitblock \npython3 PyBlock.py"
         print_success "\nSelect the Option B."
         print_success "\nLeave in BLANK ip:port, rpcuser, rpcpass and paste this Path to Bitcoin-cli: ./../../../..$TARGET_DIR/bin/bitcoin-cli"
