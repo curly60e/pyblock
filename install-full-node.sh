@@ -433,7 +433,7 @@ upnp=1
 
 ### Tor mode ###
 # This mode requires tor (https://www.torproject.org/download/) to be running at the proxy address below.
-# No configuration is needed on your router to allow Bitcoin Core to accept incoming connections.
+# No configuration is needed on your router to allow Bitcoin KNOTS to accept incoming connections.
 #proxy=127.0.0.1:9050
 #bind=127.0.0.1
 #onlynet=onion
