@@ -1,43 +1,12 @@
 #!/bin/sh
 
 ###############################################################################
-#
-#                             install-full-node.sh
-#
-# This is the install script for Bitcoin full node based on Bitcoin Core.
-#
-# *** SCRIPT AVAILABILITY *****************************************************
-#
-# Bitcoin Core will be installed using binaries provided by bitcoincore.org.
-#
-# If the binaries for your system are not available, the installer will attempt
-# to build and install Bitcoin Core from source.
-#
-# All files will be installed into $HOME/bitcoin-core directory. Layout of this
-# directory after the installation is shown below:
-#
-# Source files:
-#   $HOME/bitcoin-core/bitcoin/
-#
-# Binaries:
-#   $HOME/bitcoin-core/bin/
-#
-# Configuration file:
-#   $HOME/bitcoin-core/.bitcoin/bitcoin.conf
-#
-# Blockchain data files:
-#   $HOME/bitcoin-core/.bitcoin/blocks
-#   $HOME/bitcoin-core/.bitcoin/chainstate
-#
-#
-###############################################################################
 
-REPO_URL="https://github.com/bitcoin/bitcoin.git"
+REPO_URL="https://github.com/bitcoinknots/bitcoin.git"
 
-# See https://github.com/bitcoin/bitcoin/tags for latest version.
-VERSION=28.0
+VERSION=28.1.knots20250305
 
-TARGET_DIR=$HOME/bitcoin-core
+TARGET_DIR=$HOME/bitcoin-knots
 PORT=8333
 
 BUILD=0
@@ -60,7 +29,7 @@ SUDO=""
 usage() {
     cat <<EOF
 
-This is the install script for Bitcoin full node based on Bitcoin Core.
+This is the install script for Bitcoin full node based on Bitcoin KNOTS.
 
 Usage: $0 [-h] [-v <version>] [-t <target_directory>] [-p <port>] [-b] [-u]
 
@@ -68,23 +37,23 @@ Usage: $0 [-h] [-v <version>] [-t <target_directory>] [-p <port>] [-b] [-u]
     Print usage.
 
 -v <version>
-    Version of Bitcoin Core to install.
+    Version of Bitcoin KNOTS to install.
     Default: $VERSION
 
 -t <target_directory>
     Target directory for source files and binaries.
-    Default: $HOME/bitcoin-core
+    Default: $HOME/bitcoin-knots
 
 -p <port>
-    Bitcoin Core listening port.
+    Bitcoin KNOTS listening port.
     Default: $PORT
 
 -b
-    Build and install Bitcoin Core from source.
+    Build and install Bitcoin KNOTS from source.
     Default: $BUILD
 
 -u
-    Uninstall Bitcoin Core.
+    Uninstall Bitcoin KNOTS.
 
 EOF
 }
@@ -120,11 +89,11 @@ print_readme() {
 
 # README
 
-To stop Bitcoin Core:
+To stop Bitcoin KNOTS:
 
     cd $TARGET_DIR/bin && ./stop.sh
 
-To start Bitcoin Core again:
+To start Bitcoin KNOTS again:
 
     cd $TARGET_DIR/bin && ./start.sh
 
@@ -132,11 +101,11 @@ To use bitcoin-cli program:
 
     cd $TARGET_DIR/bin && ./bitcoin-cli -conf=$TARGET_DIR/.bitcoin/bitcoin.conf getnetworkinfo
 
-To view Bitcoin Core log file:
+To view Bitcoin KNOTS log file:
 
     tail -f $TARGET_DIR/.bitcoin/debug.log
 
-To uninstall Bitcoin Core:
+To uninstall Bitcoin KNOTS:
 
     ./install-full-node.sh -u
 
@@ -309,7 +278,7 @@ build_bitcoin_core() {
     cd $TARGET_DIR
 
     if [ ! -d "$TARGET_DIR/bitcoin" ]; then
-        print_info "\nDownloading Bitcoin Core source files.."
+        print_info "\nDownloading Bitcoin KNOTS source files.."
         git clone --quiet $REPO_URL
     fi
 
@@ -327,7 +296,7 @@ build_bitcoin_core() {
         ldflags="-L/usr/local/lib"
     fi
 
-    print_info "\nBuilding Bitcoin Core v$VERSION"
+    print_info "\nBuilding Bitcoin KNOTS v$VERSION"
     print_info "Build output: $TARGET_DIR/bitcoin/build.out"
     print_info "This can take up to an hour or more.."
     rm -f build.out
@@ -355,7 +324,7 @@ build_bitcoin_core() {
 }
 
 get_bin_url() {
-    url="https://bitcoincore.org/bin/bitcoin-core-$VERSION"
+    url="https://bitcoinknots.org/files/28.x/$VERSION"
     case "$SYSTEM" in
         Linux)
             if program_exists "apk"; then
@@ -382,13 +351,13 @@ get_bin_url() {
 }
 
 download_bin() {
-    checksum_url="https://bitcoincore.org/bin/bitcoin-core-$VERSION/SHA256SUMS"
+    checksum_url="https://bitcoinknots.org/files/28.x/$VERSION/SHA256SUMS"
 
     cd $TARGET_DIR
 
     rm -f bitcoin-$VERSION.tar.gz checksum.asc
 
-    print_info "\nDownloading Bitcoin Core binaries.."
+    print_info "\nDownloading Bitcoin KNOTS binaries.."
     if program_exists "wget"; then
         wget -q "$1" -O bitcoin-$VERSION.tar.gz &&
             wget -q "$checksum_url" -O checksum.asc &&
@@ -420,7 +389,7 @@ download_bin() {
 install_bitcoin_core() {
     cd $TARGET_DIR
 
-    print_info "\nInstalling Bitcoin Core v$VERSION"
+    print_info "\nInstalling Bitcoin KNOTS v$VERSION"
 
     if [ ! -d "$TARGET_DIR/bin" ]; then
         mkdir -p $TARGET_DIR/bin
@@ -444,13 +413,13 @@ install_bitcoin_core() {
         # Install compiled binaries.
         cp "$TARGET_DIR/bitcoin/src/bitcoind" "$TARGET_DIR/bin/" &&
             cp "$TARGET_DIR/bitcoin/src/bitcoin-cli" "$TARGET_DIR/bin/" &&
-            print_success "Bitcoin Core v$VERSION (compiled) installed successfully!"
+            print_success "Bitcoin KNOTS v$VERSION (compiled) installed successfully!"
     elif [ -f "$TARGET_DIR/bitcoin-$VERSION/bin/bitcoind" ]; then
         # Install downloaded binaries.
         cp "$TARGET_DIR/bitcoin-$VERSION/bin/bitcoind" "$TARGET_DIR/bin/" &&
             cp "$TARGET_DIR/bitcoin-$VERSION/bin/bitcoin-cli" "$TARGET_DIR/bin/" &&
                 rm -rf "$TARGET_DIR/bitcoin-$VERSION"
-            print_success "Bitcoin Core v$VERSION (binaries) installed successfully!"
+            print_success "Bitcoin KNOTS v$VERSION (binaries) installed successfully!"
     else
         print_error "Cannot find files to install."
         exit 1
@@ -458,7 +427,7 @@ install_bitcoin_core() {
 
     cat > $TARGET_DIR/.bitcoin/bitcoin.conf <<EOF
 ### IPv4/IPv6 mode ###
-# This mode requires uPnP feature on your router to allow Bitcoin Core to accept incoming connections.
+# This mode requires uPnP feature on your router to allow Bitcoin KNOTS to accept incoming connections.
 bind=0.0.0.0
 upnp=1
 
@@ -472,6 +441,8 @@ upnp=1
 listen=1
 port=$PORT
 maxconnections=64
+datacarrier=0
+permitbaremultisig=0
 
 dbcache=128
 par=2
@@ -530,7 +501,7 @@ start_bitcoin_core() {
 
 stop_bitcoin_core() {
     if [ -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
-        print_info "\nStopping Bitcoin Core.."
+        print_info "\nStopping Bitcoin KNOTS.."
         cd $TARGET_DIR/bin && ./stop.sh
 
         timer=0
@@ -540,9 +511,9 @@ stop_bitcoin_core() {
         done
 
         if [ ! -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
-            print_success "Bitcoin Core stopped."
+            print_success "Bitcoin KNOTS stopped."
         else
-            print_error "Failed to stop Bitcoin Core."
+            print_error "Failed to stop Bitcoin KNOTS."
             exit 1
         fi
     fi
@@ -551,16 +522,16 @@ stop_bitcoin_core() {
 check_bitcoin_core() {
     if [ -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
         if [ -f $TARGET_DIR/bin/bitcoin-cli ]; then
-            print_info "\nChecking Bitcoin Core in 30 seconds.."
+            print_info "\nChecking Bitcoin KNOTS in 30 seconds.."
             sleep 30
             $TARGET_DIR/bin/bitcoin-cli -conf=$TARGET_DIR/.bitcoin/bitcoin.conf -datadir=$TARGET_DIR/.bitcoin getnetworkinfo
         fi
 
         reachable=$(curl -I https://bitnodes.io/api/v1/nodes/me-$PORT/ 2> /dev/null | head -n 1 | cut -d ' ' -f2)
         if [ $reachable -eq 200 ]; then
-            print_success "Bitcoin Core is accepting incoming connections at port $PORT!"
+            print_success "Bitcoin KNOTS is accepting incoming connections at port $PORT!"
         else
-            print_warning "Bitcoin Core is not accepting incoming connections at port $PORT. You may need to configure port forwarding (https://bitcoin.org/en/full-node#port-forwarding) on your router."
+            print_warning "Bitcoin KNOTS is not accepting incoming connections at port $PORT. You may need to configure port forwarding on your router."
         fi
     fi
 }
@@ -569,7 +540,7 @@ uninstall_bitcoin_core() {
     stop_bitcoin_core
 
     if [ -d "$TARGET_DIR" ]; then
-        print_info "\nUninstalling Bitcoin Core.."
+        print_info "\nUninstalling Bitcoin KNOTS.."
         rm -rf $TARGET_DIR
 
         # Remove stale symlink.
@@ -584,13 +555,13 @@ uninstall_bitcoin_core() {
         fi
 
         if [ ! -d "$TARGET_DIR" ]; then
-            print_success "Bitcoin Core uninstalled successfully!"
+            print_success "Bitcoin KNOTS uninstalled successfully!"
         else
-            print_error "Uninstallation failed. Is Bitcoin Core still running?"
+            print_error "Uninstallation failed. Is Bitcoin KNOTS still running?"
             exit 1
         fi
     else
-        print_error "Bitcoin Core not installed."
+        print_error "Bitcoin KNOTS not installed."
     fi
 }
 
@@ -627,7 +598,7 @@ WELCOME_TEXT=$(cat <<EOF
 
 Welcome Cypherpunk!
 
-You are about to install a Bitcoin full node based on Bitcoin Core v$VERSION.
+You are about to install a Bitcoin full node based on Bitcoin KNOTS v$VERSION.
 
 All files will be installed under $TARGET_DIR directory.
 
@@ -639,7 +610,7 @@ For security reason, wallet functionality is not enabled by default.
 After the installation, it may take several hours for your node to download a
 full copy of the blockchain.
 
-If you wish to uninstall Bitcoin Core later, you can download this script and
+If you wish to uninstall Bitcoin KNOTS later, you can download this script and
 run "sh install-full-node.sh -u".
 
 EOF
@@ -649,7 +620,7 @@ print_start
 
 if [ $UNINSTALL -eq 1 ]; then
     echo
-    read -p "WARNING: This will stop Bitcoin Core and uninstall it from your system. Uninstall? (y/n) " answer
+    read -p "WARNING: This will stop Bitcoin KNOTS and uninstall it from your system. Uninstall? (y/n) " answer
     if [ "$answer" = "y" ]; then
         uninstall_bitcoin_core
     fi
@@ -682,7 +653,7 @@ else
         install_bitcoin_core && start_bitcoin_core && check_bitcoin_core
         print_readme > $TARGET_DIR/README.md
         cat $TARGET_DIR/README.md
-        print_success "If this is your first install, Bitcoin Core may take several hours/days to download a full copy of the blockchain."
+        print_success "If this is your first install, Bitcoin KNOTS may take several hours/days to download a full copy of the blockchain."
         print_success "\nMeanwhile you can install PyBLOCK to Manage your Bitcoin Node copying and pasting this commands:"
         print_success "\ngit clone https://github.com/curly60e/pyblock.git \ncd pyblock \npip3 install -r requirements.txt \ncd pybitblock \npython3 PyBlock.py"
         print_success "\nSelect the Option B."
