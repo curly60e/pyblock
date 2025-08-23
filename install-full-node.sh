@@ -163,7 +163,6 @@ install_debian_build_dependencies() {
         pkg-config
 }
 
-# This applies also for Fedora distribution.
 install_centos_build_dependencies() {
     $SUDO yum install -y \
         automake \
@@ -274,7 +273,7 @@ install_build_dependencies() {
     esac
 }
 
-build_bitcoin_core() {
+build_bitcoin_knots() {
     cd $TARGET_DIR
 
     if [ ! -d "$TARGET_DIR/bitcoin" ]; then
@@ -386,7 +385,7 @@ download_bin() {
     rm -f bitcoin-$VERSION.tar.gz checksum.asc
 }
 
-install_bitcoin_core() {
+install_bitcoin_knots() {
     cd $TARGET_DIR
 
     print_info "\nInstalling Bitcoin KNOTS v$VERSION"
@@ -479,7 +478,7 @@ EOF
     chmod ugo+x $TARGET_DIR/bin/stop.sh
 }
 
-start_bitcoin_core() {
+start_bitcoin_knots() {
     if [ ! -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
         print_info "\nStarting Bitcoin KNOTS.."
         cd $TARGET_DIR/bin && ./start.sh
@@ -499,7 +498,7 @@ start_bitcoin_core() {
     fi
 }
 
-stop_bitcoin_core() {
+stop_bitcoin_knots() {
     if [ -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
         print_info "\nStopping Bitcoin KNOTS.."
         cd $TARGET_DIR/bin && ./stop.sh
@@ -519,7 +518,7 @@ stop_bitcoin_core() {
     fi
 }
 
-check_bitcoin_core() {
+check_bitcoin_knots() {
     if [ -f $TARGET_DIR/.bitcoin/bitcoind.pid ]; then
         if [ -f $TARGET_DIR/bin/bitcoin-cli ]; then
             print_info "\nChecking Bitcoin KNOTS in 30 seconds.."
@@ -536,8 +535,8 @@ check_bitcoin_core() {
     fi
 }
 
-uninstall_bitcoin_core() {
-    stop_bitcoin_core
+uninstall_bitcoin_knots() {
+    stop_bitcoin_knots
 
     if [ -d "$TARGET_DIR" ]; then
         print_info "\nUninstalling Bitcoin KNOTS.."
@@ -622,7 +621,7 @@ if [ $UNINSTALL -eq 1 ]; then
     echo
     read -p "WARNING: This will stop Bitcoin KNOTS and uninstall it from your system. Uninstall? (y/n) " answer
     if [ "$answer" = "y" ]; then
-        uninstall_bitcoin_core
+        uninstall_bitcoin_knots
     fi
 else
     echo "$WELCOME_TEXT"
@@ -643,14 +642,14 @@ else
         else
             bin_url=""
         fi
-        stop_bitcoin_core
+        stop_bitcoin_knots
         create_target_dir
         if [ "$bin_url" != "" ]; then
             download_bin "$bin_url"
         else
-            install_build_dependencies && build_bitcoin_core
+            install_build_dependencies && build_bitcoin_knots
         fi
-        install_bitcoin_core && start_bitcoin_core && check_bitcoin_core
+        install_bitcoin_knots && start_bitcoin_knots && check_bitcoin_knots
         print_readme > $TARGET_DIR/README.md
         cat $TARGET_DIR/README.md
         print_success "If this is your first install, Bitcoin KNOTS may take several hours/days to download a full copy of the blockchain."
