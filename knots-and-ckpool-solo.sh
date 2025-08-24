@@ -1,6 +1,6 @@
 #!/bin/bash
-#chmod +x pure-and-ckpool-solo.sh
-#sudo ./pure-and-ckpool-solo.sh
+#chmod +x knots-and-ckpool-solo.sh
+#sudo ./knots-and-ckpool-solo.sh
 
 # Exit on errors
 set -e
@@ -65,13 +65,13 @@ if $PREVIOUS_INSTALL; then
 fi
 
 # Main installation
-echo "Starting installation of Bitcoin PURE and CKPool-Solo. This requires sudo privileges."
-echo "Warning: Bitcoin PURE will download up to ~700GB of blockchain data (or less if pruned). Ensure sufficient disk space."
-echo "Important: You cannot mine with CKPool-Solo until the Bitcoin PURE blockchain is fully synchronized, which may take days depending on your hardware and network speed."
+echo "Starting installation of Bitcoin KNOTS and CKPool-Solo. This requires sudo privileges."
+echo "Warning: Bitcoin KNOTS will download up to ~700GB of blockchain data (or less if pruned). Ensure sufficient disk space."
+echo "Important: You cannot mine with CKPool-Solo until the Bitcoin KNOTS blockchain is fully synchronized, which may take days depending on your hardware and network speed."
 
 # Prompt for service user (default to current sudo user)
 current_user=${SUDO_USER:-root}
-echo "Optionally, choose a user to run Bitcoin PURE and CKPool as (instead of $current_user)."
+echo "Optionally, choose a user to run Bitcoin KNOTS and CKPool as (instead of $current_user)."
 echo "Any existing blockchain data in the user's .bitcoin directory will be used."
 read -p "Enter existing username, or 'create' to make a new 'ckpool' user (leave blank for $current_user): " input_user
 if [ "$input_user" = "create" ]; then
@@ -94,7 +94,7 @@ else
 fi
 
 # Prompt for max disk space
-echo "Bitcoin blockchain full size is approximately 700 GB as of August 2025."
+echo "Bitcoin blockchain full size is approximately ~700GB."
 read -p "Enter maximum disk space for Bitcoin data in GB (0 for full chain, default: 0): " max_gb
 if [ -z "$max_gb" ]; then max_gb=0; fi
 if [ "$max_gb" -eq 0 ]; then
@@ -126,7 +126,7 @@ if [ "$available_space_gb" -lt "$required_space" ]; then
 fi
 
 # Prompt for assumevalid block hash
-read -p "To speed up blockchain sync, enter a trusted recent block hash for assumevalid (default: 00000000000000000001e6a5aec8788183793b27370ef638b152b4d02f9f0787 at block 907465, or 0 to disable): " assumevalid_hash
+read -p "To speed up blockchain sync, enter a trusted recent block hash for assumevalid (default: 0000000000000000000202c4c09182c0874fc0e0ab61248ac25699d7e86d12da at block 911119, or 0 to disable): " assumevalid_hash
 if [ "$assumevalid_hash" = "0" ]; then
     assumevalid_line=""
     echo "Assumevalid disabled. Full blockchain verification will be performed."
@@ -134,7 +134,7 @@ elif [ -n "$assumevalid_hash" ]; then
     echo "Warning: Using assumevalid skips signature verification up to this block, reducing security. Ensure the hash is from a trusted source."
     assumevalid_line="assumevalid=$assumevalid_hash"
 else
-    assumevalid_line="assumevalid=00000000000000000001e6a5aec8788183793b27370ef638b152b4d02f9f0787"
+    assumevalid_line="assumevalid=0000000000000000000202c4c09182c0874fc0e0ab61248ac25699d7e86d12da"
 fi
 
 # Prompt for donation to CKPool author
@@ -160,7 +160,7 @@ fi
 detect_distro
 $UPDATE_CMD
 
-# Install dependencies (for Bitcoin PURE, CKPool build, rpcauth.py, tarball verification, and jq for sync check)
+# Install dependencies (for Bitcoin KNOTS, CKPool build, rpcauth.py, tarball verification, and jq for sync check)
 $INSTALL_CMD build-essential git autoconf automake libtool pkg-config yasm libzmq3-dev curl screen libevent-dev libssl-dev bsdmainutils python3 gnupg jq
 
 # Enable persistent journald storage
@@ -168,31 +168,43 @@ echo "Enabling persistent journal storage for easier log access..."
 mkdir -p /var/log/journal
 systemd-tmpfiles --create --prefix /var/log/journal 2>/dev/null || true
 
-# Download and verify Bitcoin PURE tarball
+# Download and verify Bitcoin KNOTS tarball
+BITCOIN_VERSION="28.1.knots20250305"
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
-    BITCOIN_TAR="archive/refs/tags/PURE.tar.gz"
+    BITCOIN_TAR="bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz"
 elif [ "$ARCH" = "aarch64" ]; then
-    BITCOIN_TAR="archive/refs/tags/PURE.tar.gz"
+    BITCOIN_TAR="bitcoin-${BITCOIN_VERSION}-aarch64-linux-gnu.tar.gz"
 else
     echo "Unsupported architecture: $ARCH. Exiting."
     exit 1
 fi
-BASE_URL="https://github.com/SatoshiNakamotoBitcoin/The-Bitcoin-Pure"
+BASE_URL="https://bitcoinknots.org/files/28.x/${BITCOIN_VERSION}"
 curl -O ${BASE_URL}/${BITCOIN_TAR}
+curl -O ${BASE_URL}/SHA256SUMS
+curl -O ${BASE_URL}/SHA256SUMS.asc
+
+# Import Bitcoin KNOTS builder GPG keys
+git clone https://github.com/bitcoinknots/guix.sigs -b main --depth 1 /tmp/guix.sigs
+gpg --import /tmp/guix.sigs/builder-keys/* || true
+rm -rf /tmp/guix.sigs
+
+# Verify hash and signature
+sha256sum --ignore-missing --check SHA256SUMS || { echo "Hash verification failed. Exiting."; exit 1; }
+gpg --verify SHA256SUMS.asc || { echo "Signature verification failed. Exiting."; exit 1; }
 
 # Extract tarball
 tar -zxvf ${BITCOIN_TAR}
 
 # Generate rpcauth using included script
-cd The-Bitcoin-Pure-PURE
+cd bitcoin-${BITCOIN_VERSION}
 rpc_output=$(python3 ./share/rpcauth/rpcauth.py ckpooluser)
 rpcauth_line=$(echo "$rpc_output" | grep '^rpcauth=')
 rpc_password=$(echo "$rpc_output" | tail -1 | sed 's/Your password://' | tr -d '[:space:]')
 cd ..
 
-cp -r The-Bitcoin-Pure-PURE/bin/* /usr/local/bin/
-rm -rf The-Bitcoin-Pure-PURE ${BITCOIN_TAR}
+cp -r bitcoin-${BITCOIN_VERSION}/bin/* /usr/local/bin/
+rm -rf bitcoin-${BITCOIN_VERSION} ${BITCOIN_TAR} SHA256SUMS SHA256SUMS.asc
 
 # Calculate dbcache: 25% of total memory in MB, capped at 8192 MB
 total_mem=$(free -m | awk '/Mem:/ {print $2}')
@@ -201,7 +213,7 @@ if [ $dbcache -gt 8192 ]; then
     dbcache=8192
 fi
 
-# Set up Bitcoin PURE config and datadir
+# Set up Bitcoin KNOTS config and datadir
 DATADIR="$HOME_DIR/.bitcoin"
 mkdir -p "$DATADIR"
 chown -R $service_user:$service_user "$DATADIR"
@@ -212,6 +224,12 @@ $prune_line
 $assumevalid_line
 rpcallowip=127.0.0.1
 rpcbind=127.0.0.1
+datacarrier=0
+datacarriersize=0
+permitbaremultisig=0
+uacomment=PyBLOCK Crew
+rejectparasites=1
+rejecttokens=1
 zmqpubhashblock=tcp://127.0.0.1:28332
 blockmaxweight=3900000
 checkblocks=6
@@ -336,5 +354,5 @@ echo "CKPool startup is delayed until sync completes (monitor with: journalctl -
 echo "Connect miners using: stratum+tcp://[machine IP]:3333 with your Bitcoin address as username and 'x' as password. Replace [machine IP] with the IP address of this machine (use ifconfig or ip addr to find it)."
 echo "Monitor logs:"
 echo "  - CKPool: tail -f /var/log/ckpool/ckpool.log (full logs) or journalctl -u ckpool -f (block progress, then reduced CKPool logs)"
-echo "  - Bitcoin PURE: tail -f $DATADIR/debug.log or journalctl -u bitcoind -f"
+echo "  - Bitcoin KNOTS: tail -f $DATADIR/debug.log or journalctl -u bitcoind -f"
 echo "Edit configs in $DATADIR/bitcoin.conf and /etc/ckpool/ckpool.conf if needed, then restart services with: systemctl restart bitcoind ckpool"
