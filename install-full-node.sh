@@ -450,7 +450,7 @@ dbcache=777
 par=2
 checkblocks=24
 checklevel=0
-uaappend=PyBLOCKCrew
+uaappend=PyBLOCK
 
 disablewallet=1
 uacomment=PyBLOCK Crew
