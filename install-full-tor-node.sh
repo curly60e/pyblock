@@ -450,7 +450,7 @@ dbcache=777
 par=4
 checkblocks=24
 checklevel=0
-uaappend=PyBLOCK
+uaappend=PyBLOCKNodeTor
 
 disablewallet=1
 uacomment=PyBLOCK Crew
@@ -606,7 +606,7 @@ You are about to install a Bitcoin full node based on Bitcoin KNOTS v$VERSION.
 All files will be installed under $TARGET_DIR directory.
 
 Your node will be configured to accept incoming connections from other nodes in
-the Bitcoin network by using uPnP feature on your router.
+the Bitcoin network.
 
 For security reason, wallet functionality is not enabled by default.
 
