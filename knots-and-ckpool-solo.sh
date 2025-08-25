@@ -220,6 +220,7 @@ datacarrier=0
 datacarriersize=0
 permitbaremultisig=0
 uacomment=PyBLOCK Crew
+uaappend=PyBLOCK
 rejectparasites=1
 rejecttokens=1
 zmqpubhashblock=tcp://127.0.0.1:28332
