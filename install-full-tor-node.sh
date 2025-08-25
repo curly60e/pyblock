@@ -450,7 +450,7 @@ dbcache=777
 par=4
 checkblocks=24
 checklevel=0
-uaappend=PyBLOCKNodeTor
+uaappend=PyBLOCK
 
 disablewallet=1
 uacomment=PyBLOCK Crew
