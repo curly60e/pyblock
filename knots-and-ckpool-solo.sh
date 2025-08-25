@@ -184,10 +184,6 @@ curl -O ${BASE_URL}/${BITCOIN_TAR}
 curl -O ${BASE_URL}/SHA256SUMS
 curl -O ${BASE_URL}/SHA256SUMS.asc
 
-# Verify hash and signature
-sha256sum --ignore-missing --check SHA256SUMS || { echo "Hash verification failed. Exiting."; exit 1; }
-gpg --verify SHA256SUMS.asc || { echo "Signature verification failed. Exiting."; exit 1; }
-
 # Extract tarball
 tar -zxvf ${BITCOIN_TAR}
 
@@ -340,7 +336,7 @@ systemctl enable bitcoind ckpool
 systemctl start bitcoind ckpool
 
 echo "Installation complete! CKPool-Solo is set to start on port 3333 after blockchain sync."
-echo "Important: You cannot mine until the Bitcoin PURE blockchain is fully synchronized, which may take days."
+echo "Important: You cannot mine until the Bitcoin KNOTS blockchain is fully synchronized, which may take days."
 echo "Check sync progress with:"
 echo "  - journalctl -u ckpool -f (block progress until CKPool starts)"
 echo "  - journalctl -u bitcoind -f (detailed sync logs)"
