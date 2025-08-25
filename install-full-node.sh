@@ -446,7 +446,7 @@ permitbaremultisig=0
 rejectparasites=1
 rejecttokens=1
 
-dbcache=128
+dbcache=777
 par=2
 checkblocks=24
 checklevel=0
