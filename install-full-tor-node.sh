@@ -441,9 +441,12 @@ listen=1
 port=$PORT
 maxconnections=64
 datacarrier=0
+datacarriersize=0
 permitbaremultisig=0
+rejectparasites=1
+rejecttokens=1
 
-dbcache=5555
+dbcache=777
 par=4
 checkblocks=24
 checklevel=0
