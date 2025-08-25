@@ -1,4 +1,5 @@
 #!/bin/bash
+#wget https://raw.githubusercontent.com/curly60e/pyblock/refs/heads/master/knots-and-ckpool-solo.sh
 #chmod +x knots-and-ckpool-solo.sh
 #sudo ./knots-and-ckpool-solo.sh
 
