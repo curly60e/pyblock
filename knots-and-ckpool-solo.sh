@@ -335,15 +335,15 @@ systemctl daemon-reload
 systemctl enable bitcoind ckpool
 systemctl start bitcoind ckpool
 
-echo "Installation complete! CKPool-Solo is set to start on port 3333 after blockchain sync."
-echo "Important: You cannot mine until the Bitcoin KNOTS blockchain is fully synchronized, which may take days."
+echo -e "Installation complete! CKPool-Solo is set to start on port 3333 after blockchain sync. \n"
+echo -e "Important: You cannot mine until the Bitcoin KNOTS blockchain is fully synchronized, which may take days. \n"
 echo "Check sync progress with:"
 echo "  - journalctl -u ckpool -f (block progress until CKPool starts)"
 echo "  - journalctl -u bitcoind -f (detailed sync logs)"
-echo "  - tail -f $DATADIR/debug.log (detailed sync logs)"
-echo "CKPool startup is delayed until sync completes (monitor with: journalctl -u ckpool -f)."
-echo "Connect miners using: stratum+tcp://[machine IP]:3333 with your Bitcoin address as username and 'x' as password. Replace [machine IP] with the IP address of this machine (use ifconfig or ip addr to find it)."
+echo -e "  - tail -f $DATADIR/debug.log (detailed sync logs) \n"
+echo -e "CKPool startup is delayed until sync completes (monitor with: journalctl -u ckpool -f). \n"
+echo -e "Connect miners using: stratum+tcp://[machine IP]:3333 with your Bitcoin address as username and 'x' as password. Replace [machine IP] with the IP address of this machine (use ifconfig or ip addr to find it). \n"
 echo "Monitor logs:"
 echo "  - CKPool: tail -f /var/log/ckpool/ckpool.log (full logs) or journalctl -u ckpool -f (block progress, then reduced CKPool logs)"
-echo "  - Bitcoin KNOTS: tail -f $DATADIR/debug.log or journalctl -u bitcoind -f"
-echo "Edit configs in $DATADIR/bitcoin.conf and /etc/ckpool/ckpool.conf if needed, then restart services with: systemctl restart bitcoind ckpool"
+echo -e "  - Bitcoin KNOTS: tail -f $DATADIR/debug.log or journalctl -u bitcoind -f \n"
+echo -e "Edit configs in $DATADIR/bitcoin.conf and /etc/ckpool/ckpool.conf if needed, then restart services with: systemctl restart bitcoind ckpool. \n"
