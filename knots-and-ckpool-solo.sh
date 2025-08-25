@@ -184,11 +184,6 @@ curl -O ${BASE_URL}/${BITCOIN_TAR}
 curl -O ${BASE_URL}/SHA256SUMS
 curl -O ${BASE_URL}/SHA256SUMS.asc
 
-# Import Bitcoin KNOTS builder GPG keys
-git clone https://github.com/bitcoinknots/guix.sigs -b main --depth 1 /tmp/guix.sigs
-gpg --import /tmp/guix.sigs/builder-keys/* || true
-rm -rf /tmp/guix.sigs
-
 # Verify hash and signature
 sha256sum --ignore-missing --check SHA256SUMS || { echo "Hash verification failed. Exiting."; exit 1; }
 gpg --verify SHA256SUMS.asc || { echo "Signature verification failed. Exiting."; exit 1; }
