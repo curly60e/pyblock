@@ -66,14 +66,14 @@ if $PREVIOUS_INSTALL; then
 fi
 
 # Main installation
-echo "Starting installation of Bitcoin KNOTS and CKPool-Solo. This requires sudo privileges."
-echo "Warning: Bitcoin KNOTS will download up to ~700GB of blockchain data (or less if pruned). Ensure sufficient disk space."
-echo "Important: You cannot mine with CKPool-Solo until the Bitcoin KNOTS blockchain is fully synchronized, which may take days depending on your hardware and network speed."
+echo -e "\nStarting installation of Bitcoin KNOTS and CKPool-Solo. This requires sudo privileges. \n"
+echo -e "\nWarning: Bitcoin KNOTS will download up to ~700GB of blockchain data (or less if pruned). Ensure sufficient disk space. \n"
+echo -e "\nImportant: You cannot mine with CKPool-Solo until the Bitcoin KNOTS blockchain is fully synchronized, which may take days depending on your hardware and network speed. \n"
 
 # Prompt for service user (default to current sudo user)
 current_user=${SUDO_USER:-root}
-echo "Optionally, choose a user to run Bitcoin KNOTS and CKPool as (instead of $current_user)."
-echo "Any existing blockchain data in the user's .bitcoin directory will be used."
+echo -e "\nOptionally, choose a user to run Bitcoin KNOTS and CKPool as (instead of $current_user). \n"
+echo -e "\nAny existing blockchain data in the user's .bitcoin directory will be used. \n"
 read -p "Enter existing username, or 'create' to make a new 'ckpool' user (leave blank for $current_user): " input_user
 if [ "$input_user" = "create" ]; then
     useradd -m -s /bin/bash ckpool
@@ -95,7 +95,7 @@ else
 fi
 
 # Prompt for max disk space
-echo "Bitcoin blockchain full size is approximately ~700GB."
+echo -e "\nBitcoin blockchain full size is approximately ~700GB. \n"
 read -p "Enter maximum disk space for Bitcoin data in GB (0 for full chain, default: 0): " max_gb
 if [ -z "$max_gb" ]; then max_gb=0; fi
 if [ "$max_gb" -eq 0 ]; then
@@ -142,20 +142,20 @@ fi
 read -p "Support CKPool author with a 0.5% donation on mined blocks? (y/N, default: no): " donation_answer
 if [[ "$donation_answer" =~ ^[Yy]$ ]]; then
     donation_line='"donation" : 0.5,'
-    echo "Donation of 0.5% enabled. Thank you for supporting CKPool development!"
+    echo -e "\nDonation of 0.5% enabled. Thank you for supporting CKPool development! \n"
 else
     donation_line=""
-    echo "Donation disabled. You can enable it later in /etc/ckpool/ckpool.conf."
+    echo -e "\nDonation disabled. You can enable it later in /etc/ckpool/ckpool.conf. \n"
 fi
 
 # Prompt for coinbase signature
 read -p "Enter an optional signature string to include in the coinbase of mined blocks (leave blank for none): " btcsig
 if [ -n "$btcsig" ]; then
     btcsig_line="\"btcsig\" : \"$btcsig\","
-    echo "Coinbase signature '$btcsig' will be included in mined blocks."
+    echo -e "Coinbase signature '$btcsig' will be included in mined blocks. \n"
 else
     btcsig_line=""
-    echo "No coinbase signature set. You can add one later in /etc/ckpool/ckpool.conf."
+    echo -e "No coinbase signature set. You can add one later in /etc/ckpool/ckpool.conf. \n"
 fi
 
 detect_distro
@@ -165,7 +165,7 @@ $UPDATE_CMD
 $INSTALL_CMD build-essential git autoconf automake libtool pkg-config yasm libzmq3-dev curl screen libevent-dev libssl-dev bsdmainutils python3 gnupg jq
 
 # Enable persistent journald storage
-echo "Enabling persistent journal storage for easier log access..."
+echo -e "\nEnabling persistent journal storage for easier log access... \n"
 mkdir -p /var/log/journal
 systemd-tmpfiles --create --prefix /var/log/journal 2>/dev/null || true
 
