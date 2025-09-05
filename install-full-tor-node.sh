@@ -4,7 +4,7 @@
 
 REPO_URL="https://github.com/bitcoinknots/bitcoin.git"
 
-VERSION=28.1.knots20250305
+VERSION=29.1.knots20250903
 
 TARGET_DIR=$HOME/bitcoin-knots
 PORT=8333
@@ -323,7 +323,7 @@ build_bitcoin_knots() {
 }
 
 get_bin_url() {
-    url="https://bitcoinknots.org/files/28.x/$VERSION"
+    url="https://bitcoinknots.org/files/29.x/$VERSION"
     case "$SYSTEM" in
         Linux)
             if program_exists "apk"; then
@@ -350,7 +350,7 @@ get_bin_url() {
 }
 
 download_bin() {
-    checksum_url="https://bitcoinknots.org/files/28.x/$VERSION/SHA256SUMS"
+    checksum_url="https://bitcoinknots.org/files/29.x/$VERSION/SHA256SUMS"
 
     cd $TARGET_DIR
 
@@ -428,7 +428,7 @@ install_bitcoin_knots() {
 ### IPv4/IPv6 mode ###
 # This mode requires uPnP feature on your router to allow Bitcoin KNOTS to accept incoming connections.
 #bind=0.0.0.0
-upnp=0
+#upnp=0
 
 ### Tor mode ###
 # This mode requires tor (https://www.torproject.org/download/) to be running at the proxy address below.
