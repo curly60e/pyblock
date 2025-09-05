@@ -170,7 +170,7 @@ mkdir -p /var/log/journal
 systemd-tmpfiles --create --prefix /var/log/journal 2>/dev/null || true
 
 # Download and verify Bitcoin KNOTS tarball
-BITCOIN_VERSION="28.1.knots20250305"
+BITCOIN_VERSION="29.1.knots20250903"
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
     BITCOIN_TAR="bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz"
@@ -180,7 +180,7 @@ else
     echo "Unsupported architecture: $ARCH. Exiting."
     exit 1
 fi
-BASE_URL="https://bitcoinknots.org/files/28.x/${BITCOIN_VERSION}"
+BASE_URL="https://bitcoinknots.org/files/29.x/${BITCOIN_VERSION}"
 curl -O ${BASE_URL}/${BITCOIN_TAR}
 curl -O ${BASE_URL}/SHA256SUMS
 curl -O ${BASE_URL}/SHA256SUMS.asc
