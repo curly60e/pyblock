@@ -438,6 +438,8 @@ upnp=1
 #onlynet=onion
 
 listen=1
+listen=ipv4
+listen=ipv6
 port=$PORT
 maxconnections=64
 datacarrier=0
