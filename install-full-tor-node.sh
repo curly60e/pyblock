@@ -438,6 +438,7 @@ bind=127.0.0.1
 onlynet=onion
 
 listen=1
+listen=onion
 port=$PORT
 maxconnections=64
 datacarrier=0
