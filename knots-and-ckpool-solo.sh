@@ -170,7 +170,7 @@ mkdir -p /var/log/journal
 systemd-tmpfiles --create --prefix /var/log/journal 2>/dev/null || true
 
 # Download and verify Bitcoin KNOTS tarball
-BITCOIN_VERSION="29.1.knots20250903"
+BITCOIN_VERSION="29.2.knots20251010"
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
     BITCOIN_TAR="bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz"
