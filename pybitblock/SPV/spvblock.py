@@ -1280,7 +1280,7 @@ def CroppedMinerComputer():
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        os.system(f"cd CroppedMiner && ./minerd -a sha256d -o stratum+tcp://pool.pyblock.xyz:3333 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
+        os.system(f"cd CroppedMiner && ./minerd -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
         input("\a\nContinue...")
     except:
         pass
@@ -1302,7 +1302,7 @@ def CroppedMinerRaspberry():
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        os.system(f"cd CroppedMiner && cd cpuminer-multi-arm && ./cpuminer -a sha256d -o stratum+tcp://pool.pyblock.xyz:3333 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
+        os.system(f"cd CroppedMiner && cd cpuminer-multi-arm && ./cpuminer -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
         input("\a\nContinue...")
     except:
         pass
