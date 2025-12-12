@@ -14,7 +14,7 @@ signal.signal(signal.SIGINT, lambda x, y: sys.exit(0))
 address = '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
 nonce   = hex(random.randint(0,2**32-1))[2:].zfill(8)
 host    = 'pool.pyblock.xyz'
-port    = 3333
+port    = 4444
 
 def main():
     print("\nSatoshi: {}\n\nNonce: {}\n".format(address,nonce))
