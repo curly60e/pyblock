@@ -182,8 +182,8 @@ else
 fi
 BASE_URL="https://github.com/dathonohm/bitcoin/releases/download/v${BITCOIN_VERSION}"
 wget ${BASE_URL}/${BITCOIN_TAR}
-wget ${BASE_URL}/SHA256SUMS
-wget ${BASE_URL}/SHA256SUMS.asc
+wget https://github.com/dathonohm/bitcoin/releases/download/v29.2.knots20251110%2Bbip110-v0.1rc3/SHA256SUMS
+wget https://github.com/dathonohm/bitcoin/releases/download/v29.2.knots20251110%2Bbip110-v0.1rc3/SHA256SUMS.asc
 
 # Extract tarball
 tar -zxvf ${BITCOIN_TAR}
