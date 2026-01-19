@@ -127,7 +127,7 @@ if [ "$available_space_gb" -lt "$required_space" ]; then
 fi
 
 # Prompt for assumevalid block hash
-read -p "To speed up blockchain sync, enter a trusted recent block hash for assumevalid (default: 0000000000000000000202c4c09182c0874fc0e0ab61248ac25699d7e86d12da at block 911119, or 0 to disable): " assumevalid_hash
+read -p "To speed up blockchain sync, enter a trusted recent block hash for assumevalid. (Default: 0000000000000000000202c4c09182c0874fc0e0ab61248ac25699d7e86d12da at block 911119, or 0 to disable): " assumevalid_hash
 if [ "$assumevalid_hash" = "0" ]; then
     assumevalid_line=""
     echo "Assumevalid disabled. Full blockchain verification will be performed."
