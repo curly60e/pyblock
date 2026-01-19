@@ -180,10 +180,10 @@ else
     echo "Unsupported architecture: $ARCH. Exiting."
     exit 1
 fi
-BASE_URL="https://github.com/dathonohm/bitcoin/releases/download/v29.2.knots20251110%2Bbip110-v0.1rc3/${BITCOIN_VERSION}"
-curl -O ${BASE_URL}/${BITCOIN_TAR}
-curl -O ${BASE_URL}/SHA256SUMS
-curl -O ${BASE_URL}/SHA256SUMS.asc
+BASE_URL="https://github.com/dathonohm/bitcoin/releases/download/v${BITCOIN_VERSION}"
+wget ${BASE_URL}/${BITCOIN_TAR}
+wget ${BASE_URL}/SHA256SUMS
+wget ${BASE_URL}/SHA256SUMS.asc
 
 # Extract tarball
 tar -zxvf ${BITCOIN_TAR}
