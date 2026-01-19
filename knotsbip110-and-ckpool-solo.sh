@@ -182,8 +182,6 @@ else
 fi
 BASE_URL="https://github.com/dathonohm/bitcoin/releases/download/v${BITCOIN_VERSION}"
 wget ${BASE_URL}/${BITCOIN_TAR}
-wget https://github.com/dathonohm/bitcoin/releases/download/v29.2.knots20251110%2Bbip110-v0.1rc3/SHA256SUMS
-wget https://github.com/dathonohm/bitcoin/releases/download/v29.2.knots20251110%2Bbip110-v0.1rc3/SHA256SUMS.asc
 
 # Extract tarball
 tar -zxvf ${BITCOIN_TAR}
@@ -196,7 +194,7 @@ rpc_password=$(echo "$rpc_output" | tail -1 | sed 's/Your password://' | tr -d '
 cd ..
 
 cp -r bitcoin-${BITCOIN_VERSION}/bin/* /usr/local/bin/
-rm -rf bitcoin-${BITCOIN_VERSION} ${BITCOIN_TAR} SHA256SUMS SHA256SUMS.asc
+rm -rf bitcoin-${BITCOIN_VERSION} ${BITCOIN_TAR}
 
 # Calculate dbcache: 25% of total memory in MB, capped at 8192 MB
 total_mem=$(free -m | awk '/Mem:/ {print $2}')
