@@ -67,7 +67,7 @@ fi
 
 # Main installation
 echo -e "\nStarting installation of Bitcoin KNOTS+BIP110 and CKPool-Solo. This requires sudo privileges. \n"
-echo -e "\nWarning: Bitcoin KNOTS+BIP110 will download up to ~700GB of blockchain data (or less if pruned). Ensure sufficient disk space. \n"
+echo -e "\nWarning: Bitcoin KNOTS+BIP110 will download up to ~800GB of blockchain data (or less if pruned). Ensure sufficient disk space. \n"
 echo -e "\nImportant: You cannot mine with CKPool-Solo until the Bitcoin KNOTS+BIP110 blockchain is fully synchronized, which may take days depending on your hardware and network speed. \n"
 
 # Prompt for service user (default to current sudo user)
