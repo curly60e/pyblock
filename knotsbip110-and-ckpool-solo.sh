@@ -336,7 +336,7 @@ systemctl enable bitcoind ckpool
 systemctl start bitcoind ckpool
 
 echo -e "Installation complete! CKPool-Solo is set to start on port 3333 after blockchain sync. \n"
-echo -e "Important: You cannot mine until the Bitcoin KNOTS blockchain is fully synchronized, which may take days. \n"
+echo -e "Important: You cannot mine until the Bitcoin KNOTS+BIP110 blockchain is fully synchronized, which may take days. \n"
 echo "Check sync progress with:"
 echo "  - journalctl -u ckpool -f (block progress until CKPool starts)"
 echo "  - journalctl -u bitcoind -f (detailed sync logs)"
