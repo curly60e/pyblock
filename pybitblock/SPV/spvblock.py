@@ -4426,8 +4426,8 @@ def MainMenuCROPPED(): #Main Menu
 
 
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
-    \u001b[33;1mL.\033[0;37;40m Lightning Network
+    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
+    \u001b[33;1mL.\033[0;37;40m Lightning
     \u001b[38;5;40mP.\033[0;37;40m Platforms
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
