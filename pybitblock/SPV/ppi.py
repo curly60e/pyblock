@@ -134,7 +134,7 @@ def opreturn():
 
             path['rpcuser'] = input("RPC User: ")
             path['rpcpass'] = input("RPC Password: ")
-            print("\n\tLocal Bitcoin Core Node connection.\n")
+            print("\n\tLocal Bitcoin Node connection.\n")
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
             pickle.dump(path, open("bclock.conf", "wb"))
         clear()
