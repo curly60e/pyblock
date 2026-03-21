@@ -12,8 +12,8 @@
     Version: X.x.X
     
     A. PyBLOCK
-    B. Bitcoin Core
-    L. Lightning Network
+    B. Bitcoin
+    L. Lightning
     P. Platforms
     S. Settings
     X. Donate
