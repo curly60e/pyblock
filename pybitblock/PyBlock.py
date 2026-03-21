@@ -1806,8 +1806,8 @@ def MainMenuLOCAL(): #Main Menu
 
 
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
-    \u001b[33;1mL.\033[0;37;40m Lightning Network
+    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
+    \u001b[33;1mL.\033[0;37;40m Lightning
     \u001b[38;5;40mP.\033[0;37;40m Platforms
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
@@ -1833,7 +1833,7 @@ def MainMenuLOCALChainONLY(): #Main Menu
 
 
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
+    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
     \u001b[38;5;40mP.\033[0;37;40m Platforms
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
@@ -1869,8 +1869,8 @@ def MainMenuREMOTE(): #Main Menu
 
 
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin Core
-    \u001b[33;1mL.\033[0;37;40m Lightning Network
+    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
+    \u001b[33;1mL.\033[0;37;40m Lightning
     \u001b[38;5;40mP.\033[0;37;40m Platforms
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
@@ -1924,7 +1924,7 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
     \u001b[38;5;202mX.\033[0;37;40m Node Monitor
     \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m Core Miner
+    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
     \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
     \u001b[33;1mEnter.\033[0;37;40m Return
@@ -1972,7 +1972,7 @@ def bitcoincoremenuLOCALOnchainONLY():
     \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
     \u001b[38;5;202mX.\033[0;37;40m Node Monitor
     \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m Core Miner
+    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
     \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
     \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
     \u001b[33;1mEnter.\033[0;37;40m Return
