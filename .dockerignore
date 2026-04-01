@@ -1,0 +1,10 @@
+.git
+__pycache__
+*.pyc
+*.pyo
+.github
+.venv
+*.egg-info
+dist/
+build/
+*.pickle.bak

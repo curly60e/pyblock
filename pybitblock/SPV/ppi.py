@@ -12,7 +12,6 @@ import lnpay_py
 import requests
 import xmltodict
 import time as t
-import simplejson as json
 from art import *
 from cfonts import render, say
 from nodeconnection import *
@@ -20,6 +19,9 @@ from pblogo import *
 from logos import *
 from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
+from config import cfg
+from log import get_logger
+logger = get_logger("SPV.ppi")
 
 def clear(): # clear the screen
     subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
@@ -94,8 +96,8 @@ def opreturnOnchainONLY():
         blogo()
         print("\nTransaction ID: " + responseC)
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def opreturn():
     qr = qrcode.QRCode(
@@ -105,40 +107,8 @@ def opreturn():
     border=4,
     )
     try:
-        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-            lndconnectData= json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        else:
-            clear()
-            blogo()
-            print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in blank.\n")
-            lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ") # path to the bitcoin-cli
-            lndconnectload["tls"] = input("Insert the path to tls.cert file: ")
-            lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
-            print("\n\tLocal Lightning Node connection.\n")
-            lndconnectload["ln"] = input("Insert the path to lncli: ")
-            with open("blndconnect.conf", "w") as f:
-                json.dump(lndconnectload, f, indent=2) # Save the file 'bclock.conf'
-
-        path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-        if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = json.load(open("bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
-        else:
-            blogo()
-            print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
-            print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in blank.\n")
-            path[
-                'ip_port'
-            ] = f'http://{input("Insert IP:PORT to access your remote Bitcoin-Cli node: ")}'
-
-            path['rpcuser'] = input("RPC User: ")
-            path['rpcpass'] = input("RPC Password: ")
-            print("\n\tLocal Bitcoin Node connection.\n")
-            path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-            with open("bclock.conf", "w") as f:
-                json.dump(path, f, indent=2)
+        lndconnectload = cfg.lndconnectload
+        path = cfg.path
         clear()
         blogo()
         output = render(
@@ -168,9 +138,7 @@ def opreturn():
         b = str(a)
         node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
-            lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            lndconnectload = cfg.lndconnectload
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + b + "\n")
                 payinvoice()
@@ -238,8 +206,8 @@ def opreturn():
             blogo()
             print("\nTransaction ID: " + responseC)
             input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def opreturn_view():
     try:
@@ -260,8 +228,8 @@ def opreturn_view():
         print("\nTransaction ID: " + responseC)
         print(f'OP_RETURN Message: {r3}')
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def opretminer():
     try:
@@ -277,8 +245,8 @@ def opretminer():
         print(output)
         print(a)
         input("")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------GAMES--------------------------------
 #------------------------------------------------------------------
@@ -297,8 +265,8 @@ def gameroom():
         input("\a\nContinue...")
         conn = ['ssh', 'gameroom@bitreich.org']
         subprocess.run(conn)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 #----------------------------------------------------------------------
 
 #-----------------------------Stats--------------------------------
@@ -314,8 +282,8 @@ def statsConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END Stats--------------------------------
 
@@ -335,8 +303,8 @@ def pgpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END PGP--------------------------------
 
@@ -356,8 +324,8 @@ def satoshiConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END Satoshi--------------------------------
 
@@ -374,8 +342,8 @@ def whalalConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END Whale Alert--------------------------------
 #-----------------------------bwt.dev--------------------------------
@@ -389,8 +357,8 @@ def bwtConn():
         closed()
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END bwt.dev--------------------------------
 #-----------------------------Dates--------------------------------
@@ -406,8 +374,8 @@ def datesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END Dates--------------------------------
 #-----------------------------Quotes--------------------------------
@@ -423,8 +391,8 @@ def quotesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END Quotes--------------------------------
 #-----------------------------Hashrate--------------------------------
@@ -440,8 +408,8 @@ def miningConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END Hashrate--------------------------------
 #-----------------------------StatsLN--------------------------------
@@ -460,8 +428,8 @@ def stalnConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END StatsLN--------------------------------
 #-----------------------------StatRanking--------------------------------
@@ -477,8 +445,8 @@ def ranConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 #-----------------------------END Ranking--------------------------------
 
 def trustednode():
@@ -500,8 +468,8 @@ def trustednode():
         input("\a\nContinue...")
         conn = ['telnet', 'cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion', '6023']
         subprocess.run(conn)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 #-----------------------------END GAMES--------------------------------
 
 #-----------------------------wttr.in--------------------------------
@@ -562,8 +530,8 @@ def wttrDataV1():
         blogo()
         print(a)
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def wttrDataV2():
     try:
@@ -621,8 +589,8 @@ def wttrDataV2():
         blogo()
         print(a)
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 
 #-----------------------------END wttr.in--------------------------------
@@ -670,8 +638,8 @@ def rateSXList():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
     while True:
         try:
             list = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
@@ -681,7 +649,8 @@ def rateSXList():
             closed()
             print(a)
             t.sleep(20)
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
 
 def rateSXGraph():
@@ -725,8 +694,8 @@ def rateSXGraph():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
     while True:
         try:
             list = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
@@ -736,7 +705,8 @@ def rateSXGraph():
             closed()
             print(a)
             t.sleep(20)
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
 
 #-----------------------------END RATE.SX--------------------------------
@@ -775,8 +745,8 @@ def CoingeckoPP():
         ------------------------------------------------------------------
         """.format(usd,eur,gbp,jpy,aud))
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END COINGECKO--------------------------------
 
@@ -859,9 +829,7 @@ def lnbitCreateNewInvoice():
 
         while True:
             if node_not in ["Y", "y"]:
-                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                lndconnectload = cfg.lndconnectload
                 if lndconnectload['ip_port']:
                     print("\nInvoice: " + c + "\n")
                     payinvoice()
@@ -896,8 +864,8 @@ def lnbitCreateNewInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def lnbitPayInvoice():
     bolt = input("Invoice: ")
@@ -936,8 +904,8 @@ def lnbitPayInvoice():
             tick()
             t.sleep(2)
             break
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def lnbitCreatePayWall():
     while True:
@@ -1008,7 +976,8 @@ def lnbitCreatePayWall():
                 input("Continue...")
             clear()
             blogo()
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
 
 def lnbitListPawWall():
@@ -1049,7 +1018,8 @@ def lnbitListPawWall():
                     Wallet: {}
                     """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
         input("Continue...")
         clear()
@@ -1095,7 +1065,8 @@ def lnbitDeletePayWall():
                             Wallet: {}
                             """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                             print("----------------------------------------------------------------------------------------------------------------\n")
-                except Exception:
+                except Exception as e:
+                    logger.debug("ppi: %s", e)
                     break
                 input("Continue...")
                 break
@@ -1114,7 +1085,8 @@ def lnbitDeletePayWall():
             print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
             t.sleep(2)
             clear()
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
 
 def lnbitsLNURLw():
@@ -1183,7 +1155,8 @@ def lnbitsLNURLw():
                 input("Continue...")
                 clear()
                 blogo()
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
 
 def lnbitsLNURLwList():
@@ -1221,7 +1194,8 @@ def lnbitsLNURLwList():
                     """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
             input("Continue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("ppi: %s", e)
         print("\n")
 
 #-------------------------1d646820055e4e2da218e801eaacfc94----END LNBITS--------------------------------
@@ -1310,9 +1284,7 @@ def lnpayCreateInvoice():
         node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         while True:
             if node_not in ["Y", "y"]:
-                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                lndconnectload = cfg.lndconnectload
                 if lndconnectload['ip_port']:
                     print("\nInvoice: " + invoice['payment_request'] + "\n")
                     payinvoice()
@@ -1342,8 +1314,8 @@ def lnpayCreateInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def lnpayGetTransactions():
     qr = qrcode.QRCode(
@@ -1395,7 +1367,8 @@ def lnpayGetTransactions():
             input("Continue...")
             clear()
             blogo()
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
     clear()
     blogo()
@@ -1436,8 +1409,8 @@ def lnpayPayInvoice():
             'payment_request': inv
         }
         pay_result = my_wallet.pay_invoice(invoice_params)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def lnpayTransBWallets():
     a = loadFileConnLNPay(['key'])
@@ -1477,8 +1450,8 @@ def lnpayTransBWallets():
         """.format(p['id'], p['num_satoshis'], p['user_label'], v['user_label'], f['user_label']))
         print("----------------------------------------------------------------------------------------------------\n")
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END LNPAY--------------------------------
 #-----------------------------OPENNODE--------------------------------
@@ -1634,9 +1607,7 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                        lndconnectload = cfg.lndconnectload
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
                             payinvoice()
@@ -1661,7 +1632,8 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except Exception:
+            except Exception as e:
+                logger.debug("ppi: %s", e)
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
@@ -1702,9 +1674,7 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                        lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                        lndconnectload = cfg.lndconnectload
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
                             payinvoice()
@@ -1729,7 +1699,8 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except Exception:
+            except Exception as e:
+                logger.debug("ppi: %s", e)
                 break
 
 def OpenNodeiniciatewithdrawal():
@@ -1794,7 +1765,8 @@ def OpenNodeiniciatewithdrawal():
             blogo()
             tick()
             t.sleep(2)
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             pass
 
     elif lnchain in ["O", "o"]:
@@ -1843,7 +1815,8 @@ def OpenNodeiniciatewithdrawal():
                     logoB()
                     t.sleep(2)
                     break
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             pass
 
 def OpenNodeListPayments():
@@ -1895,7 +1868,8 @@ def OpenNodeListPayments():
             clear()
             blogo()
             print("\n\tOPENNODE TRANSACTIONS LIST\n")
-        except Exception:
+        except Exception as e:
+            logger.debug("ppi: %s", e)
             break
 
 #-----------------------------END OPENNODE--------------------------------
@@ -1957,9 +1931,7 @@ def tippinmeGetInvoice():
         ln1 = ln.strip('"')
         node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
-            lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            lndconnectload = cfg.lndconnectload
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + ln1 + "\n")
                 payinvoice()
@@ -1974,8 +1946,8 @@ def tippinmeGetInvoice():
             print(f'LND Invoice: {ln1}')
             response.close()
             input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 #-----------------------------END TIPPINME--------------------------------
 #-----------------------------TALLYCOIN------------------------------
@@ -2061,8 +2033,8 @@ def tallycoGetPayment():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 
 def tallycoDonateid():
@@ -2096,9 +2068,7 @@ def tallycoDonateid():
         if lnd_onchain in ["ln", "lN", "Ln", "LN"]:
             node_not = input("Do you want to pay this tip with your node? Y/n: ")
             if node_not in ["Y", "y"]:
-                lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                lndconnectload = cfg.lndconnectload
                 if lndconnectload['ip_port']:
                     e = d['lightning_pay_request']
                     f = e.lower()
@@ -2129,8 +2099,8 @@ def tallycoDonateid():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 
 #-----------------------------END TALLYCOIN------------------------------
@@ -2155,8 +2125,8 @@ def fee():
             """.format(di['fastestFee'], di['halfHourFee'], di['hourFee']))
             t.sleep(5)
             print("\n\t    Getting New Information")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 def blocks():
     try:
@@ -2185,8 +2155,8 @@ def blocks():
                 <<< Back Control + C
                 """.format(q['blockSize'], q['blockVSize'], q['nTx'], q['totalFees'], q['medianFee']))
                 t.sleep(3)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("ppi: %s", e)
 
 
 #-----------------------------END MEMPOOL.SPACE------------------------------

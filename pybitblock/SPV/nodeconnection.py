@@ -9,7 +9,6 @@ import os
 import os.path
 import qrcode
 import sys
-import simplejson as json
 import time as t
 import numpy as np
 from cfonts import render, say
@@ -17,6 +16,9 @@ from art import *
 from pblogo import *
 from PIL import Image
 from robohash import Robohash
+from config import cfg
+from log import get_logger
+logger = get_logger("SPV.nodeconnection")
 
 
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
@@ -37,10 +39,7 @@ def rpc(method, params=[]):
         "method": method,
         "params": params
     })
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = json.load(open("bclock.conf", "r")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
+    path = cfg.path
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 def remoteHalving():
@@ -48,32 +47,32 @@ def remoteHalving():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def remotegetblock():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def remoteconsole(): # get into the console from bitcoin-cli
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def runthenumbersConn():
     try:
@@ -86,14 +85,13 @@ def runthenumbersConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def localFullProtocol():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
 
     proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
@@ -125,8 +123,7 @@ def get_color(r, g, b):
     return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
 
 def channels():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
@@ -218,7 +215,8 @@ def channels():
                     print("----------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
-        except Exception:
+        except Exception as e:
+            logger.debug("nodeconnection: %s", e)
             break
 
 def channelbalance():
@@ -226,24 +224,24 @@ def channelbalance():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def listonchaintxs():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def balanceOC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 # END Remote connection with rest -------------------------------------
 #---------------------------------OPENDIME-----------------------------

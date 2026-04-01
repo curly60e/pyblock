@@ -14,9 +14,6 @@ import sys
 import subprocess
 import requests
 import json
-import term_image
-import simplejson as json
-import numpy as np
 from imgterminal import *
 from sha256 import *
 from cfonts import render, say
@@ -36,7 +33,11 @@ from pycoingecko import CoinGeckoAPI
 from binascii import unhexlify
 from embit import bip39
 from embit.wordlists.bip39 import WORDLIST
-from io import StringIO
+from config import cfg
+from log import get_logger
+from shared.display import clear, close, sysinfo, rectangle, delay_print
+from shared.formatting import get_ansi_color_code, get_color
+logger = get_logger("SPV")
 
 
 version = "4.0"
@@ -44,40 +45,8 @@ version = "4.0"
 settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
 settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
 
-def close():
-    print("<<< Ctrl + C.\n\n")
-
-def sysinfo():  #Cpu and memory usage
-    print("    \033[0;37;40m----------------------")
-    print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print(
-        f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
-    )
-
-    print("    \033[0;37;40m----------------------")
-
 def tmp():
     t.sleep(15)
-
-def rectangle(n):
-    x = n - 3
-    y = n - x
-    [
-        print(''.join(i))
-        for i in
-        (
-            ''*x
-            if i in (0,y-1)
-            else
-            (
-                f'{""*n}{"|"*n}{""*n}'
-                if i >= (n+1)/2 and i <= (1*n)/2
-                else
-                f'\u001b[38;5;27m{"█"*(x-1)}'
-            )
-            for i in range(y)
-        )
-    ]
 
 def counttxs():
     try:
@@ -173,19 +142,13 @@ def counttxs():
                 clear()
                 qs = current_block
                 nn = e
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 def blogo():
 
-    if os.path.isfile('config/pyblocksettinconfig/gs.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("config/pyblocksettings.conf", "r")) # Load the file 'bclock.conf'
-        settings = settingsv # Copy the variable pathv to 'path'
-    else:
-        settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        with open("config/pyblocksettings.conf", "w") as f:
-            json.dump(settings, f, indent=2)
+    settings = cfg.settings
 
     if settings["gradient"] == "grd":
         output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -363,7 +326,8 @@ def satnode():
         subprocess.run("python3 satellite/api/examples/demo-rx.py &", shell=True)
         t.sleep(5)
         subprocess.run("python3 satellite/api/examples/api_data_reader.py --demo  --plaintext ", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         subprocess.run("ps -ef | grep api_data_reader.py | grep -v grep | awk '{print $2}' | xargs kill -9", shell=True)
         subprocess.run("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9", shell=True)
 
@@ -448,8 +412,8 @@ def opreturnOnchainONLY():
         blogo()
         print("\nTransaction ID: " + responseC)
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def opreturn():
     qr = qrcode.QRCode(
@@ -516,8 +480,8 @@ def opreturn():
         blogo()
         print("\nTransaction ID: " + responseC)
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def opreturn_view():
     try:
@@ -538,8 +502,8 @@ def opreturn_view():
         print("\nTransaction ID: " + responseC)
         print(f'OP_RETURN Message: {r3}')
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def opretminer():
     try:
@@ -555,8 +519,8 @@ def opretminer():
         print(output)
         print(a)
         input("")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #------------------------------------------------------------------
 
@@ -577,8 +541,8 @@ def bitaxeA(): # show srings
         input("\a\n...Loading Logs...\n\n")
         a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def bitaxeB(): # show srings
     try:
@@ -595,8 +559,8 @@ def bitaxeB(): # show srings
         print("\nBitAxe ip: " + responseC)
         print("\nSystem Info:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def bitaxeC(): # show srings
     try:
@@ -613,8 +577,8 @@ def bitaxeC(): # show srings
         print("\nBitAxe ip: " + responseC)
         print("\nBitAxe Restarting:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 #-----------------------------GAMES--------------------------------
 #------------------------------------------------------------------
 
@@ -632,8 +596,8 @@ def gameroom():
         input("\a\nContinue...")
         conn = "ssh gameroom@bitreich.org"
         subprocess.run(conn).read(, shell=True)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 #----------------------------------------------------------------------
 
 #----------------------------------------------------------------------PhoenixSta
@@ -658,7 +622,8 @@ def callPhoenixLin():
         blogo()
         print(output)
         subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callPhoenixWin():
@@ -681,7 +646,8 @@ def callPhoenixWin():
         blogo()
         print(output)
         subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callPhoenixMacX64():
@@ -704,7 +670,8 @@ def callPhoenixMacX64():
         blogo()
         print(output)
         subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callPhoenixMacARM():
@@ -727,7 +694,8 @@ def callPhoenixMacARM():
         blogo()
         print(output)
         subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callPhoenix():
@@ -762,7 +730,8 @@ def callPhoenix():
         responseC = input("\a\nCType a command of the list: ")
         subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def wallPhoenix():
@@ -777,7 +746,8 @@ def wallPhoenix():
         responseE = input("Amount in Sats: ")
         subprocess.run(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def wallPhoenixBOLT12():
@@ -790,7 +760,8 @@ def wallPhoenixBOLT12():
         responseC = input("Your PhoenixD Password: ")
         subprocess.run(f"curl -s 'http://localhost:9740/getoffer' -u :{responseC}", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 #----------------------------------------------------------------------PhoenixEnd
@@ -807,8 +778,8 @@ def statsConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Stats--------------------------------
 
@@ -825,8 +796,8 @@ def blockTmpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Block Templates--------------------------------
 
@@ -843,8 +814,8 @@ def unspendableConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Unspendable--------------------------------
 
@@ -856,7 +827,8 @@ def SHS():
         print(output)
         subprocess.run(f"python3 SHS.py", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
         
 #-----------------------------PGP--------------------------------
@@ -875,8 +847,8 @@ def pgpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END PGP--------------------------------
 
@@ -895,7 +867,8 @@ def mtConn():  # here we convert the result of the command 'getblockcount' on a 
             print(output)
             print(outputT)
             input("\a\nContinue...")
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def mtclock():
@@ -910,8 +883,8 @@ def mtclock():
         print(output)
         print(outputT)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 #-----------------------------END MT--------------------------------
 
 #-----------------------------Satoshi--------------------------------
@@ -930,8 +903,8 @@ def satoshiConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Satoshi--------------------------------
 
@@ -948,8 +921,8 @@ def whalalConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Whale Alert--------------------------------
 #-----------------------------bwt.dev--------------------------------
@@ -963,8 +936,8 @@ def bwtConn():
         closed()
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END bwt.dev--------------------------------
 #-----------------------------STARTBLOCKS--------------------------------
@@ -980,8 +953,8 @@ def allblocksConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------ENDBLOCKS--------------------------------
 #-----------------------------STRLuxor--------------------------------
@@ -1026,7 +999,8 @@ def luxorstats():
         responseC = input("\a\nCType a command of the list: ")
         subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 #-----------------------------ENDLuxor--------------------------------
@@ -1051,8 +1025,8 @@ def PickaxeCon():
         responseD = input("Your Foreman clientId: ")
         subprocess.run(f"cd Pickaxe && curl https://tinyurl.com/service-install -Ls --output install.sh; sudo bash install.sh {responseD} {responseC}", shell=True)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 #-----------------------------ENDPickaxe--------------------------------
 #-----------------------------Dates--------------------------------
 
@@ -1067,8 +1041,8 @@ def datesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Dates--------------------------------
 #-----------------------------Missing--------------------------------
@@ -1084,8 +1058,8 @@ def missingConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Missing--------------------------------
 #-----------------------------Quotes--------------------------------
@@ -1101,8 +1075,8 @@ def quotesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Quotes--------------------------------
 #-----------------------------Hashrate--------------------------------
@@ -1118,8 +1092,8 @@ def miningConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END Hashrate--------------------------------
 
@@ -1142,8 +1116,8 @@ def decodeStrDat(): # show srings
         print("\nBLK: " + responseC)
         print("\nString: " + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------End Strings Dat--------------------------------
 #---------------------------------ocean pool----------------------------------
@@ -1163,8 +1137,8 @@ def oceanH(): # show srings
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def oceanB(): # show srings
     try:
@@ -1179,8 +1153,8 @@ def oceanB(): # show srings
         a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def oceanE(): # show srings
     try:
@@ -1197,8 +1171,8 @@ def oceanE(): # show srings
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #---------------------------------ocean pool end----------------------------------
 #-----------------------------StatsLN--------------------------------
@@ -1217,8 +1191,8 @@ def stalnConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END StatsLN--------------------------------
 #-----------------------------StatRanking--------------------------------
@@ -1234,8 +1208,8 @@ def ranConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 #-----------------------------END Ranking--------------------------------
 
 def trustednode():
@@ -1257,8 +1231,8 @@ def trustednode():
         input("\a\nContinue...")
         conn = "telnet cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion 6023"
         subprocess.run(conn, shell=True)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 #-----------------------------END GAMES--------------------------------
 
 #-----------------------------MINER POOL--------------------------------
@@ -1282,8 +1256,8 @@ def CroppedMinerComputer():
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
         subprocess.run(f"cd CroppedMiner && ./minerd -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}", shell=True)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def CroppedMinerRaspberry():
     try:
@@ -1304,8 +1278,8 @@ def CroppedMinerRaspberry():
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
         subprocess.run(f"cd CroppedMiner && cd cpuminer-multi-arm && ./cpuminer -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}", shell=True)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------MINER POOL--------------------------------
 
@@ -1367,8 +1341,8 @@ def wttrDataV1():
         blogo()
         print(a)
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def wttrDataV2():
     try:
@@ -1426,8 +1400,8 @@ def wttrDataV2():
         blogo()
         print(a)
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 #-----------------------------END wttr.in--------------------------------
@@ -1475,8 +1449,8 @@ def rateSXList():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
     while True:
         try:
             list = f"curl -s '{selectFiat}.rate.sx/?F&n=1'"
@@ -1486,7 +1460,8 @@ def rateSXList():
             closed()
             print(a)
             t.sleep(20)
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def rateSXGraph():
@@ -1530,8 +1505,8 @@ def rateSXGraph():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
     while True:
         try:
             list = f"curl -s '{selectFiat}.rate.sx/btc' | grep -v -E 'Use'"
@@ -1541,7 +1516,8 @@ def rateSXGraph():
             closed()
             print(a)
             t.sleep(20)
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 #-----------------------------END RATE.SX--------------------------------
@@ -1561,7 +1537,8 @@ def PyBLOCKTemplate():
             print(output)
             print(a)
             input("\a\nPress Enter to Refresh the Template or Ctrl +C to back to the Main Menu.")
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 #-----------------------------COINGECKO--------------------------------
@@ -1596,8 +1573,8 @@ def CoingeckoPP():
         ------------------------------------------------------------------
         """.format(usd,eur,gbp,jpy,aud))
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END COINGECKO--------------------------------
 
@@ -1718,8 +1695,8 @@ def lnbitCreateNewInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def lnbitPayInvoice():
     bolt = input("Invoice: ")
@@ -1758,8 +1735,8 @@ def lnbitPayInvoice():
             tick()
             t.sleep(2)
             break
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def lnbitCreatePayWall():
     while True:
@@ -1840,7 +1817,8 @@ def lnbitCreatePayWall():
                 input("Continue...")
             clear()
             blogo()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def lnbitListPawWall():
@@ -1881,7 +1859,8 @@ def lnbitListPawWall():
                     Wallet: {}
                     """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
         input("Continue...")
         clear()
@@ -1927,7 +1906,8 @@ def lnbitDeletePayWall():
                             Wallet: {}
                             """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                             print("----------------------------------------------------------------------------------------------------------------\n")
-                except Exception:
+                except Exception as e:
+                    logger.debug("spvblock: %s", e)
                     break
                 input("Continue...")
                 break
@@ -1946,7 +1926,8 @@ def lnbitDeletePayWall():
             print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
             t.sleep(2)
             clear()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def lnbitsLNURLw():
@@ -2015,7 +1996,8 @@ def lnbitsLNURLw():
                 input("Continue...")
                 clear()
                 blogo()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def lnbitsLNURLwList():
@@ -2053,7 +2035,8 @@ def lnbitsLNURLwList():
                     """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
             input("Continue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         print("\n")
 
 #-------------------------1d646820055e4e2da218e801eaacfc94----END LNBITS--------------------------------
@@ -2174,8 +2157,8 @@ def lnpayCreateInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def lnpayGetTransactions():
     qr = qrcode.QRCode(
@@ -2227,7 +2210,8 @@ def lnpayGetTransactions():
             input("Continue...")
             clear()
             blogo()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
     clear()
     blogo()
@@ -2268,8 +2252,8 @@ def lnpayPayInvoice():
             'payment_request': inv
         }
         pay_result = my_wallet.pay_invoice(invoice_params)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def lnpayTransBWallets():
     a = loadFileConnLNPay(['key'])
@@ -2309,8 +2293,8 @@ def lnpayTransBWallets():
         """.format(p['id'], p['num_satoshis'], p['user_label'], v['user_label'], f['user_label']))
         print("----------------------------------------------------------------------------------------------------\n")
         input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END LNPAY--------------------------------
 #-----------------------------OPENNODE--------------------------------
@@ -2491,7 +2475,8 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
@@ -2559,7 +2544,8 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
 
 def OpenNodeiniciatewithdrawal():
@@ -2624,7 +2610,8 @@ def OpenNodeiniciatewithdrawal():
             blogo()
             tick()
             t.sleep(2)
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
 
     elif lnchain in ["O", "o"]:
@@ -2673,7 +2660,8 @@ def OpenNodeiniciatewithdrawal():
                     logoB()
                     t.sleep(2)
                     break
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
 
 def OpenNodeListPayments():
@@ -2725,7 +2713,8 @@ def OpenNodeListPayments():
             clear()
             blogo()
             print("\n\tOPENNODE TRANSACTIONS LIST\n")
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 #-----------------------------END OPENNODE--------------------------------
@@ -2804,8 +2793,8 @@ def tippinmeGetInvoice():
             print(f'LND Invoice: {ln1}')
             response.close()
             input("Continue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------END TIPPINME--------------------------------
 
@@ -2826,7 +2815,8 @@ def bip39convert():
         responseC = input("Words to Tiny Seed: ")
         subprocess.run(f"cd TinySeed && python3 TinySeed.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 #-----------------------------TALLYCOIN------------------------------
@@ -2913,8 +2903,8 @@ def tallycoGetPayment():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 def tallycoDonateid():
@@ -2981,8 +2971,8 @@ def tallycoDonateid():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 #-----------------------------END TALLYCOIN------------------------------
@@ -3003,7 +2993,8 @@ def callMemL():
         blogo()
         print(output)
         subprocess.run(f"cd mempoolcli && ./mempool-cli", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callMemR():
@@ -3021,7 +3012,8 @@ def callMemR():
         blogo()
         print(output)
         subprocess.run(f"cd mempoolcli && ./mempool-cli", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def MemShellMenu(menunos):
@@ -3073,8 +3065,8 @@ def fee():
             """.format(di['fastestFee'], di['halfHourFee'], di['hourFee']))
             t.sleep(5)
             print("\n\t    Getting New Information")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def blocks():
     try:
@@ -3103,8 +3095,8 @@ def blocks():
                 <<< Back Control + C
                 """.format(q['blockSize'], q['blockVSize'], q['nTx'], q['totalFees'], q['medianFee']))
                 t.sleep(3)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 
@@ -3113,32 +3105,32 @@ def remoteHalving():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def remotegetblock():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def remoteconsole(): # get into the console from bitcoin-cli
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def runthenumbersConn():
     try:
@@ -3151,8 +3143,8 @@ def runthenumbersConn():
         print(output)
         print(a)
         input("\a\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def channelbalance():
     try:
@@ -3165,8 +3157,8 @@ def channelbalance():
         print(output)
         print(a)
         input("\a\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 def listonchaintxs():
@@ -3188,8 +3180,8 @@ def listonchaintxs():
         print("\nTransaction ID: " + responseC)
         print(f'Onchain Txs: {r3}')
         input("\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def balanceOC():
     try:
@@ -3202,24 +3194,24 @@ def balanceOC():
         print(output)
         print(a)
         input("\a\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localkeysendC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatsendAC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 def localchatnewAC():
@@ -3227,96 +3219,96 @@ def localchatnewAC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatlistAC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatsendBC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatnewBC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatlistBC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatsendCC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatnewCC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchatlistCC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localchannelbalanceC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localnewaddressC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localbalanceOCC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localrebalancelndC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 # Remote connection with rest -------------------------------------
 
@@ -3325,8 +3317,8 @@ def getnewinvoice():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def payinvoice():
     try:
@@ -3347,24 +3339,24 @@ def payinvoice():
         print("\nInvoice: " + responseC)
         print(f'Invoice: {r3}')
         input("\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def getnewaddress():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def listinvoice():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def getinfo():
     try:
@@ -3383,8 +3375,8 @@ def getinfo():
         print("\nNode: " + responseC)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 
 def consoleLNC(): # get into the console from bitcoin-cli
@@ -3398,48 +3390,48 @@ def consoleLNC(): # get into the console from bitcoin-cli
         print(output)
         print(a)
         input("\a\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def locallistpeersQQC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localconnectpeerC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def locallistchaintxnsC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def locallistinvoicesC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def locallistchannelsC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localgetinfoC():
     try:
@@ -3458,24 +3450,24 @@ def localgetinfoC():
         print("\nNode: " + responseC)
         print(a)
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localaddinvoiceC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localpayinvoiceC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localgetnetworkinfoC():
     try:
@@ -3491,8 +3483,8 @@ def localgetnetworkinfoC():
         print(output)
         print(a)
         input("\a\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #-----------------------------Slush--------------------------------
 
@@ -3518,8 +3510,8 @@ def slDIFFConn():
 
         """)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def slPOOLConn():
     try:
@@ -3532,8 +3524,8 @@ def slPOOLConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def getPoolSlushCheck():
 
@@ -3551,8 +3543,8 @@ def getPoolSlushCheck():
             api = input("Insert Braiins API KEY: ")
             with open("config/braiinsAPI.conf", "w") as f:
                 json.dump(api, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
     while True:
         try:
@@ -3609,7 +3601,8 @@ def getPoolSlushCheck():
 
             t.sleep(10)
 
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 
@@ -3631,8 +3624,8 @@ def ckpoolpoolLOCALOnchainONLY():
             api = input("Insert CKPool Wallet.Worker: ")
             with open("config/CKPOOLAPI.conf", "w") as f:
                 json.dump(api, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
     while True:
         try:
@@ -3670,7 +3663,8 @@ def ckpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def pyblockpoolpoolLOCALOnchainONLY():
@@ -3689,8 +3683,8 @@ def pyblockpoolpoolLOCALOnchainONLY():
             api = input("Insert your PyBLOCK Pool Wallet: ")
             with open("config/PYBLOCKPOOLAPI.conf", "w") as f:
                 json.dump(api, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
     while True:
         try:
@@ -3728,7 +3722,8 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def kanopoolpoolLOCALOnchainONLY():
@@ -3752,8 +3747,8 @@ def kanopoolpoolLOCALOnchainONLY():
             api2 = input("Insert KanoPool API KEY: ")
             with open("config/KANOPOOLAPI.conf", "w") as f:
                 json.dump(api2, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
     while True:
         try:
@@ -3791,7 +3786,8 @@ def kanopoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 
@@ -3806,8 +3802,8 @@ def getblock():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def searchTXS():
     try:
@@ -3828,8 +3824,8 @@ def searchTXS():
         print("\nTransaction ID: " + responseC)
         print(f'Tx: {r3}')
         input("\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def untxsConn():
     try:
@@ -3842,8 +3838,8 @@ def untxsConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def getnewaddressOnchain():
     try:
@@ -3853,8 +3849,8 @@ def getnewaddressOnchain():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def gettransactionsOnchain():
     try:
@@ -3875,16 +3871,16 @@ def gettransactionsOnchain():
         print("\nTransaction ID: " + responseC)
         print(f'Tx: {r3}')
         input("\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def getbestblockhash():
     try:
@@ -3905,11 +3901,8 @@ def getbestblockhash():
         print("\nHash: " + responseC)
         print(f'Block Hash {r3}')
         input("\n")
-    except Exception:
-        pass
-
-def clear(): # clear the screen
-    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def getgenesis():
     try:
@@ -3922,8 +3915,8 @@ def getgenesis():
         print(output)
         print(a)
         input("\a\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def readHexBlock():
     try:
@@ -3942,8 +3935,8 @@ def readHexBlock():
         print("\nHex: " + responseC)
         print("\nPyBLOCK Hex: " + a)
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def readHexTx():
     try:
@@ -3962,8 +3955,8 @@ def readHexTx():
         print("\nBlock: " + responseC)
         print("\nPyBLOCK Decoded: " + a)
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def console(): # get into the console from bitcoin-cli
     try:
@@ -3982,8 +3975,8 @@ def console(): # get into the console from bitcoin-cli
         print("\nRPC: " + responseC)
         print("\nPyBLOCK Help: " + a)
         input("\n")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def screensv():
     try:
@@ -3994,11 +3987,6 @@ def screensv():
         blogo()
         menu()
 
-def delay_print(s):
-    for c in s:
-        sys.stdout.write(c)
-        sys.stdout.flush()
-        time.sleep(0.25)
 #------------------------------------------------------
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
@@ -4007,17 +3995,12 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             clear()
             close()
             design()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             break
 
 def design():
-    if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("config/pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
-        settingsClock = settingsv # Copy the variable pathv to 'path'
-    else:
-        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        with open("config/pyblocksettingsClock.conf", "w") as f:
-            json.dump(settingsClock, f, indent=2)
+    settingsClock = cfg.settings_clock
     clear()
     # Obtener el número de bloque actual
     r = requests.get('https://mempool.space/api/blocks/tip/height')
@@ -4068,8 +4051,8 @@ def getrawtx(): # show confirmations from transactions
         print("\nTx: " + responseC)
         print("\nMerkle Proof: " + a)
         input("\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def runthenumbers():
     try:
@@ -4083,8 +4066,8 @@ def runthenumbers():
         print(output)
         print(outputT)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def countdownblock():
     try:
@@ -4094,8 +4077,8 @@ def countdownblock():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def countdownblockConn():
     try:
@@ -4105,8 +4088,8 @@ def countdownblockConn():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def localHalving():
     try:
@@ -4119,8 +4102,8 @@ def localHalving():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
@@ -4135,22 +4118,10 @@ def pdfconvert():
         print(output)
         print(a)
         input("\a\nControl + C...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #--------------------------------- NYMs -----------------------------------
-
-def get_ansi_color_code(r, g, b):
-    if r == g == b:
-        if r < 8:
-            return 16
-        return 231 if r > 248 else round(((r - 8) / 247) * 24) + 232
-    return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
-
-
-def get_color(r, g, b):
-    return f"\x1b[48;5;{int(get_ansi_color_code(r, g, b))}m \x1b[0m"
-
 
 def robotNym():
     try:
@@ -4191,7 +4162,8 @@ def robotNym():
         image = "\n\t\t\t\t\t    \u001b[31;1mNode\u001b[38;5;93mNym\033[0;37;40m\n"+ "\n\t         \u001b[33;1m" + alias['identity_pubkey'] + "\033[0;37;40m"
         print(image)
         input("\n\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 
@@ -4220,7 +4192,8 @@ def callGitNostrLinTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_linux_amd64 -k {responseC} -l", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callGitNostrLinarmTerminal():
@@ -4239,7 +4212,8 @@ def callGitNostrLinarmTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_linux_arm64 -k {responseC} -l", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callGitNostrMacTerminal():
@@ -4259,7 +4233,8 @@ def callGitNostrMacTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_macos_amd64 -k {responseC} -l", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callGitNostrMacarmTerminal():
@@ -4278,7 +4253,8 @@ def callGitNostrMacarmTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -l", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callGitNostrWinTerminal():
@@ -4297,7 +4273,8 @@ def callGitNostrWinTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_windows_amd64.exe -k {responseC} -l", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callGitNostrSeedTerminal():
@@ -4317,7 +4294,8 @@ def callGitNostrSeedTerminal():
         responseC = input("Hex to BIP39 & BIP39 to Hex: ")
         subprocess.run(f"cd nostr_seed && python3 nostr_seed.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callGitNostrQRSeedTerminal():
@@ -4337,7 +4315,8 @@ def callGitNostrQRSeedTerminal():
         responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
         subprocess.run(f"cd nostr_QRseed && python3 nostr_c_seed_qr.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 def callGitBija():
@@ -4376,8 +4355,8 @@ def callGitUTXOracle():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
@@ -4414,7 +4393,8 @@ def callColdCore():
                 subprocess.run(git, shell=True)
                 subprocess.run(install, shell=True)
             subprocess.run("coldcore", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         menuSelection()
 
 #--------------------------------- Menu section -----------------------------------
@@ -4708,8 +4688,8 @@ def decodeHex(): # show hex
         print("\nBlock: " + responseC)
         print("\nDecoded: " + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def miscellaneousLOCAL():
     clear()
@@ -5876,37 +5856,28 @@ def BitaxeConn():
     bitaxeMstats(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def menuSelection():
+    cfg.load()
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
-    if os.path.isfile('config/intro.conf'):
-        chain = json.load(open("config/intro.conf", "r"))
-        chln = chain
+    if cfg.intro_mode is not None:
+        chln = cfg.intro_mode
         print(chln + "\n")
         if chln == "B":
-            path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCALChainONLY()
         elif chln == "A":
-            path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCAL()
         elif chln == "C":
             MainMenuCROPPED()
     else:
-        if os.path.isfile('config/blndconnect.conf'):
+        if cfg.has_config('blndconnect.conf'):
             chln['offchain'] = "offchain"
         else:
             chln['onchain'] = "onchain"
 
-        with open("config/selection.conf", "w") as f:
-            json.dump(chln, f, indent=2)
+        cfg.save("selection.conf", chln)
 
 
 def menuSelectionLN():
-    lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
-    lndconnectData = json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
     if lndconnectload['ln']:
         menuLNDLOCAL()
     else:
@@ -5973,7 +5944,8 @@ def aaccPPiLNBits():
                     json.dump(bitLN, f, indent=2)
                 createFileConnLNBits()
                 break
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -6041,7 +6013,8 @@ def aaccPPiLNPay():
                 createFileConnLNPay()
                 break
 
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -6109,7 +6082,8 @@ def aaccPPiOpenNode():
                 createFileConnOpenNode()
                 break
 
-    except Exception:
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -6146,8 +6120,8 @@ def testlogo():
         settings["gradient"] = "color"
         with open("config/pyblocksettings.conf", "w") as f:
             json.dump(settings, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def testlogoRB():
     output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -6167,8 +6141,8 @@ def testlogoRB():
         settings["gradient"] = "grd"
         with open("config/pyblocksettings.conf", "w") as f:
             json.dump(settings, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 def testClock():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
@@ -6190,8 +6164,8 @@ def testClock():
         settingsClock["gradient"] = "color"
         with open("config/pyblocksettingsClock.conf", "w") as f:
             json.dump(settingsClock, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)
 
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
@@ -7650,7 +7624,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
                 close()
                 console()
                 t.sleep(5)
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
     elif bcore in ["B", "b"]:
         clear()
@@ -7672,7 +7647,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
     elif bcore in ["G", "g"]:
         getrawtx()
@@ -7716,7 +7692,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
                 close()
                 console()
                 t.sleep(5)
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
     elif bcore in ["B", "b"]:
         clear()
@@ -7738,7 +7715,8 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
     elif bcore in ["G", "g"]:
         getrawtx()
@@ -7827,7 +7805,8 @@ def miscellaneousLOCALmenu(misce):
                 close()
                 logoC()
                 tmp()
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7897,7 +7876,8 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
                 close()
                 logoC()
                 tmp()
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7962,7 +7942,8 @@ def decodeHexLOCAL(hexloc):
                 clear()
                 blogo()
                 readHexBlock()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
     elif hexloc in ["B", "b"]:
         clear()
@@ -7978,7 +7959,8 @@ def decodeHexLOCAL(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
 
 def decodeHexLOCALOnchainONLY(hexloc):
@@ -7995,7 +7977,8 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 clear()
                 blogo()
                 readHexBlock()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
     elif hexloc in ["B", "b"]:
         clear()
@@ -8011,7 +7994,8 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
 
 def lightningnetworkLOCALcontrol(lncore):
@@ -8264,7 +8248,8 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
                 close()
                 remotegetblock()
                 tmp()
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
     elif menuS in ["B", "b"]:
         bitcoincoremenuREMOTE()
@@ -8339,7 +8324,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
                 close()
                 remoteconsole()
                 t.sleep(5)
-            except Exception:
+            except Exception as e:
+                logger.debug("spvblock: %s", e)
                 break
     elif bcore in ["B", "b"]:
         remotegetblockcount()
@@ -8353,7 +8339,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
     elif bcore in ["E", "e"]:
         miscellaneousLOCALmenuOnchainONLY()
@@ -8469,7 +8456,8 @@ def menuD(menuN): # Satnode access Menu
                     apisenderFile()
                     t.sleep(30)
                     menuSelection()
-                except Exception:
+                except Exception as e:
+                    logger.debug("spvblock: %s", e)
                     menuSelection()
             elif message in ["T", "t"]:
                 try:
@@ -8479,9 +8467,11 @@ def menuD(menuN): # Satnode access Menu
                     apisender()
                     t.sleep(30)
                     menuSelection()
-                except Exception:
+                except Exception as e:
+                    logger.debug("spvblock: %s", e)
                     menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuN in ["C", "c"]:
         try:
@@ -8491,7 +8481,8 @@ def menuD(menuN): # Satnode access Menu
                 gitclone()
             else:
                 menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             pass
     elif menuN in ["R", "r"]:
         menuSelection()
@@ -8505,7 +8496,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -8515,7 +8507,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -8525,7 +8518,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -8539,7 +8533,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -8549,7 +8544,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -8559,7 +8555,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -8573,7 +8570,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -8583,7 +8581,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -8597,7 +8596,8 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -8607,7 +8607,8 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("spvblock: %s", e)
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -8698,5 +8699,5 @@ def testClockRemote():
         settingsClock["gradient"] = "color"
         with open("pyblocksettingsClock.conf", "w") as f:
             json.dump(settingsClock, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("spvblock: %s", e)

@@ -14,9 +14,6 @@ import sys
 import subprocess
 import requests
 import json
-import term_image
-import simplejson as json
-import numpy as np
 import lastblockdetail
 import block_visualizer
 import mempool_monitor
@@ -47,42 +44,15 @@ from robohash import Robohash
 from binascii import unhexlify
 from embit import bip39
 from embit.wordlists.bip39 import WORDLIST
-from io import StringIO
+from config import cfg
+from menu import select_color
+from log import get_logger
+from shared.display import clear, close, sysinfo, rectangle, delay_print
+from shared.formatting import get_ansi_color_code, get_color
+logger = get_logger("PyBlock")
 
 
 version = "4.0"
-
-def close():
-    print("<<< Ctrl + C.\n\n")
-
-def sysinfo():  #Cpu and memory usage
-    print("    \033[0;37;40m----------------------")
-    print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print(
-        f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
-    )
-
-    print("    \033[0;37;40m----------------------")
-
-def rectangle(n):
-    x = n - 3
-    y = n - x
-    [
-        print(''.join(i))
-        for i in
-        (
-            ''*x
-            if i in (0,y-1)
-            else
-            (
-                f'{""*n}{"|"*n}{""*n}'
-                if i >= (n+1)/2 and i <= (1*n)/2
-                else
-                f'\u001b[38;5;27m{"█"*(x-1)}'
-            )
-            for i in range(y)
-        )
-    ]
 
 def rpc(method, params=[]):
     payload = json.dumps({
@@ -91,22 +61,15 @@ def rpc(method, params=[]):
         "method": method,
         "params": params
     })
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('config/bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
-    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+    return requests.post(cfg.path['ip_port'], auth=(cfg.path['rpcuser'], cfg.path['rpcpass']), data=payload).json()['result']
 
 def pathexec():
     global path
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
+    path = cfg.path
 
 def lndconnectexec():
     global lndconnectload
-    lndconnectData = json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
 #-----------------------------Slush--------------------------------
 
 def counttxs():
@@ -180,8 +143,8 @@ def counttxs():
                 clear()
                 a = b
                 nn = e
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def slDIFFConn():
     try:
@@ -205,8 +168,8 @@ def slDIFFConn():
 
         """)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def slPOOLConn():
     try:
@@ -219,8 +182,8 @@ def slPOOLConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def getPoolSlushCheck():
 
@@ -237,8 +200,8 @@ def getPoolSlushCheck():
             blogo()
             api = input("Insert Braiins API KEY: ")
             with open("config/braiinsAPI.conf", "w") as f: json.dump(api, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
     while True:
         try:
@@ -295,7 +258,8 @@ def getPoolSlushCheck():
 
             t.sleep(10)
 
-        except Exception:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 
@@ -316,8 +280,8 @@ def ckpoolpoolLOCALOnchainONLY():
             blogo()
             api = input("Insert CKPool Wallet.Worker: ")
             with open("config/CKPOOLAPI.conf", "w") as f: json.dump(api, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
     while True:
         try:
@@ -355,7 +319,8 @@ def ckpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except Exception:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def callMemL():
@@ -373,7 +338,8 @@ def callMemL():
         blogo()
         print(output)
         subprocess.run(["./mempool-cli"], cwd="mempoolcli")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callMemR():
@@ -391,7 +357,8 @@ def callMemR():
         blogo()
         print(output)
         subprocess.run(["./mempool-cli"], cwd="mempoolcli")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def MemShellMenu(menunos):
@@ -410,7 +377,8 @@ def SHS():
         print(output)
         subprocess.run(["python3", "SHS.py"])
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def MemShell():
@@ -463,8 +431,8 @@ def pyblockpoolpoolLOCALOnchainONLY():
             blogo()
             api = input("Insert your PyBLOCK Pool Wallet: ")
             with open("config/PYBLOCKPOOLAPI.conf", "w") as f: json.dump(api, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
     while True:
         try:
@@ -502,7 +470,8 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except Exception:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
@@ -530,7 +499,8 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             ----------------------------------------------------------------------------
             """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
             t.sleep(10)
-        except Exception:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def searchTXS():
@@ -568,8 +538,8 @@ def searchTXS():
                 print("Is this a \u001b[38;5;40m Coinbase\033[0;37;40m tx?")
 
             input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def untxsConn():
     try:
@@ -616,8 +586,8 @@ def untxsConn():
                         print("OP_RETURN Hex: ")
                         subprocess.run(decodeTX, shell=True)
                 input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def getnewaddressOnchain():
     try:
@@ -704,7 +674,8 @@ def getnewaddressOnchain():
             nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
             print(f"\n\033[ALive Fee: ~{nn} sat/vB \033[A")
             t.sleep(10)
-    except Exception:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def gettransactionsOnchain():
@@ -743,7 +714,8 @@ def gettransactionsOnchain():
 
             print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
             input("\nRefresh...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def dumppk(): #
@@ -756,7 +728,8 @@ def dumppk(): #
         bitcoincli = " dumpprivkey "
         subprocess.run([path['bitcoincli']] + (bitcoincli + responseC).split())
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def wallmenu(): #
@@ -768,7 +741,8 @@ def wallmenu(): #
         bitcoincli = " getwalletinfo"
         subprocess.run([path['bitcoincli']] + bitcoincli.split())
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def inffmenu(): #
@@ -781,7 +755,8 @@ def inffmenu(): #
         bitcoincli = " getaddressinfo "
         subprocess.run([path['bitcoincli']] + (bitcoincli + responseC).split())
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def miningmenu(): #
@@ -793,7 +768,8 @@ def miningmenu(): #
         bitcoincli = " getmininginfo"
         subprocess.run([path['bitcoincli']] + bitcoincli.split())
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
@@ -803,9 +779,6 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
 def getbestblockhash(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getbestblockhash"
     subprocess.run([path['bitcoincli']] + bitcoincli.split())
-
-def clear(): # clear the screen
-    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 def getgenesis(): # get and decode Genesis block
     output = render("genesis", colors=['yellow'], align='left', font='tiny')
@@ -860,11 +833,6 @@ def screensv():
         blogo()
         menu()
 
-def delay_print(s):
-    for c in s:
-        sys.stdout.write(c)
-        sys.stdout.flush()
-        time.sleep(0.25)
 #------------------------------------------------------
 
 
@@ -881,7 +849,8 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             clear()
             close()
             design()
-        except Exception:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def design():
@@ -967,7 +936,8 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
                 tmp()
                 lsd.close()
             input("Continue...")
-        except Exception:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def runthenumbers():
@@ -1003,11 +973,13 @@ def countdownblock():
                     q = int(a) - int(b)
                     print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(b)
-            except Exception:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
         print(f'#RunTheNumbers {str(a)} PyBLOCK')
         input("\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def countdownblockConn():
@@ -1036,11 +1008,13 @@ def countdownblockConn():
                     q = a - int(c)
                     print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(c)
-            except Exception:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
         print(f'#RunTheNumbers {a} PyBLOCK')
         input("\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 
@@ -1103,7 +1077,8 @@ def epoch():
             """.format("0" if int(c) == 6930000 else oneh,"\033[1;32;40mON\033[0;37;40m")
             print(q)
             t.sleep(2)
-        except Exception:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
@@ -1179,22 +1154,11 @@ def bip39convert():
         responseC = input("Words to Tiny Seed: ")
         subprocess.run(["python3", "TinySeed.py", responseC], cwd="TinySeed")
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #--------------------------------- NYMs -----------------------------------
-
-def get_ansi_color_code(r, g, b):
-    if r == g == b:
-        if r < 8:
-            return 16
-        return 231 if r > 248 else round(((r - 8) / 247) * 24) + 232
-    return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
-
-
-def get_color(r, g, b):
-    return f"\x1b[48;5;{int(get_ansi_color_code(r, g, b))}m \x1b[0m"
-
 
 def robotNym():
     try:
@@ -1235,7 +1199,8 @@ def robotNym():
         image = "\n\t\t\t\t\t    \u001b[31;1mNode\u001b[38;5;93mNym\033[0;37;40m\n"+ "\n\t         \u001b[33;1m" + alias['identity_pubkey'] + "\033[0;37;40m"
         print(image)
         input("\n\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 
@@ -1266,8 +1231,8 @@ def blockTmpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 #-----------------------------END Block Templates--------------------------------
 #---------------------------------ocean pool----------------------------------
@@ -1287,8 +1252,8 @@ def oceanH(): # show srings
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def oceanB(): # show srings
     try:
@@ -1303,8 +1268,8 @@ def oceanB(): # show srings
         a = subprocess.run(list.split(), capture_output=True, text=True).stdout
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def oceanE(): # show srings
     try:
@@ -1321,8 +1286,8 @@ def oceanE(): # show srings
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 #---------------------------------ocean pool end----------------------------------
 
@@ -1352,7 +1317,8 @@ def callGitNostrLinTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_linux_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrLinarmTerminal():
@@ -1371,7 +1337,8 @@ def callGitNostrLinarmTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_linux_arm64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrMacTerminal():
@@ -1391,7 +1358,8 @@ def callGitNostrMacTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_macos_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrMacarmTerminal():
@@ -1410,7 +1378,8 @@ def callGitNostrMacarmTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_elf64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrWinTerminal():
@@ -1429,7 +1398,8 @@ def callGitNostrWinTerminal():
         print(output)
         responseC = input("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_windows_amd64.exe", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrSeedTerminal():
@@ -1449,7 +1419,8 @@ def callGitNostrSeedTerminal():
         responseC = input("Hex to BIP39 & BIP39 to Hex: ")
         subprocess.run(["python3", "nostr_seed.py", responseC], cwd="nostr_seed")
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrQRSeedTerminal():
@@ -1469,7 +1440,8 @@ def callGitNostrQRSeedTerminal():
         responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
         subprocess.run(["python3", "nostr_c_seed_qr.py", responseC], cwd="nostr_QRseed")
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitBija():
@@ -1507,7 +1479,8 @@ def callPhoenixLin():
         blogo()
         print(output)
         subprocess.run(["./phoenixd"], cwd="phoenixwallet")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenixWin():
@@ -1530,7 +1503,8 @@ def callPhoenixWin():
         blogo()
         print(output)
         subprocess.run(["./phoenixd"], cwd="phoenixwallet")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenixMacX64():
@@ -1553,7 +1527,8 @@ def callPhoenixMacX64():
         blogo()
         print(output)
         subprocess.run(["./phoenixd"], cwd="phoenixwallet")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenixMacARM():
@@ -1576,7 +1551,8 @@ def callPhoenixMacARM():
         blogo()
         print(output)
         subprocess.run(["./phoenixd"], cwd="phoenixwallet")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenix():
@@ -1611,7 +1587,8 @@ def callPhoenix():
         responseC = input("\a\nCType a command of the list: ")
         subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def wallPhoenix():
@@ -1627,7 +1604,8 @@ def wallPhoenix():
         r = requests.post('http://localhost:9740/createinvoice', auth=('', responseC), data={'description': responseD, 'amountSat': responseE})
         print(r.text)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def wallPhoenixBOLT12():
@@ -1641,7 +1619,8 @@ def wallPhoenixBOLT12():
         r = requests.get('http://localhost:9740/getoffer', auth=('', responseC))
         print(r.text)
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #----------------------------------------------------------------------PhoenixEnd
@@ -1658,8 +1637,8 @@ def allblocksConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 #-----------------------------ENDBLOCKS--------------------------------
 #-----------------------------STRLuxor--------------------------------
@@ -1704,7 +1683,8 @@ def luxorstats():
         responseC = input("\a\nCType a command of the list: ")
         subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #-----------------------------ENDLuxor--------------------------------
@@ -1725,7 +1705,8 @@ def callGitUTXOracle():
         print(output)
         subprocess.run(["python3", "UTXOracle.py"], cwd="utxoracle")
         input("\a\nContinue...")
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
@@ -1756,207 +1737,175 @@ def callColdCore():
                 subprocess.run(git, shell=True)
                 subprocess.run(install, shell=True)
             subprocess.run("coldcore", shell=True)
-    except Exception:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #--------------------------------- Menu section -----------------------------------
 
-def MainMenuLOCAL(): #Main Menu
+def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remote"
     clear()
     blogo()
     sysinfo()
     pathexec()
-    lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
-    b = json.loads(a)
-    d = b
 
-    lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
-    print("""\t\t
+    if mode == "remote":
+        lndconnectexec()
+        path_remote = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+        pathv = json.load(open("config/bclock.conf", "r"))
+        path_remote = pathv
+        n = "Local" if path_remote['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
+
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    elif mode == "local":
+        lndconnectexec()
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        b = json.loads(a)
+        d = b
+
+        lncli = " getinfo"
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd0 = str(lsd)
+        alias = json.loads(lsd0)
+    else:  # onchain_only
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        b = json.loads(a)
+        d = b
+        alias = None
+
+    # Build header
+    if alias is not None:
+        header = """\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, alias['alias'], d['blocks'], version)
+    else:
+        header = """\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, d['blocks'], version)
 
+    # Build menu items
+    menu_items = """
 
     \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
-    \u001b[33;1mL.\033[0;37;40m Lightning
+    \u001b[38;5;202mB.\033[0;37;40m Bitcoin"""
+
+    if mode != "onchain_only":
+        menu_items += """
+    \u001b[33;1mL.\033[0;37;40m Lightning"""
+
+    menu_items += """
     \u001b[38;5;40mP.\033[0;37;40m Platforms
     \u001b[38;5;27mS.\033[0;37;40m Settings
     \u001b[38;5;15mX.\033[0;37;40m Donate
     \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ))
-    mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    \n\n\x1b[?25h"""
+
+    print(header + menu_items)
+    mainmenuControl(input("\033[1;32;40mSelect option: \033[0;37;40m"), mode)
+
+def MainMenuLOCAL(): #Main Menu
+    MainMenu("local")
 
 def MainMenuLOCALChainONLY(): #Main Menu
-    clear()
-    blogo()
-    sysinfo()
-    pathexec()
-    #lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
-    b = json.loads(a)
-    d = b
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n,d['blocks'], version ))
-    mainmenuLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    MainMenu("onchain_only")
 
 def MainMenuREMOTE(): #Main Menu
+    MainMenu("remote")
+
+def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_only modes
     clear()
     blogo()
     sysinfo()
     pathexec()
-    lndconnectexec()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
-    a = "Local" if path['bitcoincli'] else "Remote"
-    blk = rpc('getblockchaininfo')
-    d = blk
 
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-    r = requests.get(url, headers=headers, verify=cert_path)
-    alias = r.json()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    b = json.loads(a)
+    d = b
 
-    print("""\t\t
+    if mode == "local":
+        lndconnectexec()
+        lncli = " getinfo"
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd0 = str(lsd)
+        alias = json.loads(lsd0)
+    else:
+        alias = None
+
+    # Build header
+    if alias is not None:
+        header = """\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, alias['alias'], d['blocks'], version)
+    else:
+        header = """\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, d['blocks'], version)
 
+    # Build menu items
+    menu_items = """
 
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
-    \u001b[33;1mL.\033[0;37;40m Lightning
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version))
-    mainmenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
+    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
+    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
+    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
+    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
+    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
+    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
+    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
+    \u001b[38;5;202mI.\033[0;37;40m ColdCore
+    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
+    \u001b[38;5;202mL.\033[0;37;40m Latest Block
+    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
+    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
+    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[38;5;202mP.\033[0;37;40m Block Monitor"""
+
+    if mode == "onchain_only":
+        menu_items += """
+    \u001b[38;5;202mW.\033[0;37;40m Wallet"""
+
+    menu_items += """
+    \u001b[38;5;202mZ.\033[0;37;40m Stats
+    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
+    \u001b[38;5;202mS.\033[0;37;40m Mempool
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
+    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
+    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
+    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
+    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
+    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
+    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
+    \u001b[33;1mEnter.\033[0;37;40m Return
+    \n\n\x1b[?25h"""
+
+    print(header + menu_items)
+    bitcoincoremenuLocalControl(input("\033[1;32;40mSelect option: \033[0;37;40m"), mode)
 
 def bitcoincoremenuLOCAL():
-    clear()
-    blogo()
-    sysinfo()
-    pathexec()
-    lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
-    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
-    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
-    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
-    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
-    \u001b[38;5;202mL.\033[0;37;40m Latest Block
-    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
-    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mP.\033[0;37;40m Block Monitor
-    \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mS.\033[0;37;40m Mempool
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
-    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
-    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
-    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
-    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ))
-    bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    bitcoincoremenuLocal("local")
 
 def bitcoincoremenuLOCALOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    pathexec()
-    #lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
-    b = json.loads(a)
-    d = b
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
-    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
-    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
-    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
-    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
-    \u001b[38;5;202mL.\033[0;37;40m Latest Block
-    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
-    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mP.\033[0;37;40m Block Monitor
-    \u001b[38;5;202mW.\033[0;37;40m Wallet
-    \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mS.\033[0;37;40m Mempool
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
-    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
-    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
-    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
-    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,d['blocks'], version ))
-    bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    bitcoincoremenuLocal("onchain_only")
 
 def OwnNodeMiner(menuMin):
     clear()
@@ -5183,7 +5132,8 @@ def aaccPPiLNBits():
                 with open("config/lnbitSN.conf", "w") as f: json.dump(bitLN, f, indent=2)
                 createFileConnLNBits()
                 break
-    except Exception:
+    except Exception as e:
+        logger.debug("Display error: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -5239,7 +5189,8 @@ def aaccPPiLNPay():
                 createFileConnLNPay()
                 break
 
-    except Exception:
+    except Exception as e:
+        logger.debug("Display error: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -5295,7 +5246,8 @@ def aaccPPiOpenNode():
                 createFileConnOpenNode()
                 break
 
-    except Exception:
+    except Exception as e:
+        logger.debug("Display error: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -5343,8 +5295,8 @@ def testlogo():
         input("Enter To Apply...")
         settings["gradient"] = "color"
         with open("config/pyblocksettings.conf", "w") as f: json.dump(settings, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def testlogoRB():
     output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -5363,8 +5315,8 @@ def testlogoRB():
         input("Enter To Apply...")
         settings["gradient"] = "grd"
         with open("config/pyblocksettings.conf", "w") as f: json.dump(settings, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 def testClock():
     pathexec()
@@ -5387,8 +5339,8 @@ def testClock():
         input("Enter To Apply...")
         settingsClock["gradient"] = "color"
         with open("config/pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
@@ -5496,690 +5448,46 @@ def menuColorsSelectRainbowOnchainONLY(menuRF):
         colorsOnchainONLY()
 
 def menuColorsSelectRainbowEnd(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorB", testlogoRB, colors)
 
 def menuColorsSelectRainbowEndOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorB", testlogoRB, colorsOnchainONLY)
 
 def menuColorsSelectRainbowStart(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogoRB()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorA", testlogoRB, colors)
 
 def menuColorsSelectRainbowStartOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogoRB()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorA", testlogoRB, colorsOnchainONLY)
 
 def menuColorsSelectBack(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorB", testlogo, colors)
 
 def menuColorsSelectBackOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorB", testlogo, colorsOnchainONLY)
 
 def menuColorsSelectFront(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorA", testlogo, colors)
 
 def menuColorsSelectFrontOncainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorA", testlogo, colorsOnchainONLY)
 
 def menuColorsSelectFrontClock(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorA", testClock, colors)
 
 def menuColorsSelectFrontClockOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settingsClock, "colorA", testClock, colorsOnchainONLY)
 
 def menuColorsSelectBackClock(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorB", testClock, colors)
 
 def menuColorsSelectBackClockOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settingsClock, "colorB", testClock, colorsOnchainONLY)
 
 def menuColorsSelectFrontClockRemote(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "black"
-        testClockRemote()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "red"
-        testClockRemote()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "green"
-        testClockRemote()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "yellow"
-        testClockRemote()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "blue"
-        testClockRemote()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "magenta"
-        testClockRemote()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "cyan"
-        testClockRemote()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "white"
-        testClockRemote()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "gray"
-        testClockRemote()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorA", testClockRemote, colors)
 
 def menuColorsSelectBackClockRemote(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "black"
-        testClockRemote()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "red"
-        testClockRemote()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "green"
-        testClockRemote()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "yellow"
-        testClockRemote()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "blue"
-        testClockRemote()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "magenta"
-        testClockRemote()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "cyan"
-        testClockRemote()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "white"
-        testClockRemote()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "gray"
-        testClockRemote()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorB", testClockRemote, colors)
 
 def menuDesign(menuDSN):
     if menuDSN in ["A", "a"]:
@@ -6681,19 +5989,50 @@ def menuWeatherOnchainONLY(menuWD):
     elif menuWD in ["B", "b"]:
         wttrDataV2()
 
-def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
+def mainmenuControl(menuS, mode): #Unified execution of Main Menu options
     if menuS in ["A", "a"]:
-        artist()
+        if mode == "remote":
+            while True:
+                try:
+                    clear()
+                    close()
+                    remotegetblock()
+                    tmp()
+                except Exception as e:
+                    logger.debug("Loop interrupted: %s", e)
+                    break
+        else:
+            artist()
     elif menuS in ["B", "b"]:
-        bitcoincoremenuLOCAL()
+        if mode == "remote":
+            bitcoincoremenuREMOTE()
+        elif mode == "onchain_only":
+            bitcoincoremenuLOCALOnchainONLY()
+        else:
+            bitcoincoremenuLOCAL()
     elif menuS in ["L", "l"]:
-        lightningnetworkLOCAL()
+        if mode != "onchain_only":
+            if mode == "remote":
+                lightningnetworkREMOTE()
+            else:
+                lightningnetworkLOCAL()
     elif menuS in ["S", "s"]:
-        settings4Local()
+        if mode == "remote":
+            settings4Remote()
+        elif mode == "onchain_only":
+            settings4LocalOnchainONLY()
+        else:
+            settings4Local()
     elif menuS in ["P", "p"]:
-        APIMenuLOCAL()
+        if mode == "onchain_only":
+            APIMenuLOCALOnchainONLY()
+        else:
+            APIMenuLOCAL()
     elif menuS in ["X", "x"]:
-        dnt()
+        if mode == "onchain_only":
+            dntOnchainONLY()
+        else:
+            dnt()
     elif menuS in ["Q", "q"]:
         os._exit(0)
         apisnd.close()
@@ -6755,77 +6094,11 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
         input("\a\nContinue...")
 
+def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
+    mainmenuControl(menuS, "local")
+
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
-    if menuS in ["A", "a"]:
-        artist()
-    elif menuS in ["B", "b"]:
-        bitcoincoremenuLOCALOnchainONLY()
-    elif menuS in ["S", "s"]:
-        settings4LocalOnchainONLY()
-    elif menuS in ["P", "p"]:
-        APIMenuLOCALOnchainONLY()
-    elif menuS in ["X", "x"]:
-        dntOnchainONLY()
-    elif menuS in ["Q", "q"]:
-        os._exit(0)
-        apisnd.close()
-        donation.close()
-        clone.close()
-        logos.close()
-        feed.close()
-        sysinf.close()
-        nodeconnection.close()
-        exit()
-    elif menuS in ["T", "t"]:
-        clear()
-        delay_print("\033[1;32;40mWake up, Neo...")
-        t.sleep(2)
-        clear()
-        delay_print("The Matrix has you...")
-        t.sleep(2)
-        clear()
-        delay_print("Follow the white rabbit.")
-        t.sleep(3)
-        clear()
-        print("Knock, knock, Neo.\033[0;37;40m\n")
-        t.sleep(2)
-        clear()
-        t.sleep(3)
-        screensv()
-    elif menuS in ["nym", "Nym", "NYM", "nYm", "nyM", "NYm", "NyM", "nYM"]:
-        clear()
-        blogo()
-        robotNym()
-    elif menuS in ["wt", "WT", "Wt", "wT"]:
-        clear()
-        blogo()
-        callGitWardenTerminal()
-    elif menuS in ["ss", "SS", "Ss", "sS"]:
-        clear()
-        blogo()
-        callGitSatSale()
-    elif menuS in ["tt", "TT", "Tt", "tT"]:
-        clear()
-        blogo()
-        callGitBpytop()
-    elif menuS in ["CA", "ca", "Ca", "cA"]:
-        clear()
-        blogo()
-        callGitCashu()
-    elif menuS in ["7"]:
-        clear()
-        blogo()
-        output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        subprocess.run(["python3", "7Blocks.py"], cwd="SPV")
-        input("\a\nContinue...")
-    elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
-        clear()
-        blogo()
-        output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
-        input("\a\nContinue...")
+    mainmenuControl(menuS, "onchain_only")
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
@@ -6865,7 +6138,7 @@ def pyblockpoolREMOTEOnchainONLYMenu(slush):
         blogo()
         getPoolPYBLOCKCheck()
 
-def bitcoincoremenuLOCALcontrolA(bcore):
+def bitcoincoremenuLocalControl(bcore, mode=None): #Unified Bitcoin Core local control
     if bcore in ["A", "a"]:
         while True:
             try:
@@ -6875,7 +6148,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
                 close()
                 console()
                 t.sleep(5)
-            except Exception:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif bcore in ["B", "b"]:
         clear()
@@ -6897,8 +6171,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
@@ -6919,48 +6193,46 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
-    elif bcore in ["Q", "q"]:
-        searchTXS()
     elif bcore in ["S", "s"]:
         counttxs()
     elif bcore in ["L", "l"]:
         try:
             lastblockdetail.run_urwid()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["V", "v"]:
         try:
             clear()
             execute_visualizer()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["Y", "y"]:
         try:
             asyncio.run(mempool_monitor.display_mempool_info())
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["X", "x"]:
         try:
             clear()
             some_other_function()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["K", "k"]:
         try:
             peers_monitor.run_peers_monitor()()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["N", "n"]:
         try:
             tx_search.search_tx()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["P", "p"]:
         try:
             clear()
             call_blocks()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
@@ -6973,113 +6245,11 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
         input("\a\nContinue...")
 
+def bitcoincoremenuLOCALcontrolA(bcore):
+    bitcoincoremenuLocalControl(bcore, "local")
+
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
-    if bcore in ["A", "a"]:
-        while True:
-            try:
-                clear()
-                blogo()
-                sysinfo()
-                close()
-                console()
-                t.sleep(5)
-            except Exception:
-                break
-    elif bcore in ["B", "b"]:
-        clear()
-        blogo()
-        getgenesis()
-        input("Continue...")
-        menuSelection()
-    elif bcore in ["C", "c"]:
-        getblock()
-    elif bcore in ["D", "d"]:
-        runTheNumbersMenuOnchainONLY()
-    elif bcore in ["E", "e"]:
-        decodeHexOnchainONLY()
-    elif bcore in ["F", "f"]:
-        try:
-            clear()
-            blogo()
-            sysinfo()
-            close()
-            decodeQR()
-            input("Continue...")
-        except Exception:
-            pass
-    elif bcore in ["G", "g"]:
-        getrawtx()
-    elif bcore in ["H", "h"]:
-        miscellaneousLOCALOnchainONLY()
-    elif bcore in ["I", "i"]:
-        callColdCore()
-    elif bcore in ["J", "j"]:
-        pdfconvert()
-    elif bcore in ["M", "m"]:
-        mtConn()
-    elif bcore in ["O", "o"]:
-        bitcoincoremenuLOCALOPRETURNOnchainONLY()
-    elif bcore in ["W", "w"]:
-        walletmenuLOCALOnchainONLY()
-    elif bcore in ["Z", "z"]:
-        statsConn()
-    elif bcore in ["Q", "q"]:
-        miningConn()
-    elif bcore in ["U", "u"]:
-        untxsConn()
-    elif bcore in ["Q", "q"]:
-        searchTXS()
-    elif bcore in ["S", "s"]:
-        counttxs()
-    elif bcore in ["L", "l"]:
-        try:
-            lastblockdetail.run_urwid()
-        except Exception:
-            pass
-    elif bcore in ["V", "v"]:
-        try:
-            clear()
-            execute_visualizer()
-        except Exception:
-            pass
-    elif bcore in ["Y", "y"]:
-        try:
-            asyncio.run(mempool_monitor.display_mempool_info())
-        except Exception:
-            pass
-    elif bcore in ["X", "x"]:
-        try:
-            clear()
-            some_other_function()
-        except Exception:
-            pass
-    elif bcore in ["K", "k"]:
-        try:
-            peers_monitor.run_peers_monitor()()
-        except Exception:
-            pass
-    elif bcore in ["N", "n"]:
-        try:
-            tx_search.search_tx()
-        except Exception:
-            pass
-    elif bcore in ["P", "p"]:
-        try:
-            clear()
-            call_blocks()
-        except Exception:
-            pass
-    elif bcore in ["CM", "cm"]:
-        CoreMiner()
-    elif bcore in ["ONM", "onm"]:
-        OwnNodeMinerONCHAIN()
-    elif bcore in ["VG", "vg"]:
-        clear()
-        blogo()
-        output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
-        input("\a\nContinue...")
+    bitcoincoremenuLocalControl(bcore, "onchain_only")
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
@@ -7142,7 +6312,8 @@ def miscellaneousLOCALmenu(misce):
                 close()
                 logoC()
                 tmp()
-            except Exception:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7209,7 +6380,8 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
                 close()
                 logoC()
                 tmp()
-            except Exception:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7271,8 +6443,8 @@ def decodeHexLOCAL(hexloc):
                     readHexBlock()
                 else:
                     break
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif hexloc in ["B", "b"]:
         clear()
         blogo()
@@ -7287,8 +6459,8 @@ def decodeHexLOCAL(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
 
 def decodeHexLOCALOnchainONLY(hexloc):
     if hexloc in ["A", "a"]:
@@ -7305,8 +6477,8 @@ def decodeHexLOCALOnchainONLY(hexloc):
                     readHexBlock()
                 else:
                     break
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif hexloc in ["B", "b"]:
         clear()
         blogo()
@@ -7321,8 +6493,8 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
 
 def lightningnetworkLOCALcontrol(lncore):
     if lncore in ["A", "a"]:
@@ -7334,7 +6506,8 @@ def lightningnetworkLOCALcontrol(lncore):
                 close()
                 consoleLN()
                 t.sleep(5)
-            except Exception:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif lncore in ["B", "b"]:
         clear()
@@ -7617,77 +6790,7 @@ def nostrmenu(menunos):
 #----------------------------REMOTE MENUS
 
 def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
-    if menuS in ["A", "a"]:
-        while True:
-            try:
-                clear()
-                close()
-                remotegetblock()
-                tmp()
-            except Exception:
-                break
-    elif menuS in ["B", "b"]:
-        bitcoincoremenuREMOTE()
-    elif menuS in ["L", "l"]:
-        lightningnetworkREMOTE()
-    elif menuS in ["P", "p"]:
-        APIMenuLOCAL()
-    elif menuS in ["X", "x"]:
-        dnt()
-    elif menuS in ["S", "s"]:
-        settings4Remote()
-    elif menuS in ["Q", "q"]:
-        os._exit(0)
-        apisnd.close()
-        donation.close()
-        clone.close()
-        logos.close()
-        feed.close()
-        sysinf.close()
-        nodeconnection.close()
-        exit()
-    elif menuS in ["T", "t"]: #Test feature fast access
-        clear()
-        delay_print("\033[1;32;40mWake up, Neo...")
-        t.sleep(2)
-        clear()
-        delay_print("The Matrix has you...")
-        t.sleep(2)
-        clear()
-        delay_print("Follow the white rabbit.")
-        t.sleep(3)
-        clear()
-        print("Knock, knock, Neo.\033[0;37;40m\n")
-        t.sleep(2)
-        clear()
-        t.sleep(3)
-        screensv()
-    elif menuS in ["nym", "Nym", "NYM", "nYm", "nyM", "NYm", "NyM", "nYM"]:
-        clear()
-        blogo()
-        robotNym()
-    elif menuS in ["wt", "WT", "Wt", "wT"]:
-        clear()
-        blogo()
-        callGitWardenTerminal()
-    elif menuS in ["ss", "SS", "Ss", "sS"]:
-        clear()
-        blogo()
-        callGitSatSale()
-    elif menuS in ["7"]:
-        clear()
-        blogo()
-        output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        subprocess.run(["python3", "7Blocks.py"], cwd="SPV")
-        input("\a\nContinue...")
-    elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
-        clear()
-        blogo()
-        output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
-        input("\a\nContinue...")
+    mainmenuControl(menuS, "remote")
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
@@ -7699,7 +6802,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
                 close()
                 remoteconsole()
                 t.sleep(5)
-            except Exception:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif bcore in ["B", "b"]:
         remotegetblockcount()
@@ -7713,8 +6817,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["E", "e"]:
         miscellaneousLOCAL()
     elif bcore in ["M", "m"]:
@@ -7840,7 +6944,8 @@ def menuD(menuN): # Satnode access Menu
                     apisenderFile()
                     t.sleep(30)
                     menuSelection()
-                except Exception:
+                except Exception as e:
+                    logger.debug("Menu error: %s", e)
                     menuSelection()
             elif message in ["T", "t"]:
                 try:
@@ -7850,9 +6955,11 @@ def menuD(menuN): # Satnode access Menu
                     apisender()
                     t.sleep(30)
                     menuSelection()
-                except Exception:
+                except Exception as e:
+                    logger.debug("Menu error: %s", e)
                     menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuN in ["C", "c"]:
         try:
@@ -7862,8 +6969,8 @@ def menuD(menuN): # Satnode access Menu
                 gitclone()
             else:
                 menuSelection()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Suppressed error: %s", e)
     elif menuN in ["R", "r"]:
         menuSelection()
 
@@ -7876,7 +6983,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -7886,7 +6994,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -7896,7 +7005,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -7910,7 +7020,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -7920,7 +7031,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -7930,7 +7042,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -7944,7 +7057,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -7954,7 +7068,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -7968,7 +7083,8 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -7978,7 +7094,8 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except Exception:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -8037,8 +7154,8 @@ def testClockRemote():
         input("Enter To Apply...")
         settingsClock["gradient"] = "color"
         with open("pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Suppressed error: %s", e)
 
 
 def commandsINIT(initCONF):
@@ -8174,24 +7291,28 @@ def introINIT():
 
 #--------------------------------- End Main Menu execution --------------------------------
 
-settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
-while True: # Loop
-    try:
-        path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-        if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
-        if os.path.isfile('config/blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-            lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        clear()
-        if not os.path.isfile('config/intro.conf'):
-            set_terminal_background()
-            introINIT()
-        else:
-            set_terminal_background()
-            menuSelection()
-    except Exception:
-        print("\n")
-        sys.exit(101)
+def main():
+    global settings, settingsClock, path, lndconnectload
+    cfg.load()
+    settings = cfg.settings
+    settingsClock = cfg.settings_clock
+    while True:
+        try:
+            path = cfg.path
+            lndconnectload = cfg.lndconnectload
+            clear()
+            if not cfg.has_config('intro.conf'):
+                set_terminal_background()
+                introINIT()
+            else:
+                set_terminal_background()
+                menuSelection()
+        except KeyboardInterrupt:
+            print("\n")
+            sys.exit(0)
+        except Exception as e:
+            logger.error("Fatal error: %s", e)
+            sys.exit(101)
+
+if __name__ == "__main__":
+    main()
