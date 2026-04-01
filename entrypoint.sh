@@ -21,15 +21,21 @@ fi
 # Auto-generate LND config from env vars if set
 if [ -n "$LND_HOST" ] || [ -n "$LND_TLS_CERT_PATH" ]; then
     LND_GRPC_PORT="${LND_GRPC_PORT:-10009}"
+    # Only build ip_port if LND_HOST is set (matches Python _env_lnd_config)
+    if [ -n "$LND_HOST" ]; then
+        LND_IP_PORT="${LND_HOST}:${LND_GRPC_PORT}"
+    else
+        LND_IP_PORT=""
+    fi
     cat > "$CONFIG_DIR/blndconnect.conf" <<LNDEOF
 {
-  "ip_port": "${LND_HOST}:${LND_GRPC_PORT}",
+  "ip_port": "${LND_IP_PORT}",
   "tls": "${LND_TLS_CERT_PATH:-}",
   "macaroon": "${LND_MACAROON_PATH:-}",
   "ln": "${LND_CLI_PATH:-}"
 }
 LNDEOF
-    echo "[PyBLOCK] LND configured: ${LND_HOST}:${LND_GRPC_PORT}"
+    echo "[PyBLOCK] LND configured: ${LND_IP_PORT:-local paths only}"
 fi
 
 # Auto-set mode if specified
