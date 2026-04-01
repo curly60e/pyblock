@@ -316,8 +316,8 @@ def logoC():
 
 def gitclone():
     url = "https://github.com/curly60e/satellite"
-    subprocess.run(f"git clone {url}", shell=True)
-    subprocess.run("mkdir satellite/api/examples/.gnupg", shell=True)
+    subprocess.run(["git", "clone", url])
+    os.makedirs("satellite/api/examples/.gnupg", exist_ok=True)
     subprocess.run("gpg --full-generate-key --homedir satellite/api/examples/.gnupg", shell=True)
 
 def satnode():
@@ -335,7 +335,7 @@ def matrixsc():
         print("OK Pass")
     else:
         url = "https://github.com/curly60e/terminal_matrix.git"
-        subprocess.run(f"git clone {url}", shell=True)
+        subprocess.run(["git", "clone", url])
 
 def main():
     scriptpath = os.path.join(os.path.dirname(__file__), 'PyBlock.py')
@@ -998,7 +998,10 @@ def luxorstats():
         if os.path.isdir ('luxor'):
             subprocess.run(["python3", "luxor.py", "--help"], cwd=os.path.join("luxor", "graphql-python-client"))
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion", shell=True)
+            os.makedirs("luxor", exist_ok=True)
+            subprocess.run(["git", "clone", "https://github.com/LuxorLabs/graphql-python-client.git"], cwd="luxor")
+            subprocess.run(["pip3", "install", "-r", "requirements3.txt"], cwd=os.path.join("luxor", "graphql-python-client"))
+            subprocess.run(["python3", "luxor.py", "--install-completion"], cwd=os.path.join("luxor", "graphql-python-client"))
         clear()
         blogo()
         input("\a\nYou need to COPY the lines inside the file .env.example and create a NEW file .env with your Luxor API Key. Press Enter to Continue.")
@@ -1261,7 +1264,9 @@ def CroppedMinerComputer():
         if os.path.isdir ('CroppedMiner'):
             print("...Follow the steps...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir CroppedMiner && cd CroppedMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz", shell=True)
+            os.makedirs("CroppedMiner", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz"], cwd="CroppedMiner")
+            subprocess.run(["tar", "-xf", "pooler-cpuminer-2.5.1-linux-x86_64.tar.gz"], cwd="CroppedMiner")
             clear()
             blogo()
             print(output)
@@ -1283,7 +1288,8 @@ def CroppedMinerRaspberry():
         if os.path.isdir ('CroppedMiner'):
             print("...Follow the steps...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir CroppedMiner && cd CroppedMiner && git clone https://github.com/jojapoppa/cpuminer-multi-arm.git", shell=True)
+            os.makedirs("CroppedMiner", exist_ok=True)
+            subprocess.run(["git", "clone", "https://github.com/jojapoppa/cpuminer-multi-arm.git"], cwd="CroppedMiner")
             clear()
             blogo()
             print(output)
@@ -2831,7 +2837,8 @@ def bip39convert():
         if os.path.isdir ('TinySeed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir TinySeed && cd TinySeed && wget https://gist.githubusercontent.com/odudex/a29de0c91c4010a6b4c565d6f29fa0c6/raw/0349754c1b3f218ff61302acd1f346e0027ba215/TinySeed.py", shell=True)
+            os.makedirs("TinySeed", exist_ok=True)
+            subprocess.run(["wget", "https://gist.githubusercontent.com/odudex/a29de0c91c4010a6b4c565d6f29fa0c6/raw/0349754c1b3f218ff61302acd1f346e0027ba215/TinySeed.py"], cwd="TinySeed")
         clear()
         blogo()
         print(output)
@@ -3011,9 +3018,12 @@ def callMemL():
             "Mempool-cli", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('mempoolcli'):
-            subprocess.run("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_x86_64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz", shell=True)
+            subprocess.run(["rm", "-rf", "mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz", shell=True)
+            os.makedirs("mempoolcli", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["tar", "-xvf", "mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
         clear()
         blogo()
         print(output)
@@ -3030,9 +3040,12 @@ def callMemR():
             "Mempool-cli", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('mempoolcli'):
-            subprocess.run("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_arm64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz", shell=True)
+            subprocess.run(["rm", "-rf", "mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_arm64.tar.gz", shell=True)
+            os.makedirs("mempoolcli", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["tar", "-xvf", "mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
         clear()
         blogo()
         print(output)
@@ -4201,8 +4214,7 @@ def robotNym():
 #---------------------------------Warden Terminal----------------------------------
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
-        git = "git clone https://github.com/pxsocs/warden_terminal.git"
-        subprocess.run(git, shell=True)
+        subprocess.run(["git", "clone", "https://github.com/pxsocs/warden_terminal.git"])
     subprocess.run(["python3", "node_warden.py"], cwd="warden_terminal")
 
 #---------------------------------Nostr Terminal----------------------------------
@@ -4215,9 +4227,13 @@ def callGitNostrLinTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_linux_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *", shell=True)
+            subprocess.run(["rm", "-rf", "nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *", shell=True)
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
@@ -4235,9 +4251,13 @@ def callGitNostrLinarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_linux_arm64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *", shell=True)
+            subprocess.run(["rm", "-rf", "nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *", shell=True)
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
@@ -4255,9 +4275,11 @@ def callGitNostrMacTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_macos_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64", shell=True)
+            subprocess.run(["rm", "-rf", "nostr_console_macos_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64", shell=True)
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
 
@@ -4276,9 +4298,13 @@ def callGitNostrMacarmTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *", shell=True)
+            subprocess.run(["rm", "-rf", "nostr_console_elf64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_elf64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *", shell=True)
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_elf64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
@@ -4296,9 +4322,11 @@ def callGitNostrWinTerminal():
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_windows_amd64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe", shell=True)
+            subprocess.run(["rm", "-rf", "nostr_console_windows_amd64.exe"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe", shell=True)
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
@@ -4318,7 +4346,8 @@ def callGitNostrSeedTerminal():
         if os.path.isdir ('nostr_seed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir nostr_seed && cd nostr_seed && wget https://gist.githubusercontent.com/odudex/93cfb5628b22f8675ab1939fd43133f4/raw/b48f047c0358a9ae50c2027106bdf5e37ee1fe5c/nostr_seed.py", shell=True)
+            os.makedirs("nostr_seed", exist_ok=True)
+            subprocess.run(["wget", "https://gist.githubusercontent.com/odudex/93cfb5628b22f8675ab1939fd43133f4/raw/b48f047c0358a9ae50c2027106bdf5e37ee1fe5c/nostr_seed.py"], cwd="nostr_seed")
         clear()
         blogo()
         print(output)
@@ -4339,7 +4368,8 @@ def callGitNostrQRSeedTerminal():
         if os.path.isdir ('nostr_QRseed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir nostr_QRseed && cd nostr_QRseed && wget https://gist.githubusercontent.com/odudex/9e848a91d23e967309bd1719910021e6/raw/dbe04893f4ee2e0aa020735528f7f19bb2d13a7e/nostr_c_seed_qr.py", shell=True)
+            os.makedirs("nostr_QRseed", exist_ok=True)
+            subprocess.run(["wget", "https://gist.githubusercontent.com/odudex/9e848a91d23e967309bd1719910021e6/raw/dbe04893f4ee2e0aa020735528f7f19bb2d13a7e/nostr_c_seed_qr.py"], cwd="nostr_QRseed")
         clear()
         blogo()
         print(output)
@@ -4352,23 +4382,23 @@ def callGitNostrQRSeedTerminal():
 
 def callGitBija():
     if not os.path.isdir('bija'):
-        git = "git clone --recurse-submodules https://github.com/BrightonBTC/bija"
-        subprocess.run(git, shell=True)
+        subprocess.run(["git", "clone", "--recurse-submodules", "https://github.com/BrightonBTC/bija"])
     subprocess.run(["docker-compose", "up"], cwd="bija")
     input("\a\nYou can now access Bija at http://localhost:5000")
 
 #---------------------------------Bpytop----------------------------------
 def callGitBpytop():
     if not os.path.isdir('bpytop'):
-        git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
-        subprocess.run(git, shell=True)
-    subprocess.run("cd bpytop && sudo make install && bpytop", shell=True)
+        subprocess.run(["pip3", "install", "bpytop"])
+        subprocess.run(["git", "clone", "https://github.com/aristocratos/bpytop.git"])
+    subprocess.run(["sudo", "make", "install"], cwd="bpytop")
+    subprocess.run(["bpytop"], cwd="bpytop")
 
 def callGitRES():
     if not os.path.isdir('resurrection_wallet_0.3.0_amd64.AppImage'):
-        wget = "wget https://github.com/ktecho/resurrection-wallet/releases/download/app-v0.3.0/resurrection_wallet_0.3.0_amd64.AppImage"
-        subprocess.run(wget, shell=True)
-    subprocess.run("chmod +x resurrection_wallet_0.3.0_amd64.AppImage && ./resurrection_wallet_0.3.0_amd64.AppImage", shell=True)
+        subprocess.run(["wget", "https://github.com/ktecho/resurrection-wallet/releases/download/app-v0.3.0/resurrection_wallet_0.3.0_amd64.AppImage"])
+    subprocess.run(["chmod", "+x", "resurrection_wallet_0.3.0_amd64.AppImage"])
+    subprocess.run(["./resurrection_wallet_0.3.0_amd64.AppImage"])
     input("\a\nFollow the Steps by Resurrection Wallet")
     
 #---------------------------------UTXOracle----------------------------------
@@ -4391,8 +4421,8 @@ def callGitUTXOracle():
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
-        git = "pip3 install cashu && mkdir Cashu"
-        subprocess.run(git, shell=True)
+        subprocess.run(["pip3", "install", "cashu"])
+        os.makedirs("Cashu", exist_ok=True)
     subprocess.run(["cashu"], cwd="Cashu")
 
 #---------------------------------ColdCore-----------------------------------------
@@ -4419,10 +4449,9 @@ def callColdCore():
             input("\nContinue...")
         else:
             if not os.path.isdir('$HOME/.pyblock/coldcore'):
-                git = "git clone https://github.com/jamesob/coldcore.git"
-                install = "cd coldcore && chmod +x coldcore && cp coldcore ~/.local/bin/coldcore"
-                subprocess.run(git, shell=True)
-                subprocess.run(install, shell=True)
+                subprocess.run(["git", "clone", "https://github.com/jamesob/coldcore.git"])
+                subprocess.run(["chmod", "+x", "coldcore"], cwd="coldcore")
+                subprocess.run(["cp", "coldcore", os.path.expanduser("~/.local/bin/coldcore")], cwd="coldcore")
             subprocess.run("coldcore", shell=True)
     except Exception as e:
         logger.debug("spvblock: %s", e)
