@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.04@sha256:b59d21599a2b151e7f6a8d7b6f0e864fbb4ce8b0c9cf09be2e67f4d6e3b942a4
 
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -12,7 +12,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/tsl0922/ttyd.git \
+# Pin ttyd to a specific release tag for reproducibility
+RUN git clone --branch 1.7.7 --depth 1 https://github.com/tsl0922/ttyd.git \
     && cd ttyd \
     && mkdir build \
     && cd build \
@@ -24,10 +25,10 @@ RUN git clone https://github.com/tsl0922/ttyd.git \
 RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 
-RUN pip install --upgrade pip \
-    && git clone https://github.com/curly60e/pyblock.git \
+RUN pip install --no-cache-dir --upgrade pip \
+    && git clone --depth 1 https://github.com/curly60e/pyblock.git \
     && cd pyblock \
-    && pip install -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt
 
 RUN useradd -m -s /bin/bash pyblock \
     && chown -R pyblock:pyblock /app

@@ -105,3 +105,20 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local env overrides
+.env.local
+.env.*.local
+
+# Debug logs
+debug_*.log

@@ -8,3 +8,9 @@ __pycache__
 dist/
 build/
 *.pickle.bak
+*.pickle
+.pytest_cache/
+.mypy_cache/
+.env
+.env.*
+*.log
