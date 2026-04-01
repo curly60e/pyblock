@@ -82,17 +82,19 @@ class PyBlockApp(App):
 
     def on_mount(self):
         self.query_one(StatusBar).mode = self.mode
-        self._update_timer = self.set_interval(30, self._refresh_data)
-        self.run_worker(self._initial_load)
+        self._update_timer = self.set_interval(30, self._do_refresh)
+        self._do_refresh()
 
-    async def _initial_load(self):
-        await self._refresh_data()
+    def _do_refresh(self):
+        self.run_worker(self._refresh_data_worker, thread=True)
 
-    async def _refresh_data(self):
-        block = await self.run_in_thread(fetch_block_height)
-        price = await self.run_in_thread(fetch_btc_price)
-        fees = await self.run_in_thread(fetch_fees)
+    def _refresh_data_worker(self):
+        block = fetch_block_height()
+        price = fetch_btc_price()
+        fees = fetch_fees()
+        self.call_from_thread(self._update_ui, block, price, fees)
 
+    def _update_ui(self, block, price, fees):
         status = self.query_one(StatusBar)
         status.block_height = block
         status.btc_price = price
@@ -106,7 +108,7 @@ class PyBlockApp(App):
         )
 
     def action_refresh_data(self):
-        self.run_worker(self._refresh_data)
+        self._do_refresh()
         self.notify("Refreshing data...", timeout=1)
 
     def action_quit(self):
