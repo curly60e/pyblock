@@ -37,7 +37,7 @@ PYBLOCK_THEME = Theme({
     "pyblock.block": "bold white",
 })
 
-console = Console(theme=PYBLOCK_THEME)
+console = Console(theme=PYBLOCK_THEME, highlight=False)
 
 
 def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
@@ -80,7 +80,7 @@ def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
             combined.append_text(separator)
         combined.append_text(part)
 
-    console.print(Panel(combined, style="pyblock.dim", expand=False, padding=(0, 2)))
+    console.print(Panel(combined, style="dim", expand=False, padding=(0, 2)))
 
 
 def rich_sysinfo(cpu_percent, mem_percent):
@@ -112,7 +112,7 @@ def _make_bar(percent, color):
     """Create a simple text-based progress bar."""
     filled = int(percent / 5)
     empty = 20 - filled
-    return f"[{color}]{'█' * filled}[/{color}][dim]{'░' * empty}[/dim]"
+    return f"[{color}]{'█' * filled}[/{color}][rgb(60,60,60)]{'─' * empty}[/rgb(60,60,60)]"
 
 
 def rich_menu(title, items, footer_text=""):
@@ -191,7 +191,7 @@ def rich_header(node_type, block_height, version, alias=None):
     info.append("Version: ", style="bold white")
     info.append(f"{version}", style="dim")
 
-    console.print(Panel(info, style="pyblock.dim", expand=False, padding=(0, 2)))
+    console.print(Panel(info, style="dim", expand=False, padding=(0, 2)))
 
 
 def rich_loading(label="Loading"):
