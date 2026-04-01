@@ -700,10 +700,14 @@ def callPhoenixMacARM():
         output = render(
             "Phoenix MacOSARM", colors=['yellow'], align='left', font='tiny'
         )
-        if os.path.isdir ('phoenixwallet'):
-            subprocess.run("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip", shell=True)
-        else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip && unzip -j phoenix-0.3.0-macos-arm64.zip", shell=True)
+        phoenix_url = "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip"
+        if os.path.isdir('phoenixwallet'):
+            subprocess.run(["rm", "-rf", "phoenix-0.3.0-macos-arm64.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+        else:
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "phoenix-0.3.0-macos-arm64.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -712,7 +716,7 @@ def callPhoenixMacARM():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -992,7 +996,7 @@ def luxorstats():
             "Luxor Pool", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('luxor'):
-            subprocess.run("cd luxor && cd graphql-python-client && python3 luxor.py --help", shell=True)
+            subprocess.run(["python3", "luxor.py", "--help"], cwd=os.path.join("luxor", "graphql-python-client"))
         else: # Check if the file 'bclock.conf' is in the same folder
             subprocess.run("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion", shell=True)
         clear()
@@ -3013,7 +3017,7 @@ def callMemL():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd mempoolcli && ./mempool-cli", shell=True)
+        subprocess.run(["./mempool-cli"], cwd="mempoolcli")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -3032,7 +3036,7 @@ def callMemR():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd mempoolcli && ./mempool-cli", shell=True)
+        subprocess.run(["./mempool-cli"], cwd="mempoolcli")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -4199,7 +4203,7 @@ def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
         subprocess.run(git, shell=True)
-    subprocess.run("cd warden_terminal && python3 node_warden.py", shell=True)
+    subprocess.run(["python3", "node_warden.py"], cwd="warden_terminal")
 
 #---------------------------------Nostr Terminal----------------------------------
 
@@ -4350,7 +4354,7 @@ def callGitBija():
     if not os.path.isdir('bija'):
         git = "git clone --recurse-submodules https://github.com/BrightonBTC/bija"
         subprocess.run(git, shell=True)
-    subprocess.run("cd bija && docker-compose up", shell=True)
+    subprocess.run(["docker-compose", "up"], cwd="bija")
     input("\a\nYou can now access Bija at http://localhost:5000")
 
 #---------------------------------Bpytop----------------------------------
@@ -4389,7 +4393,7 @@ def callGitCashu():
     if not os.path.isdir('Cashu'):
         git = "pip3 install cashu && mkdir Cashu"
         subprocess.run(git, shell=True)
-    subprocess.run("cd Cashu && cashu", shell=True)
+    subprocess.run(["cashu"], cwd="Cashu")
 
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
