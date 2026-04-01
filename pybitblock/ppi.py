@@ -8,16 +8,12 @@ import subprocess
 import os
 import os.path
 import qrcode
-#import lnpay_py
-import requests
 import xmltodict
 import time as t
 import simplejson as json
-from art import *
 from cfonts import render, say
-from nodeconnection import *
-from pblogo import *
-from logos import *
+from pblogo import blogo
+from logos import logoB
 #from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
