@@ -37,7 +37,7 @@ PYBLOCK_THEME = Theme({
     "pyblock.block": "bold white",
 })
 
-console = Console(theme=PYBLOCK_THEME, highlight=False)
+console = Console(theme=PYBLOCK_THEME, highlight=False, color_system="truecolor")
 
 
 def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
@@ -85,28 +85,15 @@ def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
 
 
 def rich_sysinfo(cpu_percent, mem_percent):
-    """Render CPU and Memory as a compact Rich panel."""
+    """Render CPU and Memory with colored bars."""
     cpu_color = "green" if cpu_percent < 70 else ("yellow" if cpu_percent < 90 else "red")
     mem_color = "green" if mem_percent < 70 else ("yellow" if mem_percent < 90 else "red")
 
     cpu_bar = _make_bar(cpu_percent, cpu_color)
     mem_bar = _make_bar(mem_percent, mem_color)
 
-    table = Table(show_header=False, box=None, padding=(0, 1))
-    table.add_column(width=10)
-    table.add_column(width=22)
-    table.add_column(width=5, justify="right")
-    table.add_row(
-        Text("CPU", style="italic yellow"),
-        Text.from_markup(cpu_bar),
-        Text(f"{cpu_percent}%", style=f"bold {cpu_color}"),
-    )
-    table.add_row(
-        Text("Memory", style="italic yellow"),
-        Text.from_markup(mem_bar),
-        Text(f"{mem_percent}%", style=f"bold {mem_color}"),
-    )
-    console.print(table)
+    console.print(f"    [italic yellow]CPU[/]     {cpu_bar} [bold {cpu_color}]{cpu_percent}%[/]")
+    console.print(f"    [italic yellow]Memory[/]  {mem_bar} [bold {mem_color}]{mem_percent}%[/]")
 
 
 def _make_bar(percent, color):
@@ -117,32 +104,18 @@ def _make_bar(percent, color):
 
 
 def rich_menu(title, items, footer_text=""):
-    """Render a styled menu table.
+    """Render a styled menu.
 
     Args:
         title: Menu section title
         items: List of (key, label, style) tuples
         footer_text: Optional text below the menu
     """
-    table = Table(
-        show_header=False,
-        box=None,
-        padding=(0, 1),
-        pad_edge=False,
-    )
-    table.add_column("Key", width=6, justify="right")
-    table.add_column("Label")
-
-    for key, label, style in items:
-        table.add_row(
-            Text(f"{key}.", style=f"bold {style}"),
-            Text(label, style="white"),
-        )
-
     console.print()
-    console.print(table)
+    for key, label, style in items:
+        console.print(f"    [bold {style}]{key}.[/] {label}")
     if footer_text:
-        console.print(f"    [pyblock.dim]{footer_text}[/pyblock.dim]")
+        console.print(f"    [dim]{footer_text}[/dim]")
     console.print()
 
 
