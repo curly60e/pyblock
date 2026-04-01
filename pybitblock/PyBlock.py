@@ -7433,10 +7433,16 @@ if __name__ == "__main__":
         if cfg.has_config('intro.conf'):
             with open("config/intro.conf", "r") as f:
                 init_data = json.load(f)
-            if init_data.get("fullbtclnd"):
-                mode = "local"
-            elif init_data.get("fullbtc"):
-                mode = "onchain_only"
+            if isinstance(init_data, str):
+                if init_data == "A":
+                    mode = "local"
+                elif init_data == "B":
+                    mode = "onchain_only"
+            elif isinstance(init_data, dict):
+                if init_data.get("fullbtclnd"):
+                    mode = "local"
+                elif init_data.get("fullbtc"):
+                    mode = "onchain_only"
         run_tui(mode=mode)
     else:
         main()
