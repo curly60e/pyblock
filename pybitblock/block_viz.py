@@ -26,16 +26,18 @@ from rich.color import Color
 
 console = Console()
 
-# ─── Fee color scale (purple → blue → green → yellow → orange → red) ───
+# ─── Fee color scale inspired by mempool.space ───
 FEE_COLORS = [
-    (68, 1, 84),      # very low - dark purple
-    (59, 82, 139),     # low - blue
-    (33, 145, 140),    # below avg - teal
-    (94, 201, 98),     # avg - green
-    (253, 231, 37),    # above avg - yellow
-    (253, 174, 37),    # high - orange
-    (237, 105, 37),    # very high - dark orange
-    (215, 48, 31),     # extreme - red
+    (64, 224, 208),    # 1 sat - turquoise
+    (0, 191, 255),     # very low - deep sky blue
+    (30, 144, 255),    # low - dodger blue
+    (65, 105, 225),    # below avg - royal blue
+    (138, 43, 226),    # avg - blue violet
+    (186, 85, 211),    # above avg - medium orchid
+    (255, 165, 0),     # high - orange
+    (255, 69, 0),      # very high - orange red
+    (220, 20, 60),     # extreme - crimson
+    (178, 34, 34),     # insane - firebrick
 ]
 
 
@@ -171,57 +173,153 @@ def fetch_block_cli(height=None):
 
 # ─── Rendering ───
 
-def render_treemap(transactions, width=70, height=20):
-    """Render a treemap of transactions as colored blocks."""
+def _squarify_layout(items, x, y, w, h):
+    """Squarified treemap layout algorithm.
+
+    Returns list of (tx, rx, ry, rw, rh) rectangles.
+    """
+    if not items or w <= 0 or h <= 0:
+        return []
+
+    if len(items) == 1:
+        return [(items[0], x, y, w, h)]
+
+    total = sum(it["_area"] for it in items)
+    if total <= 0:
+        return []
+
+    results = []
+    vertical = h <= w  # lay out along the shorter dimension
+
+    row = []
+    row_area = 0
+    side = min(w, h)
+
+    for it in items:
+        row.append(it)
+        row_area += it["_area"]
+
+        # Check if adding next item would worsen the aspect ratio
+        if len(row) > 1:
+            row_w = row_area / total * (w if vertical else h)
+            worst_ratio = 0
+            for r in row:
+                r_h = (r["_area"] / row_area) * (h if vertical else w) if row_area > 0 else 1
+                r_w = row_w
+                if r_h > 0 and r_w > 0:
+                    ratio = max(r_w / r_h, r_h / r_w)
+                    worst_ratio = max(worst_ratio, ratio)
+
+            # Try without the last item
+            prev_area = row_area - it["_area"]
+            prev_w = prev_area / total * (w if vertical else h) if total > 0 else 0
+            prev_worst = 0
+            for r in row[:-1]:
+                r_h = (r["_area"] / prev_area) * (h if vertical else w) if prev_area > 0 else 1
+                r_w = prev_w
+                if r_h > 0 and r_w > 0:
+                    ratio = max(r_w / r_h, r_h / r_w)
+                    prev_worst = max(prev_worst, ratio)
+
+            if worst_ratio > prev_worst and len(row) > 2:
+                # Remove last, layout current row, recurse
+                row.pop()
+                row_area -= it["_area"]
+                row_w = row_area / total * (w if vertical else h) if total > 0 else 0
+
+                offset = 0
+                for r in row:
+                    frac = r["_area"] / row_area if row_area > 0 else 0
+                    if vertical:
+                        rh = frac * h
+                        results.append((r, x, y + offset, row_w, rh))
+                        offset += rh
+                    else:
+                        rw = frac * w
+                        results.append((r, x + offset, y, rw, row_w))
+                        offset += rw
+
+                remaining = items[items.index(it):]
+                if vertical:
+                    results.extend(_squarify_layout(remaining, x + row_w, y, w - row_w, h))
+                else:
+                    results.extend(_squarify_layout(remaining, x, y + row_w, w, h - row_w))
+                return results
+
+    # Lay out final row
+    if row and row_area > 0:
+        row_w = row_area / total * (w if vertical else h)
+        offset = 0
+        for r in row:
+            frac = r["_area"] / row_area if row_area > 0 else 0
+            if vertical:
+                rh = frac * h
+                results.append((r, x, y + offset, row_w, rh))
+                offset += rh
+            else:
+                rw = frac * w
+                results.append((r, x + offset, y, rw, row_w))
+                offset += rw
+
+    return results
+
+
+def render_treemap(transactions, width=70, height=22):
+    """Render a squarified treemap of transactions as colored blocks."""
     if not transactions:
         return Text("No transactions", style="dim")
 
     fee_rates = [t["fee_rate"] for t in transactions]
     min_rate = min(fee_rates) if fee_rates else 1
-    max_rate = max(fee_rates) if fee_rates else 100
+    max_rate = max(max(fee_rates), min_rate + 1) if fee_rates else 100
 
     total_vsize = sum(t["vsize"] for t in transactions)
     if total_vsize == 0:
         return Text("Empty block", style="dim")
 
-    # Build grid
-    grid = [[None for _ in range(width)] for _ in range(height)]
-    cursor_x, cursor_y = 0, 0
-
+    # Prepare items with normalized areas
+    items = []
     for tx in transactions:
-        area = max(1, int((tx["vsize"] / total_vsize) * width * height * 0.85))
-        rect_w = max(1, min(int(math.sqrt(area * 2)), width - cursor_x))
-        rect_h = max(1, min(area // max(rect_w, 1), height - cursor_y))
+        tx_copy = dict(tx)
+        tx_copy["_area"] = max(0.5, tx["vsize"] / total_vsize * width * height)
+        items.append(tx_copy)
 
-        if cursor_x + rect_w > width:
-            cursor_x = 0
-            cursor_y += rect_h
-            if cursor_y >= height:
-                break
+    # Sort by area descending for better squarification
+    items.sort(key=lambda x: x["_area"], reverse=True)
 
-        r, g, b = fee_to_color(tx["fee_rate"], min_rate, max_rate)
-        for dy in range(rect_h):
-            for dx in range(rect_w):
-                gy, gx = cursor_y + dy, cursor_x + dx
-                if gy < height and gx < width:
-                    grid[gy][gx] = (r, g, b, tx)
+    # Compute layout
+    rects = _squarify_layout(items, 0, 0, width, height)
 
-        cursor_x += rect_w
-        if cursor_x >= width:
-            cursor_x = 0
-            cursor_y += rect_h
+    # Build grid with borders
+    grid = [[(30, 30, 30, None) for _ in range(width)] for _ in range(height)]
+    border_grid = [[False for _ in range(width)] for _ in range(height)]
 
-    # Render grid to Text
+    for tx_data, rx, ry, rw, rh in rects:
+        ix, iy = int(rx), int(ry)
+        iw, ih = max(1, int(rx + rw) - ix), max(1, int(ry + rh) - iy)
+        r, g, b = fee_to_color(tx_data["fee_rate"], min_rate, max_rate)
+
+        for dy in range(ih):
+            for dx in range(iw):
+                gx, gy = ix + dx, iy + dy
+                if 0 <= gy < height and 0 <= gx < width:
+                    # Border detection
+                    is_border = (dx == 0 or dy == 0 or dx == iw - 1 or dy == ih - 1)
+                    if is_border and (iw > 2 and ih > 2):
+                        border_grid[gy][gx] = True
+                        # Darken color for border
+                        grid[gy][gx] = (max(0, r - 50), max(0, g - 50), max(0, b - 50), tx_data)
+                    else:
+                        grid[gy][gx] = (r, g, b, tx_data)
+
+    # Render to Text using half-block characters for 2x vertical resolution
     text = Text()
-    for row in grid:
-        for cell in row:
-            if cell is None:
-                text.append("░", style="rgb(40,40,40)")
-            else:
-                r, g, b, tx = cell
-                luma = r * 0.299 + g * 0.587 + b * 0.114
-                fg = "black" if luma > 128 else "white"
-                text.append("█", style=f"{fg} on rgb({r},{g},{b})")
+    for y in range(0, height - 1, 2):
+        for x in range(width):
+            r1, g1, b1, _ = grid[y][x]
+            r2, g2, b2, _ = grid[y + 1][x] if y + 1 < height else (30, 30, 30, None)
+            # ▀ = top half block: fg=top color, bg=bottom color
+            text.append("▀", style=f"rgb({r1},{g1},{b1}) on rgb({r2},{g2},{b2})")
         text.append("\n")
 
     return text
@@ -230,19 +328,16 @@ def render_treemap(transactions, width=70, height=20):
 def render_legend(min_rate=1, max_rate=100, width=50):
     """Render a color legend bar for fee rates."""
     text = Text()
-    text.append("    Fee Rate (sat/vB): ", style="dim")
-    text.append(f"{min_rate:.0f}", style="bold")
-    text.append(" ")
+    text.append("  Low ", style="bold cyan")
 
-    steps = min(width, 40)
+    steps = min(width, 50)
     for i in range(steps):
         rate = min_rate + (max_rate - min_rate) * (i / steps)
         r, g, b = fee_to_color(rate, min_rate, max_rate)
         text.append("█", style=f"rgb({r},{g},{b})")
 
-    text.append(" ")
-    text.append(f"{max_rate:.0f}", style="bold")
-    text.append(" sat/vB", style="dim")
+    text.append(" High", style="bold red")
+    text.append(f"   ({min_rate:.0f} - {max_rate:.0f} sat/vB)", style="dim")
     return text
 
 
@@ -351,8 +446,8 @@ def render_full_block(block_data, term_width=None):
     min_rate = min(fee_rates)
     max_rate = max(fee_rates)
 
-    map_width = min(term_width - 4, 80)
-    map_height = min(22, max(10, len(txs) // 20))
+    map_width = min(term_width - 6, 120)
+    map_height = min(30, max(14, len(txs) // 15))
 
     treemap = render_treemap(txs, width=map_width, height=map_height)
     legend = render_legend(min_rate, max_rate, width=map_width)
