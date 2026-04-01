@@ -23,6 +23,12 @@ RUN git clone --branch 1.7.7 --depth 1 https://github.com/tsl0922/ttyd.git \
     && make install \
     && cd /app && rm -rf ttyd
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       python3-dev libgmp-dev libffi-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 
