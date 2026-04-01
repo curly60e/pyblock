@@ -26,6 +26,7 @@ from imgterminal import createimagebitaxe, set_terminal_background
 from datetime import datetime, timedelta
 from sha256 import ex
 from cfonts import render, say
+from SPV.spvblock import MainMenuCROPPED
 from clone import gitclone, satnode
 from donation import donationAddr, donationPayNym, donationLN, donationAddrTst, donationLNTst, decodeQR
 from feed import readFile
