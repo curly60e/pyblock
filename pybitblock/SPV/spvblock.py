@@ -5135,20 +5135,22 @@ def runTheNumbersMenu():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Countdown Block
-    \033[1;32;40mB.\033[0;37;40m Countdown Halving
-    \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
-    \033[1;32;40mE.\033[0;37;40m Missing Transactions
-    \033[1;32;40mU.\033[0;37;40m Bitcoin Unspendable
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version ))
-    runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] Countdown Block")
+    rich_console.print("    [bold cyan]B.[/] Countdown Halving")
+    rich_console.print("    [bold cyan]C.[/] Audit")
+    rich_console.print("    [bold cyan]D.[/] Templates & Blocks")
+    rich_console.print("    [bold cyan]E.[/] Missing Transactions")
+    rich_console.print("    [bold cyan]U.[/] Bitcoin Unspendable")
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    runTheNumbersControl(rich_prompt("Select option"))
 
 def runTheNumbersMenuConn():
     clear()
@@ -5161,20 +5163,22 @@ def runTheNumbersMenuConn():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Countdown Block
-    \033[1;32;40mB.\033[0;37;40m Countdown Halving
-    \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
-    \033[1;32;40mE.\033[0;37;40m Missing Transactions
-    \033[1;32;40mU.\033[0;37;40m Bitcoin Unspendable
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version ))
-    runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] Countdown Block")
+    rich_console.print("    [bold cyan]B.[/] Countdown Halving")
+    rich_console.print("    [bold cyan]C.[/] Audit")
+    rich_console.print("    [bold cyan]D.[/] Templates & Blocks")
+    rich_console.print("    [bold cyan]E.[/] Missing Transactions")
+    rich_console.print("    [bold cyan]U.[/] Bitcoin Unspendable")
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    runTheNumbersControlConn(rich_prompt("Select option"))
 
 def weatherMenuOnchainONLY():
     clear()
@@ -5497,6 +5501,8 @@ def mempoolmenuOnchainONLY():
 
 
 def APILnbit():
+    from rich.columns import Columns
+    from rich.text import Text as RText
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
         with open("lnbitSN.conf", "r") as f:
@@ -5512,25 +5518,44 @@ def APILnbit():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print(f"    LNBits SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
 
-    \033[0;37;40mLNBits SN:{} \033[1;34;40mPremium\033[0;37;40m
+    col1 = RText()
+    col1.append("  INVOICES\n", style="bold yellow underline")
+    col1.append("  A.  ", style="bold yellow")
+    col1.append("New Invoice\n", style="white")
+    col1.append("  B.  ", style="bold yellow")
+    col1.append("Pay Invoice\n", style="white")
 
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m New PayWall
-    \033[1;32;40mD.\033[0;37;40m Delete PayWall
-    \033[1;32;40mE.\033[0;37;40m List PayWalls
-    \033[1;32;40mF.\033[0;37;40m Create LNURL
-    \033[1;32;40mG.\033[0;37;40m List LNURL
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
-    menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    col2 = RText()
+    col2.append("  MANAGE\n", style="bold cyan underline")
+    col2.append("  C.  ", style="bold cyan")
+    col2.append("New PayWall\n", style="white")
+    col2.append("  D.  ", style="bold cyan")
+    col2.append("Delete PayWall\n", style="white")
+    col2.append("  E.  ", style="bold cyan")
+    col2.append("List PayWalls\n", style="white")
+    col2.append("  F.  ", style="bold cyan")
+    col2.append("Create LNURL\n", style="white")
+    col2.append("  G.  ", style="bold cyan")
+    col2.append("List LNURL\n", style="white")
+
+    rich_console.print(Columns([col1, col2], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNBPI(rich_prompt("Select option"))
 
 def APILnbitOnchainONLY():
+    from rich.columns import Columns
+    from rich.text import Text as RText
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
         with open("lnbitSN.conf", "r") as f:
@@ -5546,23 +5571,40 @@ def APILnbitOnchainONLY():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print(f"    LNBits SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
 
-    \033[0;37;40mLNBits SN:{} \033[1;34;40mPremium\033[0;37;40m
+    col1 = RText()
+    col1.append("  INVOICES\n", style="bold yellow underline")
+    col1.append("  A.  ", style="bold yellow")
+    col1.append("New Invoice\n", style="white")
+    col1.append("  B.  ", style="bold yellow")
+    col1.append("Pay Invoice\n", style="white")
 
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m New PayWall
-    \033[1;32;40mD.\033[0;37;40m Delete PayWall
-    \033[1;32;40mE.\033[0;37;40m List PayWalls
-    \033[1;32;40mF.\033[0;37;40m Create LNURL
-    \033[1;32;40mG.\033[0;37;40m List LNURL
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, b, version, bitLN['NN'] ))
-    menuLNBPIOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    col2 = RText()
+    col2.append("  MANAGE\n", style="bold cyan underline")
+    col2.append("  C.  ", style="bold cyan")
+    col2.append("New PayWall\n", style="white")
+    col2.append("  D.  ", style="bold cyan")
+    col2.append("Delete PayWall\n", style="white")
+    col2.append("  E.  ", style="bold cyan")
+    col2.append("List PayWalls\n", style="white")
+    col2.append("  F.  ", style="bold cyan")
+    col2.append("Create LNURL\n", style="white")
+    col2.append("  G.  ", style="bold cyan")
+    col2.append("List LNURL\n", style="white")
+
+    rich_console.print(Columns([col1, col2], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNBPIOnchainONLY(rich_prompt("Select option"))
 
 def APILnPay():
     bitLN = {"NN":"","pd":""}
@@ -5580,21 +5622,23 @@ def APILnPay():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mLNPay SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Invoices
-    \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
-    menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print(f"    LNPay SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Invoices")
+    rich_console.print("    [bold cyan]E.[/] Transfer Between Wallets")
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNPAY(rich_prompt("Select option"))
 
 def APILnPayOnchainONLY():
     bitLN = {"NN":"","pd":""}
@@ -5612,21 +5656,23 @@ def APILnPayOnchainONLY():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mLNPay SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Invoices
-    \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
-    menuLNPAYOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print(f"    LNPay SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Invoices")
+    rich_console.print("    [bold cyan]E.[/] Transfer Between Wallets")
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNPAYOnchainONLY(rich_prompt("Select option"))
 
 def APIOpenNode():
     bitLN = {"NN":"","pd":""}
@@ -5644,21 +5690,23 @@ def APIOpenNode():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mOpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Payments
-    \033[1;32;40mS.\033[0;37;40m Status
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
-    menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print(f"    OpenNode SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Payments")
+    rich_console.print("    [bold cyan]S.[/] Status")
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuOpenNode(rich_prompt("Select option"))
 
 def APIOpenNodeOnchainONLY():
     bitLN = {"NN":"","pd":""}
@@ -5676,21 +5724,23 @@ def APIOpenNodeOnchainONLY():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mOpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Payments
-    \033[1;32;40mS.\033[0;37;40m Status
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version, bitLN['NN'] ))
-    menuOpenNodeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print(f"    OpenNode SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Payments")
+    rich_console.print("    [bold cyan]S.[/] Status")
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuOpenNodeOnchainONLY(rich_prompt("Select option"))
 
 def APITippinMe():
     clear()
@@ -6118,6 +6168,8 @@ def colorsSelectRainbowEnd():
     menuColorsSelectRainbowEnd(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def nostrConn():
+    from rich.columns import Columns
+    from rich.text import Text as RText
     clear()
     blogo()
     sysinfo()
@@ -6128,24 +6180,44 @@ def nostrConn():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
 
-    \033[1;32;40mA.\033[0;37;40m Linux   x64
-    \033[1;32;40mB.\033[0;37;40m Linux   arm64
-    \033[1;32;40mC.\033[0;37;40m Mac     x64
-    \033[1;32;40mD.\033[0;37;40m Mac     arm64 (SOON)
-    \033[1;32;40mE.\033[0;37;40m Windows
-    \033[1;32;40mS.\033[0;37;40m Bip39
-    \033[1;32;40mW.\033[0;37;40m QR
-    \033[1;32;40mZ.\033[0;37;40m Bija
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version ))
-    nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    col1 = RText()
+    col1.append("  CONSOLE\n", style="bold cyan underline")
+    col1.append("  A.  ", style="bold cyan")
+    col1.append("Linux   x64\n", style="white")
+    col1.append("  B.  ", style="bold cyan")
+    col1.append("Linux   arm64\n", style="white")
+    col1.append("  C.  ", style="bold cyan")
+    col1.append("Mac     x64\n", style="white")
+    col1.append("  D.  ", style="bold cyan")
+    col1.append("Mac     arm64 (SOON)\n", style="white")
+    col1.append("  E.  ", style="bold cyan")
+    col1.append("Windows\n", style="white")
+
+    col2 = RText()
+    col2.append("  TOOLS\n", style="bold green underline")
+    col2.append("  S.  ", style="bold green")
+    col2.append("Bip39\n", style="white")
+    col2.append("  W.  ", style="bold green")
+    col2.append("QR\n", style="white")
+    col2.append("  Z.  ", style="bold green")
+    col2.append("Bija\n", style="white")
+
+    rich_console.print(Columns([col1, col2], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    nostrmenu(rich_prompt("Select option"))
 
 def PhoenixConn():
+    from rich.columns import Columns
+    from rich.text import Text as RText
     clear()
     blogo()
     sysinfo()
@@ -6156,21 +6228,38 @@ def PhoenixConn():
     di = json.loads(nn)
     a = di
     b = str(a)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{b}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
 
-    \033[1;32;40mA.\033[0;37;40m Linux
-    \033[1;32;40mB.\033[0;37;40m Mac   arm64
-    \033[1;32;40mC.\033[0;37;40m Mac     x64
-    \033[1;32;40mD.\033[0;37;40m Windows
-    \033[1;32;40mE.\033[0;37;40m Manage
-    \033[1;32;40mF.\033[0;37;40m Invoice Maker
-    \033[1;32;40mG.\033[0;37;40m BOLT12
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version ))
-    phoenixmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    col1 = RText()
+    col1.append("  INSTALL\n", style="bold cyan underline")
+    col1.append("  A.  ", style="bold cyan")
+    col1.append("Linux\n", style="white")
+    col1.append("  B.  ", style="bold cyan")
+    col1.append("Mac   arm64\n", style="white")
+    col1.append("  C.  ", style="bold cyan")
+    col1.append("Mac     x64\n", style="white")
+    col1.append("  D.  ", style="bold cyan")
+    col1.append("Windows\n", style="white")
+
+    col2 = RText()
+    col2.append("  MANAGE\n", style="bold green underline")
+    col2.append("  E.  ", style="bold green")
+    col2.append("Manage\n", style="white")
+    col2.append("  F.  ", style="bold green")
+    col2.append("Invoice Maker\n", style="white")
+    col2.append("  G.  ", style="bold green")
+    col2.append("BOLT12\n", style="white")
+
+    rich_console.print(Columns([col1, col2], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    phoenixmenu(rich_prompt("Select option"))
 
 def OceanConn():
     clear()
