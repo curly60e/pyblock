@@ -70,7 +70,7 @@ from shared.display import clear, close, sysinfo, rectangle, delay_print
 from shared.formatting import get_ansi_color_code, get_color
 from shared.ui import status_bar, show_error, loading
 from shared.rich_ui import (
-    console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
+    console as rich_console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
 )
 logger = get_logger("PyBlock")
 
@@ -2028,11 +2028,11 @@ def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_onl
         col4.append("  W.  ", style="bold yellow")
         col4.append("Wallet\n", style="white")
 
-    console.print()
-    console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
-    console.print()
-    console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
-    console.print()
+    rich_console.print()
+    rich_console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
     print("\x1b[?25h")
     bitcoincoremenuLocalControl(rich_prompt("Select option"), mode)
 
