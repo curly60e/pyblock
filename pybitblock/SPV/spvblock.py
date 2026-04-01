@@ -9,6 +9,7 @@ import psutil
 import html2text
 import qrcode
 import random
+import shlex
 import xmltodict
 import sys
 import subprocess
@@ -536,12 +537,12 @@ def bitaxeA(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        ip = "http://"
-        ep = responseC
-        pi = "/api/ws"        
-        list = subprocess.Popen(['curl', ip+ep+pi])
-        input("\a\n...Loading Logs...\n\n")
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        url = f"http://{responseC}/api/ws"
+        try:
+            r = requests.get(url, timeout=10)
+            print(r.text)
+        except requests.RequestException as e:
+            print(f"Error connecting to Bitaxe: {e}")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -556,8 +557,11 @@ def bitaxeB(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -s 'http://{responseC}/api/system/info' | jq -C """
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        try:
+            r = requests.get(f"http://{responseC}/api/system/info", timeout=10)
+            a = json.dumps(r.json(), indent=2)
+        except requests.RequestException as e:
+            a = f"Error: {e}"
         print("\nBitAxe ip: " + responseC)
         print("\nSystem Info:\n" + a)
         input("\a\nContinue...")
@@ -574,8 +578,11 @@ def bitaxeC(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
-        list = f"""curl -s -X POST 'http://{responseC}/api/system/restart' """
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        try:
+            r = requests.post(f"http://{responseC}/api/system/restart", timeout=10)
+            a = r.text
+        except requests.RequestException as e:
+            a = f"Error: {e}"
         print("\nBitAxe ip: " + responseC)
         print("\nBitAxe Restarting:\n" + a)
         input("\a\nContinue...")
@@ -611,10 +618,14 @@ def callPhoenixLin():
         output = render(
             "Phoenix Linux", colors=['yellow'], align='left', font='tiny'
         )
-        if os.path.isdir ('phoenixwallet'):
-            subprocess.run("cd phoenixwallet && rm -rf phoenix-0.3.0-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip", shell=True)
-        else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip && unzip -j phoenix-0.3.0-linux-x64.zip", shell=True)
+        phoenix_url = "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip"
+        if os.path.isdir('phoenixwallet'):
+            subprocess.run(["rm", "-rf", "phoenix-0.3.0-linux-x64.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+        else:
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "phoenix-0.3.0-linux-x64.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -623,7 +634,7 @@ def callPhoenixLin():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -635,10 +646,14 @@ def callPhoenixWin():
         output = render(
             "Phoenix Windows", colors=['yellow'], align='left', font='tiny'
         )
-        if os.path.isdir ('phoenixwallet'):
-            subprocess.run("cd phoenixwallet && rm -rf v0.3.0.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip", shell=True)
-        else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip && unzip -j v0.3.0.zip", shell=True)
+        phoenix_url = "https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip"
+        if os.path.isdir('phoenixwallet'):
+            subprocess.run(["rm", "-rf", "v0.3.0.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+        else:
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "v0.3.0.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -647,7 +662,7 @@ def callPhoenixWin():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -659,10 +674,14 @@ def callPhoenixMacX64():
         output = render(
             "Phoenix MacOSX64", colors=['yellow'], align='left', font='tiny'
         )
-        if os.path.isdir ('phoenixwallet'):
-            subprocess.run("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip", shell=True)
-        else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip && unzip -j phoenix-0.3.0-macos-x64.zip", shell=True)
+        phoenix_url = "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip"
+        if os.path.isdir('phoenixwallet'):
+            subprocess.run(["rm", "-rf", "phoenix-0.3.0-macos-x64.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+        else:
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", phoenix_url], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "phoenix-0.3.0-macos-x64.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -671,7 +690,7 @@ def callPhoenixMacX64():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -710,27 +729,10 @@ def callPhoenix():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli --help", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
-        responseC = input("\a\nCType a command of the list: ")
-        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
+        subprocess.run(["./phoenix-cli", "--help"], cwd="phoenixwallet")
+        for _ in range(10):
+            responseC = input("\a\nType a command of the list: ")
+            subprocess.run(["./phoenix-cli"] + shlex.split(responseC), cwd="phoenixwallet")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -746,7 +748,15 @@ def wallPhoenix():
         responseC = input("Your PhoenixD Password: ")
         responseD = input("Your Description: ")
         responseE = input("Amount in Sats: ")
-        subprocess.run(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'", shell=True)
+        try:
+            r = requests.post(
+                "http://localhost:9740/createinvoice",
+                auth=("", responseC),
+                data={"description": responseD, "amountSat": responseE}
+            )
+            print(r.text)
+        except requests.RequestException as e:
+            print(f"Error creating invoice: {e}")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -760,7 +770,11 @@ def wallPhoenixBOLT12():
         "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
         )
         responseC = input("Your PhoenixD Password: ")
-        subprocess.run(f"curl -s 'http://localhost:9740/getoffer' -u :{responseC}", shell=True)
+        try:
+            r = requests.get("http://localhost:9740/getoffer", auth=("", responseC))
+            print(r.text)
+        except requests.RequestException as e:
+            print(f"Error getting offer: {e}")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -990,27 +1004,11 @@ def luxorstats():
         clear()
         blogo()
         print(output)
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py --help", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
-        responseC = input("\a\nCType a command of the list: ")
-        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
+        luxor_cwd = os.path.join("luxor", "graphql-python-client")
+        subprocess.run(["python3", "luxor.py", "--help"], cwd=luxor_cwd)
+        for _ in range(10):
+            responseC = input("\a\nType a command of the list: ")
+            subprocess.run(["python3", "luxor.py"] + shlex.split(responseC), cwd=luxor_cwd)
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
