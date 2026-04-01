@@ -27,7 +27,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install Poetry
-        run: curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.8.3
+          rm install-poetry.py
 
       - name: Configure Poetry
         run: |
@@ -55,7 +58,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install Poetry
-        run: curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.8.3
+          rm install-poetry.py
 
       - name: Configure Poetry
         run: |
@@ -73,6 +79,4 @@ jobs:
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          poetry publish --no-interaction --username __token__ --password ${{ secrets.PYPI_API_TOKEN }}
-
-
+          poetry publish --no-interaction
