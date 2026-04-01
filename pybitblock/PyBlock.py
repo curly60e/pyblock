@@ -7407,6 +7407,14 @@ def main():
         except KeyboardInterrupt:
             print("\n")
             sys.exit(0)
+        except PermissionError as e:
+            if str(e).endswith("''"):
+                show_error("Bitcoin CLI path is not configured. Please set it up.")
+                logger.error("Empty bitcoincli path in bclock.conf")
+                introINIT()
+            else:
+                logger.error("Fatal error: %s", e)
+                sys.exit(101)
         except Exception as e:
             logger.error("Fatal error: %s", e)
             sys.exit(101)
