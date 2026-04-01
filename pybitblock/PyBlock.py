@@ -68,6 +68,9 @@ from log import get_logger
 from shared.display import clear, close, sysinfo, rectangle, delay_print
 from shared.formatting import get_ansi_color_code, get_color
 from shared.ui import status_bar, show_error, loading
+from shared.rich_ui import (
+    console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
+)
 logger = get_logger("PyBlock")
 
 
@@ -1864,41 +1867,28 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
         d = b
         alias = None
 
-    # Status bar
-    status_bar(mode=mode, block_height=str(d.get('blocks', '')), btc_price=_btc_price)
+    # Rich status bar and header
+    rich_status_bar(mode=mode, block_height=str(d.get('blocks', '')), btc_price=_btc_price)
+    alias_name = alias.get('alias', '') if alias else None
+    rich_header(n, str(d.get('blocks', '')), version, alias=alias_name)
 
-    # Build header
-    if alias is not None:
-        header = """\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, alias['alias'], d['blocks'], version)
-    else:
-        header = """\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, d['blocks'], version)
-
-    # Build menu items
-    menu_items = """
-
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin"""
-
+    # Rich menu
+    items = [
+        ("A", "PyBLOCK", "red"),
+        ("B", "Bitcoin", "rgb(255,102,0)"),
+    ]
     if mode != "onchain_only":
-        menu_items += """
-    \u001b[33;1mL.\033[0;37;40m Lightning"""
+        items.append(("L", "Lightning", "yellow"))
+    items.extend([
+        ("P", "Platforms", "rgb(0,200,0)"),
+        ("S", "Settings", "blue"),
+        ("X", "Donate", "white"),
+        ("Q", "Exit", "rgb(128,0,255)"),
+    ])
+    rich_menu("Main Menu", items)
 
-    menu_items += """
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h"""
-
-    print(header + menu_items)
-    mainmenuControl(input("\033[1;32;40mSelect option: \033[0;37;40m"), mode)
+    print("\x1b[?25h")
+    mainmenuControl(rich_prompt("Select option"), mode)
 
 def MainMenuLOCAL(): #Main Menu
     MainMenu("local")

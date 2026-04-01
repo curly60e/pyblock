@@ -37,6 +37,9 @@ from log import get_logger
 from shared.display import clear, close, sysinfo, rectangle, delay_print
 from shared.formatting import get_ansi_color_code, get_color
 from shared.ui import status_bar, show_error, loading
+from shared.rich_ui import (
+    console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
+)
 logger = get_logger("SPV")
 
 
@@ -4627,22 +4630,22 @@ def MainMenuCROPPED(): #Main Menu
         _btc_price = f"{_price_r.json().get('USD', ''):,}"
     except Exception:
         _btc_price = ""
-    status_bar(mode="lite", block_height=b, btc_price=_btc_price)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    rich_status_bar(mode="lite", block_height=b, btc_price=_btc_price)
+    rich_header(n, b, version)
 
+    items = [
+        ("A", "PyBLOCK", "red"),
+        ("B", "Bitcoin", "rgb(255,102,0)"),
+        ("L", "Lightning", "yellow"),
+        ("P", "Platforms", "rgb(0,200,0)"),
+        ("S", "Settings", "blue"),
+        ("X", "Donate", "white"),
+        ("Q", "Exit", "rgb(128,0,255)"),
+    ]
+    rich_menu("Main Menu", items)
 
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
-    \u001b[33;1mL.\033[0;37;40m Lightning
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n,b, version ))
-    mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    print("\x1b[?25h")
+    mainmenuLOCALcontrol(rich_prompt("Select option"))
 
 def bitcoincoremenuLOCAL():
     clear()
