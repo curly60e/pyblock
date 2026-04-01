@@ -4,6 +4,7 @@
 
 import os
 import os.path
+import subprocess
 import time as t
 
 
@@ -16,9 +17,9 @@ def readFile():
                 continue
             else:
                 print("\t\t\n\033[1;33;40mNew message from Space just arrived...\033[0;37;40m\n")
-                os.system("cat downloads/*")
-                os.system("rm downloads/*")
+                subprocess.run(['cat'] + [os.path.join('downloads', f) for f in os.listdir('downloads')])
+                subprocess.run(['rm'] + [os.path.join('downloads', f) for f in os.listdir('downloads')])
 
-    except:
-        os.system("ps -ef | grep api_data_reader.py | grep -v grep | awk '{print $2}' | xargs kill -9")
-        os.system("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9")
+    except Exception:
+        subprocess.run(['pkill', '-f', 'api_data_reader.py'])
+        subprocess.run(['pkill', '-f', 'demo-rx.py'])

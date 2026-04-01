@@ -94,7 +94,7 @@ class Lnd:
         try:
             response = self.stub.QueryRoutes(request)
             return response.routes
-        except:
+        except Exception:
             return None
 
     def send_payment(self, payment_request, route):

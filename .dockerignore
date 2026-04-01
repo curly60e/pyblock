@@ -1,0 +1,16 @@
+.git
+__pycache__
+*.pyc
+*.pyo
+.github
+.venv
+*.egg-info
+dist/
+build/
+*.pickle.bak
+*.pickle
+.pytest_cache/
+.mypy_cache/
+.env
+.env.*
+*.log

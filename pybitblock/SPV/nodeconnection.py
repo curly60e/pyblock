@@ -4,19 +4,20 @@
 
 
 import base64, codecs, json, requests
-import pickle
+import subprocess
 import os
 import os.path
 import qrcode
 import sys
-import simplejson as json
 import time as t
 import numpy as np
 from cfonts import render, say
-from art import *
-from pblogo import *
+from pblogo import blogo
 from PIL import Image
 from robohash import Robohash
+from config import cfg
+from log import get_logger
+logger = get_logger("SPV.nodeconnection")
 
 
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
@@ -24,23 +25,22 @@ settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 def closed():
     print("<<< Back Control + C.\n\n")
 
 #-------------------------RPC BITCOIN NODE CONNECTION
 
-def rpc(method, params=[]):
+def rpc(method, params=None):
+    if params is None:
+        params = []
     payload = json.dumps({
         "jsonrpc": "2.0",
         "id": "minebet",
         "method": method,
         "params": params
     })
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
+    path = cfg.path
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 def remoteHalving():
@@ -48,37 +48,37 @@ def remoteHalving():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def remotegetblock():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def remoteconsole(): # get into the console from bitcoin-cli
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def runthenumbersConn():
     try:
-        conn = """curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C """
-        a = os.popen(conn).read()
+        conn = 'curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C '
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -86,28 +86,27 @@ def runthenumbersConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def localFullProtocol():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
 
     proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = os.popen(proto1).read()
-    p2 = os.popen(proto2).read()
-    p3 = os.popen(proto3).read()
+    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
+    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
+    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
 
     proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = os.popen(proto1).list()
-    p2 = os.popen(proto2).list()
-    p3 = os.popen(proto3).list()
+    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
+    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
+    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
 
 #--------------------------------- NYMs -----------------------------------
 
@@ -125,8 +124,7 @@ def get_color(r, g, b):
     return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
 
 def channels():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
@@ -218,7 +216,8 @@ def channels():
                     print("----------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
-        except:
+        except Exception as e:
+            logger.debug("nodeconnection: %s", e)
             break
 
 def channelbalance():
@@ -226,24 +225,24 @@ def channelbalance():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def listonchaintxs():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def balanceOC():
     try:
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 # END Remote connection with rest -------------------------------------
 #---------------------------------OPENDIME-----------------------------

@@ -7,6 +7,7 @@ __pycache__/
 
 # pyblock stuff
 pyblocksettings.conf
+*.pickle.bak
 
 # C extensions
 *.so
@@ -104,3 +105,20 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local env overrides
+.env.local
+.env.*.local
+
+# Debug logs
+debug_*.log

@@ -1,14 +1,15 @@
-import pickle
+import json
 import os
+import subprocess
 import sys
-import base64, codecs, json, requests
+import base64, codecs, requests
 import time as t
 from cfonts import render, say
 
 
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 def rectangle(n):
     x = n - 3
@@ -33,11 +34,13 @@ def rectangle(n):
 def blogo():
 
     if os.path.isfile('config/pyblocksettings.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("config/pyblocksettings.conf", "rb")) # Load the file 'bclock.conf'
-        settings = settingsv # Copy the variable pathv to 'path'
+        with open("config/pyblocksettings.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
+            settings = settingsv # Copy the variable pathv to 'path'
     else:
         settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
+        with open("config/pyblocksettings.conf", "w") as f:
+            json.dump(settings, f, indent=2)
 
     if settings["gradient"] == "grd":
         output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='center', font=settings['design'])
@@ -51,35 +54,38 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
         try:
             clear()
             design()
-        except:
+        except Exception:
             break
 
 def pathexec():
     global path
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
+    with open("config/bclock.conf", "r") as f:
+        pathv = json.load(f) # Load the file 'bclock.conf'
+        path = pathv # Copy the variable pathv to 'path'
 
 def design():
     while True:
         if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
-            settingsClock = settingsv # Copy the variable pathv to 'path'
+            with open("config/pyblocksettingsClock.conf", "r") as f:
+                settingsv = json.load(f) # Load the file 'bclock.conf'
+                settingsClock = settingsv # Copy the variable pathv to 'path'
         else:
             settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-            pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
+            with open("config/pyblocksettingsClock.conf", "w") as f:
+                json.dump(settingsClock, f, indent=2)
         bitcoinclient = path['bitcoincli'] + " getblockcount"
-        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
         b = block
         a = b
         blogo()
         output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
         print("\x1b[?25l" + output)
         bitcoinclient = path['bitcoincli'] + " getbestblockhash"
-        bb = os.popen(str(bitcoinclient)).read()
+        bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
         ll = bb
         bitcoinclientgetblock = path['bitcoincli'] + " getblock " + ll
-        qq = os.popen(bitcoinclientgetblock).read()
+        qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
         yy = json.loads(qq)
         mm = yy
         outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
@@ -93,7 +99,7 @@ def design():
         while True:
             x = a
             bitcoinclient = path['bitcoincli'] + " getblockcount"
-            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
             b = block
             if b > a:
                 clear()
@@ -101,10 +107,10 @@ def design():
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
                 print("\a\x1b[?25l" + output)
                 bitcoinclient = path['bitcoincli'] + " getbestblockhash"
-                bb = os.popen(str(bitcoinclient)).read()
+                bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
                 ll = bb
                 bitcoinclientgetblock = path['bitcoincli'] + " getblock " + ll
-                qq = os.popen(bitcoinclientgetblock).read()
+                qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
                 yy = json.loads(qq)
                 mm = yy
                 outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
@@ -138,8 +144,9 @@ while True: # Loop
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
+            with open("config/bclock.conf", "r") as f:
+                pathv = json.load(f) # Load the file 'bclock.conf'
+                path = pathv # Copy the variable pathv to 'path'
         else:
             blogo()
             print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
@@ -152,10 +159,11 @@ while True: # Loop
             path['rpcpass'] = input("RPC Password: ")
             print("\n\tLocal Bitcoin Node connection.\n")
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-            pickle.dump(path, open("config/bclock.conf", "wb"))
+            with open("config/bclock.conf", "w") as f:
+                json.dump(path, f, indent=2)
         artist()
 
 
-    except:
+    except Exception:
         print("\n")
         sys.exit(101)

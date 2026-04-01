@@ -2,16 +2,16 @@
 #PyBLOCK its a clock of the Bitcoin blockchain.
 
 import os
+import subprocess
+import json
 import qrcode
 import requests
 import time as t
 import sys
-from nodeconnection import *
-from pblogo import *
-from logos import *
+from pblogo import blogo
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 def apisender():
     qr = qrcode.QRCode(
@@ -34,11 +34,9 @@ def apisender():
     sentby = " - PyBLOCK."
     print("\n\tATENTION: YOU NEED TO PAY \033[1;31;40m" + q + "\033[0;37;40m MilliSats")
     amountmsat = input("\nInsert the amount in MSats: ")
-    curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
-    sh = os.popen(curl)
+    sh0 = subprocess.run(['curl', '-F', 'bid={}'.format(amountmsat), '-F', 'message=' + message + sentby, url], capture_output=True, text=True).stdout
     clear()
     blogo()
-    sh0 = sh.read()
     while True:
         if 'Bid too low' in sh0:
             print("\n\t\033[1;31;40mATENTION: Per byte bid cannot be below 50 millisatoshis per byte.\033[0;37;40m\n")
@@ -57,11 +55,9 @@ def apisender():
             sentby = " - PyBLOCK."
             print("\n\tATENTION: YOU NEED TO PAY \033[1;31;40m" + q + "\033[0;37;40m MilliSats")
             amountmsat = input("\nInsert the amount in MSats: ")
-            curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "message=' + message + sentby + '" ' + url
-            sh = os.popen(curl)
+            sh0 = subprocess.run(['curl', '-F', 'bid={}'.format(amountmsat), '-F', 'message=' + message + sentby, url], capture_output=True, text=True).stdout
             clear()
             blogo()
-            sh0 = sh.read()
         elif 'lightning_invoice' in sh0:
             break
 
@@ -99,7 +95,7 @@ def apisender():
     node_not = input("Do you want to pay this message with your node? Y/n: ")
     if node_not in ["Y", "y"]:
         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
         if lndconnectload['ip_port']:
             print("\nInvoice: " + cln + "\n")
@@ -131,9 +127,7 @@ def apisenderFile():
     message = input("\nInsert the path to the File: ")
     print("ATENTION: Minimum amount for sending a File is 50000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
-    curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
-    sh = os.popen(curl)
-    sh0 = sh.read()
+    sh0 = subprocess.run(['curl', '-F', 'bid={}'.format(amountmsat), '-F', 'file=@' + message, url], capture_output=True, text=True).stdout
     while True:
         try:
             if 'Bid too low' in sh0:
@@ -143,12 +137,10 @@ def apisenderFile():
                 message = input("\nInsert the path to the File: ")
                 print("ATENTION: Minimum amount for sending a File is 50000 MSats")
                 amountmsat = input("\nInsert the amount in MSats: ")
-                curl = 'curl -F ' "bid={} ".format(amountmsat) + '-F ' + ' "file=@' + message + '" ' + url
-                sh = os.popen(curl)
-                sh0 = sh.read()
+                sh0 = subprocess.run(['curl', '-F', 'bid={}'.format(amountmsat), '-F', 'file=@' + message, url], capture_output=True, text=True).stdout
             elif 'lightning_invoice' in sh0:
                 break
-        except:
+        except Exception:
             break
 
     sh1 = str(sh0)
@@ -186,7 +178,7 @@ def apisenderFile():
         node_not = input("Do you want to pay this message with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + cln + "\n")
@@ -206,7 +198,7 @@ def apisenderFile():
                 donate()
             else:
                 t.sleep(2)
-    except:
+    except Exception:
         pass
 
 def devAddr():
@@ -234,7 +226,7 @@ def devAddr():
         node_not = input("Do you want to pay this tip with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + ln1 + "\n")
@@ -249,7 +241,7 @@ def devAddr():
             print("\033[0;37;40m")
             print("LND Invoice: " + ln1)
             response.close()
-    except:
+    except Exception:
         pass
 
 def donate():

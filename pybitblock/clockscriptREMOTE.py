@@ -1,6 +1,6 @@
 import base64, codecs, json, requests
-import pickle
 import os
+import subprocess
 import sys
 import simplejson as json
 from cfonts import render, say
@@ -11,11 +11,13 @@ settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 def blogo():
 
     if os.path.isfile('pyblocksettings.conf') or os.path.isfile('pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("pyblocksettings.conf", "rb")) # Load the file 'bclock.conf'
-        settings = settingsv # Copy the variable pathv to 'path'
+        with open("pyblocksettings.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
+            settings = settingsv # Copy the variable pathv to 'path'
     else:
         settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settings, open("pyblocksettings.conf", "wb"))
+        with open("pyblocksettings.conf", "w") as f:
+            json.dump(settings, f, indent=2)
 
     if settings["gradient"] == "grd":
         output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='center', font=settings['design'])
@@ -25,11 +27,12 @@ def blogo():
     print(output)
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-    lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    with open("blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
+        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 else:
     clear()
     blogo()
@@ -39,9 +42,12 @@ else:
     lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
     print("\n\tLocal Lightning Node connection.\n")
     lndconnectload["ln"] = input("Insert the path to lncli: ")
-    pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+    with open("blndconnect.conf", "w") as f:
+        json.dump(lndconnectload, f, indent=2) # Save the file 'bclock.conf'
 
-def rpc(method, params=[]):
+def rpc(method, params=None):
+    if params is None:
+        params = []
     payload = json.dumps({
         "jsonrpc": "2.0",
         "id": "minebet",
@@ -50,18 +56,21 @@ def rpc(method, params=[]):
     })
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
+        with open("bclock.conf", "r") as f:
+            pathv = json.load(f) # Load the file 'bclock.conf'
+            path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 
 def remotegetblock():
     if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
-        settingsClock = settingsv # Copy the variable pathv to 'path'
+        with open("pyblocksettingsClock.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
+            settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+        with open("pyblocksettingsClock.conf", "w") as f:
+            json.dump(settingsClock, f, indent=2)
     b = rpc('getblockcount')
     c = str(b)
     a = c
@@ -84,6 +93,6 @@ while True:
         blogo()
         remotegetblock()
         tmp()
-    except:
+    except Exception:
         print("\n")
         sys.exit(101)

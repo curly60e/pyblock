@@ -5,7 +5,6 @@
 import os
 import os.path
 import time as t
-import pickle
 import psutil
 import html2text
 import qrcode
@@ -15,9 +14,6 @@ import sys
 import subprocess
 import requests
 import json
-import term_image
-import simplejson as json
-import numpy as np
 import lastblockdetail
 import block_visualizer
 import mempool_monitor
@@ -26,101 +22,90 @@ import peers_monitor
 import tx_search
 from block_explorer import call_blocks
 from node_monitor import run_display_node_info
-from imgterminal import *
+from imgterminal import createimagebitaxe, set_terminal_background
 from datetime import datetime, timedelta
-from sha256 import *
-from SPV.spvblock import *
+from sha256 import ex
 from cfonts import render, say
-from clone import *
-from donation import *
-from feed import *
-from art import *
-from logos import *
-from sysinf import *
-from pblogo import *
-from apisnd import *
-from ppi import *
+from clone import gitclone, satnode
+from donation import donationAddr, donationPayNym, donationLN, donationAddrTst, donationLNTst, decodeQR
+from feed import readFile
+from logos import logoA, logoB, logoC
+from sysinf import sysinfoDetail
+from pblogo import blogo, tick
+from apisnd import apisender, apisenderFile
+from ppi import (
+    opreturnOnchainONLY, opreturn, opreturn_view, opretminer, gameroom,
+    statsConn, pgpConn, mtConn, satoshiConn, whalalConn, bwtConn,
+    datesConn, quotesConn, miningConn, stalnConn, ranConn, CoingeckoPP,
+    OwnNodeMinerComputer, OwnNodeMinerRaspberry, wttrDataV1, wttrDataV2,
+    rateSXList, rateSXGraph, lnbitCreateNewInvoice, lnbitPayInvoice,
+    lnbitCreatePayWall, lnbitDeletePayWall, lnbitsLNURLw, lnbitsLNURLwList,
+    lnbitListPawWall, createFileConnOpenNode, OpenNodecreatecharge,
+    OpenNodeiniciatewithdrawal, OpenNodelistfunds, OpenNodeListPayments,
+    OpenNodeCheckStatus, tippinmeGetInvoice, blocks, fee,
+)
 from termcolor import colored, cprint
-from nodeconnection import *
-from terminal_matrix.matrix import *
+from nodeconnection import (
+    remoteHalving, remotegetblock, remotegetblockcount, remoteconsole,
+    runthenumbersConn, consoleLN, localaddinvoice, localpayinvoice,
+    localkeysend, localnewaddress, locallistinvoices, localchannelbalance,
+    locallistchannels, localrebalancelnd, locallistpeersQQ, localconnectpeer,
+    localbalanceOC, locallistchaintxns, localgetinfo, localgetnetworkinfo,
+    localchatsendA, localchatnewA, localchatlistA, localchatsendB,
+    localchatnewB, localchatlistB, localchatsendC, localchatnewC,
+    localchatlistC, getnewinvoice, payinvoice, getnewaddress, listinvoice,
+    getinfo, channels, channelbalance, listonchaintxs, balanceOC,
+)
+from terminal_matrix.matrix import doit
 from PIL import Image
 from robohash import Robohash
 from binascii import unhexlify
 from embit import bip39
 from embit.wordlists.bip39 import WORDLIST
-from io import StringIO
+from config import cfg
+from menu import select_color
+from log import get_logger
+from shared.display import clear, close, sysinfo, rectangle, delay_print
+from shared.formatting import get_ansi_color_code, get_color
+from shared.ui import status_bar, show_error, loading
+from shared.rich_ui import (
+    console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
+)
+logger = get_logger("PyBlock")
 
 
 version = "4.0"
 
-def close():
-    print("<<< Ctrl + C.\n\n")
-
-def sysinfo():  #Cpu and memory usage
-    print("    \033[0;37;40m----------------------")
-    print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print(
-        f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
-    )
-
-    print("    \033[0;37;40m----------------------")
-
-def rectangle(n):
-    x = n - 3
-    y = n - x
-    [
-        print(''.join(i))
-        for i in
-        (
-            ''*x
-            if i in (0,y-1)
-            else
-            (
-                f'{""*n}{"|"*n}{""*n}'
-                if i >= (n+1)/2 and i <= (1*n)/2
-                else
-                f'\u001b[38;5;27m{"█"*(x-1)}'
-            )
-            for i in range(y)
-        )
-    ]
-
-def rpc(method, params=[]):
+def rpc(method, params=None):
+    if params is None:
+        params = []
     payload = json.dumps({
         "jsonrpc": "2.0",
         "id": "minebet",
         "method": method,
         "params": params
     })
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    if os.path.isfile('config/bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
-    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+    return requests.post(cfg.path['ip_port'], auth=(cfg.path['rpcuser'], cfg.path['rpcpass']), data=payload).json()['result']
 
 def pathexec():
     global path
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
+    path = cfg.path
 
 def lndconnectexec():
     global lndconnectload
-    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
 #-----------------------------Slush--------------------------------
 
 def counttxs():
     try:
         bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
         b = block
         a = b
         pathexec()
         clear()
         getrawmempool = " getrawmempool"
-        gna = os.popen(path['bitcoincli'] + getrawmempool)
-        gnaa = gna.read()
+        gnaa = subprocess.run([path['bitcoincli']] + getrawmempool.split(), capture_output=True, text=True).stdout
         gna1 = str(gnaa)
         d = json.loads(gna1)
         e = len(d)
@@ -130,11 +115,10 @@ def counttxs():
         while True:
             x = a
             bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
             b = block
             pathexec()
-            gna = os.popen(path['bitcoincli'] + getrawmempool)
-            gnaa = gna.read()
+            gnaa = subprocess.run([path['bitcoincli']] + getrawmempool.split(), capture_output=True, text=True).stdout
             gna1 = str(gnaa)
             d = json.loads(gna1)
             e = len(d)
@@ -159,10 +143,10 @@ def counttxs():
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
                 print("\a\x1b[?25l" + output)
                 bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-                bb = os.popen(str(bitcoinclient)).read()
+                bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
                 ll = bb
                 bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-                qq = os.popen(bitcoinclientgetblock).read()
+                qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
                 yy = json.loads(qq)
                 mm = yy
                 outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
@@ -175,7 +159,7 @@ def counttxs():
                 txs = str(mm['nTx'])
                 if txs == "1":
                     try:
-                        p = subprocess.Popen(['curl', 'http://ascii.live/forrest'])
+                        p = subprocess.Popen(['curl', 'https://ascii.live/forrest'])
                         p.wait(5)
                     except subprocess.TimeoutExpired:
                         p.kill()
@@ -183,13 +167,14 @@ def counttxs():
                 clear()
                 a = b
                 nn = e
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def slDIFFConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/difficulty-stats"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -208,13 +193,14 @@ def slDIFFConn():
 
         """)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def slPOOLConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/pool-stats?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -222,8 +208,9 @@ def slPOOLConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def getPoolSlushCheck():
 
@@ -233,15 +220,16 @@ def getPoolSlushCheck():
     api = ""
     try:
         if os.path.isfile("config/braiinsAPI.conf"):
-            apiv = pickle.load(open("config/braiinsAPI.conf", "rb"))
+            apiv = json.load(open("config/braiinsAPI.conf", "r"))
             api = apiv
         else:
             clear()
             blogo()
             api = input("Insert Braiins API KEY: ")
-            pickle.dump(api, open("config/braiinsAPI.conf", "wb"))
-    except:
-        pass
+            with open("config/braiinsAPI.conf", "w") as f: json.dump(api, f, indent=2)
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
     while True:
         try:
@@ -250,13 +238,11 @@ def getPoolSlushCheck():
             slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
 
 
-            b = os.popen(slushpoolbtc)
-            c = b.read()
+            c = subprocess.run(slushpoolbtc.split(), capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['btc']
 
-            bblock = os.popen(slushpoolbtcblock)
-            cblock = bblock.read()
+            cblock = subprocess.run(slushpoolbtcblock.split(), capture_output=True, text=True).stdout
             dblock = json.loads(cblock)
             fblock = dblock['btc']
             eblock = fblock['blocks']
@@ -300,7 +286,8 @@ def getPoolSlushCheck():
 
             t.sleep(10)
 
-        except:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 
@@ -314,23 +301,23 @@ def ckpoolpoolLOCALOnchainONLY():
     api = ""
     try:
         if os.path.isfile("config/CKPOOLAPI.conf"):
-            apiv = pickle.load(open("config/CKPOOLAPI.conf", "rb"))
+            apiv = json.load(open("config/CKPOOLAPI.conf", "r"))
             api = apiv
         else:
             clear()
             blogo()
             api = input("Insert CKPool Wallet.Worker: ")
-            pickle.dump(api, open("config/CKPOOLAPI.conf", "wb"))
-    except:
-        pass
+            with open("config/CKPOOLAPI.conf", "w") as f: json.dump(api, f, indent=2)
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
     while True:
         try:
             ckpool = f"curl https://solo.ckpool.org/users/{api} 2>/dev/null"
 
 
-            b = os.popen(ckpool)
-            c = b.read()
+            c = subprocess.run(ckpool.split(), capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -361,7 +348,8 @@ def ckpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def callMemL():
@@ -372,14 +360,18 @@ def callMemL():
             "Mempool-cli", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('mempoolcli'):
-            os.system("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_x86_64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz")
+            subprocess.run(["rm", "-rf", "mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz")
+            os.makedirs("mempoolcli", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["tar", "-xvf", "mempool-cli_2.0.4_Linux_x86_64.tar.gz"], cwd="mempoolcli")
         clear()
         blogo()
         print(output)
-        os.system(f"cd mempoolcli && ./mempool-cli")
-    except:
+        subprocess.run(["./mempool-cli"], cwd="mempoolcli")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callMemR():
@@ -390,14 +382,18 @@ def callMemR():
             "Mempool-cli", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('mempoolcli'):
-            os.system("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_arm64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz")
+            subprocess.run(["rm", "-rf", "mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_arm64.tar.gz")
+            os.makedirs("mempoolcli", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
+            subprocess.run(["tar", "-xvf", "mempool-cli_2.0.4_Linux_arm64.tar.gz"], cwd="mempoolcli")
         clear()
         blogo()
         print(output)
-        os.system(f"cd mempoolcli && ./mempool-cli")
-    except:
+        subprocess.run(["./mempool-cli"], cwd="mempoolcli")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def MemShellMenu(menunos):
@@ -414,9 +410,10 @@ def SHS():
         blogo()
         output = render("SHS - Symbolic Hash Satoshi", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"python3 SHS.py")
+        subprocess.run(["python3", "SHS.py"])
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def MemShell():
@@ -428,7 +425,7 @@ def MemShell():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -462,23 +459,23 @@ def pyblockpoolpoolLOCALOnchainONLY():
     api = ""
     try:
         if os.path.isfile("config/PYBLOCKPOOLAPI.conf"):
-            apiv = pickle.load(open("config/PYBLOCKPOOLAPI.conf", "rb"))
+            apiv = json.load(open("config/PYBLOCKPOOLAPI.conf", "r"))
             api = apiv
         else:
             clear()
             blogo()
             api = input("Insert your PyBLOCK Pool Wallet: ")
-            pickle.dump(api, open("config/PYBLOCKPOOLAPI.conf", "wb"))
-    except:
-        pass
+            with open("config/PYBLOCKPOOLAPI.conf", "w") as f: json.dump(api, f, indent=2)
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
     while True:
         try:
             pyblockpool = f"curl https://pyblock.xyz:8443/users/{api} 2>/dev/null"
 
 
-            b = os.popen(pyblockpool)
-            c = b.read()
+            c = subprocess.run(pyblockpool.split(), capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -509,14 +506,15 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
         try:
             bitcoincli = " getblockchaininfo"
-            a = os.popen(path['bitcoincli'] + bitcoincli).read()
+            a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
             b = json.loads(a)
             d = b
             print(d)
@@ -537,7 +535,8 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
             ----------------------------------------------------------------------------
             """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
             t.sleep(10)
-        except:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def searchTXS():
@@ -551,8 +550,7 @@ def searchTXS():
             output = render("search txs", colors=['yellow'], align='left', font='tiny')
             print(output)
             tx = input("Search Tx ID: ")
-            gnt = os.popen(path['bitcoincli'] + gettxout + tx + " 1")
-            gnta = gnt.read()
+            gnta = subprocess.run([path['bitcoincli']] + (gettxout + tx + " 1").split(), capture_output=True, text=True).stdout
             gnt1 = str(gnta)
             gnt2 = json.loads(gnt1)
             if gnt2['bestblock']:
@@ -576,8 +574,9 @@ def searchTXS():
                 print("Is this a \u001b[38;5;40m Coinbase\033[0;37;40m tx?")
 
             input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def untxsConn():
     try:
@@ -591,16 +590,14 @@ def untxsConn():
 
             print(output)
             getrawmempool = " getrawmempool"
-            gna = os.popen(path['bitcoincli'] + getrawmempool)
-            gnaa = gna.read()
+            gnaa = subprocess.run([path['bitcoincli']] + getrawmempool.split(), capture_output=True, text=True).stdout
             gna1 = str(gnaa)
             d = json.loads(gna1)
             getrawtrans = " getrawtransaction "
             for b in d:
                 n = "".join(map(str, b))
                 m = getrawtrans + n + " 1"
-                gnb = os.popen(path['bitcoincli'] + m)
-                gnba = gnb.read()
+                gnba = subprocess.run([path['bitcoincli']] + m.split(), capture_output=True, text=True).stdout
                 gnb1 = str(gnba)
                 abc = json.loads(gnb1)
                 ab = abc['vout']
@@ -624,10 +621,11 @@ def untxsConn():
                         )
 
                         print("OP_RETURN Hex: ")
-                        os.system(decodeTX)
+                        subprocess.run(decodeTX, shell=True)
                 input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def getnewaddressOnchain():
     try:
@@ -644,14 +642,11 @@ def getnewaddressOnchain():
         getbal = " getbalance"
         getfeemempool = " getmempoolinfo"
         getunconfirm = " getunconfirmedbalance"
-        gna = os.popen(path['bitcoincli'] + getadd)
-        gnaa = gna.read()
+        gnaa = subprocess.run([path['bitcoincli']] + getadd.split(), capture_output=True, text=True).stdout
         gna1 = str(gnaa)
-        gnb = os.popen(path['bitcoincli'] + getbal)
-        gnbb= gnb.read()
+        gnbb = subprocess.run([path['bitcoincli']] + getbal.split(), capture_output=True, text=True).stdout
         gnb1 = str(gnbb)
-        gnu = os.popen(path['bitcoincli'] + getunconfirm)
-        gnua= gnu.read()
+        gnua = subprocess.run([path['bitcoincli']] + getunconfirm.split(), capture_output=True, text=True).stdout
         gnub = str(gnua)
         output = render(
             str(f'{gnb1} BTC'), colors=['yellow'], align='left', font='tiny'
@@ -675,14 +670,11 @@ def getnewaddressOnchain():
         while True:
             x = a
             z = b
-            gnb = os.popen(path['bitcoincli'] + getbal)
-            gnbb= gnb.read()
+            gnbb = subprocess.run([path['bitcoincli']] + getbal.split(), capture_output=True, text=True).stdout
             gnb1 = str(gnbb)
-            gnaq = os.popen(path['bitcoincli'] + getfeemempool)
-            gnaaq = gnaq.read()
+            gnaaq = subprocess.run([path['bitcoincli']] + getfeemempool.split(), capture_output=True, text=True).stdout
             gna1q = str(gnaaq)
-            gnu = os.popen(path['bitcoincli'] + getunconfirm)
-            gnua= gnu.read()
+            gnua = subprocess.run([path['bitcoincli']] + getunconfirm.split(), capture_output=True, text=True).stdout
             gnub = str(gnua)
             d = json.loads(gna1q)
             if gnub > a or gnb1 > b:
@@ -690,8 +682,7 @@ def getnewaddressOnchain():
                 blogo()
                 close()
                 getadd = " getnewaddress"
-                gna = os.popen(path['bitcoincli'] + getadd)
-                gnaa = gna.read()
+                gnaa = subprocess.run([path['bitcoincli']] + getadd.split(), capture_output=True, text=True).stdout
                 gna1 = str(gnaa)
                 output = render(
                     str(f'{gnb1} BTC'),
@@ -706,8 +697,7 @@ def getnewaddressOnchain():
                 print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
                 print("---------------------------------------------------------------")
                 getfeemempool = " getmempoolinfo"
-                gnaq = os.popen(path['bitcoincli'] + getfeemempool)
-                gnaaq = gnaq.read()
+                gnaaq = subprocess.run([path['bitcoincli']] + getfeemempool.split(), capture_output=True, text=True).stdout
                 gna1q = str(gnaaq)
                 d = json.loads(gna1q)
                 print("\033[1;30;47m")
@@ -722,7 +712,8 @@ def getnewaddressOnchain():
             nn = float(d['total_fee']) / float(d['bytes']) * float(100000000)
             print(f"\n\033[ALive Fee: ~{nn} sat/vB \033[A")
             t.sleep(10)
-    except:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def gettransactionsOnchain():
@@ -732,12 +723,10 @@ def gettransactionsOnchain():
             clear()
             blogo()
             close()
-            gna = os.popen(path['bitcoincli'] + listtxs)
-            gnaa = gna.read()
+            gnaa = subprocess.run([path['bitcoincli']] + listtxs.split(), capture_output=True, text=True).stdout
             gna1 = str(gnaa)
             d = json.loads(gna1)
-            gnb = os.popen(path['bitcoincli'] + " getbalance")
-            gnbb= gnb.read()
+            gnbb = subprocess.run([path['bitcoincli'], 'getbalance'], capture_output=True, text=True).stdout
             gnb1 = str(gnbb)
             sort_order = sorted(d, key=lambda x:x['confirmations'], reverse=True)
             output = render("transactions", colors=['yellow'], align='left', font='tiny')
@@ -763,7 +752,8 @@ def gettransactionsOnchain():
 
             print("\nTotal Balance: \u001b[38;5;202m{} BTC \033[0;37;40m".format(gnb1.replace("\n", "")))
             input("\nRefresh...")
-    except:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def dumppk(): #
@@ -774,9 +764,10 @@ def dumppk(): #
         print(output)
         responseC = input("Bitcoin Address: ")
         bitcoincli = " dumpprivkey "
-        os.system(path['bitcoincli'] + bitcoincli + f"{responseC}")
+        subprocess.run([path['bitcoincli']] + (bitcoincli + responseC).split())
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def wallmenu(): #
@@ -786,9 +777,10 @@ def wallmenu(): #
         output = render("Your Wallet info", colors=['yellow'], align='left', font='tiny')
         print(output)
         bitcoincli = " getwalletinfo"
-        os.system(path['bitcoincli'] + bitcoincli)
+        subprocess.run([path['bitcoincli']] + bitcoincli.split())
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def inffmenu(): #
@@ -799,9 +791,10 @@ def inffmenu(): #
         print(output)
         responseC = input("Bitcoin Address: ")
         bitcoincli = " getaddressinfo "
-        os.system(path['bitcoincli'] + bitcoincli + f"{responseC}")
+        subprocess.run([path['bitcoincli']] + (bitcoincli + responseC).split())
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def miningmenu(): #
@@ -811,27 +804,25 @@ def miningmenu(): #
         output = render("Minning info", colors=['yellow'], align='left', font='tiny')
         print(output)
         bitcoincli = " getmininginfo"
-        os.system(path['bitcoincli'] + bitcoincli)
+        subprocess.run([path['bitcoincli']] + bitcoincli.split())
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Wallet menu error: %s", e)
         walletmenuLOCALOnchainONLY()
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
-    os.system(path['bitcoincli'] + bitcoincli)
+    subprocess.run([path['bitcoincli']] + bitcoincli.split())
 
 def getbestblockhash(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getbestblockhash"
-    os.system(path['bitcoincli'] + bitcoincli)
-
-def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run([path['bitcoincli']] + bitcoincli.split())
 
 def getgenesis(): # get and decode Genesis block
     output = render("genesis", colors=['yellow'], align='left', font='tiny')
     print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
-    os.system(path['bitcoincli'] + bitcoincli)
+    subprocess.run([path['bitcoincli']] + bitcoincli.split())
 
 def readHexBlock(): # Hex Decoder using Hexyl on local node
     hexa = input("Add the Block Hash you want to decode: ")
@@ -842,7 +833,7 @@ def readHexBlock(): # Hex Decoder using Hexyl on local node
         + " | xxd -r -p | hexyl -n 256"
     )
 
-    os.system(decodeBlock)
+    subprocess.run(decodeBlock, shell=True)
 
 def readHexTx(): # Hex Decoder using Hexyl on an external node
     hexa = input("Add the Transaction ID. you want to decode: ")
@@ -852,7 +843,7 @@ def readHexTx(): # Hex Decoder using Hexyl on an external node
         + " | xxd -r -p | hexyl -n 256"
     )
 
-    os.system(decodeTX)
+    subprocess.run(decodeTX, shell=True)
 
 def tmp():
     t.sleep(15)
@@ -867,11 +858,9 @@ def console(): # get into the console from bitcoin-cli
             sysinfo()
             close()
             console()
-        lsd = os.popen(f'{path["bitcoincli"]} {cle}')
-        lsd0 = lsd.read()
+        lsd0 = subprocess.run([path['bitcoincli']] + cle.split(), capture_output=True, text=True).stdout
         lsd1 = str(lsd0)
         print(lsd1)
-        lsd.close()
 
 def screensv():
     try:
@@ -882,11 +871,6 @@ def screensv():
         blogo()
         menu()
 
-def delay_print(s):
-    for c in s:
-        sys.stdout.write(c)
-        sys.stdout.flush()
-        time.sleep(0.25)
 #------------------------------------------------------
 
 
@@ -903,18 +887,19 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             clear()
             close()
             design()
-        except:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def design():
     if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+        settingsv = json.load(open("config/pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
         settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
+        with open("config/pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
     bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
     b = block
     a = b
     output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
@@ -922,7 +907,7 @@ def design():
     while True:
         x = a
         bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
         b = block
         if b > a:
             clear()
@@ -930,10 +915,10 @@ def design():
             output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
             print("\a\x1b[?25l" + output)
             bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-            bb = os.popen(str(bitcoinclient)).read()
+            bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
             ll = bb
             bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-            qq = os.popen(bitcoinclientgetblock).read()
+            qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
             yy = json.loads(qq)
             mm = yy
             outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
@@ -948,7 +933,7 @@ def design():
             txs = str(mm['nTx'])
             if txs == "1":
                 try:
-                    p = subprocess.Popen(['curl', 'http://ascii.live/forrest'])
+                    p = subprocess.Popen(['curl', 'https://ascii.live/forrest'])
                     p.wait(5)
                 except subprocess.TimeoutExpired:
                     p.kill()
@@ -974,8 +959,7 @@ def getrawtx(): # show confirmatins from transactions
 You can decode that block in HEX and see what's inside.\033[0;37;40m""")
             else:
                 bitcoincli = " getrawtransaction "
-                lsd = os.popen(path['bitcoincli'] + bitcoincli + tx + " 1")
-                lsd0 = lsd.read()
+                lsd0 = subprocess.run([path['bitcoincli']] + (bitcoincli + tx + " 1").split(), capture_output=True, text=True).stdout
                 lsd1 = str(lsd0)
                 lsda = lsd1.split(',')
                 lsdb = lsda[-3]
@@ -990,17 +974,18 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
                 tmp()
                 lsd.close()
             input("Continue...")
-        except:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 def runthenumbers():
     bitcoincli = " gettxoutsetinfo"
-    os.system(path['bitcoincli'] + bitcoincli)
+    subprocess.run([path['bitcoincli']] + bitcoincli.split())
     input("\nContinue...")
 
 def countdownblock():
     bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
     b = block
     try:
         a = input("Insert your block target: ")
@@ -1017,7 +1002,7 @@ def countdownblock():
         while a > b:
             try:
                 bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-                block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+                block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
                 b = block
                 if a == b:
                     break
@@ -1026,11 +1011,13 @@ def countdownblock():
                     q = int(a) - int(b)
                     print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(b)
-            except:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
         print(f'#RunTheNumbers {str(a)} PyBLOCK')
         input("\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def countdownblockConn():
@@ -1059,17 +1046,19 @@ def countdownblockConn():
                     q = a - int(c)
                     print(f'Remaining: {str(q)}' + " Blocks\n")
                     n = int(c)
-            except:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
         print(f'#RunTheNumbers {a} PyBLOCK')
         input("\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 
 def localHalving():
     bitcoincli = f'{path["bitcoincli"]} getblockcount'
-    block_count = int(os.popen(bitcoincli).read().strip())  # Leer y convertir el conteo de bloques directamente a int
+    block_count = int(subprocess.run(bitcoincli.split(), capture_output=True, text=True).stdout.strip())  # Leer y convertir el conteo de bloques directamente a int
 
     # Suponemos 64 halvings, aunque técnicamente podrían ser más
     max_halvings = 64
@@ -1112,7 +1101,7 @@ def epoch():
             output = render("BITCOIN EPOCH CLOCK", colors=['yellow'], align='left', font='tiny')
             print(output)
             bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
             b = block
             c = b
             oneh = 0 + int(c) / 2016
@@ -1126,14 +1115,15 @@ def epoch():
             """.format("0" if int(c) == 6930000 else oneh,"\033[1;32;40mON\033[0;37;40m")
             print(q)
             t.sleep(2)
-        except:
+        except Exception as e:
+            logger.debug("Loop interrupted: %s", e)
             break
 
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
 
 def pdfconvert():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
     if not os.path.isfile("config/bitcoin.pdf"):
         clear()
@@ -1172,17 +1162,17 @@ def pdfconvert():
             """)
             input("Continue...")
             bitcoincli = """seq 0 947 | (while read -r n; do bitcoin-cli gettxout 54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713 $n | jq -r '.scriptPubKey.asm' | awk '{ print $2 $3 $4 }'; done) | tr -d '\n' | cut -c 17-368600 | xxd -r -p > bitcoin.pdf """
-            os.system(bitcoincli)
+            subprocess.run(bitcoincli, shell=True)
             clear()
             blogo()
             close()
-            os.system("pdf2txt.py bitcoin.pdf")
+            subprocess.run(["pdf2txt.py", "bitcoin.pdf"])
             input("Continue...")
     else:
         clear()
         blogo()
         close()
-        os.system("pdf2txt.py bitcoin.pdf")
+        subprocess.run(["pdf2txt.py", "bitcoin.pdf"])
         input("Continue...")
 
 def bip39convert():
@@ -1195,35 +1185,25 @@ def bip39convert():
         if os.path.isdir ('TinySeed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir TinySeed && cd TinySeed && wget https://gist.githubusercontent.com/odudex/a29de0c91c4010a6b4c565d6f29fa0c6/raw/0349754c1b3f218ff61302acd1f346e0027ba215/TinySeed.py")
+            os.makedirs("TinySeed", exist_ok=True)
+            subprocess.run(["wget", "https://gist.githubusercontent.com/odudex/a29de0c91c4010a6b4c565d6f29fa0c6/raw/0349754c1b3f218ff61302acd1f346e0027ba215/TinySeed.py"], cwd="TinySeed")
         clear()
         blogo()
         print(output)
         responseC = input("Words to Tiny Seed: ")
-        os.system(f"cd TinySeed && python3 TinySeed.py {responseC}")
+        subprocess.run(["python3", "TinySeed.py", responseC], cwd="TinySeed")
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #--------------------------------- NYMs -----------------------------------
-
-def get_ansi_color_code(r, g, b):
-    if r == g == b:
-        if r < 8:
-            return 16
-        return 231 if r > 248 else round(((r - 8) / 247) * 24) + 232
-    return 16 + (36 * round(r / 255 * 5)) + (6 * round(g / 255 * 5)) + round(b / 255 * 5)
-
-
-def get_color(r, g, b):
-    return f"\x1b[48;5;{int(get_ansi_color_code(r, g, b))}m \x1b[0m"
-
 
 def robotNym():
     try:
         if path['bitcoincli']:
             lncli = " getinfo"
-            lsd = os.popen(lndconnectload['ln'] + lncli).read()
+            lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             alias = json.loads(lsd0)
         else:
@@ -1258,30 +1238,30 @@ def robotNym():
         image = "\n\t\t\t\t\t    \u001b[31;1mNode\u001b[38;5;93mNym\033[0;37;40m\n"+ "\n\t         \u001b[33;1m" + alias['identity_pubkey'] + "\033[0;37;40m"
         print(image)
         input("\n\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 
 #---------------------------------Sat Sale----------------------------------
 def callGitSatSale():
     if not os.path.isdir('SatSale'):
-        git = "git clone https://github.com/nickfarrow/SatSale.git"
-        os.system(git)
-    os.system("cd SatSale && python3 satsale.py")
+        subprocess.run(["git", "clone", "https://github.com/nickfarrow/SatSale.git"])
+    subprocess.run(["python3", "satsale.py"], cwd="SatSale")
 
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
-        git = "pip3 install cashu && mkdir Cashu"
-        os.system(git)
-    os.system("cd Cashu && cashu")
+        subprocess.run(["pip3", "install", "cashu"])
+        os.makedirs("Cashu", exist_ok=True)
+    subprocess.run(["cashu"], cwd="Cashu")
 
 #-----------------------------Block Templates--------------------------------
 
 def blockTmpConn():
     try:
         conn = """curl -s https://miningpool.observer/template-and-block | html2text | grep "Template and Block for" -A 13 """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1289,8 +1269,9 @@ def blockTmpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 #-----------------------------END Block Templates--------------------------------
 #---------------------------------ocean pool----------------------------------
@@ -1305,13 +1286,14 @@ def oceanH(): # show srings
 
         print(output)
         responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
-        a = os.popen(list).read()
+        cmd = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
+        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def oceanB(): # show srings
     try:
@@ -1322,12 +1304,13 @@ def oceanB(): # show srings
         )
 
         print(output)
-        list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
-        a = os.popen(list).read()
+        cmd = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
+        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def oceanE(): # show srings
     try:
@@ -1339,13 +1322,14 @@ def oceanE(): # show srings
 
         print(output)
         responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
-        a = os.popen(list).read()
+        cmd = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 #---------------------------------ocean pool end----------------------------------
 
@@ -1353,9 +1337,8 @@ def oceanE(): # show srings
 
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
-        git = "git clone https://github.com/pxsocs/warden_terminal.git"
-        os.system(git)
-    os.system("cd warden_terminal && python3 node_warden.py")
+        subprocess.run(["git", "clone", "https://github.com/pxsocs/warden_terminal.git"])
+    subprocess.run(["python3", "node_warden.py"], cwd="warden_terminal")
 
 #---------------------------------Nostr Terminal----------------------------------
 
@@ -1367,15 +1350,20 @@ def callGitNostrLinTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_linux_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *")
+            subprocess.run(["rm", "-rf", "nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *")
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_amd64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_amd64 -k {responseC} -l")
-    except:
+        subprocess.run(["./nostr_console_linux_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrLinarmTerminal():
@@ -1386,15 +1374,20 @@ def callGitNostrLinarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_linux_arm64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
+            subprocess.run(["rm", "-rf", "nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_linux_arm64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_arm64 -k {responseC} -l")
-    except:
+        subprocess.run(["./nostr_console_linux_arm64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrMacTerminal():
@@ -1405,16 +1398,19 @@ def callGitNostrMacTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_macos_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64")
+            subprocess.run(["rm", "-rf", "nostr_console_macos_amd64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64")
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_macos_amd64 -k {responseC} -l")
-    except:
+        subprocess.run(["./nostr_console_macos_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrMacarmTerminal():
@@ -1425,15 +1421,20 @@ def callGitNostrMacarmTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            subprocess.run(["rm", "-rf", "nostr_console_elf64"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_elf64"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64"], cwd="nostr_console_pyblock")
+            subprocess.run(["chmod", "+x", "nostr_console_elf64"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -l")
-    except:
+        subprocess.run(["./nostr_console_elf64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrWinTerminal():
@@ -1444,15 +1445,18 @@ def callGitNostrWinTerminal():
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_windows_amd64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe")
+            subprocess.run(["rm", "-rf", "nostr_console_windows_amd64.exe"], cwd="nostr_console_pyblock")
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe"], cwd="nostr_console_pyblock")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe")
+            os.makedirs("nostr_console_pyblock", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe"], cwd="nostr_console_pyblock")
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_windows_amd64.exe -k {responseC} -l")
-    except:
+        subprocess.run(["./nostr_console_windows_amd64.exe", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrSeedTerminal():
@@ -1465,14 +1469,16 @@ def callGitNostrSeedTerminal():
         if os.path.isdir ('nostr_seed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_seed && cd nostr_seed && wget https://gist.githubusercontent.com/odudex/93cfb5628b22f8675ab1939fd43133f4/raw/b48f047c0358a9ae50c2027106bdf5e37ee1fe5c/nostr_seed.py")
+            os.makedirs("nostr_seed", exist_ok=True)
+            subprocess.run(["wget", "https://gist.githubusercontent.com/odudex/93cfb5628b22f8675ab1939fd43133f4/raw/b48f047c0358a9ae50c2027106bdf5e37ee1fe5c/nostr_seed.py"], cwd="nostr_seed")
         clear()
         blogo()
         print(output)
         responseC = input("Hex to BIP39 & BIP39 to Hex: ")
-        os.system(f"cd nostr_seed && python3 nostr_seed.py {responseC}")
+        subprocess.run(["python3", "nostr_seed.py", responseC], cwd="nostr_seed")
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitNostrQRSeedTerminal():
@@ -1485,29 +1491,31 @@ def callGitNostrQRSeedTerminal():
         if os.path.isdir ('nostr_QRseed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_QRseed && cd nostr_QRseed && wget https://gist.githubusercontent.com/odudex/9e848a91d23e967309bd1719910021e6/raw/dbe04893f4ee2e0aa020735528f7f19bb2d13a7e/nostr_c_seed_qr.py")
+            os.makedirs("nostr_QRseed", exist_ok=True)
+            subprocess.run(["wget", "https://gist.githubusercontent.com/odudex/9e848a91d23e967309bd1719910021e6/raw/dbe04893f4ee2e0aa020735528f7f19bb2d13a7e/nostr_c_seed_qr.py"], cwd="nostr_QRseed")
         clear()
         blogo()
         print(output)
         responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
-        os.system(f"cd nostr_QRseed && python3 nostr_c_seed_qr.py {responseC}")
+        subprocess.run(["python3", "nostr_c_seed_qr.py", responseC], cwd="nostr_QRseed")
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callGitBija():
     if not os.path.isdir('bija'):
-        git = "git clone --recurse-submodules https://github.com/BrightonBTC/bija"
-        os.system(git)
-    os.system("cd bija && docker-compose up")
+        subprocess.run(["git", "clone", "--recurse-submodules", "https://github.com/BrightonBTC/bija"])
+    subprocess.run(["docker-compose", "up"], cwd="bija")
     input("\a\nYou can now access Bija at http://localhost:5000")
 
 #---------------------------------Bpytop----------------------------------
 def callGitBpytop():
     if not os.path.isdir('bpytop'):
-        git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
-        os.system(git)
-    os.system("cd bpytop && sudo make install && bpytop")
+        subprocess.run(["pip3", "install", "bpytop"])
+        subprocess.run(["git", "clone", "https://github.com/aristocratos/bpytop.git"])
+    subprocess.run(["sudo", "make", "install"], cwd="bpytop")
+    subprocess.run(["bpytop"])
 
 #----------------------------------------------------------------------PhoenixSta
 def callPhoenixLin():
@@ -1518,9 +1526,12 @@ def callPhoenixLin():
             "Phoenix Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip")
+            subprocess.run(["rm", "-rf", "phoenix-0.3.0-linux-x64.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip"], cwd="phoenixwallet")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip && unzip -j phoenix-0.3.0-linux-x64.zip")
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip"], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "phoenix-0.3.0-linux-x64.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -1529,8 +1540,9 @@ def callPhoenixLin():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenixWin():
@@ -1541,9 +1553,12 @@ def callPhoenixWin():
             "Phoenix Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf v0.3.0.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip")
+            subprocess.run(["rm", "-rf", "v0.3.0.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip"], cwd="phoenixwallet")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip && unzip -j v0.3.0.zip")
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip"], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "v0.3.0.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -1552,8 +1567,9 @@ def callPhoenixWin():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenixMacX64():
@@ -1564,9 +1580,12 @@ def callPhoenixMacX64():
             "Phoenix MacOSX64", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip")
+            subprocess.run(["rm", "-rf", "phoenix-0.3.0-macos-x64.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip"], cwd="phoenixwallet")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip && unzip -j phoenix-0.3.0-macos-x64.zip")
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip"], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "phoenix-0.3.0-macos-x64.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -1575,8 +1594,9 @@ def callPhoenixMacX64():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenixMacARM():
@@ -1587,9 +1607,12 @@ def callPhoenixMacARM():
             "Phoenix MacOSARM", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip")
+            subprocess.run(["rm", "-rf", "phoenix-0.3.0-macos-arm64.zip"], cwd="phoenixwallet")
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip"], cwd="phoenixwallet")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip && unzip -j phoenix-0.3.0-macos-arm64.zip")
+            os.makedirs("phoenixwallet", exist_ok=True)
+            subprocess.run(["wget", "https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip"], cwd="phoenixwallet")
+            subprocess.run(["unzip", "-j", "phoenix-0.3.0-macos-arm64.zip"], cwd="phoenixwallet")
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -1598,8 +1621,9 @@ def callPhoenixMacARM():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(["./phoenixd"], cwd="phoenixwallet")
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def callPhoenix():
@@ -1612,29 +1636,30 @@ def callPhoenix():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenix-cli --help")
+        subprocess.run(["./phoenix-cli", "--help"], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         responseC = input("\a\nCType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(["./phoenix-cli", responseC], cwd="phoenixwallet")
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def wallPhoenix():
@@ -1647,9 +1672,11 @@ def wallPhoenix():
         responseC = input("Your PhoenixD Password: ")
         responseD = input("Your Description: ")
         responseE = input("Amount in Sats: ")
-        os.system(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'")
+        r = requests.post('http://localhost:9740/createinvoice', auth=('', responseC), data={'description': responseD, 'amountSat': responseE})
+        print(r.text)
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 def wallPhoenixBOLT12():
@@ -1660,9 +1687,11 @@ def wallPhoenixBOLT12():
         "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
         )
         responseC = input("Your PhoenixD Password: ")
-        os.system(f"curl -s 'http://localhost:9740/getoffer' -u :{responseC}")
+        r = requests.get('http://localhost:9740/getoffer', auth=('', responseC))
+        print(r.text)
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #----------------------------------------------------------------------PhoenixEnd
@@ -1671,7 +1700,7 @@ def wallPhoenixBOLT12():
 def allblocksConn():
     try:
         conn = """curl -s https://raw.githubusercontent.com/jlopp/bitcoin-blocks-by-mining-pool/master/blocks.csv """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1679,8 +1708,9 @@ def allblocksConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
-        pass
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 #-----------------------------ENDBLOCKS--------------------------------
 #-----------------------------STRLuxor--------------------------------
@@ -1693,9 +1723,12 @@ def luxorstats():
             "Luxor Pool", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('luxor'):
-            os.system("cd luxor && cd graphql-python-client && python3 luxor.py --help")
+            subprocess.run(["python3", "luxor.py", "--help"], cwd=os.path.join("luxor", "graphql-python-client"))
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion")
+            os.makedirs("luxor", exist_ok=True)
+            subprocess.run(["git", "clone", "https://github.com/LuxorLabs/graphql-python-client.git"], cwd="luxor")
+            subprocess.run(["pip3", "install", "-r", "requirements3.txt"], cwd=os.path.join("luxor", "graphql-python-client"))
+            subprocess.run(["python3", "luxor.py", "--install-completion"], cwd=os.path.join("luxor", "graphql-python-client"))
         clear()
         blogo()
         input("\a\nYou need to COPY the lines inside the file .env.example and create a NEW file .env with your Luxor API Key. Press Enter to Continue.")
@@ -1703,29 +1736,30 @@ def luxorstats():
         clear()
         blogo()
         print(output)
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py --help")
+        subprocess.run(["python3", "luxor.py", "--help"], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         responseC = input("\a\nCType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(["python3", "luxor.py", responseC], cwd="luxor/graphql-python-client")
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #-----------------------------ENDLuxor--------------------------------
@@ -1740,13 +1774,15 @@ def callGitUTXOracle():
         if os.path.isdir ('utxoracle'):
             print("...Reading UTXOSet...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir utxoracle && cd utxoracle && wget https://raw.githubusercontent.com/Unbesteveable/UTXOracle/main/UTXOracle.py")
+            os.makedirs("utxoracle", exist_ok=True)
+            subprocess.run(["wget", "https://raw.githubusercontent.com/Unbesteveable/UTXOracle/main/UTXOracle.py"], cwd="utxoracle")
         clear()
         blogo()
         print(output)
-        os.system(f"cd utxoracle && python3 UTXOracle.py")
+        subprocess.run(["python3", "UTXOracle.py"], cwd="utxoracle")
         input("\a\nContinue...")
-    except:
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
@@ -1772,212 +1808,177 @@ def callColdCore():
             input("\nContinue...")
         else:
             if not os.path.isdir('$HOME/.pyblock/coldcore'):
-                git = "git clone https://github.com/jamesob/coldcore.git"
-                install = "cd coldcore && chmod +x coldcore && cp coldcore ~/.local/bin/coldcore"
-                os.system(git)
-                os.system(install)
-            os.system("coldcore")
-    except:
+                subprocess.run(["git", "clone", "https://github.com/jamesob/coldcore.git"])
+                subprocess.run(["chmod", "+x", "coldcore"], cwd="coldcore")
+                subprocess.run(["cp", "coldcore", os.path.expanduser("~/.local/bin/coldcore")], cwd="coldcore")
+            subprocess.run(["coldcore"])
+    except Exception as e:
+        logger.debug("Menu error: %s", e)
         menuSelection()
 
 #--------------------------------- Menu section -----------------------------------
 
-def MainMenuLOCAL(): #Main Menu
+def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remote"
     clear()
     blogo()
     sysinfo()
     pathexec()
-    lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
 
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    # Fetch BTC price for status bar
+    try:
+        _price_r = requests.get("https://mempool.space/api/v1/prices", timeout=3)
+        _btc_price = f"{_price_r.json().get('USD', ''):,}"
+    except Exception:
+        _btc_price = ""
 
+    if mode == "remote":
+        lndconnectexec()
+        path_remote = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
+        with open("config/bclock.conf", "r") as f:
+            pathv = json.load(f)
+        path_remote = pathv
+        n = "Local" if path_remote['bitcoincli'] else "Remote"
+        blk = rpc('getblockchaininfo')
+        d = blk
 
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
-    \u001b[33;1mL.\033[0;37;40m Lightning
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ))
-    mainmenuLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+        cert_path = lndconnectload["tls"]
+        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        headers = {'Grpc-Metadata-macaroon': macaroon}
+        url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
+        r = requests.get(url, headers=headers, verify=cert_path)
+        alias = r.json()
+    elif mode == "local":
+        lndconnectexec()
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        b = json.loads(a)
+        d = b
+
+        lncli = " getinfo"
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd0 = str(lsd)
+        alias = json.loads(lsd0)
+    else:  # onchain_only
+        n = "Local" if path['bitcoincli'] else "Remote"
+        bitcoincli = " getblockchaininfo"
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        b = json.loads(a)
+        d = b
+        alias = None
+
+    # Rich status bar and header
+    rich_status_bar(mode=mode, block_height=str(d.get('blocks', '')), btc_price=_btc_price)
+    alias_name = alias.get('alias', '') if alias else None
+    rich_header(n, str(d.get('blocks', '')), version, alias=alias_name)
+
+    # Rich menu
+    items = [
+        ("A", "PyBLOCK", "red"),
+        ("B", "Bitcoin", "rgb(255,102,0)"),
+    ]
+    if mode != "onchain_only":
+        items.append(("L", "Lightning", "yellow"))
+    items.extend([
+        ("P", "Platforms", "rgb(0,200,0)"),
+        ("S", "Settings", "blue"),
+        ("X", "Donate", "white"),
+        ("Q", "Exit", "rgb(128,0,255)"),
+    ])
+    rich_menu("Main Menu", items)
+
+    print("\x1b[?25h")
+    mainmenuControl(rich_prompt("Select option"), mode)
+
+def MainMenuLOCAL(): #Main Menu
+    MainMenu("local")
 
 def MainMenuLOCALChainONLY(): #Main Menu
-    clear()
-    blogo()
-    sysinfo()
-    pathexec()
-    #lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(n,d['blocks'], version ))
-    mainmenuLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    MainMenu("onchain_only")
 
 def MainMenuREMOTE(): #Main Menu
+    MainMenu("remote")
+
+def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_only modes
     clear()
     blogo()
     sysinfo()
     pathexec()
-    lndconnectexec()
-    path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
-    a = "Local" if path['bitcoincli'] else "Remote"
-    blk = rpc('getblockchaininfo')
-    d = blk
 
-    cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
-    headers = {'Grpc-Metadata-macaroon': macaroon}
-    url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
-    r = requests.get(url, headers=headers, verify=cert_path)
-    alias = r.json()
+    n = "Local" if path['bitcoincli'] else "Remote"
+    bitcoincli = " getblockchaininfo"
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    b = json.loads(a)
+    d = b
 
-    print("""\t\t
+    if mode == "local":
+        lndconnectexec()
+        lncli = " getinfo"
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd0 = str(lsd)
+        alias = json.loads(lsd0)
+    else:
+        alias = None
+
+    # Build header
+    if alias is not None:
+        header = """\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, alias['alias'], d['blocks'], version)
+    else:
+        header = """\t\t
+    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
+    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, d['blocks'], version)
 
+    # Build menu items
+    menu_items = """
 
-    \u001b[31;1mA.\033[0;37;40m PyBLOCK
-    \u001b[38;5;202mB.\033[0;37;40m Bitcoin
-    \u001b[33;1mL.\033[0;37;40m Lightning
-    \u001b[38;5;40mP.\033[0;37;40m Platforms
-    \u001b[38;5;27mS.\033[0;37;40m Settings
-    \u001b[38;5;15mX.\033[0;37;40m Donate
-    \u001b[38;5;93mQ.\033[0;37;40m Exit
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version))
-    mainmenuREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
+    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
+    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
+    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
+    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
+    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
+    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
+    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
+    \u001b[38;5;202mI.\033[0;37;40m ColdCore
+    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
+    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
+    \u001b[38;5;202mL.\033[0;37;40m Latest Block
+    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
+    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
+    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
+    \u001b[38;5;202mP.\033[0;37;40m Block Monitor"""
+
+    if mode == "onchain_only":
+        menu_items += """
+    \u001b[38;5;202mW.\033[0;37;40m Wallet"""
+
+    menu_items += """
+    \u001b[38;5;202mZ.\033[0;37;40m Stats
+    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
+    \u001b[38;5;202mS.\033[0;37;40m Mempool
+    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
+    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
+    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
+    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
+    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
+    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
+    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
+    \u001b[33;1mEnter.\033[0;37;40m Return
+    \n\n\x1b[?25h"""
+
+    print(header + menu_items)
+    bitcoincoremenuLocalControl(input("\033[1;32;40mSelect option: \033[0;37;40m"), mode)
 
 def bitcoincoremenuLOCAL():
-    clear()
-    blogo()
-    sysinfo()
-    pathexec()
-    lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
-    lsd0 = str(lsd)
-    alias = json.loads(lsd0)
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
-    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
-    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
-    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
-    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
-    \u001b[38;5;202mL.\033[0;37;40m Latest Block
-    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
-    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mP.\033[0;37;40m Block Monitor
-    \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mS.\033[0;37;40m Mempool
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
-    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
-    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
-    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
-    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version ))
-    bitcoincoremenuLOCALcontrolA(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    bitcoincoremenuLocal("local")
 
 def bitcoincoremenuLOCALOnchainONLY():
-    clear()
-    blogo()
-    sysinfo()
-    pathexec()
-    #lndconnectexec()
-    n = "Local" if path['bitcoincli'] else "Remote"
-    bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
-    b = json.loads(a)
-    d = b
-
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
-    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
-    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
-    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
-    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
-    \u001b[38;5;202mL.\033[0;37;40m Latest Block
-    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
-    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mP.\033[0;37;40m Block Monitor
-    \u001b[38;5;202mW.\033[0;37;40m Wallet
-    \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mS.\033[0;37;40m Mempool
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
-    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
-    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
-    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
-    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,d['blocks'], version ))
-    bitcoincoremenuLOCALcontrolAOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    bitcoincoremenuLocal("onchain_only")
 
 def OwnNodeMiner(menuMin):
     clear()
@@ -1988,12 +1989,12 @@ def OwnNodeMiner(menuMin):
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2027,7 +2028,7 @@ def OwnNodeMinerONCHAIN():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
@@ -2050,7 +2051,7 @@ def walletmenuLOCALOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
@@ -2077,12 +2078,12 @@ def bitcoincoremenuLOCALOPRETURN():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2107,7 +2108,7 @@ def bitcoincoremenuLOCALOPRETURNOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
@@ -2196,12 +2197,12 @@ def lightningnetworkLOCAL():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2243,12 +2244,12 @@ def chatConn():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2272,12 +2273,12 @@ def pyCHATA():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2301,12 +2302,12 @@ def pyCHATB():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2330,12 +2331,12 @@ def pyCHATC():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2400,12 +2401,12 @@ def APIMenuLOCAL():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2458,7 +2459,7 @@ def APIMenuLOCALOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2511,12 +2512,12 @@ def decodeHex():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2540,7 +2541,7 @@ def decodeHexOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
@@ -2564,12 +2565,12 @@ def miscellaneousLOCAL():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2612,7 +2613,7 @@ def miscellaneousLOCALOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2654,7 +2655,7 @@ def PhoenixConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2693,7 +2694,7 @@ def OceanConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2728,7 +2729,7 @@ def slushpoolREMOTEOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2763,7 +2764,7 @@ def slushpoolLOCALOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2798,12 +2799,12 @@ def runTheNumbersMenu():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2841,7 +2842,7 @@ def runTheNumbersMenuOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2878,12 +2879,12 @@ def runTheNumbersMenuConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2921,7 +2922,7 @@ def weatherMenuOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -2955,12 +2956,12 @@ def weatherMenu():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2995,12 +2996,12 @@ def dnt(): # Donation selection menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3035,7 +3036,7 @@ def dntOnchainONLY(): # Donation selection menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3070,12 +3071,12 @@ def dntDev(): # Dev Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3111,7 +3112,7 @@ def dntDevOnchainONLY(): # Dev Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3146,12 +3147,12 @@ def dntTst(): # Tester Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3186,7 +3187,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3221,12 +3222,12 @@ def satnodeMenu(): # Satnode Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3263,7 +3264,7 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3299,12 +3300,12 @@ def rateSX():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3339,7 +3340,7 @@ def rateSXOncainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3373,12 +3374,12 @@ def mempoolmenu():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3414,7 +3415,7 @@ def mempoolmenuOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3444,7 +3445,7 @@ def mempoolmenuOnchainONLY():
 def APILnbit():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnbitSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3454,12 +3455,12 @@ def APILnbit():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3494,13 +3495,13 @@ def APILnbit():
 
 def APILnbitOnchainONLY():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
-    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData = json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnbitSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3510,7 +3511,7 @@ def APILnbitOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3545,7 +3546,7 @@ def APILnbitOnchainONLY():
 def APILnPay():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnpaySN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3555,12 +3556,12 @@ def APILnPay():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3594,7 +3595,7 @@ def APILnPay():
 def APILnPayOnchainONLY():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnpaySN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3604,7 +3605,7 @@ def APILnPayOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3637,7 +3638,7 @@ def APILnPayOnchainONLY():
 def APIOpenNode():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("opennodeSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3647,12 +3648,12 @@ def APIOpenNode():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3686,7 +3687,7 @@ def APIOpenNode():
 def APIOpenNodeOnchainONLY():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("opennodeSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3696,7 +3697,7 @@ def APIOpenNodeOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3735,12 +3736,12 @@ def APITippinMe():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3776,7 +3777,7 @@ def APITippinMeOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3811,12 +3812,12 @@ def APITallyCo():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3853,7 +3854,7 @@ def APITallyCoOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -3890,12 +3891,12 @@ def settings4Local():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -3920,7 +3921,7 @@ def settings4LocalOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = os.popen(path['bitcoincli'] + bitcoincli).read()
+    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
     b = json.loads(a)
     d = b
 
@@ -3975,12 +3976,12 @@ def designQ():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4025,7 +4026,7 @@ def designQOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4071,12 +4072,12 @@ def designC():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4121,7 +4122,7 @@ def designCOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4167,12 +4168,12 @@ def designCRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4217,12 +4218,12 @@ def colors():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4258,7 +4259,7 @@ def colorsOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4295,12 +4296,12 @@ def colorsC():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4335,7 +4336,7 @@ def colorsCOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -4370,12 +4371,12 @@ def colorsCRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4410,12 +4411,12 @@ def colorsSelectFront():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4457,7 +4458,7 @@ def colorsSelectFrontOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4500,12 +4501,12 @@ def colorsSelectFrontClock():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4547,7 +4548,7 @@ def colorsSelectFrontClockOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4590,12 +4591,12 @@ def colorsSelectFrontClockRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4637,12 +4638,12 @@ def colorsSelectBack():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4684,7 +4685,7 @@ def colorsSelectBackOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "RemotcolorsCe"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4727,16 +4728,16 @@ def colorsSelectBackClock():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4778,7 +4779,7 @@ def colorsSelectBackClockOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4821,12 +4822,12 @@ def colorsSelectBackClockRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4868,12 +4869,12 @@ def colorsSelectRainbow():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4908,7 +4909,7 @@ def colorsSelectRainbowOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -4944,12 +4945,12 @@ def colorsSelectRainbowStart():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4991,7 +4992,7 @@ def colorsSelectRainbowStartOnchaiONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
@@ -5034,12 +5035,12 @@ def colorsSelectRainbowEnd():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -5081,12 +5082,12 @@ def colorsSelectRainbowEndOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -5122,17 +5123,17 @@ def colorsSelectRainbowEndOnchainONLY():
 def menuSelection():
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
     if os.path.isfile('config/intro.conf'):
-        chain = pickle.load(open("config/intro.conf", "rb"))
+        chain = json.load(open("config/intro.conf", "r"))
         chln = chain
         print(chln + "\n")
         if chln == "B":
             path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
             path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCALChainONLY()
         elif chln == "A":
             path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
             path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCAL()
         elif chln == "C":
@@ -5143,12 +5144,12 @@ def menuSelection():
         else:
             chln['onchain'] = "onchain"
 
-        pickle.dump(chln, open("config/selection.conf", "wb"))
+        with open("config/selection.conf", "w") as f: json.dump(chln, f, indent=2)
 
 
 def menuSelectionLN():
     lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
-    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData = json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     if lndconnectload['ln']:
         menuLNDLOCAL()
@@ -5159,7 +5160,7 @@ def aaccPPiLNBits():
     try:
         bitLN = {"NN":"","pd":""}
         if os.path.isfile('config/lnbitSN.conf'):
-            bitData= pickle.load(open("config/lnbitSN.conf", "rb"))
+            bitData= json.load(open("config/lnbitSN.conf", "r"))
             bitLN = bitData
             APILnbit()
         else:
@@ -5171,7 +5172,7 @@ def aaccPPiLNBits():
             )
             bitLN['NN'] = randrange(10000000)
             curl = 'curl -X POST https://legend.lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNBits on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl.split(), capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -5188,7 +5189,7 @@ def aaccPPiLNBits():
                 dn = str(d['checking_id'])
                 t.sleep(10)
                 checkcurl = 'curl -X GET https://legend.lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl.split(), capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -5201,10 +5202,11 @@ def aaccPPiLNBits():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("config/lnbitSN.conf", "wb"))
+                with open("config/lnbitSN.conf", "w") as f: json.dump(bitLN, f, indent=2)
                 createFileConnLNBits()
                 break
-    except:
+    except Exception as e:
+        logger.debug("Display error: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -5214,7 +5216,7 @@ def aaccPPiLNPay():
     try:
         bitLN = {"NN":"","pd":""}
         if os.path.isfile('config/lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("config/lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+            bitData= json.load(open("config/lnpaySN.conf", "r")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
             APILnPay()
         else:
@@ -5226,7 +5228,7 @@ def aaccPPiLNPay():
             )
             bitLN['NN'] = randrange(10000000)
             curl = 'curl -X POST https://legend.lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "LNPay on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl.split(), capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -5243,7 +5245,7 @@ def aaccPPiLNPay():
                 dn = str(d['checking_id'])
                 t.sleep(10)
                 checkcurl = 'curl -X GET https://legend.lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl.split(), capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -5256,11 +5258,12 @@ def aaccPPiLNPay():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("config/lnpaySN.conf", "wb"))
+                with open("config/lnpaySN.conf", "w") as f: json.dump(bitLN, f, indent=2)
                 createFileConnLNPay()
                 break
 
-    except:
+    except Exception as e:
+        logger.debug("Display error: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -5270,7 +5273,7 @@ def aaccPPiOpenNode():
     try:
         bitLN = {"NN":"","pd":""}
         if os.path.isfile('config/opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("config/opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+            bitData= json.load(open("config/opennodeSN.conf", "r")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
             APIOpenNode()
         else:
@@ -5282,7 +5285,7 @@ def aaccPPiOpenNode():
             )
             bitLN['NN'] = randrange(10000000)
             curl = 'curl -X POST https://legend.lnbits.com/api/v1/payments -d ' + "'{" + """"out": false, "amount": 1000, "memo": "OpenNode on PyBLOCK {}" """.format(bitLN['NN']) + "}'" + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl.split(), capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -5299,7 +5302,7 @@ def aaccPPiOpenNode():
                 dn = str(d['checking_id'])
                 t.sleep(10)
                 checkcurl = 'curl -X GET https://legend.lnbits.com/api/v1/payments/' + dn + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl.split(), capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -5312,11 +5315,12 @@ def aaccPPiOpenNode():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("config/opennodeSN.conf", "wb"))
+                with open("config/opennodeSN.conf", "w") as f: json.dump(bitLN, f, indent=2)
                 createFileConnOpenNode()
                 break
 
-    except:
+    except Exception as e:
+        logger.debug("Display error: %s", e)
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -5363,9 +5367,10 @@ def testlogo():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settings["gradient"] = "color"
-        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
-    except:
-        pass
+        with open("config/pyblocksettings.conf", "w") as f: json.dump(settings, f, indent=2)
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def testlogoRB():
     output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -5383,15 +5388,16 @@ def testlogoRB():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settings["gradient"] = "grd"
-        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
-    except:
-        pass
+        with open("config/pyblocksettings.conf", "w") as f: json.dump(settings, f, indent=2)
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 def testClock():
     pathexec()
     #lndconnectexec()
     bitcoinclient = path['bitcoincli'] + " getblockcount"
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
     b = block
     output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='left')
     print(output)
@@ -5407,9 +5413,10 @@ def testClock():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settingsClock["gradient"] = "color"
-        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
-    except:
-        pass
+        with open("config/pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 #--------------------------------- End Menu section -----------------------------------
 #--------------------------------- Main Menu execution --------------------------------
@@ -5517,690 +5524,46 @@ def menuColorsSelectRainbowOnchainONLY(menuRF):
         colorsOnchainONLY()
 
 def menuColorsSelectRainbowEnd(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorB", testlogoRB, colors)
 
 def menuColorsSelectRainbowEndOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorB", testlogoRB, colorsOnchainONLY)
 
 def menuColorsSelectRainbowStart(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogoRB()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorA", testlogoRB, colors)
 
 def menuColorsSelectRainbowStartOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogoRB()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogoRB()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogoRB()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogoRB()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogoRB()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogoRB()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogoRB()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogoRB()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogoRB()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorA", testlogoRB, colorsOnchainONLY)
 
 def menuColorsSelectBack(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorB", testlogo, colors)
 
 def menuColorsSelectBackOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorB"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorB"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorB"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorB"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorB"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorB"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorB"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorB"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorB"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorB", testlogo, colorsOnchainONLY)
 
 def menuColorsSelectFront(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settings, "colorA", testlogo, colors)
 
 def menuColorsSelectFrontOncainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settings["colorA"] = "black"
-        testlogo()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settings["colorA"] = "red"
-        testlogo()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settings["colorA"] = "green"
-        testlogo()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settings["colorA"] = "yellow"
-        testlogo()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settings["colorA"] = "blue"
-        testlogo()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settings["colorA"] = "magenta"
-        testlogo()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settings["colorA"] = "cyan"
-        testlogo()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settings["colorA"] = "white"
-        testlogo()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settings["colorA"] = "gray"
-        testlogo()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settings, "colorA", testlogo, colorsOnchainONLY)
 
 def menuColorsSelectFrontClock(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorA", testClock, colors)
 
 def menuColorsSelectFrontClockOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settingsClock, "colorA", testClock, colorsOnchainONLY)
 
 def menuColorsSelectBackClock(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorB", testClock, colors)
 
 def menuColorsSelectBackClockOnchainONLY(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "black"
-        testClock()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "red"
-        testClock()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "green"
-        testClock()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "yellow"
-        testClock()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "blue"
-        testClock()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "magenta"
-        testClock()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "cyan"
-        testClock()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "white"
-        testClock()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "gray"
-        testClock()
-    elif menuCF in ["R", "r"]:
-        colorsOnchainONLY()
+    select_color(settingsClock, "colorB", testClock, colorsOnchainONLY)
 
 def menuColorsSelectFrontClockRemote(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "black"
-        testClockRemote()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "red"
-        testClockRemote()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "green"
-        testClockRemote()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "yellow"
-        testClockRemote()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "blue"
-        testClockRemote()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "magenta"
-        testClockRemote()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "cyan"
-        testClockRemote()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "white"
-        testClockRemote()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorA"] = "gray"
-        testClockRemote()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorA", testClockRemote, colors)
 
 def menuColorsSelectBackClockRemote(menuCF):
-    if menuCF in ["A", "a"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "black"
-        testClockRemote()
-    elif menuCF in ["B", "b"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "red"
-        testClockRemote()
-    elif menuCF in ["C", "c"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "green"
-        testClockRemote()
-    elif menuCF in ["D", "d"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "yellow"
-        testClockRemote()
-    elif menuCF in ["E", "e"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "blue"
-        testClockRemote()
-    elif menuCF in ["F", "f"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "magenta"
-        testClockRemote()
-    elif menuCF in ["G", "g"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "cyan"
-        testClockRemote()
-    elif menuCF in ["H", "h"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "white"
-        testClockRemote()
-    elif menuCF in ["I", "i"]:
-        clear()
-        blogo()
-        settingsClock["colorB"] = "gray"
-        testClockRemote()
-    elif menuCF in ["R", "r"]:
-        colors()
+    select_color(settingsClock, "colorB", testClockRemote, colors)
 
 def menuDesign(menuDSN):
     if menuDSN in ["A", "a"]:
@@ -6702,19 +6065,50 @@ def menuWeatherOnchainONLY(menuWD):
     elif menuWD in ["B", "b"]:
         wttrDataV2()
 
-def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
+def mainmenuControl(menuS, mode): #Unified execution of Main Menu options
     if menuS in ["A", "a"]:
-        artist()
+        if mode == "remote":
+            while True:
+                try:
+                    clear()
+                    close()
+                    remotegetblock()
+                    tmp()
+                except Exception as e:
+                    logger.debug("Loop interrupted: %s", e)
+                    break
+        else:
+            artist()
     elif menuS in ["B", "b"]:
-        bitcoincoremenuLOCAL()
+        if mode == "remote":
+            bitcoincoremenuREMOTE()
+        elif mode == "onchain_only":
+            bitcoincoremenuLOCALOnchainONLY()
+        else:
+            bitcoincoremenuLOCAL()
     elif menuS in ["L", "l"]:
-        lightningnetworkLOCAL()
+        if mode != "onchain_only":
+            if mode == "remote":
+                lightningnetworkREMOTE()
+            else:
+                lightningnetworkLOCAL()
     elif menuS in ["S", "s"]:
-        settings4Local()
+        if mode == "remote":
+            settings4Remote()
+        elif mode == "onchain_only":
+            settings4LocalOnchainONLY()
+        else:
+            settings4Local()
     elif menuS in ["P", "p"]:
-        APIMenuLOCAL()
+        if mode == "onchain_only":
+            APIMenuLOCALOnchainONLY()
+        else:
+            APIMenuLOCAL()
     elif menuS in ["X", "x"]:
-        dnt()
+        if mode == "onchain_only":
+            dntOnchainONLY()
+        else:
+            dnt()
     elif menuS in ["Q", "q"]:
         os._exit(0)
         apisnd.close()
@@ -6766,87 +6160,26 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         blogo()
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 7Blocks.py")
+        subprocess.run(["python3", "7Blocks.py"], cwd="SPV")
         input("\a\nContinue...")
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
         output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyBlockMiner.py")
+        subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
         input("\a\nContinue...")
+    else:
+        if menuS.strip():
+            from shared.ui import YELLOW, RESET
+            print(f"    {YELLOW}Invalid option '{menuS}'. Try again.{RESET}")
+            t.sleep(1)
+
+def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
+    mainmenuControl(menuS, "local")
 
 def mainmenuLOCALcontrolOnchainONLY(menuS): #Execution of the Main Menu options
-    if menuS in ["A", "a"]:
-        artist()
-    elif menuS in ["B", "b"]:
-        bitcoincoremenuLOCALOnchainONLY()
-    elif menuS in ["S", "s"]:
-        settings4LocalOnchainONLY()
-    elif menuS in ["P", "p"]:
-        APIMenuLOCALOnchainONLY()
-    elif menuS in ["X", "x"]:
-        dntOnchainONLY()
-    elif menuS in ["Q", "q"]:
-        os._exit(0)
-        apisnd.close()
-        donation.close()
-        clone.close()
-        logos.close()
-        feed.close()
-        sysinf.close()
-        nodeconnection.close()
-        exit()
-    elif menuS in ["T", "t"]:
-        clear()
-        delay_print("\033[1;32;40mWake up, Neo...")
-        t.sleep(2)
-        clear()
-        delay_print("The Matrix has you...")
-        t.sleep(2)
-        clear()
-        delay_print("Follow the white rabbit.")
-        t.sleep(3)
-        clear()
-        print("Knock, knock, Neo.\033[0;37;40m\n")
-        t.sleep(2)
-        clear()
-        t.sleep(3)
-        screensv()
-    elif menuS in ["nym", "Nym", "NYM", "nYm", "nyM", "NYm", "NyM", "nYM"]:
-        clear()
-        blogo()
-        robotNym()
-    elif menuS in ["wt", "WT", "Wt", "wT"]:
-        clear()
-        blogo()
-        callGitWardenTerminal()
-    elif menuS in ["ss", "SS", "Ss", "sS"]:
-        clear()
-        blogo()
-        callGitSatSale()
-    elif menuS in ["tt", "TT", "Tt", "tT"]:
-        clear()
-        blogo()
-        callGitBpytop()
-    elif menuS in ["CA", "ca", "Ca", "cA"]:
-        clear()
-        blogo()
-        callGitCashu()
-    elif menuS in ["7"]:
-        clear()
-        blogo()
-        output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 7Blocks.py")
-        input("\a\nContinue...")
-    elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
-        clear()
-        blogo()
-        output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 PyBlockMiner.py")
-        input("\a\nContinue...")
+    mainmenuControl(menuS, "onchain_only")
 
 def slushpoolLOCALOnchainONLYMenu(slush):
     if slush in ["A", "a"]:
@@ -6886,7 +6219,7 @@ def pyblockpoolREMOTEOnchainONLYMenu(slush):
         blogo()
         getPoolPYBLOCKCheck()
 
-def bitcoincoremenuLOCALcontrolA(bcore):
+def bitcoincoremenuLocalControl(bcore, mode=None): #Unified Bitcoin Core local control
     if bcore in ["A", "a"]:
         while True:
             try:
@@ -6896,7 +6229,8 @@ def bitcoincoremenuLOCALcontrolA(bcore):
                 close()
                 console()
                 t.sleep(5)
-            except:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif bcore in ["B", "b"]:
         clear()
@@ -6918,8 +6252,9 @@ def bitcoincoremenuLOCALcontrolA(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["G", "g"]:
         getrawtx()
     elif bcore in ["H", "h"]:
@@ -6940,48 +6275,53 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         miningConn()
     elif bcore in ["U", "u"]:
         untxsConn()
-    elif bcore in ["Q", "q"]:
-        searchTXS()
     elif bcore in ["S", "s"]:
         counttxs()
     elif bcore in ["L", "l"]:
         try:
             lastblockdetail.run_urwid()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["V", "v"]:
         try:
             clear()
             execute_visualizer()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["Y", "y"]:
         try:
             asyncio.run(mempool_monitor.display_mempool_info())
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["X", "x"]:
         try:
             clear()
             some_other_function()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["K", "k"]:
         try:
             peers_monitor.run_peers_monitor()()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["N", "n"]:
         try:
             tx_search.search_tx()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["P", "p"]:
         try:
             clear()
             call_blocks()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["CM", "cm"]:
         CoreMiner()
     elif bcore in ["ONM", "onm"]:
@@ -6991,116 +6331,19 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         blogo()
         output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyVanityGenerator.py")
+        subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
         input("\a\nContinue...")
+    else:
+        if bcore.strip():
+            from shared.ui import YELLOW, RESET
+            print(f"    {YELLOW}Invalid option '{bcore}'. Try again.{RESET}")
+            t.sleep(1)
+
+def bitcoincoremenuLOCALcontrolA(bcore):
+    bitcoincoremenuLocalControl(bcore, "local")
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
-    if bcore in ["A", "a"]:
-        while True:
-            try:
-                clear()
-                blogo()
-                sysinfo()
-                close()
-                console()
-                t.sleep(5)
-            except:
-                break
-    elif bcore in ["B", "b"]:
-        clear()
-        blogo()
-        getgenesis()
-        input("Continue...")
-        menuSelection()
-    elif bcore in ["C", "c"]:
-        getblock()
-    elif bcore in ["D", "d"]:
-        runTheNumbersMenuOnchainONLY()
-    elif bcore in ["E", "e"]:
-        decodeHexOnchainONLY()
-    elif bcore in ["F", "f"]:
-        try:
-            clear()
-            blogo()
-            sysinfo()
-            close()
-            decodeQR()
-            input("Continue...")
-        except:
-            pass
-    elif bcore in ["G", "g"]:
-        getrawtx()
-    elif bcore in ["H", "h"]:
-        miscellaneousLOCALOnchainONLY()
-    elif bcore in ["I", "i"]:
-        callColdCore()
-    elif bcore in ["J", "j"]:
-        pdfconvert()
-    elif bcore in ["M", "m"]:
-        mtConn()
-    elif bcore in ["O", "o"]:
-        bitcoincoremenuLOCALOPRETURNOnchainONLY()
-    elif bcore in ["W", "w"]:
-        walletmenuLOCALOnchainONLY()
-    elif bcore in ["Z", "z"]:
-        statsConn()
-    elif bcore in ["Q", "q"]:
-        miningConn()
-    elif bcore in ["U", "u"]:
-        untxsConn()
-    elif bcore in ["Q", "q"]:
-        searchTXS()
-    elif bcore in ["S", "s"]:
-        counttxs()
-    elif bcore in ["L", "l"]:
-        try:
-            lastblockdetail.run_urwid()
-        except:
-            pass
-    elif bcore in ["V", "v"]:
-        try:
-            clear()
-            execute_visualizer()
-        except:
-            pass
-    elif bcore in ["Y", "y"]:
-        try:
-            asyncio.run(mempool_monitor.display_mempool_info())
-        except:
-            pass
-    elif bcore in ["X", "x"]:
-        try:
-            clear()
-            some_other_function()
-        except:
-            pass
-    elif bcore in ["K", "k"]:
-        try:
-            peers_monitor.run_peers_monitor()()
-        except:
-            pass
-    elif bcore in ["N", "n"]:
-        try:
-            tx_search.search_tx()
-        except:
-            pass
-    elif bcore in ["P", "p"]:
-        try:
-            clear()
-            call_blocks()
-        except:
-            pass
-    elif bcore in ["CM", "cm"]:
-        CoreMiner()
-    elif bcore in ["ONM", "onm"]:
-        OwnNodeMinerONCHAIN()
-    elif bcore in ["VG", "vg"]:
-        clear()
-        blogo()
-        output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 PyVanityGenerator.py")
-        input("\a\nContinue...")
+    bitcoincoremenuLocalControl(bcore, "onchain_only")
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
     if walletmnu in ["A", "a"]:
@@ -7163,7 +6406,8 @@ def miscellaneousLOCALmenu(misce):
                 close()
                 logoC()
                 tmp()
-            except:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7183,9 +6427,9 @@ def miscellaneousLOCALmenu(misce):
         blogo()
         ex()
     elif misce in ["M", "m"]:
-        os.system('printf "\033[49m"')
+        subprocess.run(["printf", "\033[49m"])
         clear()
-        os.system('printf "\033[49m"')
+        subprocess.run(["printf", "\033[49m"])
         blogo()
         output = render("1st 𝕭𝐢𝐭𝐚𝐱𝐞 Block 853742", colors=['white'], align='center', font='console')
         print(output)
@@ -7230,7 +6474,8 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
                 close()
                 logoC()
                 tmp()
-            except:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7250,9 +6495,9 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         blogo()
         ex()
     elif misce in ["M", "m"]:
-        os.system('printf "\033[49m"')
+        subprocess.run(["printf", "\033[49m"])
         clear()
-        os.system('printf "\033[49m"')
+        subprocess.run(["printf", "\033[49m"])
         blogo()
         output = render("1st 𝕭𝐢𝐭𝐚𝐱𝐞 Block 853742", colors=['white'], align='center', font='console')
         print(output)
@@ -7292,8 +6537,9 @@ def decodeHexLOCAL(hexloc):
                     readHexBlock()
                 else:
                     break
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif hexloc in ["B", "b"]:
         clear()
         blogo()
@@ -7308,8 +6554,9 @@ def decodeHexLOCAL(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
 
 def decodeHexLOCALOnchainONLY(hexloc):
     if hexloc in ["A", "a"]:
@@ -7326,8 +6573,9 @@ def decodeHexLOCALOnchainONLY(hexloc):
                     readHexBlock()
                 else:
                     break
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif hexloc in ["B", "b"]:
         clear()
         blogo()
@@ -7342,8 +6590,9 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
 
 def lightningnetworkLOCALcontrol(lncore):
     if lncore in ["A", "a"]:
@@ -7355,7 +6604,8 @@ def lightningnetworkLOCALcontrol(lncore):
                 close()
                 consoleLN()
                 t.sleep(5)
-            except:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif lncore in ["B", "b"]:
         clear()
@@ -7638,77 +6888,7 @@ def nostrmenu(menunos):
 #----------------------------REMOTE MENUS
 
 def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
-    if menuS in ["A", "a"]:
-        while True:
-            try:
-                clear()
-                close()
-                remotegetblock()
-                tmp()
-            except:
-                break
-    elif menuS in ["B", "b"]:
-        bitcoincoremenuREMOTE()
-    elif menuS in ["L", "l"]:
-        lightningnetworkREMOTE()
-    elif menuS in ["P", "p"]:
-        APIMenuLOCAL()
-    elif menuS in ["X", "x"]:
-        dnt()
-    elif menuS in ["S", "s"]:
-        settings4Remote()
-    elif menuS in ["Q", "q"]:
-        os._exit(0)
-        apisnd.close()
-        donation.close()
-        clone.close()
-        logos.close()
-        feed.close()
-        sysinf.close()
-        nodeconnection.close()
-        exit()
-    elif menuS in ["T", "t"]: #Test feature fast access
-        clear()
-        delay_print("\033[1;32;40mWake up, Neo...")
-        t.sleep(2)
-        clear()
-        delay_print("The Matrix has you...")
-        t.sleep(2)
-        clear()
-        delay_print("Follow the white rabbit.")
-        t.sleep(3)
-        clear()
-        print("Knock, knock, Neo.\033[0;37;40m\n")
-        t.sleep(2)
-        clear()
-        t.sleep(3)
-        screensv()
-    elif menuS in ["nym", "Nym", "NYM", "nYm", "nyM", "NYm", "NyM", "nYM"]:
-        clear()
-        blogo()
-        robotNym()
-    elif menuS in ["wt", "WT", "Wt", "wT"]:
-        clear()
-        blogo()
-        callGitWardenTerminal()
-    elif menuS in ["ss", "SS", "Ss", "sS"]:
-        clear()
-        blogo()
-        callGitSatSale()
-    elif menuS in ["7"]:
-        clear()
-        blogo()
-        output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 7Blocks.py")
-        input("\a\nContinue...")
-    elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
-        clear()
-        blogo()
-        output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
-        print(output)
-        os.system(f"cd SPV && python3 PyBlockMiner.py")
-        input("\a\nContinue...")
+    mainmenuControl(menuS, "remote")
 
 def bitcoincoremenuREMOTEcontrol(bcore):
     if bcore in ["A", "a"]:
@@ -7720,7 +6900,8 @@ def bitcoincoremenuREMOTEcontrol(bcore):
                 close()
                 remoteconsole()
                 t.sleep(5)
-            except:
+            except Exception as e:
+                logger.debug("Loop interrupted: %s", e)
                 break
     elif bcore in ["B", "b"]:
         remotegetblockcount()
@@ -7734,8 +6915,9 @@ def bitcoincoremenuREMOTEcontrol(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif bcore in ["E", "e"]:
         miscellaneousLOCAL()
     elif bcore in ["M", "m"]:
@@ -7755,7 +6937,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
         blogo()
         output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyVanityGenerator.py")
+        subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
         input("\a\nContinue...")
 
 def bitcoincoremenuREMOTEcontrolO(oreturn):
@@ -7861,7 +7043,8 @@ def menuD(menuN): # Satnode access Menu
                     apisenderFile()
                     t.sleep(30)
                     menuSelection()
-                except:
+                except Exception as e:
+                    logger.debug("Menu error: %s", e)
                     menuSelection()
             elif message in ["T", "t"]:
                 try:
@@ -7871,9 +7054,11 @@ def menuD(menuN): # Satnode access Menu
                     apisender()
                     t.sleep(30)
                     menuSelection()
-                except:
+                except Exception as e:
+                    logger.debug("Menu error: %s", e)
                     menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuN in ["C", "c"]:
         try:
@@ -7883,8 +7068,9 @@ def menuD(menuN): # Satnode access Menu
                 gitclone()
             else:
                 menuSelection()
-        except:
-            pass
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     elif menuN in ["R", "r"]:
         menuSelection()
 
@@ -7897,7 +7083,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -7907,7 +7094,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -7917,7 +7105,8 @@ def menuE(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -7931,7 +7120,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -7941,7 +7131,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -7951,7 +7142,8 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -7965,7 +7157,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -7975,7 +7168,8 @@ def menuF(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -7989,7 +7183,8 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -7999,7 +7194,8 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception as e:
+            logger.debug("Menu error: %s", e)
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -8013,7 +7209,7 @@ def nostrConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = os.popen(path['bitcoincli'] + bitcoincli).read()
+        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
         b = json.loads(a)
         d = b
     else:
@@ -8057,20 +7253,20 @@ def testClockRemote():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settingsClock["gradient"] = "color"
-        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
-    except:
-        pass
+        with open("pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
+    except Exception as e:
+        show_error(str(e))
+        logger.debug("Suppressed error: %s", e)
 
 
 def commandsINIT(initCONF):
     intCONF = {"fullbtclnd":"","fullbtc":"","cropped":""}
 
     if not os.path.isdir("config"):
-        dir = 'mkdir config'
-        os.system(dir)
+        os.makedirs("config", exist_ok=True)
 
     if os.path.isfile('config/intro.conf'):
-        intro = pickle.load(open("config/intro.conf", "rb"))
+        intro = json.load(open("config/intro.conf", "r"))
         initCONF = intro
         if initCONF['fullbtclnd']:
             fullbtclnd()
@@ -8083,21 +7279,21 @@ def commandsINIT(initCONF):
             initDATA = "A"
             intCONF['fullbtclnd'] = initDATA
             initPATH = intCONF['fullbtclnd']
-            pickle.dump(initPATH, open("config/intro.conf", "wb"))
+            with open("config/intro.conf", "w") as f: json.dump(initPATH, f, indent=2)
             clear()
             fullbtclnd()
         elif initCONF in ["B", "b"]:
             initDATA = "B"
             intCONF['fullbtc'] = initDATA
             initPATH = intCONF['fullbtc']
-            pickle.dump(initPATH, open("config/intro.conf", "wb"))
+            with open("config/intro.conf", "w") as f: json.dump(initPATH, f, indent=2)
             clear()
             fullbtc()
         elif initCONF in ["C", "c"]:
             initDATA = "C"
             intCONF['cropped'] = initDATA
             initPATH = intCONF['cropped']
-            pickle.dump(initPATH, open("config/intro.conf", "wb"))
+            with open("config/intro.conf", "w") as f: json.dump(initPATH, f, indent=2)
             clear()
             menuSelection()
 
@@ -8112,11 +7308,10 @@ def restart_script():
 def fullbtc():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     if not os.path.isdir("config"):
-        dir = 'mkdir config'
-        os.system(dir)
+        os.makedirs("config", exist_ok=True)
 
     if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+        pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     else:
         blogo()
@@ -8127,18 +7322,17 @@ def fullbtc():
         path['rpcpass'] = input("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
-        pickle.dump(path, open("config/bclock.conf", "wb"))
+        with open("config/bclock.conf", "w") as f: json.dump(path, f, indent=2)
     menuSelection()
 
 def fullbtclnd():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
     if not os.path.isdir("config"):
-        dir = 'mkdir config'
-        os.system(dir)
+        os.makedirs("config", exist_ok=True)
 
     if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+        pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     else:
         blogo()
@@ -8149,20 +7343,20 @@ def fullbtclnd():
         path['rpcpass'] = input("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
-        pickle.dump(path, open("config/bclock.conf", "wb"))
+        with open("config/bclock.conf", "w") as f: json.dump(path, f, indent=2)
 
     if os.path.isfile('config/blndconnect.conf'):
-        lndconnectData= pickle.load(open("config/blndconnect.conf", "rb"))
+        lndconnectData= json.load(open("config/blndconnect.conf", "r"))
         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     else:
         clear()
         blogo()
         if os.path.isfile('config/init.conf'):
-            pqr = pickle.load(open("config/init.conf", "rb"))
+            pqr = json.load(open("config/init.conf", "r"))
             yesno = pqr
         else:
             yesno = input("You are going to 𝐜𝐨𝐧𝐧𝐞𝐜𝐭 your 𝐋𝐢𝐠𝐡𝐭𝐧𝐢𝐧𝐠 𝐍𝐨𝐝𝐞, type 𝐘𝐞𝐬 to continue: ")
-            pickle.dump(yesno, open("config/init.conf", "wb"))
+            with open("config/init.conf", "w") as f: json.dump(yesno, f, indent=2)
             if yesno in ["YES", "yes", "yES", "yeS", "Yes", "YEs"]:
                 print("\n\tIf you are going to use your local node leave IP:PORT/CERT/MACAROONS in 𝗕𝗟𝗔𝗡𝗞.\n")
                 lndconnectload["ip_port"] = input("Insert IP:PORT to your node: ")
@@ -8170,49 +7364,73 @@ def fullbtclnd():
                 lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
                 print("\n\tLocal Lightning Node connection.\n")
                 lndconnectload["ln"] = input("Insert the Path to Lncli. Normally you just need to type 𝙡𝙣𝙘𝙡𝙞: ")
-                pickle.dump(lndconnectload, open("config/blndconnect.conf", "wb"))
+                with open("config/blndconnect.conf", "w") as f: json.dump(lndconnectload, f, indent=2)
     menuSelection()
 
 
 def introINIT():
     if not os.path.isdir("config"):
-        dir = 'mkdir config'
-        os.system(dir)
+        os.makedirs("config", exist_ok=True)
     clear()
     blogo()
     #sysinfo()
     print("""\t\t
     Welcome 𝓒𝔂𝓹𝓱𝓮𝓻𝓹𝓾𝓷𝓴.
 
-    Connect 𝗣𝘆𝗕𝗟Ø𝗖𝗞 to your Nodes or Run the Cropped option.
+    Connect 𝗣𝘆𝗕𝗟Ø𝗖𝗞 to your Nodes or Run Lite Mode (no node required).
 
 
     \u001b[31;1mA.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin & Lightning)
     \u001b[38;5;202mB.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin)
-    \u001b[33;1mC.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Cropped)
+    \u001b[33;1mC.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Lite Mode)
     \n\n\x1b[?25h""")
     commandsINIT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 #--------------------------------- End Main Menu execution --------------------------------
 
-settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-settingsClock = {"gradient":"", "colorA":"green", "colorB":"yellow"}
-while True: # Loop
-    try:
-        path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-        if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
-        if os.path.isfile('config/blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-            lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
-        clear()
-        if not os.path.isfile('config/intro.conf'):
-            set_terminal_background()
-            introINIT()
-        else:
-            set_terminal_background()
-            menuSelection()
-    except:
-        print("\n")
-        sys.exit(101)
+def main():
+    global settings, settingsClock, path, lndconnectload
+    cfg.load()
+    settings = cfg.settings
+    settingsClock = cfg.settings_clock
+    while True:
+        try:
+            path = cfg.path
+            lndconnectload = cfg.lndconnectload
+            clear()
+            if not cfg.has_config('intro.conf'):
+                set_terminal_background()
+                introINIT()
+            else:
+                set_terminal_background()
+                menuSelection()
+        except KeyboardInterrupt:
+            print("\n")
+            sys.exit(0)
+        except PermissionError as e:
+            if str(e).endswith("''"):
+                show_error("Bitcoin CLI path is not configured. Please set it up.")
+                logger.error("Empty bitcoincli path in bclock.conf")
+                introINIT()
+            else:
+                logger.error("Fatal error: %s", e)
+                sys.exit(101)
+        except Exception as e:
+            logger.error("Fatal error: %s", e)
+            sys.exit(101)
+
+if __name__ == "__main__":
+    if "--tui" in sys.argv:
+        from tui.app import run as run_tui
+        mode = "lite"
+        cfg.load()
+        if cfg.has_config('intro.conf'):
+            with open("config/intro.conf", "r") as f:
+                init_data = json.load(f)
+            if init_data.get("fullbtclnd"):
+                mode = "local"
+            elif init_data.get("fullbtc"):
+                mode = "onchain_only"
+        run_tui(mode=mode)
+    else:
+        main()

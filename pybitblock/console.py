@@ -1,10 +1,9 @@
-import os
 import typer
 
 
 def main():
-    scriptpath = os.path.join(os.path.dirname(__file__), 'PyBlock.py')
-    os.system(f"python3 {scriptpath}")
+    from PyBlock import main as pyblock_main
+    pyblock_main()
 
 
 if __name__ == "__main__":
