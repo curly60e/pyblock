@@ -80,7 +80,8 @@ def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
             combined.append_text(separator)
         combined.append_text(part)
 
-    console.print(Panel(combined, style="dim", expand=False, padding=(0, 2)))
+    console.print(f"    ", end="")
+    console.print(combined)
 
 
 def rich_sysinfo(cpu_percent, mem_percent):
@@ -191,7 +192,8 @@ def rich_header(node_type, block_height, version, alias=None):
     info.append("Version: ", style="bold white")
     info.append(f"{version}", style="dim")
 
-    console.print(Panel(info, style="dim", expand=False, padding=(0, 2)))
+    console.print(f"    ", end="")
+    console.print(info)
 
 
 def rich_loading(label="Loading"):
