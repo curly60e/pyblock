@@ -35,4 +35,4 @@ asciimatics>=1.15,<2.0
 plotext>=5.2,<6.0
 blessings>=1.7,<2.0
 bitcoinlib>=0.6,<1.0
-vanity-address>=1.0,<2.0
+# vanity-address>=1.0,<2.0  # Optional: not available on all platforms
