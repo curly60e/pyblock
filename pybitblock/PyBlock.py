@@ -7334,12 +7334,12 @@ def introINIT():
     print("""\t\t
     Welcome 𝓒𝔂𝓹𝓱𝓮𝓻𝓹𝓾𝓷𝓴.
 
-    Connect 𝗣𝘆𝗕𝗟Ø𝗖𝗞 to your Nodes or Run the Cropped option.
+    Connect 𝗣𝘆𝗕𝗟Ø𝗖𝗞 to your Nodes or Run Lite Mode (no node required).
 
 
     \u001b[31;1mA.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin & Lightning)
     \u001b[38;5;202mB.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Bitcoin)
-    \u001b[33;1mC.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Cropped)
+    \u001b[33;1mC.\033[0;37;40m 𝗣𝘆𝗕𝗟Ø𝗖𝗞 (Lite Mode)
     \n\n\x1b[?25h""")
     commandsINIT(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 

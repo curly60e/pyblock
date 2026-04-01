@@ -3066,7 +3066,7 @@ def MemShell():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4463,7 +4463,7 @@ def MainMenuCROPPED(): #Main Menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4490,7 +4490,7 @@ def bitcoincoremenuLOCAL():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4529,7 +4529,7 @@ def bitcoincoremenuLOCALOPRETURN():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4552,7 +4552,7 @@ def lightningnetworkLOCAL():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4592,7 +4592,7 @@ def chatConn():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4615,7 +4615,7 @@ def pyCHATA():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4639,7 +4639,7 @@ def pyCHATB():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4663,7 +4663,7 @@ def pyCHATC():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4688,7 +4688,7 @@ def APIMenuLOCAL():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4755,7 +4755,7 @@ def miscellaneousLOCAL():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4785,7 +4785,7 @@ def slushpoolREMOTEOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4808,7 +4808,7 @@ def slushpoolLOCALOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4831,7 +4831,7 @@ def runTheNumbersMenu():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4857,7 +4857,7 @@ def runTheNumbersMenuConn():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4883,7 +4883,7 @@ def weatherMenuOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4905,7 +4905,7 @@ def weatherMenu():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4927,7 +4927,7 @@ def dnt(): # Donation selection menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4949,7 +4949,7 @@ def dntOnchainONLY(): # Donation selection menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4972,7 +4972,7 @@ def dntDev(): # Dev Donation Menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -4996,7 +4996,7 @@ def dntDevOnchainONLY(): # Dev Donation Menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5019,7 +5019,7 @@ def dntTst(): # Tester Donation Menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5041,7 +5041,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5064,7 +5064,7 @@ def satnodeMenu(): # Satnode Menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5088,7 +5088,7 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5112,7 +5112,7 @@ def rateSX():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5134,7 +5134,7 @@ def rateSXOncainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5156,7 +5156,7 @@ def mempoolmenu():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5179,7 +5179,7 @@ def mempoolmenuOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5208,7 +5208,7 @@ def APILnbit():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5242,7 +5242,7 @@ def APILnbitOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5276,7 +5276,7 @@ def APILnPay():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5308,7 +5308,7 @@ def APILnPayOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5340,7 +5340,7 @@ def APIOpenNode():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5372,7 +5372,7 @@ def APIOpenNodeOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5399,7 +5399,7 @@ def APITippinMe():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5422,7 +5422,7 @@ def APITippinMeOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5445,7 +5445,7 @@ def APITallyCo():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5469,7 +5469,7 @@ def APITallyCoOnchainONLY():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5495,7 +5495,7 @@ def settings4Local():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5518,7 +5518,7 @@ def designQ():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5550,7 +5550,7 @@ def designC():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5582,7 +5582,7 @@ def colors():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5605,7 +5605,7 @@ def colorsC():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5627,7 +5627,7 @@ def colorsSelectFront():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5656,7 +5656,7 @@ def colorsSelectFrontClock():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5685,7 +5685,7 @@ def colorsSelectBack():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5714,7 +5714,7 @@ def colorsSelectBackClock():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5743,7 +5743,7 @@ def colorsSelectRainbow():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5765,7 +5765,7 @@ def colorsSelectRainbowStart():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5795,7 +5795,7 @@ def colorsSelectRainbowEnd():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5824,7 +5824,7 @@ def nostrConn():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5852,7 +5852,7 @@ def PhoenixConn():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5879,7 +5879,7 @@ def OceanConn():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
@@ -5902,7 +5902,7 @@ def BitaxeConn():
     clear()
     blogo()
     sysinfo()
-    n = "CROPPED"
+    n = "LITE MODE"
     r = requests.get('https://mempool.space/api/blocks/tip/height')
     r.headers['Content-Type']
     nn = r.text
