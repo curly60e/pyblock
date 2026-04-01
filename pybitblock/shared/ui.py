@@ -55,20 +55,32 @@ def status_bar(mode="", block_height="", btc_price="", extra=""):
 
 def show_error(message):
     """Display a visible error message to the user."""
-    print(f"\n    {RED}! Error: {RESET}{message}")
-    print()
+    try:
+        from shared.rich_ui import rich_error
+        rich_error(message)
+    except ImportError:
+        print(f"\n    {RED}! Error: {RESET}{message}")
+        print()
 
 
 def show_warning(message):
     """Display a visible warning message to the user."""
-    print(f"\n    {YELLOW}! Warning: {RESET}{message}")
-    print()
+    try:
+        from shared.rich_ui import rich_warning
+        rich_warning(message)
+    except ImportError:
+        print(f"\n    {YELLOW}! Warning: {RESET}{message}")
+        print()
 
 
 def show_success(message):
     """Display a success message to the user."""
-    print(f"\n    {GREEN}+ {RESET}{message}")
-    print()
+    try:
+        from shared.rich_ui import rich_success
+        rich_success(message)
+    except ImportError:
+        print(f"\n    {GREEN}+ {RESET}{message}")
+        print()
 
 
 class Spinner:
