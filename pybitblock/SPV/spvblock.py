@@ -7761,6 +7761,11 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         clear()
         blogo()
         BitaxeConn()
+    else:
+        if menuS.strip():
+            from shared.ui import YELLOW, RESET
+            print(f"    {YELLOW}Invalid option '{menuS}'. Try again.{RESET}")
+            t.sleep(1)
 
 def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu options
     if menuS in ["A", "a"]:

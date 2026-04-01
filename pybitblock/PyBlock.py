@@ -6179,6 +6179,11 @@ def mainmenuControl(menuS, mode): #Unified execution of Main Menu options
         print(output)
         subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
         input("\a\nContinue...")
+    else:
+        if menuS.strip():
+            from shared.ui import YELLOW, RESET
+            print(f"    {YELLOW}Invalid option '{menuS}'. Try again.{RESET}")
+            t.sleep(1)
 
 def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
     mainmenuControl(menuS, "local")
@@ -6338,6 +6343,11 @@ def bitcoincoremenuLocalControl(bcore, mode=None): #Unified Bitcoin Core local c
         print(output)
         subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
         input("\a\nContinue...")
+    else:
+        if bcore.strip():
+            from shared.ui import YELLOW, RESET
+            print(f"    {YELLOW}Invalid option '{bcore}'. Try again.{RESET}")
+            t.sleep(1)
 
 def bitcoincoremenuLOCALcontrolA(bcore):
     bitcoincoremenuLocalControl(bcore, "local")
