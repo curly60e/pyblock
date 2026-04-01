@@ -13,11 +13,40 @@ If no directory is specified, it searches the current directory and
 common PyBLOCK config locations.
 """
 
+import io
 import json
 import os
 import pickle
 import shutil
 import sys
+
+
+class SafeUnpickler(pickle.Unpickler):
+    """Restricted unpickler that only allows basic Python types."""
+    SAFE_CLASSES = {
+        ('builtins', 'dict'),
+        ('builtins', 'list'),
+        ('builtins', 'set'),
+        ('builtins', 'tuple'),
+        ('builtins', 'str'),
+        ('builtins', 'int'),
+        ('builtins', 'float'),
+        ('builtins', 'bool'),
+        ('builtins', 'bytes'),
+        ('builtins', 'type'),
+    }
+
+    def find_class(self, module, name):
+        if (module, name) not in self.SAFE_CLASSES:
+            raise pickle.UnpicklingError(
+                f"Blocked unsafe class: {module}.{name}"
+            )
+        return super().find_class(module, name)
+
+
+def safe_pickle_load(f):
+    """Load pickle data using restricted unpickler."""
+    return SafeUnpickler(f).load()
 
 
 def find_conf_files(search_dirs):
@@ -42,7 +71,7 @@ def is_pickle_file(filepath):
     except (json.JSONDecodeError, UnicodeDecodeError, ValueError):
         try:
             with open(filepath, 'rb') as f:
-                pickle.load(f)
+                safe_pickle_load(f)
             return True  # Valid pickle
         except Exception:
             return False  # Neither pickle nor JSON
@@ -54,9 +83,9 @@ def migrate_file(filepath):
         return False, "already JSON or not a valid pickle file"
 
     try:
-        # Read pickle data
+        # Read pickle data using safe unpickler
         with open(filepath, 'rb') as f:
-            data = pickle.load(f)
+            data = safe_pickle_load(f)
 
         # Create backup
         backup_path = filepath + '.pickle.bak'
