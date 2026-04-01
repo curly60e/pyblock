@@ -2,13 +2,14 @@
 #PyBLOCK its a clock of the Bitcoin blockchain.
 
 import os
+import subprocess
 import psutil
 import time as t
 from pblogo import *
 
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 def sysinfoDetail(): #Cpu and memory usage
 # gives a single float value
@@ -23,5 +24,5 @@ def sysinfoDetail(): #Cpu and memory usage
             print("   \033[3;33;40mDisk Usage: \033[1;32;40m" "{}%\033[0;37;40m%".format(psutil.disk_usage('/').percent))
             print("   \033[0;37;40m----------------------------")
             t.sleep(1)
-        except:
+        except Exception:
             break

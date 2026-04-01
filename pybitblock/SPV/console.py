@@ -1,10 +1,11 @@
 import os
+import subprocess
 import typer
 
 
 def main():
     scriptpath = os.path.join(os.path.dirname(__file__), 'PyBlock.py')
-    os.system(f"python3 {scriptpath}")
+    subprocess.run(['python3', scriptpath])
 
 
 if __name__ == "__main__":

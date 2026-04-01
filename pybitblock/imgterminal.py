@@ -1,13 +1,14 @@
 import shutil
 import os
+import subprocess
 from PIL import Image as PILImage
 from term_image.image import from_file
 
 def set_terminal_background(color="black"):
     if color == "black":
-        os.system('printf "\033[40m"')  # Secuencia de escape ANSI para fondo negro
+        subprocess.run(['printf', '\033[40m'])  # Secuencia de escape ANSI para fondo negro
     elif color == "reset":
-        os.system('printf "\033[49m"')  # Secuencia de escape ANSI para restaurar el fondo
+        subprocess.run(['printf', '\033[49m'])  # Secuencia de escape ANSI para restaurar el fondo
 
 
 def createimagebitaxe():

@@ -1,7 +1,8 @@
-import pickle
+import json
 import os
+import subprocess
 import sys
-import base64, codecs, json, requests
+import base64, codecs, requests
 import time as t
 from pblogo import *
 from cfonts import render, say
@@ -9,7 +10,7 @@ from cfonts import render, say
 
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 def rectangle(n):
     x = n - 3
@@ -34,20 +35,19 @@ def rectangle(n):
 def pathexec():
     global path
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
     path = pathv # Copy the variable pathv to 'path'
 
 def counttxs():
     try:
         bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-        block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
         b = block
         a = b
         pathexec()
         clear()
         getrawmempool = " getrawmempool"
-        gna = os.popen(path['bitcoincli'] + getrawmempool)
-        gnaa = gna.read()
+        gnaa = subprocess.run((path['bitcoincli'] + getrawmempool).split(), capture_output=True, text=True).stdout
         gna1 = str(gnaa)
         d = json.loads(gna1)
         e = len(d)
@@ -57,11 +57,10 @@ def counttxs():
         while True:
             x = a
             bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-            block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
             b = block
             pathexec()
-            gna = os.popen(path['bitcoincli'] + getrawmempool)
-            gnaa = gna.read()
+            gnaa = subprocess.run((path['bitcoincli'] + getrawmempool).split(), capture_output=True, text=True).stdout
             gna1 = str(gnaa)
             d = json.loads(gna1)
             e = len(d)
@@ -86,10 +85,10 @@ def counttxs():
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
                 print("\a\x1b[?25l" + output)
                 bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-                bb = os.popen(str(bitcoinclient)).read()
+                bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
                 ll = bb
                 bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-                qq = os.popen(bitcoinclientgetblock).read()
+                qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
                 yy = json.loads(qq)
                 mm = yy
                 outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
@@ -121,7 +120,7 @@ while True: # Loop
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
             path = pathv # Copy the variable pathv to 'path'
         else:
             blogo()
@@ -135,7 +134,8 @@ while True: # Loop
             path['rpcpass'] = input("RPC Password: ")
             print("\n\tLocal Bitcoin Node connection.\n")
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-            pickle.dump(path, open("config/bclock.conf", "wb"))
+            with open("config/bclock.conf", "w") as f:
+                json.dump(path, f, indent=2)
         counttxs()
 
 

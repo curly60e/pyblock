@@ -1,5 +1,5 @@
+import json
 import os
-import pickle
 import sys
 
 def load_config():
@@ -9,10 +9,12 @@ def load_config():
 
     try:
         if os.path.isfile('config/bclock.conf'):
-            pathv = pickle.load(open("config/bclock.conf", "rb"))
+            with open("config/bclock.conf", "r") as f:
+                pathv = json.load(f)
             path = pathv
         if os.path.isfile('config/blndconnect.conf'):
-            lndconnectData = pickle.load(open("config/blndconnect.conf", "rb"))
+            with open("config/blndconnect.conf", "r") as f:
+                lndconnectData = json.load(f)
             lndconnectload = lndconnectData
     except Exception as e:
         print(f"An error occurred: {e}")

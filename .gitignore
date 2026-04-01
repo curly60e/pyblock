@@ -7,6 +7,7 @@ __pycache__/
 
 # pyblock stuff
 pyblocksettings.conf
+*.pickle.bak
 
 # C extensions
 *.so

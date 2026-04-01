@@ -4,7 +4,7 @@
 
 
 import base64, codecs, json, requests
-import pickle
+import subprocess
 import os
 import os.path
 import qrcode
@@ -24,7 +24,7 @@ settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 def closed():
     print("<<< Back Control + C.\n\n")
 
@@ -39,7 +39,7 @@ def rpc(method, params=[]):
     })
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+        pathv = json.load(open("bclock.conf", "r")) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
@@ -80,11 +80,12 @@ def remoteHalving():
 
 def remotegetblock():
     if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+        settingsv = json.load(open("pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
         settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
+        with open("pyblocksettingsClock.conf", "w") as f:
+            json.dump(settingsClock, f, indent=2)
     b = rpc('getblockcount')
     c = str(b)
     a = c
@@ -144,19 +145,17 @@ def runthenumbersConn():
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def consoleLN(): # get into the console from bitcoin-cli
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
-        lsd = os.popen(lndconnectload['ln'] + " " + cle)
-        lsd0 = lsd.read()
-        lsd1 = str(lsd0)
+        lsd = subprocess.run([lndconnectload['ln']] + cle.split(), capture_output=True, text=True)
+        lsd1 = str(lsd.stdout)
         print(lsd1)
-        lsd.close()
 
 def locallistpeersQQ():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -171,7 +170,7 @@ def locallistpeersQQ():
         blogo()
         print("\033[0;37;40m")
         print("<<< Back to the Main Menu Press Control + C.\n\n")
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         n = d['peers']
@@ -255,7 +254,7 @@ def locallistpeersQQ():
 
             pp = input("\nDo you want to disconnect? Y/n: ")
             if pp in ["Y", "y"]:
-                lsd = os.popen(lndconnectload['ln'] + " disconnect" + " " + nd).read()
+                lsd = subprocess.run([lndconnectload['ln'], "disconnect", nd], capture_output=True, text=True).stdout
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 print("\n\tDisconnected from peer " + nd)
@@ -266,7 +265,7 @@ def locallistpeersQQ():
             break
 
 def localconnectpeer():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         clear()
@@ -277,7 +276,7 @@ def localconnectpeer():
         print("\n\tCONNECT TO NEW PEER\n")
         a = input("Insert PeerID@IP:PORT: ")
         lncli = " connect "
-        lsd = os.popen(lndconnectload['ln'] + lncli + a).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split() + [a], capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         print(lsd0)
         input("\nContinue... ")
@@ -285,7 +284,7 @@ def localconnectpeer():
         pass
 
 def locallistchaintxns():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -294,7 +293,7 @@ def locallistchaintxns():
     border=4,
     )
     lncli = " listchaintxns"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     n = d['transactions']
@@ -340,7 +339,7 @@ def locallistchaintxns():
             break
 
 def locallistinvoices():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -349,7 +348,7 @@ def locallistinvoices():
     border=4,
     )
     lncli = " listinvoices"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     n = d['invoices']
@@ -392,10 +391,10 @@ def locallistinvoices():
             break
 
 def locallistchannels():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     n = d['channels']
@@ -487,7 +486,7 @@ def locallistchannels():
             break
 
 def localgetinfo():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -496,7 +495,7 @@ def localgetinfo():
     border=4,
     )
     lncli = " getinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     hash = d['identity_pubkey']
@@ -554,10 +553,10 @@ def localgetinfo():
     input("\nContinue... ")
 
 def localaddinvoice():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " addinvoice"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     qr = qrcode.QRCode(
@@ -570,7 +569,7 @@ def localaddinvoice():
         amount = input("Amount in sats: ")
         mem = input("Memo: ")
         memo = mem.replace(" ","_")
-        lsd = os.popen(lndconnectload['ln'] + lncli + " --memo {}-PyBLOCK --amt {}".format(memo, amount)).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split() + ["--memo", "{}-PyBLOCK".format(memo), "--amt", amount], capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         print("\033[1;30;47m")
@@ -581,11 +580,11 @@ def localaddinvoice():
         print("Lightning Invoice: " + d['payment_request'])
         b = str(d['payment_request'])
         while True:
-            lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + b).read()
+            lsd = subprocess.run([lndconnectload['ln'], "decodepayreq", b], capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             r = d['payment_hash']
-            lsdn = os.popen(lndconnectload['ln'] + " lookupinvoice " + r).read()
+            lsdn = subprocess.run([lndconnectload['ln'], "lookupinvoice", r], capture_output=True, text=True).stdout
             lsdn0 = str(lsdn)
             n = json.loads(lsdn0)
             if n['state'] == 'SETTLED':
@@ -608,30 +607,30 @@ def localaddinvoice():
         pass
 
 def localpayinvoice():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         invoiceN = input("Insert the invoice to pay: ")
         invoice = invoiceN.lower()
         lncli = " payinvoice "
-        lsd = os.popen(lndconnectload['ln'] + " decodepayreq " + invoice).read()
+        lsd = subprocess.run([lndconnectload['ln'], "decodepayreq", invoice], capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         if d['num_satoshis'] == "0":
             amt = " --amt "
             amount =  input("Amount in satoshis: ")
-            os.system(lndconnectload['ln'] + lncli + invoice + amt + amount)
+            subprocess.run([lndconnectload['ln']] + lncli.split() + [invoice] + amt.split() + [amount])
         else:
-            os.system(lndconnectload['ln'] + lncli + invoice )
+            subprocess.run([lndconnectload['ln']] + lncli.split() + [invoice])
         t.sleep(2)
     except:
         pass
 
 def localgetnetworkinfo():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " getnetworkinfo"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     print("\n----------------------------------------------------------------------------------------------------")
@@ -650,27 +649,27 @@ def localgetnetworkinfo():
     input("\nContinue... ")
 
 def localFullProtocol():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 
     proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = os.popen(proto1).read()
-    p2 = os.popen(proto2).read()
-    p3 = os.popen(proto3).read()
+    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
+    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
+    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
 
     proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = os.popen(proto1).list()
-    p2 = os.popen(proto2).list()
-    p3 = os.popen(proto3).list()
+    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
+    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
+    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
 
 
 
 def localkeysend():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -683,9 +682,9 @@ def localkeysend():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system(
-            f"""lncli sendpayment --keysend --d={node} --amt={amount}"""
-            + """ --final_cltv_delta=40"""
+        subprocess.run(
+            ["lncli", "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
+             "--final_cltv_delta=40"]
         )
 
         input("\nContinue...")
@@ -693,7 +692,7 @@ def localkeysend():
         pass
 
 def localchatsendA():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -711,10 +710,9 @@ def localchatsendA():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system(
-            f"""lncli sendpayment --keysend --d={node} --amt={amount}"""
-            + """ --data 34349334="""
-            + hex_encoded_message
+        subprocess.run(
+            ["lncli", "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
+             "--data", "34349334=" + hex_encoded_message]
         )
 
         input("\nContinue...")
@@ -722,29 +720,29 @@ def localchatsendA():
         pass
 
 def localchatnewA():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
-        os.system("""lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""")
+        subprocess.run("""lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
     except:
         pass
 
 def localchatlistA():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
-        os.system("""lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""")
+        subprocess.run("""lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
     except:
         pass
 
 def localchatsendB():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -763,10 +761,9 @@ def localchatsendB():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system(
-            f"""lncli sendpayment --keysend --d={node} --amt={amount}"""
-            + """ --data 7629171="""
-            + hex_encoded_message
+        subprocess.run(
+            ["lncli", "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
+             "--data", "7629171=" + hex_encoded_message]
         )
 
         input("\nContinue...")
@@ -774,29 +771,29 @@ def localchatsendB():
         pass
 
 def localchatnewB():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
-        os.system("""lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""")
+        subprocess.run("""lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
     except:
         pass
 
 def localchatlistB():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
-        os.system("""lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""")
+        subprocess.run("""lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
     except:
         pass
 
 def localchatsendC():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -815,10 +812,9 @@ def localchatsendC():
                 amount = input("\nAmount in sats: ")
             else:
                 break
-        os.system(
-            f"""lncli sendpayment --keysend --d={node} --amt={amount}"""
-            + """ --data 34343434="""
-            + hex_encoded_message
+        subprocess.run(
+            ["lncli", "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
+             "--data", "34343434=" + hex_encoded_message]
         )
 
         input("\nContinue...")
@@ -826,33 +822,33 @@ def localchatsendC():
         pass
 
 def localchatnewC():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
-        os.system("""lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""")
+        subprocess.run("""lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
     except:
         pass
 
 def localchatlistC():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
         lncli = " listpayments "
-        os.system("""lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""")
+        subprocess.run("""lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
     except:
         pass
 
 def localchannelbalance():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " channelbalance"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     print("""
@@ -868,10 +864,10 @@ def localchannelbalance():
     input("\nContinue... ")
 
 def localnewaddress():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " newaddress p2wkh"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     qr = qrcode.QRCode(
@@ -889,10 +885,10 @@ def localnewaddress():
     input("\nContinue... ")
 
 def localbalanceOC():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " walletbalance"
-    lsd = os.popen(lndconnectload['ln'] + lncli).read()
+    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     print("\n----------------------------------------------------------------------------------------------------")
@@ -905,11 +901,11 @@ def localbalanceOC():
 
 
 def localrebalancelnd():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
     while True:
-        lsd = os.popen(lndconnectload['ln'] + lncli).read()
+        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         n = d['channels']
@@ -936,7 +932,7 @@ def localrebalancelnd():
             amt = input("\nAmount in sats: ")
             fee = input("\nMax Fee factor in sats: ")
             fromtonode = "python3 rebalance.py -f {} -t {} -a {} --max-fee-factor {}".format(fromnode,tonode,amt,fee)
-            os.system(str(fromtonode))
+            subprocess.run(["python3", "rebalance.py", "-f", fromnode, "-t", tonode, "-a", amt, "--max-fee-factor", fee])
             input("Continue...")
         except:
             break
@@ -944,7 +940,7 @@ def localrebalancelnd():
 # Remote connection with rest -------------------------------------
 
 def getnewinvoice():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -1014,7 +1010,7 @@ def getnewinvoice():
         pass
 
 def payinvoice():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -1067,7 +1063,7 @@ def payinvoice():
         pass
 
 def getnewaddress():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -1093,7 +1089,7 @@ def getnewaddress():
         pass
 
 def listinvoice():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -1146,7 +1142,7 @@ def listinvoice():
     input("\nContinue... ")
 
 def getinfo():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -1229,7 +1225,7 @@ def get_color(r, g, b):
     return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
 
 def channels():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -1326,7 +1322,7 @@ def channels():
             break
 
 def channelbalance():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -1401,7 +1397,7 @@ def listonchaintxs():
             break
 
 def balanceOC():
-    lndconnectData= pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')

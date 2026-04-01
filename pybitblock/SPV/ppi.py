@@ -4,7 +4,7 @@
 
 
 import base64, codecs, json, requests
-import pickle
+import subprocess
 import os
 import os.path
 import qrcode
@@ -22,7 +22,7 @@ from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 def closed():
     print("<<< Back Control + C.\n\n")
@@ -60,7 +60,7 @@ def opreturnOnchainONLY():
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = os.popen(curl).read()
+        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         b = str(a)
         clear()
         blogo()
@@ -75,10 +75,10 @@ def opreturnOnchainONLY():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
+            lsd = subprocess.run([lndconnectload["ln"], 'decodepayreq', invoice], capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
-            url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
+            url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
         else:
             cert_path = lndconnectload["tls"]
             macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -86,7 +86,7 @@ def opreturnOnchainONLY():
             url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
             r = requests.get(url, headers=headers, verify=cert_path)
             s = r.json()
-            url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
+            url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
         response = requests.get(url)
         responseB = str(response.text)
         responseC = responseB
@@ -94,7 +94,7 @@ def opreturnOnchainONLY():
         blogo()
         print("\nTransaction ID: " + responseC)
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def opreturn():
@@ -107,7 +107,7 @@ def opreturn():
     try:
         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
         if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-            lndconnectData= pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectData= json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
         else:
             clear()
@@ -118,11 +118,12 @@ def opreturn():
             lndconnectload["macaroon"] = input("Insert the path to admin.macaroon: ")
             print("\n\tLocal Lightning Node connection.\n")
             lndconnectload["ln"] = input("Insert the path to lncli: ")
-            pickle.dump(lndconnectload, open("blndconnect.conf", "wb")) # Save the file 'bclock.conf'
+            with open("blndconnect.conf", "w") as f:
+                json.dump(lndconnectload, f, indent=2) # Save the file 'bclock.conf'
 
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = pickle.load(open("bclock.conf", "rb")) # Load the file 'bclock.conf'
+            pathv = json.load(open("bclock.conf", "r")) # Load the file 'bclock.conf'
             path = pathv # Copy the variable pathv to 'path'
         else:
             blogo()
@@ -136,7 +137,8 @@ def opreturn():
             path['rpcpass'] = input("RPC Password: ")
             print("\n\tLocal Bitcoin Node connection.\n")
             path['bitcoincli']= input("Insert the Path to Bitcoin-Cli: ")
-            pickle.dump(path, open("bclock.conf", "wb"))
+            with open("bclock.conf", "w") as f:
+                json.dump(path, f, indent=2)
         clear()
         blogo()
         output = render(
@@ -162,12 +164,12 @@ def opreturn():
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = os.popen(curl).read()
+        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         b = str(a)
         node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + b + "\n")
@@ -178,7 +180,7 @@ def opreturn():
                 url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
                 r = requests.get(url, headers=headers, verify=cert_path)
                 s = r.json()
-                url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
+                url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
@@ -192,10 +194,10 @@ def opreturn():
                 invoiceN = b
                 invoice = invoiceN.lower()
                 lncli = " payinvoice "
-                lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
+                lsd = subprocess.run([lndconnectload["ln"], 'decodepayreq', invoice], capture_output=True, text=True).stdout
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
-                url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
+                url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
                 response = requests.get(url)
                 responseB = str(response.text)
                 responseC = responseB
@@ -217,10 +219,10 @@ def opreturn():
                 invoiceN = b
                 invoice = invoiceN.lower()
                 lncli = " payinvoice "
-                lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
+                lsd = subprocess.run([lndconnectload["ln"], 'decodepayreq', invoice], capture_output=True, text=True).stdout
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
-                url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
+                url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
             else:
                 cert_path = lndconnectload["tls"]
                 macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -228,7 +230,7 @@ def opreturn():
                 url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
                 r = requests.get(url, headers=headers, verify=cert_path)
                 s = r.json()
-                url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
+                url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
             response = requests.get(url)
             responseB = str(response.text)
             responseC = responseB
@@ -236,7 +238,7 @@ def opreturn():
             blogo()
             print("\nTransaction ID: " + responseC)
             input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def opreturn_view():
@@ -249,7 +251,7 @@ def opreturn_view():
 
         print(output)
         responseC = input("TX ID: ")
-        url2 = f'http://opreturnbot.com/api/view/{responseC}'
+        url2 = f'https://opreturnbot.com/api/view/{responseC}'
         r = requests.get(url2)
         r2 = str(r.text)
         r3 = r2
@@ -258,13 +260,13 @@ def opreturn_view():
         print("\nTransaction ID: " + responseC)
         print(f'OP_RETURN Message: {r3}')
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def opretminer():
     try:
         conn = """curl -s 'https://bitcointicker.co/latestblocks/' | xargs --null | html2text | grep "Coinbase" -A 70 | tr -d '|' | grep -v "Coinbase" | grep '6.25'"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -275,7 +277,7 @@ def opretminer():
         print(output)
         print(a)
         input("")
-    except:
+    except Exception:
         pass
 
 #-----------------------------GAMES--------------------------------
@@ -293,9 +295,9 @@ def gameroom():
         --------------------------------------
         """.format(closed()))
         input("\a\nContinue...")
-        conn = "ssh gameroom@bitreich.org"
-        os.system(conn).read()
-    except:
+        conn = ['ssh', 'gameroom@bitreich.org']
+        subprocess.run(conn)
+    except Exception:
         pass
 #----------------------------------------------------------------------
 
@@ -304,7 +306,7 @@ def gameroom():
 def statsConn():
     try:
         conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -312,7 +314,7 @@ def statsConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Stats--------------------------------
@@ -322,7 +324,7 @@ def statsConn():
 def pgpConn():
     try:
         conn = """curl -s https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -333,7 +335,7 @@ def pgpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END PGP--------------------------------
@@ -343,7 +345,7 @@ def pgpConn():
 def satoshiConn():
     try:
         conn = """curl -s https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html | html2text | tail -n 82 | grep -v "Unsubscribe" | grep -v "Next message" | grep -v "Previous message"| grep -v "Messages sorted" | grep -v "More information" | grep -v "list]" """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -354,7 +356,7 @@ def satoshiConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Satoshi--------------------------------
@@ -364,7 +366,7 @@ def satoshiConn():
 def whalalConn():
     try:
         conn = """curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&min_value=5000000&currency=btc' | jq  -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to|id" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g' | sed 's/amount/₿/g' | sed 's/_usd/=$/g' | sed 's/bitcoin/WHALE ALERT/g' | grep -E ' '"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -372,7 +374,7 @@ def whalalConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Whale Alert--------------------------------
@@ -381,13 +383,13 @@ def whalalConn():
 def bwtConn():
     try:
         conn = "curl -s https://bwt.dev/banner.txt"
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END bwt.dev--------------------------------
@@ -396,7 +398,7 @@ def bwtConn():
 def datesConn():
     try:
         conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ','"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -404,7 +406,7 @@ def datesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Dates--------------------------------
@@ -413,7 +415,7 @@ def datesConn():
 def quotesConn():
     try:
         conn = """curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -421,7 +423,7 @@ def quotesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Quotes--------------------------------
@@ -430,7 +432,7 @@ def quotesConn():
 def miningConn():
     try:
         conn = """curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,'"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -438,7 +440,7 @@ def miningConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Hashrate--------------------------------
@@ -447,7 +449,7 @@ def miningConn():
 def stalnConn():
     try:
         conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -458,7 +460,7 @@ def stalnConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END StatsLN--------------------------------
@@ -467,7 +469,7 @@ def ranConn():
     try:
         conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g'
 """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -475,7 +477,7 @@ def ranConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 #-----------------------------END Ranking--------------------------------
 
@@ -496,9 +498,9 @@ def trustednode():
         """
         print(addv)
         input("\a\nContinue...")
-        conn = "telnet cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion 6023"
-        os.system(conn)
-    except:
+        conn = ['telnet', 'cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion', '6023']
+        subprocess.run(conn)
+    except Exception:
         pass
 #-----------------------------END GAMES--------------------------------
 
@@ -555,12 +557,12 @@ def wttrDataV1():
             list = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
         else:
             list = f'curl wttr.in/{selectData}?F'
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 def wttrDataV2():
@@ -614,12 +616,12 @@ def wttrDataV2():
 
         else:
             list = f'curl v2.wttr.in/{selectData}?F'
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 
@@ -668,18 +670,18 @@ def rateSXList():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except:
+    except Exception:
         pass
     while True:
         try:
             list = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
-            a = os.popen(list).read()
+            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
             print(a)
             t.sleep(20)
-        except:
+        except Exception:
             break
 
 def rateSXGraph():
@@ -723,18 +725,18 @@ def rateSXGraph():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except:
+    except Exception:
         pass
     while True:
         try:
             list = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
-            a = os.popen(list).read()
+            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
             print(a)
             t.sleep(20)
-        except:
+        except Exception:
             break
 
 #-----------------------------END RATE.SX--------------------------------
@@ -773,7 +775,7 @@ def CoingeckoPP():
         ------------------------------------------------------------------
         """.format(usd,eur,gbp,jpy,aud))
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END COINGECKO--------------------------------
@@ -785,7 +787,7 @@ def loadFileConnLNBits(lnbitLoad):
     lnbitLoad = {"wallet_name":"", "wallet_id":"", "admin_key":"", "invoice_read_key":""}
 
     if os.path.isfile('lnbit.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lnbitData= pickle.load(open("lnbit.conf", "rb")) # Load the file 'bclock.conf'
+        lnbitData= json.load(open("lnbit.conf", "r")) # Load the file 'bclock.conf'
         lnbitLoad = lnbitData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -799,7 +801,8 @@ def loadFileConnLNBits(lnbitLoad):
         lnbitLoad["wallet_id"] = input("Wallet ID: ")
         lnbitLoad["admin_key"] = input("Admin key: ")
         lnbitLoad["invoice_read_key"] = input("Invoice/read key: ")
-        pickle.dump(lnbitLoad, open("lnbit.conf", "wb"))
+        with open("lnbit.conf", "w") as f:
+            json.dump(lnbitLoad, f, indent=2)
     return lnbitLoad
 
 def createFileConnLNBits():
@@ -821,7 +824,8 @@ def createFileConnLNBits():
     lnbitLoad["admin_key"] = input("Admin key: ")
     lnbitLoad["invoice_read_key"] = input("Invoice/read key: ")
 
-    pickle.dump(lnbitLoad, open("lnbit.conf", "wb"))
+    with open("lnbit.conf", "w") as f:
+        json.dump(lnbitLoad, f, indent=2)
 
 def lnbitCreateNewInvoice():
     qr = qrcode.QRCode(
@@ -844,7 +848,7 @@ def lnbitCreateNewInvoice():
             + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json" """
         )
 
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         n = str(sh)
@@ -856,7 +860,7 @@ def lnbitCreateNewInvoice():
         while True:
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                 lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     print("\nInvoice: " + c + "\n")
@@ -879,7 +883,7 @@ def lnbitCreateNewInvoice():
                 )
 
 
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -892,7 +896,7 @@ def lnbitCreateNewInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except:
+    except Exception:
         pass
 
 def lnbitPayInvoice():
@@ -908,7 +912,7 @@ def lnbitPayInvoice():
     )
 
     try:
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         n = str(sh)
         d = json.loads(n)
         dn = str(d['checking_id'])
@@ -921,7 +925,7 @@ def lnbitPayInvoice():
             )
 
 
-            rsh = os.popen(checkcurl).read()
+            rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             nn = str(rsh)
@@ -932,7 +936,7 @@ def lnbitPayInvoice():
             tick()
             t.sleep(2)
             break
-    except:
+    except Exception:
         pass
 
 def lnbitCreatePayWall():
@@ -957,7 +961,7 @@ def lnbitCreatePayWall():
                 + f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -972,7 +976,7 @@ def lnbitCreatePayWall():
                 + f""" "X-Api-Key: {bb}" """
             )
 
-            sh = os.popen(checkcurl).read()
+            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1004,7 +1008,7 @@ def lnbitCreatePayWall():
                 input("Continue...")
             clear()
             blogo()
-        except:
+        except Exception:
             break
 
 def lnbitListPawWall():
@@ -1015,7 +1019,7 @@ def lnbitListPawWall():
         + f""" "X-Api-Key: {b}" """
     )
 
-    sh = os.popen(checkcurl).read()
+    sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     n = str(sh)
@@ -1045,7 +1049,7 @@ def lnbitListPawWall():
                     Wallet: {}
                     """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
-        except:
+        except Exception:
             break
         input("Continue...")
         clear()
@@ -1061,7 +1065,7 @@ def lnbitDeletePayWall():
                 + f""" "X-Api-Key: {b}" """
             )
 
-            sh = os.popen(checkcurl).read()
+            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1091,7 +1095,7 @@ def lnbitDeletePayWall():
                             Wallet: {}
                             """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                             print("----------------------------------------------------------------------------------------------------------------\n")
-                except:
+                except Exception:
                     break
                 input("Continue...")
                 break
@@ -1104,13 +1108,13 @@ def lnbitDeletePayWall():
                 + f""" -H "X-Api-Key: {b}" """
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
             t.sleep(2)
             clear()
-        except:
+        except Exception:
             break
 
 def lnbitsLNURLw():
@@ -1138,7 +1142,7 @@ def lnbitsLNURLw():
                 + f' -H "Content-type: application/json" -H "X-Api-Key: {b}"'
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1149,7 +1153,7 @@ def lnbitsLNURLw():
             while True:
                 checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
 
-                sh = os.popen(checkcurl).read()
+                sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 n = str(sh)
@@ -1179,7 +1183,7 @@ def lnbitsLNURLw():
                 input("Continue...")
                 clear()
                 blogo()
-        except:
+        except Exception:
             break
 
 def lnbitsLNURLwList():
@@ -1189,7 +1193,7 @@ def lnbitsLNURLwList():
             b = str(a['admin_key'])
             checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
 
-            sh = os.popen(checkcurl).read()
+            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1217,7 +1221,7 @@ def lnbitsLNURLwList():
                     """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
             input("Continue...")
-    except:
+    except Exception:
         print("\n")
 
 #-------------------------1d646820055e4e2da218e801eaacfc94----END LNBITS--------------------------------
@@ -1227,7 +1231,7 @@ def loadFileConnLNPay(lnpayLoad):
     lnpayLoad = {"key":""}
 
     if os.path.isfile('lnpay.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lnpayData= pickle.load(open("lnpay.conf", "rb")) # Load the file 'bclock.conf'
+        lnpayData= json.load(open("lnpay.conf", "r")) # Load the file 'bclock.conf'
         lnpayLoad = lnpayData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -1240,7 +1244,8 @@ def loadFileConnLNPay(lnpayLoad):
         lnpayLoad["key"] = input("API Key: ")
         print("\n\tWALLET ACCESS KEYS\n")
         lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
-        pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
+        with open("lnpay.conf", "w") as f:
+            json.dump(lnpayLoad, f, indent=2)
     clear()
     blogo()
     return lnpayLoad
@@ -1256,7 +1261,8 @@ def createFileConnLNPay():
     lnpayLoad["key"] = input("API Key: ")
     print("\n\tWALLET ACCESS KEYS\n")
     lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
-    pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
+    with open("lnpay.conf", "w") as f:
+        json.dump(lnpayLoad, f, indent=2)
 
 def lnpayGetBalance():
     a = loadFileConnLNPay(['key'])
@@ -1305,7 +1311,7 @@ def lnpayCreateInvoice():
         while True:
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                 lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     print("\nInvoice: " + invoice['payment_request'] + "\n")
@@ -1323,7 +1329,7 @@ def lnpayCreateInvoice():
                 t.sleep(10)
                 curl = f'curl -u {b}: https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis'
 
-                rsh = os.popen(curl).read()
+                rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -1336,7 +1342,7 @@ def lnpayCreateInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except:
+    except Exception:
         pass
 
 def lnpayGetTransactions():
@@ -1389,7 +1395,7 @@ def lnpayGetTransactions():
             input("Continue...")
             clear()
             blogo()
-        except:
+        except Exception:
             break
     clear()
     blogo()
@@ -1409,7 +1415,7 @@ def lnpayPayInvoice():
         curl = f'curl -u{b}: https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}'
 
         clear()
-        rsh = os.popen(curl).read()
+        rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         nn = str(rsh)
         dd = json.loads(nn)
         clear()
@@ -1430,7 +1436,7 @@ def lnpayPayInvoice():
             'payment_request': inv
         }
         pay_result = my_wallet.pay_invoice(invoice_params)
-    except:
+    except Exception:
         pass
 
 def lnpayTransBWallets():
@@ -1471,7 +1477,7 @@ def lnpayTransBWallets():
         """.format(p['id'], p['num_satoshis'], p['user_label'], v['user_label'], f['user_label']))
         print("----------------------------------------------------------------------------------------------------\n")
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END LNPAY--------------------------------
@@ -1481,7 +1487,7 @@ def loadFileConnOpenNode(opennodeLoad):
     opennodeLoad = {"key":"","wdr":"","inv":""}
 
     if os.path.isfile('opennode.conf'): # Check if the file 'bclock.conf' is in the same folder
-        opennodeData= pickle.load(open("opennode.conf", "rb")) # Load the file 'bclock.conf'
+        opennodeData= json.load(open("opennode.conf", "r")) # Load the file 'bclock.conf'
         opennodeLoad = opennodeData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -1494,7 +1500,8 @@ def loadFileConnOpenNode(opennodeLoad):
         opennodeLoad["key"] = input("API Read Only Key: ")
         opennodeLoad["wdr"] = input("API Withdrawall Key: ")
         opennodeLoad["inv"] = input("API Invoices Key: ")
-        pickle.dump(opennodeLoad, open("opennode.conf", "wb"))
+        with open("opennode.conf", "w") as f:
+            json.dump(opennodeLoad, f, indent=2)
     clear()
     blogo()
     return opennodeLoad
@@ -1510,7 +1517,8 @@ def createFileConnOpenNode():
     opennodeLoad = {'wdr': '', 'inv': '', 'key': input("API Read Only Key: ")}
     opennodeLoad["wdr"] = input("API Withdrawall Key: ")
     opennodeLoad["inv"] = input("API Invoices Key: ")
-    pickle.dump(opennodeLoad, open("opennode.conf", "wb"))
+    with open("opennode.conf", "w") as f:
+        json.dump(opennodeLoad, f, indent=2)
 
 def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
@@ -1520,7 +1528,7 @@ def OpenNodelistfunds():
         + f'"Content-Type: application/json" -H "Authorization: {b}"'
     )
 
-    sh = os.popen(curl).read()
+    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     n = str(sh)
@@ -1538,7 +1546,7 @@ def OpenNodelistfunds():
 
 def OpenNodeCheckStatus():
     curl = "curl -X GET https://status.opennode.com/history.rss"
-    sh = os.popen(curl).read()
+    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     my_dict=xmltodict.parse(sh)
@@ -1598,7 +1606,7 @@ def OpenNodecreatecharge():
             + "}'"
         )
 
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         n = str(sh)
@@ -1627,7 +1635,7 @@ def OpenNodecreatecharge():
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
@@ -1653,7 +1661,7 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except:
+            except Exception:
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
@@ -1666,7 +1674,7 @@ def OpenNodecreatecharge():
             + "}'"
         )
 
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         n = str(sh)
@@ -1694,7 +1702,7 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
@@ -1721,7 +1729,7 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except:
+            except Exception:
                 break
 
 def OpenNodeiniciatewithdrawal():
@@ -1743,7 +1751,7 @@ def OpenNodeiniciatewithdrawal():
                     + "}'"
                 )
 
-                ssh = os.popen(checkcurl).read()
+                ssh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 nn = str(ssh)
                 dd = json.loads(nn)
                 print(dd)
@@ -1779,14 +1787,14 @@ def OpenNodeiniciatewithdrawal():
                 + "}'"
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             n = str(sh)
             d = json.loads(n)
             clear()
             blogo()
             tick()
             t.sleep(2)
-        except:
+        except Exception:
             pass
 
     elif lnchain in ["O", "o"]:
@@ -1804,7 +1812,7 @@ def OpenNodeiniciatewithdrawal():
                 )
 
                 if amt < 199999:
-                    sh = os.popen(curl).read()
+                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
                     n = str(sh)
                     d = json.loads(n)
                     print("\n----------------------------------------------------------------------------------------------------")
@@ -1815,7 +1823,7 @@ def OpenNodeiniciatewithdrawal():
                     """.format(d['message']))
                     print("----------------------------------------------------------------------------------------------------\n")
                 elif amt > 200000:
-                    sh = os.popen(curl).read()
+                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
                     n = str(sh)
                     d = json.loads(n)
                     dd = d['data']
@@ -1835,7 +1843,7 @@ def OpenNodeiniciatewithdrawal():
                     logoB()
                     t.sleep(2)
                     break
-        except:
+        except Exception:
             pass
 
 def OpenNodeListPayments():
@@ -1849,7 +1857,7 @@ def OpenNodeListPayments():
     b = str(a['wdr'])
     curl = f'curl https://api.opennode.co/v1/withdrawals -H "Content-Type: application/json" -H "Authorization: {b}"'
 
-    sh = os.popen(curl).read()
+    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     print("\n\tOPENNODE TRANSACTIONS LIST\n")
@@ -1887,7 +1895,7 @@ def OpenNodeListPayments():
             clear()
             blogo()
             print("\n\tOPENNODE TRANSACTIONS LIST\n")
-        except:
+        except Exception:
             break
 
 #-----------------------------END OPENNODE--------------------------------
@@ -1897,7 +1905,7 @@ def loadFileTippinMe(tippinmeLoad):
     tippinmeLoad = {"key":""}
 
     if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
-        tippinmeData= pickle.load(open("tippinme.conf", "rb")) # Load the file 'bclock.conf'
+        tippinmeData= json.load(open("tippinme.conf", "r")) # Load the file 'bclock.conf'
         tippinmeLoad = tippinmeData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -1906,7 +1914,8 @@ def loadFileTippinMe(tippinmeLoad):
                                                                 IF YOU NEED TO START AGAIN, DELETE IT.\n
         """)
         tippinmeLoad["key"] = input("Twitter @user: ")
-        pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
+        with open("tippinme.conf", "w") as f:
+            json.dump(tippinmeLoad, f, indent=2)
     clear()
     blogo()
     return tippinmeLoad
@@ -1918,7 +1927,8 @@ def createFileTippinMe():
                                                                 IF YOU NEED TO START AGAIN, DELETE IT.\n
     """)
     tippinmeLoad = {'key': input("Twitter @user: ")}
-    pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
+    with open("tippinme.conf", "w") as f:
+        json.dump(tippinmeLoad, f, indent=2)
 
 def tippinmeGetInvoice():
     qr = qrcode.QRCode(
@@ -1948,7 +1958,7 @@ def tippinmeGetInvoice():
         node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + ln1 + "\n")
@@ -1964,7 +1974,7 @@ def tippinmeGetInvoice():
             print(f'LND Invoice: {ln1}')
             response.close()
             input("Continue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END TIPPINME--------------------------------
@@ -1973,7 +1983,7 @@ def loadFileConnTallyCo(tallycoLoad):
     tallycoLoad = {"tallyco.conf":"","id":""}
 
     if os.path.isfile('tallyco.conf'): # Check if the file 'bclock.conf' is in the same folder
-        tallyData= pickle.load(open("tallyco.conf", "rb")) # Load the file 'bclock.conf'
+        tallyData= json.load(open("tallyco.conf", "r")) # Load the file 'bclock.conf'
         tallycoLoad = tallyData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -1985,7 +1995,8 @@ def loadFileConnTallyCo(tallycoLoad):
         """)
         print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
         tallycoLoad["id"] = input("User ID or Twitter @USER: ")
-        pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
+        with open("tallyco.conf", "w") as f:
+            json.dump(tallycoLoad, f, indent=2)
     clear()
     blogo()
     return tallycoLoad
@@ -2000,7 +2011,8 @@ def createFileConnTallyCo():
     """)
     print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
     tallycoLoad = {'fundraiser_id': '', 'id': input("User ID or Twitter @USER: ")}
-    pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
+    with open("tallyco.conf", "w") as f:
+        json.dump(tallycoLoad, f, indent=2)
 
 def tallycoGetPayment():
     qr = qrcode.QRCode(
@@ -2024,7 +2036,7 @@ def tallycoGetPayment():
             + " -X POST https://api.tallyco.in/v1/payment/request/"
         )
 
-        tallycomethod = os.popen(curl).read()
+        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -2049,7 +2061,7 @@ def tallycoGetPayment():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 
@@ -2076,7 +2088,7 @@ def tallycoDonateid():
             + " -X POST https://api.tallyco.in/v1/payment/request/"
         )
 
-        tallycomethod = os.popen(curl).read()
+        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -2085,7 +2097,7 @@ def tallycoDonateid():
             node_not = input("Do you want to pay this tip with your node? Y/n: ")
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                 lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     e = d['lightning_pay_request']
@@ -2117,7 +2129,7 @@ def tallycoDonateid():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 
@@ -2143,7 +2155,7 @@ def fee():
             """.format(di['fastestFee'], di['halfHourFee'], di['hourFee']))
             t.sleep(5)
             print("\n\t    Getting New Information")
-    except:
+    except Exception:
         pass
 
 def blocks():
@@ -2173,7 +2185,7 @@ def blocks():
                 <<< Back Control + C
                 """.format(q['blockSize'], q['blockVSize'], q['nTx'], q['totalFees'], q['medianFee']))
                 t.sleep(3)
-    except:
+    except Exception:
         pass
 
 

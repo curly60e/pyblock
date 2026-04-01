@@ -4,7 +4,6 @@
 
 import requests
 import qrcode
-import pickle
 from nodeconnection import *
 
 def donationAddr():

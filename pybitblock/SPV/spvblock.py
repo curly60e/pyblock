@@ -5,7 +5,6 @@
 import os
 import os.path
 import time as t
-import pickle
 import psutil
 import html2text
 import qrcode
@@ -165,7 +164,7 @@ def counttxs():
 
                 if tx_count == 1:
                     try:
-                        p = subprocess.Popen(['curl', 'http://ascii.live/forrest'])
+                        p = subprocess.Popen(['curl', 'https://ascii.live/forrest'])
                         p.wait(5)
                     except subprocess.TimeoutExpired:
                         p.kill()
@@ -174,18 +173,19 @@ def counttxs():
                 clear()
                 qs = current_block
                 nn = e
-    except:
+    except Exception:
         pass
 
 
 def blogo():
 
     if os.path.isfile('config/pyblocksettinconfig/gs.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("config/pyblocksettings.conf", "rb")) # Load the file 'bclock.conf'
+        settingsv = json.load(open("config/pyblocksettings.conf", "r")) # Load the file 'bclock.conf'
         settings = settingsv # Copy the variable pathv to 'path'
     else:
         settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
+        with open("config/pyblocksettings.conf", "w") as f:
+            json.dump(settings, f, indent=2)
 
     if settings["gradient"] == "grd":
         output = render('PyBLOCK', gradient=[settings['colorA'], settings['colorB']], align='left', font=settings['design'])
@@ -354,29 +354,29 @@ def logoC():
 
 def gitclone():
     url = "https://github.com/curly60e/satellite"
-    os.system(f"git clone {url}")
-    os.system("mkdir satellite/api/examples/.gnupg")
-    os.system("gpg --full-generate-key --homedir satellite/api/examples/.gnupg")
+    subprocess.run(f"git clone {url}", shell=True)
+    subprocess.run("mkdir satellite/api/examples/.gnupg", shell=True)
+    subprocess.run("gpg --full-generate-key --homedir satellite/api/examples/.gnupg", shell=True)
 
 def satnode():
     try:
-        os.system("python3 satellite/api/examples/demo-rx.py &")
+        subprocess.run("python3 satellite/api/examples/demo-rx.py &", shell=True)
         t.sleep(5)
-        os.system("python3 satellite/api/examples/api_data_reader.py --demo  --plaintext ")
-    except:
-        os.system("ps -ef | grep api_data_reader.py | grep -v grep | awk '{print $2}' | xargs kill -9")
-        os.system("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9")
+        subprocess.run("python3 satellite/api/examples/api_data_reader.py --demo  --plaintext ", shell=True)
+    except Exception:
+        subprocess.run("ps -ef | grep api_data_reader.py | grep -v grep | awk '{print $2}' | xargs kill -9", shell=True)
+        subprocess.run("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9", shell=True)
 
 def matrixsc():
     if os.path.isdir('$HOME/pyblock/terminal_matrix'):
         print("OK Pass")
     else:
         url = "https://github.com/curly60e/terminal_matrix.git"
-        os.system(f"git clone {url}")
+        subprocess.run(f"git clone {url}", shell=True)
 
 def main():
     scriptpath = os.path.join(os.path.dirname(__file__), 'PyBlock.py')
-    os.system(f"python3 {scriptpath}")
+    subprocess.run(f"python3 {scriptpath}", shell=True)
 
 
 if __name__ == "__main__":
@@ -414,7 +414,7 @@ def opreturnOnchainONLY():
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = os.popen(curl).read()
+        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         b = str(a)
         clear()
         blogo()
@@ -429,10 +429,10 @@ def opreturnOnchainONLY():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
+            lsd = subprocess.run(f'{lndconnectload["ln"]} decodepayreq {invoice}', shell=True, capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
-            url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
+            url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
         else:
             cert_path = lndconnectload["tls"]
             macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -440,7 +440,7 @@ def opreturnOnchainONLY():
             url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
             r = requests.get(url, headers=headers, verify=cert_path)
             s = r.json()
-            url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
+            url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
         response = requests.get(url)
         responseB = str(response.text)
         responseC = responseB
@@ -448,7 +448,7 @@ def opreturnOnchainONLY():
         blogo()
         print("\nTransaction ID: " + responseC)
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def opreturn():
@@ -482,7 +482,7 @@ def opreturn():
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = os.popen(curl).read()
+        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         b = str(a)
         clear()
         blogo()
@@ -497,10 +497,10 @@ def opreturn():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = os.popen(f'{lndconnectload["ln"]} decodepayreq {invoice}').read()
+            lsd = subprocess.run(f'{lndconnectload["ln"]} decodepayreq {invoice}', shell=True, capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
-            url = f"http://opreturnbot.com/api/status/{d['payment_hash']}"
+            url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
         else:
             cert_path = lndconnectload["tls"]
             macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
@@ -508,7 +508,7 @@ def opreturn():
             url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
             r = requests.get(url, headers=headers, verify=cert_path)
             s = r.json()
-            url = f"http://opreturnbot.com/api/status/{s['payment_hash']}"
+            url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
         response = requests.get(url)
         responseB = str(response.text)
         responseC = responseB
@@ -516,7 +516,7 @@ def opreturn():
         blogo()
         print("\nTransaction ID: " + responseC)
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def opreturn_view():
@@ -529,7 +529,7 @@ def opreturn_view():
 
         print(output)
         responseC = input("TX ID: ")
-        url2 = f'http://opreturnbot.com/api/view/{responseC}'
+        url2 = f'https://opreturnbot.com/api/view/{responseC}'
         r = requests.get(url2)
         r2 = str(r.text)
         r3 = r2
@@ -538,13 +538,13 @@ def opreturn_view():
         print("\nTransaction ID: " + responseC)
         print(f'OP_RETURN Message: {r3}')
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def opretminer():
     try:
         conn = """curl -s 'https://bitcointicker.co/latestblocks/' | xargs --null | html2text | grep "Coinbase" -A 70 | tr -d '|' | grep -v "Coinbase" | grep '6.25'"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -555,7 +555,7 @@ def opretminer():
         print(output)
         print(a)
         input("")
-    except:
+    except Exception:
         pass
 
 #------------------------------------------------------------------
@@ -575,9 +575,9 @@ def bitaxeA(): # show srings
         pi = "/api/ws"        
         list = subprocess.Popen(['curl', ip+ep+pi])
         input("\a\n...Loading Logs...\n\n")
-        a = os.popen(list)
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def bitaxeB(): # show srings
@@ -591,11 +591,11 @@ def bitaxeB(): # show srings
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
         list = f"""curl -s 'http://{responseC}/api/system/info' | jq -C """
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         print("\nBitAxe ip: " + responseC)
         print("\nSystem Info:\n" + a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def bitaxeC(): # show srings
@@ -609,11 +609,11 @@ def bitaxeC(): # show srings
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
         list = f"""curl -s -X POST 'http://{responseC}/api/system/restart' """
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         print("\nBitAxe ip: " + responseC)
         print("\nBitAxe Restarting:\n" + a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 #-----------------------------GAMES--------------------------------
 #------------------------------------------------------------------
@@ -631,8 +631,8 @@ def gameroom():
         """.format(closed()))
         input("\a\nContinue...")
         conn = "ssh gameroom@bitreich.org"
-        os.system(conn).read()
-    except:
+        subprocess.run(conn).read(, shell=True)
+    except Exception:
         pass
 #----------------------------------------------------------------------
 
@@ -646,9 +646,9 @@ def callPhoenixLin():
             "Phoenix Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip")
+            subprocess.run("cd phoenixwallet && rm -rf phoenix-0.3.0-linux-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip && unzip -j phoenix-0.3.0-linux-x64.zip")
+            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-linux-x64.zip && unzip -j phoenix-0.3.0-linux-x64.zip", shell=True)
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -657,8 +657,8 @@ def callPhoenixLin():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+    except Exception:
         menuSelection()
 
 def callPhoenixWin():
@@ -669,9 +669,9 @@ def callPhoenixWin():
             "Phoenix Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf v0.3.0.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip")
+            subprocess.run("cd phoenixwallet && rm -rf v0.3.0.zip && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip && unzip -j v0.3.0.zip")
+            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/archive/refs/tags/v0.3.0.zip && unzip -j v0.3.0.zip", shell=True)
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -680,8 +680,8 @@ def callPhoenixWin():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+    except Exception:
         menuSelection()
 
 def callPhoenixMacX64():
@@ -692,9 +692,9 @@ def callPhoenixMacX64():
             "Phoenix MacOSX64", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip")
+            subprocess.run("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-x64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip && unzip -j phoenix-0.3.0-macos-x64.zip")
+            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-x64.zip && unzip -j phoenix-0.3.0-macos-x64.zip", shell=True)
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -703,8 +703,8 @@ def callPhoenixMacX64():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+    except Exception:
         menuSelection()
 
 def callPhoenixMacARM():
@@ -715,9 +715,9 @@ def callPhoenixMacARM():
             "Phoenix MacOSARM", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('phoenixwallet'):
-            os.system("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip")
+            subprocess.run("cd phoenixwallet && rm -rf phoenix-0.3.0-macos-arm64.zip && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip && unzip -j phoenix-0.3.0-macos-arm64.zip")
+            subprocess.run("mkdir phoenixwallet && cd phoenixwallet && wget https://github.com/ACINQ/phoenixd/releases/download/v0.3.0/phoenix-0.3.0-macos-arm64.zip && unzip -j phoenix-0.3.0-macos-arm64.zip", shell=True)
         clear()
         blogo()
         input("\a\nYou are going to launch your own Phoenix. Press Enter to Continue.")
@@ -726,8 +726,8 @@ def callPhoenixMacARM():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenixd")
-    except:
+        subprocess.run(f"cd phoenixwallet && ./phoenixd", shell=True)
+    except Exception:
         menuSelection()
 
 def callPhoenix():
@@ -740,29 +740,29 @@ def callPhoenix():
         clear()
         blogo()
         print(output)
-        os.system(f"cd phoenixwallet && ./phoenix-cli --help")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli --help", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         responseC = input("\a\nCType a command of the list: ")
-        os.system(f"cd phoenixwallet && ./phoenix-cli {responseC}")
+        subprocess.run(f"cd phoenixwallet && ./phoenix-cli {responseC}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 def wallPhoenix():
@@ -775,9 +775,9 @@ def wallPhoenix():
         responseC = input("Your PhoenixD Password: ")
         responseD = input("Your Description: ")
         responseE = input("Amount in Sats: ")
-        os.system(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'")
+        subprocess.run(f"curl -X 'POST' 'http://localhost:9740/createinvoice' -u :{responseC} -d 'description={responseD}' -d 'amountSat={responseE}'", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 def wallPhoenixBOLT12():
@@ -788,9 +788,9 @@ def wallPhoenixBOLT12():
         "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
         )
         responseC = input("Your PhoenixD Password: ")
-        os.system(f"curl -s 'http://localhost:9740/getoffer' -u :{responseC}")
+        subprocess.run(f"curl -s 'http://localhost:9740/getoffer' -u :{responseC}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 #----------------------------------------------------------------------PhoenixEnd
@@ -799,7 +799,7 @@ def wallPhoenixBOLT12():
 def statsConn():
     try:
         conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -807,7 +807,7 @@ def statsConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Stats--------------------------------
@@ -817,7 +817,7 @@ def statsConn():
 def blockTmpConn():
     try:
         conn = """curl -s https://miningpool.observer/template-and-block | html2text | grep "Template and Block for" -A 13 """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -825,7 +825,7 @@ def blockTmpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Block Templates--------------------------------
@@ -835,7 +835,7 @@ def blockTmpConn():
 def unspendableConn():
     try:
         conn = """curl -s https://get.txoutset.info/unspendable.csv """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -843,7 +843,7 @@ def unspendableConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Unspendable--------------------------------
@@ -854,9 +854,9 @@ def SHS():
         blogo()
         output = render("SHS - Symbolic Hash Satoshi", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"python3 SHS.py")
+        subprocess.run(f"python3 SHS.py", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
         
 #-----------------------------PGP--------------------------------
@@ -864,7 +864,7 @@ def SHS():
 def pgpConn():
     try:
         conn = """curl -s https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -875,7 +875,7 @@ def pgpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END PGP--------------------------------
@@ -885,7 +885,7 @@ def mtConn():  # here we convert the result of the command 'getblockcount' on a 
     while True:
         try:
             conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
-            a = os.popen(conn).read().strip()  # Leer y eliminar espacios en blanco
+            a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout.strip()  # Leer y eliminar espacios en blanco
             sats = a.lstrip('0.')  # Eliminar ceros iniciales y el punto decimal
             clear()
             blogo()
@@ -895,13 +895,13 @@ def mtConn():  # here we convert the result of the command 'getblockcount' on a 
             print(output)
             print(outputT)
             input("\a\nContinue...")
-        except:
+        except Exception:
             break
 
 def mtclock():
     try:
         conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -910,7 +910,7 @@ def mtclock():
         print(output)
         print(outputT)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 #-----------------------------END MT--------------------------------
 
@@ -919,7 +919,7 @@ def mtclock():
 def satoshiConn():
     try:
         conn = """curl -s https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html | html2text | tail -n 82 | grep -v "Unsubscribe" | grep -v "Next message" | grep -v "Previous message"| grep -v "Messages sorted" | grep -v "More information" | grep -v "list]" """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -930,7 +930,7 @@ def satoshiConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Satoshi--------------------------------
@@ -940,7 +940,7 @@ def satoshiConn():
 def whalalConn():
     try:
         conn = """curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&min_value=5000000&currency=btc' | jq  -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to|id" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g' | sed 's/amount/₿/g' | sed 's/_usd/=$/g' | sed 's/bitcoin/WHALE ALERT/g' | grep -E ' '"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -948,7 +948,7 @@ def whalalConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Whale Alert--------------------------------
@@ -957,13 +957,13 @@ def whalalConn():
 def bwtConn():
     try:
         conn = "curl -s https://bwt.dev/banner.txt"
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END bwt.dev--------------------------------
@@ -972,7 +972,7 @@ def bwtConn():
 def allblocksConn():
     try:
         conn = """curl -s https://raw.githubusercontent.com/jlopp/bitcoin-blocks-by-mining-pool/master/blocks.csv """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -980,7 +980,7 @@ def allblocksConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------ENDBLOCKS--------------------------------
@@ -994,9 +994,9 @@ def luxorstats():
             "Luxor Pool", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('luxor'):
-            os.system("cd luxor && cd graphql-python-client && python3 luxor.py --help")
+            subprocess.run("cd luxor && cd graphql-python-client && python3 luxor.py --help", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion")
+            subprocess.run("mkdir luxor && cd luxor && git clone https://github.com/LuxorLabs/graphql-python-client.git && cd graphql-python-client && pip3 install -r requirements3.txt && python3 luxor.py --install-completion", shell=True)
         clear()
         blogo()
         input("\a\nYou need to COPY the lines inside the file .env.example and create a NEW file .env with your Luxor API Key. Press Enter to Continue.")
@@ -1004,29 +1004,29 @@ def luxorstats():
         clear()
         blogo()
         print(output)
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py --help")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py --help", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         responseC = input("\a\nCType a command of the list: ")
-        os.system(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}")
+        subprocess.run(f"cd luxor && cd graphql-python-client && python3 luxor.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 #-----------------------------ENDLuxor--------------------------------
@@ -1043,15 +1043,15 @@ def PickaxeCon():
         if os.path.isdir ('Pickaxe'):
             print("...Follow the steps...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir Pickaxe && cd Pickaxe")
+            subprocess.run("mkdir Pickaxe && cd Pickaxe", shell=True)
             clear()
             blogo()
             print(output)
         responseC = input("Your Foreman apiKey: ")
         responseD = input("Your Foreman clientId: ")
-        os.system(f"cd Pickaxe && curl https://tinyurl.com/service-install -Ls --output install.sh; sudo bash install.sh {responseD} {responseC}")
+        subprocess.run(f"cd Pickaxe && curl https://tinyurl.com/service-install -Ls --output install.sh; sudo bash install.sh {responseD} {responseC}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 #-----------------------------ENDPickaxe--------------------------------
 #-----------------------------Dates--------------------------------
@@ -1059,7 +1059,7 @@ def PickaxeCon():
 def datesConn():
     try:
         conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ','"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1067,7 +1067,7 @@ def datesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Dates--------------------------------
@@ -1076,7 +1076,7 @@ def datesConn():
 def missingConn():
     try:
         conn = """curl -s https://miningpool.observer/missing/feed.xml | html2text | grep -v "link" | grep -v "https" | grep -v "Missing Transaction" """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1084,7 +1084,7 @@ def missingConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Missing--------------------------------
@@ -1093,7 +1093,7 @@ def missingConn():
 def quotesConn():
     try:
         conn = """curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1101,7 +1101,7 @@ def quotesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Quotes--------------------------------
@@ -1110,7 +1110,7 @@ def quotesConn():
 def miningConn():
     try:
         conn = """curl -s "https://blockchain.info/q/hashrate" """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1118,7 +1118,7 @@ def miningConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END Hashrate--------------------------------
@@ -1136,13 +1136,13 @@ def decodeStrDat(): # show srings
         print(output)
         responseC = input("Blk Dat: ")
         list = f"""curl -s 'https://bitcoinstrings.com/blk'{responseC}.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nBLK: " + responseC)
         print("\nString: " + a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------End Strings Dat--------------------------------
@@ -1159,11 +1159,11 @@ def oceanH(): # show srings
         print(output)
         responseC = input("Your Bitcoin Address: ")
         list = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def oceanB(): # show srings
@@ -1176,10 +1176,10 @@ def oceanB(): # show srings
 
         print(output)
         list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def oceanE(): # show srings
@@ -1193,11 +1193,11 @@ def oceanE(): # show srings
         print(output)
         responseC = input("Your Bitcoin Address: ")
         list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #---------------------------------ocean pool end----------------------------------
@@ -1206,7 +1206,7 @@ def oceanE(): # show srings
 def stalnConn():
     try:
         conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1217,7 +1217,7 @@ def stalnConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END StatsLN--------------------------------
@@ -1226,7 +1226,7 @@ def ranConn():
     try:
         conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g'
 """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1234,7 +1234,7 @@ def ranConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 #-----------------------------END Ranking--------------------------------
 
@@ -1256,8 +1256,8 @@ def trustednode():
         print(addv)
         input("\a\nContinue...")
         conn = "telnet cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion 6023"
-        os.system(conn)
-    except:
+        subprocess.run(conn, shell=True)
+    except Exception:
         pass
 #-----------------------------END GAMES--------------------------------
 
@@ -1273,16 +1273,16 @@ def CroppedMinerComputer():
         if os.path.isdir ('CroppedMiner'):
             print("...Follow the steps...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir CroppedMiner && cd CroppedMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz")
+            subprocess.run("mkdir CroppedMiner && cd CroppedMiner && wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz", shell=True)
             clear()
             blogo()
             print(output)
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        os.system(f"cd CroppedMiner && ./minerd -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
+        subprocess.run(f"cd CroppedMiner && ./minerd -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def CroppedMinerRaspberry():
@@ -1295,16 +1295,16 @@ def CroppedMinerRaspberry():
         if os.path.isdir ('CroppedMiner'):
             print("...Follow the steps...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir CroppedMiner && cd CroppedMiner && git clone https://github.com/jojapoppa/cpuminer-multi-arm.git")
+            subprocess.run("mkdir CroppedMiner && cd CroppedMiner && git clone https://github.com/jojapoppa/cpuminer-multi-arm.git", shell=True)
             clear()
             blogo()
             print(output)
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        os.system(f"cd CroppedMiner && cd cpuminer-multi-arm && ./cpuminer -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}")
+        subprocess.run(f"cd CroppedMiner && cd cpuminer-multi-arm && ./cpuminer -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------MINER POOL--------------------------------
@@ -1362,12 +1362,12 @@ def wttrDataV1():
             list = f"curl '{lang}.wttr.in/{selectData2}?F&{unit}'"
         else:
             list = f'curl wttr.in/{selectData}?F'
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 def wttrDataV2():
@@ -1421,12 +1421,12 @@ def wttrDataV2():
 
         else:
             list = f'curl v2.wttr.in/{selectData}?F'
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 
@@ -1475,18 +1475,18 @@ def rateSXList():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except:
+    except Exception:
         pass
     while True:
         try:
             list = f"curl -s '{selectFiat}.rate.sx/?F&n=1'"
-            a = os.popen(list).read()
+            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
             print(a)
             t.sleep(20)
-        except:
+        except Exception:
             break
 
 def rateSXGraph():
@@ -1530,18 +1530,18 @@ def rateSXGraph():
         """
         print(fiat)
         selectFiat = input("Insert a Fiat currency: ")
-    except:
+    except Exception:
         pass
     while True:
         try:
             list = f"curl -s '{selectFiat}.rate.sx/btc' | grep -v -E 'Use'"
-            a = os.popen(list).read()
+            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
             print(a)
             t.sleep(20)
-        except:
+        except Exception:
             break
 
 #-----------------------------END RATE.SX--------------------------------
@@ -1553,7 +1553,7 @@ def PyBLOCKTemplate():
     while True:
         try:
             conn = """curl -s "https://pool.pyblock.xyz/getblocktemplate.php" | jq -C '.transactions[]' | xargs -L 1  | tr -d '{|}|]|,' | tr -d '"' | grep -E ' ' | grep -vE 'depends'"""
-            a = os.popen(conn).read()
+            a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
@@ -1561,7 +1561,7 @@ def PyBLOCKTemplate():
             print(output)
             print(a)
             input("\a\nPress Enter to Refresh the Template or Ctrl +C to back to the Main Menu.")
-        except:
+        except Exception:
             break
 
 #-----------------------------COINGECKO--------------------------------
@@ -1596,7 +1596,7 @@ def CoingeckoPP():
         ------------------------------------------------------------------
         """.format(usd,eur,gbp,jpy,aud))
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END COINGECKO--------------------------------
@@ -1609,7 +1609,7 @@ def loadFileConnLNBits(lnbitLoad):
     lnbitLoad = {"wallet_name":"", "wallet_id":"", "admin_key":"", "invoice_read_key":""}
 
     if os.path.isfile('lnbit.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lnbitData= pickle.load(open("lnbit.conf", "rb")) # Load the file 'bclock.conf'
+        lnbitData= json.load(open("lnbit.conf", "r")) # Load the file 'bclock.conf'
         lnbitLoad = lnbitData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -1623,7 +1623,8 @@ def loadFileConnLNBits(lnbitLoad):
         lnbitLoad["wallet_id"] = input("Wallet ID: ")
         lnbitLoad["admin_key"] = input("Admin key: ")
         lnbitLoad["invoice_read_key"] = input("Invoice/read key: ")
-        pickle.dump(lnbitLoad, open("lnbit.conf", "wb"))
+        with open("lnbit.conf", "w") as f:
+            json.dump(lnbitLoad, f, indent=2)
     return lnbitLoad
 
 def createFileConnLNBits():
@@ -1645,7 +1646,8 @@ def createFileConnLNBits():
     lnbitLoad["admin_key"] = input("Admin key: ")
     lnbitLoad["invoice_read_key"] = input("Invoice/read key: ")
 
-    pickle.dump(lnbitLoad, open("lnbit.conf", "wb"))
+    with open("lnbit.conf", "w") as f:
+        json.dump(lnbitLoad, f, indent=2)
 
 def lnbitCreateNewInvoice():
     qr = qrcode.QRCode(
@@ -1668,7 +1670,7 @@ def lnbitCreateNewInvoice():
             + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json" """
         )
 
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         n = str(sh)
@@ -1680,7 +1682,7 @@ def lnbitCreateNewInvoice():
         while True:
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                 lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     print("\nInvoice: " + c + "\n")
@@ -1703,7 +1705,7 @@ def lnbitCreateNewInvoice():
                 )
 
 
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -1716,7 +1718,7 @@ def lnbitCreateNewInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except:
+    except Exception:
         pass
 
 def lnbitPayInvoice():
@@ -1732,7 +1734,7 @@ def lnbitPayInvoice():
     )
 
     try:
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         n = str(sh)
         d = json.loads(n)
         dn = str(d['checking_id'])
@@ -1745,7 +1747,7 @@ def lnbitPayInvoice():
             )
 
 
-            rsh = os.popen(checkcurl).read()
+            rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             nn = str(rsh)
@@ -1756,7 +1758,7 @@ def lnbitPayInvoice():
             tick()
             t.sleep(2)
             break
-    except:
+    except Exception:
         pass
 
 def lnbitCreatePayWall():
@@ -1781,7 +1783,7 @@ def lnbitCreatePayWall():
                 + f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1794,7 +1796,7 @@ def lnbitCreatePayWall():
             checkcurl = f"""curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H "X-Api-Key: {bb}" """
 
 
-            sh = os.popen(checkcurl).read()
+            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1838,7 +1840,7 @@ def lnbitCreatePayWall():
                 input("Continue...")
             clear()
             blogo()
-        except:
+        except Exception:
             break
 
 def lnbitListPawWall():
@@ -1849,7 +1851,7 @@ def lnbitListPawWall():
         + f""" "X-Api-Key: {b}" """
     )
 
-    sh = os.popen(checkcurl).read()
+    sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     n = str(sh)
@@ -1879,7 +1881,7 @@ def lnbitListPawWall():
                     Wallet: {}
                     """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
-        except:
+        except Exception:
             break
         input("Continue...")
         clear()
@@ -1895,7 +1897,7 @@ def lnbitDeletePayWall():
                 + f""" "X-Api-Key: {b}" """
             )
 
-            sh = os.popen(checkcurl).read()
+            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1925,7 +1927,7 @@ def lnbitDeletePayWall():
                             Wallet: {}
                             """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                             print("----------------------------------------------------------------------------------------------------------------\n")
-                except:
+                except Exception:
                     break
                 input("Continue...")
                 break
@@ -1938,13 +1940,13 @@ def lnbitDeletePayWall():
                 + f""" -H "X-Api-Key: {b}" """
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
             t.sleep(2)
             clear()
-        except:
+        except Exception:
             break
 
 def lnbitsLNURLw():
@@ -1972,7 +1974,7 @@ def lnbitsLNURLw():
                 + f' -H "Content-type: application/json" -H "X-Api-Key: {b}"'
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -1983,7 +1985,7 @@ def lnbitsLNURLw():
             while True:
                 checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
 
-                sh = os.popen(checkcurl).read()
+                sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 n = str(sh)
@@ -2013,7 +2015,7 @@ def lnbitsLNURLw():
                 input("Continue...")
                 clear()
                 blogo()
-        except:
+        except Exception:
             break
 
 def lnbitsLNURLwList():
@@ -2023,7 +2025,7 @@ def lnbitsLNURLwList():
             b = str(a['admin_key'])
             checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
 
-            sh = os.popen(checkcurl).read()
+            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -2051,7 +2053,7 @@ def lnbitsLNURLwList():
                     """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
             input("Continue...")
-    except:
+    except Exception:
         print("\n")
 
 #-------------------------1d646820055e4e2da218e801eaacfc94----END LNBITS--------------------------------
@@ -2061,7 +2063,7 @@ def loadFileConnLNPay(lnpayLoad):
     lnpayLoad = {"key":""}
 
     if os.path.isfile('lnpay.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lnpayData= pickle.load(open("lnpay.conf", "rb")) # Load the file 'bclock.conf'
+        lnpayData= json.load(open("lnpay.conf", "r")) # Load the file 'bclock.conf'
         lnpayLoad = lnpayData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -2074,7 +2076,8 @@ def loadFileConnLNPay(lnpayLoad):
         lnpayLoad["key"] = input("API Key: ")
         print("\n\tWALLET ACCESS KEYS\n")
         lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
-        pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
+        with open("lnpay.conf", "w") as f:
+            json.dump(lnpayLoad, f, indent=2)
     clear()
     blogo()
     return lnpayLoad
@@ -2090,7 +2093,8 @@ def createFileConnLNPay():
     lnpayLoad["key"] = input("API Key: ")
     print("\n\tWALLET ACCESS KEYS\n")
     lnpayLoad["wallet_key_id"] = input("Wallet Admin: ")
-    pickle.dump(lnpayLoad, open("lnpay.conf", "wb"))
+    with open("lnpay.conf", "w") as f:
+        json.dump(lnpayLoad, f, indent=2)
 
 def lnpayGetBalance():
     a = loadFileConnLNPay(['key'])
@@ -2139,7 +2143,7 @@ def lnpayCreateInvoice():
         while True:
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                 lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     print("\nInvoice: " + invoice['payment_request'] + "\n")
@@ -2157,7 +2161,7 @@ def lnpayCreateInvoice():
                 t.sleep(10)
                 curl = f'curl -u {b}: https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis'
 
-                rsh = os.popen(curl).read()
+                rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -2170,7 +2174,7 @@ def lnpayCreateInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except:
+    except Exception:
         pass
 
 def lnpayGetTransactions():
@@ -2223,7 +2227,7 @@ def lnpayGetTransactions():
             input("Continue...")
             clear()
             blogo()
-        except:
+        except Exception:
             break
     clear()
     blogo()
@@ -2243,7 +2247,7 @@ def lnpayPayInvoice():
         curl = f'curl -u{b}: https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}'
 
         clear()
-        rsh = os.popen(curl).read()
+        rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         nn = str(rsh)
         dd = json.loads(nn)
         clear()
@@ -2264,7 +2268,7 @@ def lnpayPayInvoice():
             'payment_request': inv
         }
         pay_result = my_wallet.pay_invoice(invoice_params)
-    except:
+    except Exception:
         pass
 
 def lnpayTransBWallets():
@@ -2305,7 +2309,7 @@ def lnpayTransBWallets():
         """.format(p['id'], p['num_satoshis'], p['user_label'], v['user_label'], f['user_label']))
         print("----------------------------------------------------------------------------------------------------\n")
         input("Continue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END LNPAY--------------------------------
@@ -2315,7 +2319,7 @@ def loadFileConnOpenNode(opennodeLoad):
     opennodeLoad = {"key":"","wdr":"","inv":""}
 
     if os.path.isfile('opennode.conf'): # Check if the file 'bclock.conf' is in the same folder
-        opennodeData= pickle.load(open("opennode.conf", "rb")) # Load the file 'bclock.conf'
+        opennodeData= json.load(open("opennode.conf", "r")) # Load the file 'bclock.conf'
         opennodeLoad = opennodeData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -2328,7 +2332,8 @@ def loadFileConnOpenNode(opennodeLoad):
         opennodeLoad["key"] = input("API Read Only Key: ")
         opennodeLoad["wdr"] = input("API Withdrawall Key: ")
         opennodeLoad["inv"] = input("API Invoices Key: ")
-        pickle.dump(opennodeLoad, open("opennode.conf", "wb"))
+        with open("opennode.conf", "w") as f:
+            json.dump(opennodeLoad, f, indent=2)
     clear()
     blogo()
     return opennodeLoad
@@ -2344,7 +2349,8 @@ def createFileConnOpenNode():
     opennodeLoad = {'wdr': '', 'inv': '', 'key': input("API Read Only Key: ")}
     opennodeLoad["wdr"] = input("API Withdrawall Key: ")
     opennodeLoad["inv"] = input("API Invoices Key: ")
-    pickle.dump(opennodeLoad, open("opennode.conf", "wb"))
+    with open("opennode.conf", "w") as f:
+        json.dump(opennodeLoad, f, indent=2)
 
 def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
@@ -2352,7 +2358,7 @@ def OpenNodelistfunds():
     curl = f'curl https://api.opennode.co/v1/account/balance -H "Content-Type: application/json" -H "Authorization: {b}"'
 
 
-    sh = os.popen(curl).read()
+    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     n = str(sh)
@@ -2370,7 +2376,7 @@ def OpenNodelistfunds():
 
 def OpenNodeCheckStatus():
     curl = "curl -X GET https://status.opennode.com/history.rss"
-    sh = os.popen(curl).read()
+    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     my_dict=xmltodict.parse(sh)
@@ -2430,7 +2436,7 @@ def OpenNodecreatecharge():
         )
 
 
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         n = str(sh)
@@ -2458,7 +2464,7 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
@@ -2485,7 +2491,7 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except:
+            except Exception:
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
@@ -2498,7 +2504,7 @@ def OpenNodecreatecharge():
         )
 
 
-        sh = os.popen(curl).read()
+        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         n = str(sh)
@@ -2526,7 +2532,7 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
@@ -2553,7 +2559,7 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except:
+            except Exception:
                 break
 
 def OpenNodeiniciatewithdrawal():
@@ -2575,7 +2581,7 @@ def OpenNodeiniciatewithdrawal():
                     + "}'"
                 )
 
-                ssh = os.popen(checkcurl).read()
+                ssh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 nn = str(ssh)
                 dd = json.loads(nn)
                 print(dd)
@@ -2611,14 +2617,14 @@ def OpenNodeiniciatewithdrawal():
                 + "}'"
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             n = str(sh)
             d = json.loads(n)
             clear()
             blogo()
             tick()
             t.sleep(2)
-        except:
+        except Exception:
             pass
 
     elif lnchain in ["O", "o"]:
@@ -2636,7 +2642,7 @@ def OpenNodeiniciatewithdrawal():
                 )
 
                 if amt < 199999:
-                    sh = os.popen(curl).read()
+                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
                     n = str(sh)
                     d = json.loads(n)
                     print("\n----------------------------------------------------------------------------------------------------")
@@ -2647,7 +2653,7 @@ def OpenNodeiniciatewithdrawal():
                     """.format(d['message']))
                     print("----------------------------------------------------------------------------------------------------\n")
                 elif amt > 200000:
-                    sh = os.popen(curl).read()
+                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
                     n = str(sh)
                     d = json.loads(n)
                     dd = d['data']
@@ -2667,7 +2673,7 @@ def OpenNodeiniciatewithdrawal():
                     logoB()
                     t.sleep(2)
                     break
-        except:
+        except Exception:
             pass
 
 def OpenNodeListPayments():
@@ -2681,7 +2687,7 @@ def OpenNodeListPayments():
     b = str(a['wdr'])
     curl = f'curl https://api.opennode.co/v1/withdrawals -H "Content-Type: application/json" -H "Authorization: {b}"'
 
-    sh = os.popen(curl).read()
+    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
     clear()
     blogo()
     print("\n\tOPENNODE TRANSACTIONS LIST\n")
@@ -2719,7 +2725,7 @@ def OpenNodeListPayments():
             clear()
             blogo()
             print("\n\tOPENNODE TRANSACTIONS LIST\n")
-        except:
+        except Exception:
             break
 
 #-----------------------------END OPENNODE--------------------------------
@@ -2729,7 +2735,7 @@ def loadFileTippinMe(tippinmeLoad):
     tippinmeLoad = {"key":""}
 
     if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
-        tippinmeData= pickle.load(open("tippinme.conf", "rb")) # Load the file 'bclock.conf'
+        tippinmeData= json.load(open("tippinme.conf", "r")) # Load the file 'bclock.conf'
         tippinmeLoad = tippinmeData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -2738,7 +2744,8 @@ def loadFileTippinMe(tippinmeLoad):
                                                                 IF YOU NEED TO START AGAIN, DELETE IT.\n
         """)
         tippinmeLoad["key"] = input("Twitter @user: ")
-        pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
+        with open("tippinme.conf", "w") as f:
+            json.dump(tippinmeLoad, f, indent=2)
     clear()
     blogo()
     return tippinmeLoad
@@ -2750,7 +2757,8 @@ def createFileTippinMe():
                                                                 IF YOU NEED TO START AGAIN, DELETE IT.\n
     """)
     tippinmeLoad = {'key': input("Twitter @user: ")}
-    pickle.dump(tippinmeLoad, open("tippinme.conf", "wb"))
+    with open("tippinme.conf", "w") as f:
+        json.dump(tippinmeLoad, f, indent=2)
 
 def tippinmeGetInvoice():
     qr = qrcode.QRCode(
@@ -2780,7 +2788,7 @@ def tippinmeGetInvoice():
         node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + ln1 + "\n")
@@ -2796,7 +2804,7 @@ def tippinmeGetInvoice():
             print(f'LND Invoice: {ln1}')
             response.close()
             input("Continue...")
-    except:
+    except Exception:
         pass
 
 #-----------------------------END TIPPINME--------------------------------
@@ -2811,14 +2819,14 @@ def bip39convert():
         if os.path.isdir ('TinySeed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir TinySeed && cd TinySeed && wget https://gist.githubusercontent.com/odudex/a29de0c91c4010a6b4c565d6f29fa0c6/raw/0349754c1b3f218ff61302acd1f346e0027ba215/TinySeed.py")
+            subprocess.run("mkdir TinySeed && cd TinySeed && wget https://gist.githubusercontent.com/odudex/a29de0c91c4010a6b4c565d6f29fa0c6/raw/0349754c1b3f218ff61302acd1f346e0027ba215/TinySeed.py", shell=True)
         clear()
         blogo()
         print(output)
         responseC = input("Words to Tiny Seed: ")
-        os.system(f"cd TinySeed && python3 TinySeed.py {responseC}")
+        subprocess.run(f"cd TinySeed && python3 TinySeed.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 #-----------------------------TALLYCOIN------------------------------
@@ -2827,7 +2835,7 @@ def loadFileConnTallyCo(tallycoLoad):
     tallycoLoad = {"tallyco.conf":"","id":""}
 
     if os.path.isfile('tallyco.conf'): # Check if the file 'bclock.conf' is in the same folder
-        tallyData= pickle.load(open("tallyco.conf", "rb")) # Load the file 'bclock.conf'
+        tallyData= json.load(open("tallyco.conf", "r")) # Load the file 'bclock.conf'
         tallycoLoad = tallyData # Copy the variable pathv to 'path'
     else:
         clear()
@@ -2839,7 +2847,8 @@ def loadFileConnTallyCo(tallycoLoad):
         """)
         print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
         tallycoLoad["id"] = input("User ID or Twitter @USER: ")
-        pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
+        with open("tallyco.conf", "w") as f:
+            json.dump(tallycoLoad, f, indent=2)
     clear()
     blogo()
     return tallycoLoad
@@ -2854,7 +2863,8 @@ def createFileConnTallyCo():
     """)
     print("\nEXAMPLE: https://tallyco.in/s/{fundraiser_id}/\n")
     tallycoLoad = {'fundraiser_id': '', 'id': input("User ID or Twitter @USER: ")}
-    pickle.dump(tallycoLoad, open("tallyco.conf", "wb"))
+    with open("tallyco.conf", "w") as f:
+        json.dump(tallycoLoad, f, indent=2)
 
 def tallycoGetPayment():
     qr = qrcode.QRCode(
@@ -2878,7 +2888,7 @@ def tallycoGetPayment():
             + " -X POST https://api.tallyco.in/v1/payment/request/"
         )
 
-        tallycomethod = os.popen(curl).read()
+        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -2903,7 +2913,7 @@ def tallycoGetPayment():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 
@@ -2930,7 +2940,7 @@ def tallycoDonateid():
             + " -X POST https://api.tallyco.in/v1/payment/request/"
         )
 
-        tallycomethod = os.popen(curl).read()
+        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -2939,7 +2949,7 @@ def tallycoDonateid():
             node_not = input("Do you want to pay this tip with your node? Y/n: ")
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = pickle.load(open("blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
                 lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     e = d['lightning_pay_request']
@@ -2971,7 +2981,7 @@ def tallycoDonateid():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 
@@ -2986,14 +2996,14 @@ def callMemL():
             "Mempool-cli", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('mempoolcli'):
-            os.system("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_x86_64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz")
+            subprocess.run("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_x86_64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz")
+            subprocess.run("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_x86_64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_x86_64.tar.gz", shell=True)
         clear()
         blogo()
         print(output)
-        os.system(f"cd mempoolcli && ./mempool-cli")
-    except:
+        subprocess.run(f"cd mempoolcli && ./mempool-cli", shell=True)
+    except Exception:
         menuSelection()
 
 def callMemR():
@@ -3004,14 +3014,14 @@ def callMemR():
             "Mempool-cli", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('mempoolcli'):
-            os.system("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_arm64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz")
+            subprocess.run("cd memppolcli && rm -rf mempool-cli_2.0.4_Linux_arm64.tar.gz && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_arm64.tar.gz")
+            subprocess.run("mkdir mempoolcli && cd mempoolcli && wget https://github.com/mempool/mempool-cli/releases/download/v2.0.4/mempool-cli_2.0.4_Linux_arm64.tar.gz && tar -xvf mempool-cli_2.0.4_Linux_arm64.tar.gz", shell=True)
         clear()
         blogo()
         print(output)
-        os.system(f"cd mempoolcli && ./mempool-cli")
-    except:
+        subprocess.run(f"cd mempoolcli && ./mempool-cli", shell=True)
+    except Exception:
         menuSelection()
 
 def MemShellMenu(menunos):
@@ -3063,7 +3073,7 @@ def fee():
             """.format(di['fastestFee'], di['halfHourFee'], di['hourFee']))
             t.sleep(5)
             print("\n\t    Getting New Information")
-    except:
+    except Exception:
         pass
 
 def blocks():
@@ -3093,7 +3103,7 @@ def blocks():
                 <<< Back Control + C
                 """.format(q['blockSize'], q['blockVSize'], q['nTx'], q['totalFees'], q['medianFee']))
                 t.sleep(3)
-    except:
+    except Exception:
         pass
 
 
@@ -3103,7 +3113,7 @@ def remoteHalving():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def remotegetblock():
@@ -3111,7 +3121,7 @@ def remotegetblock():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def remotegetblockcount(): # get access to bitcoin-cli with the command getblockcount
@@ -3119,7 +3129,7 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def remoteconsole(): # get into the console from bitcoin-cli
@@ -3127,13 +3137,13 @@ def remoteconsole(): # get into the console from bitcoin-cli
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def runthenumbersConn():
     try:
         conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3141,13 +3151,13 @@ def runthenumbersConn():
         print(output)
         print(a)
         input("\a\n")
-    except:
+    except Exception:
         pass
 
 def channelbalance():
     try:
         conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3155,7 +3165,7 @@ def channelbalance():
         print(output)
         print(a)
         input("\a\n")
-    except:
+    except Exception:
         pass
 
 
@@ -3178,13 +3188,13 @@ def listonchaintxs():
         print("\nTransaction ID: " + responseC)
         print(f'Onchain Txs: {r3}')
         input("\n")
-    except:
+    except Exception:
         pass
 
 def balanceOC():
     try:
         conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3192,7 +3202,7 @@ def balanceOC():
         print(output)
         print(a)
         input("\a\n")
-    except:
+    except Exception:
         pass
 
 def localkeysendC():
@@ -3200,7 +3210,7 @@ def localkeysendC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatsendAC():
@@ -3208,7 +3218,7 @@ def localchatsendAC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 
@@ -3217,7 +3227,7 @@ def localchatnewAC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatlistAC():
@@ -3225,7 +3235,7 @@ def localchatlistAC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatsendBC():
@@ -3233,7 +3243,7 @@ def localchatsendBC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatnewBC():
@@ -3241,7 +3251,7 @@ def localchatnewBC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatlistBC():
@@ -3249,7 +3259,7 @@ def localchatlistBC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatsendCC():
@@ -3257,7 +3267,7 @@ def localchatsendCC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatnewCC():
@@ -3265,7 +3275,7 @@ def localchatnewCC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchatlistCC():
@@ -3273,7 +3283,7 @@ def localchatlistCC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localchannelbalanceC():
@@ -3281,7 +3291,7 @@ def localchannelbalanceC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localnewaddressC():
@@ -3289,7 +3299,7 @@ def localnewaddressC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localbalanceOCC():
@@ -3297,7 +3307,7 @@ def localbalanceOCC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localrebalancelndC():
@@ -3305,7 +3315,7 @@ def localrebalancelndC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 # Remote connection with rest -------------------------------------
@@ -3315,7 +3325,7 @@ def getnewinvoice():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def payinvoice():
@@ -3337,7 +3347,7 @@ def payinvoice():
         print("\nInvoice: " + responseC)
         print(f'Invoice: {r3}')
         input("\n")
-    except:
+    except Exception:
         pass
 
 def getnewaddress():
@@ -3345,7 +3355,7 @@ def getnewaddress():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def listinvoice():
@@ -3353,7 +3363,7 @@ def listinvoice():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def getinfo():
@@ -3367,20 +3377,20 @@ def getinfo():
         print(output)
         responseC = input("Public Key: ")
         list = f"curl -s 'https://1ml.com/node/'{responseC}/json'"
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nNode: " + responseC)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 
 def consoleLNC(): # get into the console from bitcoin-cli
     try:
         conn = """curl -s https://github.com/tomosaigon/lncli-commands | html2text | grep -E "## COMMANDS" -A 120"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3388,7 +3398,7 @@ def consoleLNC(): # get into the console from bitcoin-cli
         print(output)
         print(a)
         input("\a\n")
-    except:
+    except Exception:
         pass
 
 def locallistpeersQQC():
@@ -3396,7 +3406,7 @@ def locallistpeersQQC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localconnectpeerC():
@@ -3404,7 +3414,7 @@ def localconnectpeerC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def locallistchaintxnsC():
@@ -3412,7 +3422,7 @@ def locallistchaintxnsC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def locallistinvoicesC():
@@ -3420,7 +3430,7 @@ def locallistinvoicesC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def locallistchannelsC():
@@ -3428,7 +3438,7 @@ def locallistchannelsC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localgetinfoC():
@@ -3442,13 +3452,13 @@ def localgetinfoC():
         print(output)
         responseC = input("Public Key: ")
         list = f"curl -s https://1ml.com/node/{responseC}/json"
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nNode: " + responseC)
         print(a)
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localaddinvoiceC():
@@ -3456,7 +3466,7 @@ def localaddinvoiceC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localpayinvoiceC():
@@ -3464,13 +3474,13 @@ def localpayinvoiceC():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localgetnetworkinfoC():
     try:
         conn = """curl -s https://1ml.com/trends | html2text | grep -E "Increase|Decrease" -A 4 | tr -d '{|}|]|,' | tr -d '"' | tr -d '* [' | tr -d '-' | tr -d '#' | xargs -L 1"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3481,7 +3491,7 @@ def localgetnetworkinfoC():
         print(output)
         print(a)
         input("\a\n")
-    except:
+    except Exception:
         pass
 
 #-----------------------------Slush--------------------------------
@@ -3489,7 +3499,7 @@ def localgetnetworkinfoC():
 def slDIFFConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/difficulty-stats"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3508,13 +3518,13 @@ def slDIFFConn():
 
         """)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def slPOOLConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/pool-stats?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3522,7 +3532,7 @@ def slPOOLConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def getPoolSlushCheck():
@@ -3533,14 +3543,15 @@ def getPoolSlushCheck():
     api = ""
     try:
         if os.path.isfile("config/braiinsAPI.conf"):
-            apiv = pickle.load(open("config/braiinsAPI.conf", "rb"))
+            apiv = json.load(open("config/braiinsAPI.conf", "r"))
             api = apiv
         else:
             clear()
             blogo()
             api = input("Insert Braiins API KEY: ")
-            pickle.dump(api, open("config/braiinsAPI.conf", "wb"))
-    except:
+            with open("config/braiinsAPI.conf", "w") as f:
+                json.dump(api, f, indent=2)
+    except Exception:
         pass
 
     while True:
@@ -3550,13 +3561,11 @@ def getPoolSlushCheck():
             slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
 
 
-            b = os.popen(slushpoolbtc)
-            c = b.read()
+            c = subprocess.run(slushpoolbtc, shell=True, capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['btc']
 
-            bblock = os.popen(slushpoolbtcblock)
-            cblock = bblock.read()
+            cblock = subprocess.run(slushpoolbtcblock, shell=True, capture_output=True, text=True).stdout
             dblock = json.loads(cblock)
             fblock = dblock['btc']
             eblock = fblock['blocks']
@@ -3600,7 +3609,7 @@ def getPoolSlushCheck():
 
             t.sleep(10)
 
-        except:
+        except Exception:
             break
 
 
@@ -3614,14 +3623,15 @@ def ckpoolpoolLOCALOnchainONLY():
     api = ""
     try:
         if os.path.isfile("config/CKPOOLAPI.conf"):
-            apiv = pickle.load(open("config/CKPOOLAPI.conf", "rb"))
+            apiv = json.load(open("config/CKPOOLAPI.conf", "r"))
             api = apiv
         else:
             clear()
             blogo()
             api = input("Insert CKPool Wallet.Worker: ")
-            pickle.dump(api, open("config/CKPOOLAPI.conf", "wb"))
-    except:
+            with open("config/CKPOOLAPI.conf", "w") as f:
+                json.dump(api, f, indent=2)
+    except Exception:
         pass
 
     while True:
@@ -3629,8 +3639,7 @@ def ckpoolpoolLOCALOnchainONLY():
             ckpool = f"curl https://solo.ckpool.org/users/{api} 2>/dev/null"
 
 
-            b = os.popen(ckpool)
-            c = b.read()
+            c = subprocess.run(ckpool, shell=True, capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -3661,7 +3670,7 @@ def ckpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except:
+        except Exception:
             break
 
 def pyblockpoolpoolLOCALOnchainONLY():
@@ -3672,14 +3681,15 @@ def pyblockpoolpoolLOCALOnchainONLY():
     api = ""
     try:
         if os.path.isfile("config/PYBLOCKPOOLAPI.conf"):
-            apiv = pickle.load(open("config/PYBLOCKPOOLAPI.conf", "rb"))
+            apiv = json.load(open("config/PYBLOCKPOOLAPI.conf", "r"))
             api = apiv
         else:
             clear()
             blogo()
             api = input("Insert your PyBLOCK Pool Wallet: ")
-            pickle.dump(api, open("config/PYBLOCKPOOLAPI.conf", "wb"))
-    except:
+            with open("config/PYBLOCKPOOLAPI.conf", "w") as f:
+                json.dump(api, f, indent=2)
+    except Exception:
         pass
 
     while True:
@@ -3687,8 +3697,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
             pyblockpool = f"curl https://pyblock.xyz:8443/users/{api} 2>/dev/null"
 
 
-            b = os.popen(pyblockpool)
-            c = b.read()
+            c = subprocess.run(pyblockpool, shell=True, capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -3719,7 +3728,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except:
+        except Exception:
             break
 
 def kanopoolpoolLOCALOnchainONLY():
@@ -3730,18 +3739,20 @@ def kanopoolpoolLOCALOnchainONLY():
     api = ""
     try:
         if os.path.isfile("config/KANOPOOLUSER.conf", "config/KANOPOOLAPI.conf"):
-            apiv = pickle.load(open("config/KANOPOOLUSER.conf", "rb"))
+            apiv = json.load(open("config/KANOPOOLUSER.conf", "r"))
             api = apiv
-            apiv2 = pickle.load(open("config/KANOPOOLAPI.conf", "rb"))
+            apiv2 = json.load(open("config/KANOPOOLAPI.conf", "r"))
             api2 = apiv2
         else:
             clear()
             blogo()
             api = input("Insert KanoPool Username: ")
-            pickle.dump(api, open("config/KANOPOOLUSER.conf", "wb"))
+            with open("config/KANOPOOLUSER.conf", "w") as f:
+                json.dump(api, f, indent=2)
             api2 = input("Insert KanoPool API KEY: ")
-            pickle.dump(api2, open("config/KANOPOOLAPI.conf", "wb"))
-    except:
+            with open("config/KANOPOOLAPI.conf", "w") as f:
+                json.dump(api2, f, indent=2)
+    except Exception:
         pass
 
     while True:
@@ -3749,8 +3760,7 @@ def kanopoolpoolLOCALOnchainONLY():
             kanopool = f"curl https://kano.is/index.php?k=api&username={api}&api={api2}&json=y&work=y 2>/dev/null"
 
 
-            b = os.popen(kanopool)
-            c = b.read()
+            c = subprocess.run(kanopool, shell=True, capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -3781,14 +3791,14 @@ def kanopoolpoolLOCALOnchainONLY():
 
             t.sleep(10)
 
-        except:
+        except Exception:
             break
 
 
 def getblock():
     try:
         conn = """curl -s https://developer.bitcoin.org/reference/rpc/getblockchaininfo.html | html2text | grep -E Result -A 50 | grep -v Result """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3796,7 +3806,7 @@ def getblock():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def searchTXS():
@@ -3818,13 +3828,13 @@ def searchTXS():
         print("\nTransaction ID: " + responseC)
         print(f'Tx: {r3}')
         input("\n")
-    except:
+    except Exception:
         pass
 
 def untxsConn():
     try:
         conn = """curl -s https://mempool.space/api/mempool/txids | jq -C '.[]' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3832,7 +3842,7 @@ def untxsConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def getnewaddressOnchain():
@@ -3843,7 +3853,7 @@ def getnewaddressOnchain():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def gettransactionsOnchain():
@@ -3865,7 +3875,7 @@ def gettransactionsOnchain():
         print("\nTransaction ID: " + responseC)
         print(f'Tx: {r3}')
         input("\n")
-    except:
+    except Exception:
         pass
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
@@ -3873,7 +3883,7 @@ def getblockcount(): # get access to bitcoin-cli with the command getblockcount
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def getbestblockhash():
@@ -3895,16 +3905,16 @@ def getbestblockhash():
         print("\nHash: " + responseC)
         print(f'Block Hash {r3}')
         input("\n")
-    except:
+    except Exception:
         pass
 
 def clear(): # clear the screen
-    os.system('cls' if os.name=='nt' else 'clear')
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 def getgenesis():
     try:
         conn = """curl -s https://en.bitcoin.it/wiki/Genesis_block | html2text | grep -E 52706 -A 48 | grep -v 52706"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -3912,7 +3922,7 @@ def getgenesis():
         print(output)
         print(a)
         input("\a\n")
-    except:
+    except Exception:
         pass
 
 def readHexBlock():
@@ -3926,13 +3936,13 @@ def readHexBlock():
         print(output)
         responseC = input("BLOCK: ")
         list = f"curl -s 'https://mempool.space/api/tx/{responseC}/hex' "
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nHex: " + responseC)
         print("\nPyBLOCK Hex: " + a)
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def readHexTx():
@@ -3946,13 +3956,13 @@ def readHexTx():
         print(output)
         responseC = input("BLOCK: ")
         list = f"curl -s https://mempool.space/api/blocks/{responseC}"
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nBlock: " + responseC)
         print("\nPyBLOCK Decoded: " + a)
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def console(): # get into the console from bitcoin-cli
@@ -3966,13 +3976,13 @@ def console(): # get into the console from bitcoin-cli
         print(output)
         responseC = input("RPC Command: ")
         list = f"""curl -s 'https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content' | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links" """
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nRPC: " + responseC)
         print("\nPyBLOCK Help: " + a)
         input("\n")
-    except:
+    except Exception:
         pass
 
 def screensv():
@@ -3997,16 +4007,17 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             clear()
             close()
             design()
-        except:
+        except Exception:
             break
 
 def design():
     if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = pickle.load(open("config/pyblocksettingsClock.conf", "rb")) # Load the file 'bclock.conf'
+        settingsv = json.load(open("config/pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
         settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
+        with open("config/pyblocksettingsClock.conf", "w") as f:
+            json.dump(settingsClock, f, indent=2)
     clear()
     # Obtener el número de bloque actual
     r = requests.get('https://mempool.space/api/blocks/tip/height')
@@ -4051,19 +4062,19 @@ def getrawtx(): # show confirmations from transactions
             + """/merkle-proof | jq -C '.[]'"""
         )
 
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nTx: " + responseC)
         print("\nMerkle Proof: " + a)
         input("\nContinue...")
-    except:
+    except Exception:
         pass
 
 def runthenumbers():
     try:
         conn = """curl -s https://blockchain.info/q/totalbc """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -4072,7 +4083,7 @@ def runthenumbers():
         print(output)
         print(outputT)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def countdownblock():
@@ -4083,7 +4094,7 @@ def countdownblock():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def countdownblockConn():
@@ -4094,13 +4105,13 @@ def countdownblockConn():
         output = render("run your node", colors=['yellow'], align='left', font='tiny')
         print(output)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def localHalving():
     try:
         conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Blocks until mining reward is halved" | tr -d '*' """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -4108,7 +4119,7 @@ def localHalving():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 #--------------------------------- End Hex Block Decoder Functions -------------------------------------
@@ -4116,7 +4127,7 @@ def localHalving():
 def pdfconvert():
     try:
         conn = """curl -s https://nakamotoinstitute.org/library/bitcoin | html2text | grep October -A 449"""
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -4124,7 +4135,7 @@ def pdfconvert():
         print(output)
         print(a)
         input("\a\nControl + C...")
-    except:
+    except Exception:
         pass
 
 #--------------------------------- NYMs -----------------------------------
@@ -4145,7 +4156,7 @@ def robotNym():
     try:
         if path['bitcoincli']:
             lncli = " getinfo"
-            lsd = os.popen(lndconnectload['ln'] + lncli).read()
+            lsd = subprocess.run(lndconnectload['ln'] + lncli, shell=True, capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             alias = json.loads(lsd0)
         else:
@@ -4180,7 +4191,7 @@ def robotNym():
         image = "\n\t\t\t\t\t    \u001b[31;1mNode\u001b[38;5;93mNym\033[0;37;40m\n"+ "\n\t         \u001b[33;1m" + alias['identity_pubkey'] + "\033[0;37;40m"
         print(image)
         input("\n\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 
@@ -4188,8 +4199,8 @@ def robotNym():
 def callGitWardenTerminal():
     if not os.path.isdir('warden_terminal'):
         git = "git clone https://github.com/pxsocs/warden_terminal.git"
-        os.system(git)
-    os.system("cd warden_terminal && python3 node_warden.py")
+        subprocess.run(git, shell=True)
+    subprocess.run("cd warden_terminal && python3 node_warden.py", shell=True)
 
 #---------------------------------Nostr Terminal----------------------------------
 
@@ -4201,15 +4212,15 @@ def callGitNostrLinTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_linux_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *")
+            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_linux_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *")
+            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_amd64 && chmod 777 *", shell=True)
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_amd64 -k {responseC} -l")
-    except:
+        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_linux_amd64 -k {responseC} -l", shell=True)
+    except Exception:
         menuSelection()
 
 def callGitNostrLinarmTerminal():
@@ -4220,15 +4231,15 @@ def callGitNostrLinarmTerminal():
             "Nostr Console Linux", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_linux_arm64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
+            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_linux_arm64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *")
+            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_linux_arm64 && chmod 777 *", shell=True)
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_linux_arm64 -k {responseC} -l")
-    except:
+        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_linux_arm64 -k {responseC} -l", shell=True)
+    except Exception:
         menuSelection()
 
 def callGitNostrMacTerminal():
@@ -4239,16 +4250,16 @@ def callGitNostrMacTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_macos_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64")
+            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_macos_amd64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64")
+            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_macos_amd64", shell=True)
         clear()
         blogo()
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_macos_amd64 -k {responseC} -l")
-    except:
+        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_macos_amd64 -k {responseC} -l", shell=True)
+    except Exception:
         menuSelection()
 
 def callGitNostrMacarmTerminal():
@@ -4259,15 +4270,15 @@ def callGitNostrMacarmTerminal():
             "Nostr Console macOS", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_elf64 && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *")
+            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_elf64 && chmod 777 *", shell=True)
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -l")
-    except:
+        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -l", shell=True)
+    except Exception:
         menuSelection()
 
 def callGitNostrWinTerminal():
@@ -4278,15 +4289,15 @@ def callGitNostrWinTerminal():
             "Nostr Console Windows", colors=['yellow'], align='left', font='tiny'
         )
         if os.path.isdir ('nostr_console_pyblock'):
-            os.system("cd nostr_console_pyblock && rm -rf nostr_console_windows_amd64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe")
+            subprocess.run("cd nostr_console_pyblock && rm -rf nostr_console_windows_amd64.exe && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe", shell=True)
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe")
+            subprocess.run("mkdir nostr_console_pyblock && cd nostr_console_pyblock && wget https://raw.githubusercontent.com/curly60e/pyblock/master/pybitblock/nostr_console_pyblock/nostr_console_windows_amd64.exe", shell=True)
         clear()
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        os.system(f"cd nostr_console_pyblock && ./nostr_console_windows_amd64.exe -k {responseC} -l")
-    except:
+        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_windows_amd64.exe -k {responseC} -l", shell=True)
+    except Exception:
         menuSelection()
 
 def callGitNostrSeedTerminal():
@@ -4299,14 +4310,14 @@ def callGitNostrSeedTerminal():
         if os.path.isdir ('nostr_seed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_seed && cd nostr_seed && wget https://gist.githubusercontent.com/odudex/93cfb5628b22f8675ab1939fd43133f4/raw/b48f047c0358a9ae50c2027106bdf5e37ee1fe5c/nostr_seed.py")
+            subprocess.run("mkdir nostr_seed && cd nostr_seed && wget https://gist.githubusercontent.com/odudex/93cfb5628b22f8675ab1939fd43133f4/raw/b48f047c0358a9ae50c2027106bdf5e37ee1fe5c/nostr_seed.py", shell=True)
         clear()
         blogo()
         print(output)
         responseC = input("Hex to BIP39 & BIP39 to Hex: ")
-        os.system(f"cd nostr_seed && python3 nostr_seed.py {responseC}")
+        subprocess.run(f"cd nostr_seed && python3 nostr_seed.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 def callGitNostrQRSeedTerminal():
@@ -4319,42 +4330,42 @@ def callGitNostrQRSeedTerminal():
         if os.path.isdir ('nostr_QRseed'):
             print("...pass...")
         else: # Check if the file 'bclock.conf' is in the same folder
-            os.system("mkdir nostr_QRseed && cd nostr_QRseed && wget https://gist.githubusercontent.com/odudex/9e848a91d23e967309bd1719910021e6/raw/dbe04893f4ee2e0aa020735528f7f19bb2d13a7e/nostr_c_seed_qr.py")
+            subprocess.run("mkdir nostr_QRseed && cd nostr_QRseed && wget https://gist.githubusercontent.com/odudex/9e848a91d23e967309bd1719910021e6/raw/dbe04893f4ee2e0aa020735528f7f19bb2d13a7e/nostr_c_seed_qr.py", shell=True)
         clear()
         blogo()
         print(output)
         responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
-        os.system(f"cd nostr_QRseed && python3 nostr_c_seed_qr.py {responseC}")
+        subprocess.run(f"cd nostr_QRseed && python3 nostr_c_seed_qr.py {responseC}", shell=True)
         input("\a\nContinue...")
-    except:
+    except Exception:
         menuSelection()
 
 def callGitBija():
     if not os.path.isdir('bija'):
         git = "git clone --recurse-submodules https://github.com/BrightonBTC/bija"
-        os.system(git)
-    os.system("cd bija && docker-compose up")
+        subprocess.run(git, shell=True)
+    subprocess.run("cd bija && docker-compose up", shell=True)
     input("\a\nYou can now access Bija at http://localhost:5000")
 
 #---------------------------------Bpytop----------------------------------
 def callGitBpytop():
     if not os.path.isdir('bpytop'):
         git = "pip3 install bpytop && git clone https://github.com/aristocratos/bpytop.git"
-        os.system(git)
-    os.system("cd bpytop && sudo make install && bpytop")
+        subprocess.run(git, shell=True)
+    subprocess.run("cd bpytop && sudo make install && bpytop", shell=True)
 
 def callGitRES():
     if not os.path.isdir('resurrection_wallet_0.3.0_amd64.AppImage'):
         wget = "wget https://github.com/ktecho/resurrection-wallet/releases/download/app-v0.3.0/resurrection_wallet_0.3.0_amd64.AppImage"
-        os.system(wget)
-    os.system("chmod +x resurrection_wallet_0.3.0_amd64.AppImage && ./resurrection_wallet_0.3.0_amd64.AppImage")
+        subprocess.run(wget, shell=True)
+    subprocess.run("chmod +x resurrection_wallet_0.3.0_amd64.AppImage && ./resurrection_wallet_0.3.0_amd64.AppImage", shell=True)
     input("\a\nFollow the Steps by Resurrection Wallet")
     
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
         conn = """curl -s 'https://utxo.live/oracle/' | html2text | grep -E "Date" -A 77 | grep -v "Date" """
-        a = os.popen(conn).read()
+        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -4365,14 +4376,14 @@ def callGitUTXOracle():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 #---------------------------------Cashu----------------------------------
 def callGitCashu():
     if not os.path.isdir('Cashu'):
         git = "pip3 install cashu && mkdir Cashu"
-        os.system(git)
-    os.system("cd Cashu && cashu")
+        subprocess.run(git, shell=True)
+    subprocess.run("cd Cashu && cashu", shell=True)
 
 #---------------------------------ColdCore-----------------------------------------
 def callColdCore():
@@ -4400,10 +4411,10 @@ def callColdCore():
             if not os.path.isdir('$HOME/.pyblock/coldcore'):
                 git = "git clone https://github.com/jamesob/coldcore.git"
                 install = "cd coldcore && chmod +x coldcore && cp coldcore ~/.local/bin/coldcore"
-                os.system(git)
-                os.system(install)
-            os.system("coldcore")
-    except:
+                subprocess.run(git, shell=True)
+                subprocess.run(install, shell=True)
+            subprocess.run("coldcore", shell=True)
+    except Exception:
         menuSelection()
 
 #--------------------------------- Menu section -----------------------------------
@@ -4691,13 +4702,13 @@ def decodeHex(): # show hex
             f"curl -s 'https://bitcoinexplorer.org/api/block/'{responseC}"
             + """ | jq -C '.[]' | tr -d '{|}|]|,'"""
         )
-        a = os.popen(list).read()
+        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nBlock: " + responseC)
         print("\nDecoded: " + a)
         input("\a\nContinue...")
-    except:
+    except Exception:
         pass
 
 def miscellaneousLOCAL():
@@ -5151,7 +5162,7 @@ def mempoolmenuOnchainONLY():
 def APILnbit():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnbitSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -5184,7 +5195,7 @@ def APILnbit():
 def APILnbitOnchainONLY():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnbitSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnbitSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -5217,7 +5228,7 @@ def APILnbitOnchainONLY():
 def APILnPay():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnpaySN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -5248,7 +5259,7 @@ def APILnPay():
 def APILnPayOnchainONLY():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("lnpaySN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -5279,7 +5290,7 @@ def APILnPayOnchainONLY():
 def APIOpenNode():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("opennodeSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -5310,7 +5321,7 @@ def APIOpenNode():
 def APIOpenNodeOnchainONLY():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= pickle.load(open("opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+        bitData= json.load(open("opennodeSN.conf", "r")) # Load the file 'bclock.conf'
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -5867,17 +5878,17 @@ def BitaxeConn():
 def menuSelection():
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
     if os.path.isfile('config/intro.conf'):
-        chain = pickle.load(open("config/intro.conf", "rb"))
+        chain = json.load(open("config/intro.conf", "r"))
         chln = chain
         print(chln + "\n")
         if chln == "B":
             path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
             path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCALChainONLY()
         elif chln == "A":
             path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = pickle.load(open("config/bclock.conf", "rb")) # Load the file 'bclock.conf'
+            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
             path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCAL()
         elif chln == "C":
@@ -5888,12 +5899,13 @@ def menuSelection():
         else:
             chln['onchain'] = "onchain"
 
-        pickle.dump(chln, open("config/selection.conf", "wb"))
+        with open("config/selection.conf", "w") as f:
+            json.dump(chln, f, indent=2)
 
 
 def menuSelectionLN():
     lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
-    lndconnectData = pickle.load(open("config/blndconnect.conf", "rb")) # Load the file 'bclock.conf'
+    lndconnectData = json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     if lndconnectload['ln']:
         menuLNDLOCAL()
@@ -5904,7 +5916,7 @@ def aaccPPiLNBits():
     try:
         bitLN = {"NN":"","pd":""}
         if os.path.isfile('config/lnbitSN.conf'):
-            bitData= pickle.load(open("config/lnbitSN.conf", "rb"))
+            bitData= json.load(open("config/lnbitSN.conf", "r"))
             bitLN = bitData
             APILnbit()
         else:
@@ -5923,7 +5935,7 @@ def aaccPPiLNBits():
                 + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -5944,7 +5956,7 @@ def aaccPPiLNBits():
                     + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
                 )
 
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -5957,10 +5969,11 @@ def aaccPPiLNBits():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("config/lnbitSN.conf", "wb"))
+                with open("config/lnbitSN.conf", "w") as f:
+                    json.dump(bitLN, f, indent=2)
                 createFileConnLNBits()
                 break
-    except:
+    except Exception:
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -5970,7 +5983,7 @@ def aaccPPiLNPay():
     try:
         bitLN = {"NN":"","pd":""}
         if os.path.isfile('config/lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("config/lnpaySN.conf", "rb")) # Load the file 'bclock.conf'
+            bitData= json.load(open("config/lnpaySN.conf", "r")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
             APILnPay()
         else:
@@ -5989,7 +6002,7 @@ def aaccPPiLNPay():
                 + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -6010,7 +6023,7 @@ def aaccPPiLNPay():
                     + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
                 )
 
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -6023,11 +6036,12 @@ def aaccPPiLNPay():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("config/lnpaySN.conf", "wb"))
+                with open("config/lnpaySN.conf", "w") as f:
+                    json.dump(bitLN, f, indent=2)
                 createFileConnLNPay()
                 break
 
-    except:
+    except Exception:
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -6037,7 +6051,7 @@ def aaccPPiOpenNode():
     try:
         bitLN = {"NN":"","pd":""}
         if os.path.isfile('config/opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            bitData= pickle.load(open("config/opennodeSN.conf", "rb")) # Load the file 'bclock.conf'
+            bitData= json.load(open("config/opennodeSN.conf", "r")) # Load the file 'bclock.conf'
             bitLN = bitData # Copy the variable pathv to 'path'
             APIOpenNode()
         else:
@@ -6056,7 +6070,7 @@ def aaccPPiOpenNode():
                 + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
             )
 
-            sh = os.popen(curl).read()
+            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             n = str(sh)
@@ -6077,7 +6091,7 @@ def aaccPPiOpenNode():
                     + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
                 )
 
-                rsh = os.popen(checkcurl).read()
+                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -6090,11 +6104,12 @@ def aaccPPiOpenNode():
                 blogo()
                 tick()
                 bitLN['pd'] = "PAID"
-                pickle.dump(bitLN, open("config/opennodeSN.conf", "wb"))
+                with open("config/opennodeSN.conf", "w") as f:
+                    json.dump(bitLN, f, indent=2)
                 createFileConnOpenNode()
                 break
 
-    except:
+    except Exception:
         clear()
         blogo()
         print("\n\tSERIAL NUMBER NOT FOUND\n")
@@ -6129,8 +6144,9 @@ def testlogo():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settings["gradient"] = "color"
-        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
-    except:
+        with open("config/pyblocksettings.conf", "w") as f:
+            json.dump(settings, f, indent=2)
+    except Exception:
         pass
 
 def testlogoRB():
@@ -6149,13 +6165,14 @@ def testlogoRB():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settings["gradient"] = "grd"
-        pickle.dump(settings, open("config/pyblocksettings.conf", "wb"))
-    except:
+        with open("config/pyblocksettings.conf", "w") as f:
+            json.dump(settings, f, indent=2)
+    except Exception:
         pass
 
 def testClock():
     bitcoinclient = path['bitcoincli'] + " getblockcount"
-    block = os.popen(str(bitcoinclient)).read() # 'getblockcount' convert to string
+    block = subprocess.run(str(bitcoinclient), shell=True, capture_output=True, text=True).stdout # 'getblockcount' convert to string
     b = block
     output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='left')
     print(output)
@@ -6171,8 +6188,9 @@ def testClock():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settingsClock["gradient"] = "color"
-        pickle.dump(settingsClock, open("config/pyblocksettingsClock.conf", "wb"))
-    except:
+        with open("config/pyblocksettingsClock.conf", "w") as f:
+            json.dump(settingsClock, f, indent=2)
+    except Exception:
         pass
 
 #--------------------------------- End Menu section -----------------------------------
@@ -7522,14 +7540,14 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         blogo()
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 7Blocks.py")
+        subprocess.run(f"cd SPV && python3 7Blocks.py", shell=True)
         input("\a\nContinue...")
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
         output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyBlockMiner.py")
+        subprocess.run(f"cd SPV && python3 PyBlockMiner.py", shell=True)
         input("\a\nContinue...")
     elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
         clear()
@@ -7594,14 +7612,14 @@ def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu o
         blogo()
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 7Blocks.py")
+        subprocess.run(f"cd SPV && python3 7Blocks.py", shell=True)
         input("\a\nContinue...")
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
         output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyBlockMiner.py")
+        subprocess.run(f"cd SPV && python3 PyBlockMiner.py", shell=True)
         input("\a\nContinue...")
     elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
         clear()
@@ -7632,7 +7650,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
                 close()
                 console()
                 t.sleep(5)
-            except:
+            except Exception:
                 break
     elif bcore in ["B", "b"]:
         clear()
@@ -7654,7 +7672,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except:
+        except Exception:
             pass
     elif bcore in ["G", "g"]:
         getrawtx()
@@ -7685,7 +7703,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         blogo()
         output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyVanityGenerator.py")
+        subprocess.run(f"cd SPV && python3 PyVanityGenerator.py", shell=True)
         input("\a\nContinue...")
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
@@ -7698,7 +7716,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
                 close()
                 console()
                 t.sleep(5)
-            except:
+            except Exception:
                 break
     elif bcore in ["B", "b"]:
         clear()
@@ -7720,7 +7738,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except:
+        except Exception:
             pass
     elif bcore in ["G", "g"]:
         getrawtx()
@@ -7753,7 +7771,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         blogo()
         output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyVanityGenerator.py")
+        subprocess.run(f"cd SPV && python3 PyVanityGenerator.py", shell=True)
         input("\a\nContinue...")
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
@@ -7809,7 +7827,7 @@ def miscellaneousLOCALmenu(misce):
                 close()
                 logoC()
                 tmp()
-            except:
+            except Exception:
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7829,9 +7847,9 @@ def miscellaneousLOCALmenu(misce):
         blogo()
         ex()
     elif misce in ["M", "m"]:
-        os.system('printf "\033[49m"')
+        subprocess.run(['printf', '\033[49m'])
         clear()
-        os.system('printf "\033[49m"')
+        subprocess.run(['printf', '\033[49m'])
         blogo()
         output = render("1st 𝕭𝐢𝐭𝐚𝐱𝐞 Block 853742", colors=['white'], align='center', font='console')
         print(output)
@@ -7879,7 +7897,7 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
                 close()
                 logoC()
                 tmp()
-            except:
+            except Exception:
                 break
     elif misce in ["B", "b"]:
         clear()
@@ -7899,9 +7917,9 @@ def miscellaneousLOCALmenuOnchainONLY(misce):
         blogo()
         ex()
     elif misce in ["M", "m"]:
-        os.system('printf "\033[49m"')
+        subprocess.run(['printf', '\033[49m'])
         clear()
-        os.system('printf "\033[49m"')
+        subprocess.run(['printf', '\033[49m'])
         blogo()
         output = render("1st 𝕭𝐢𝐭𝐚𝐱𝐞 Block 853742", colors=['white'], align='center', font='console')
         print(output)
@@ -7944,7 +7962,7 @@ def decodeHexLOCAL(hexloc):
                 clear()
                 blogo()
                 readHexBlock()
-        except:
+        except Exception:
             pass
     elif hexloc in ["B", "b"]:
         clear()
@@ -7960,7 +7978,7 @@ def decodeHexLOCAL(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except:
+        except Exception:
             pass
 
 def decodeHexLOCALOnchainONLY(hexloc):
@@ -7977,7 +7995,7 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 clear()
                 blogo()
                 readHexBlock()
-        except:
+        except Exception:
             pass
     elif hexloc in ["B", "b"]:
         clear()
@@ -7993,7 +8011,7 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 blogo()
                 sysinfo()
                 readHexTx()
-        except:
+        except Exception:
             pass
 
 def lightningnetworkLOCALcontrol(lncore):
@@ -8246,7 +8264,7 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
                 close()
                 remotegetblock()
                 tmp()
-            except:
+            except Exception:
                 break
     elif menuS in ["B", "b"]:
         bitcoincoremenuREMOTE()
@@ -8297,14 +8315,14 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         blogo()
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 7Blocks.py")
+        subprocess.run(f"cd SPV && python3 7Blocks.py", shell=True)
         input("\a\nContinue...")
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
         output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
-        os.system(f"cd SPV && python3 PyBlockMiner.py")
+        subprocess.run(f"cd SPV && python3 PyBlockMiner.py", shell=True)
         input("\a\nContinue...")
     elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
         clear()
@@ -8321,7 +8339,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
                 close()
                 remoteconsole()
                 t.sleep(5)
-            except:
+            except Exception:
                 break
     elif bcore in ["B", "b"]:
         remotegetblockcount()
@@ -8335,7 +8353,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
             close()
             decodeQR()
             input("Continue...")
-        except:
+        except Exception:
             pass
     elif bcore in ["E", "e"]:
         miscellaneousLOCALmenuOnchainONLY()
@@ -8451,7 +8469,7 @@ def menuD(menuN): # Satnode access Menu
                     apisenderFile()
                     t.sleep(30)
                     menuSelection()
-                except:
+                except Exception:
                     menuSelection()
             elif message in ["T", "t"]:
                 try:
@@ -8461,9 +8479,9 @@ def menuD(menuN): # Satnode access Menu
                     apisender()
                     t.sleep(30)
                     menuSelection()
-                except:
+                except Exception:
                     menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuN in ["C", "c"]:
         try:
@@ -8473,7 +8491,7 @@ def menuD(menuN): # Satnode access Menu
                 gitclone()
             else:
                 menuSelection()
-        except:
+        except Exception:
             pass
     elif menuN in ["R", "r"]:
         menuSelection()
@@ -8487,7 +8505,7 @@ def menuE(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -8497,7 +8515,7 @@ def menuE(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -8507,7 +8525,7 @@ def menuE(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -8521,7 +8539,7 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationPayNym()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuQ in ["B", "b"]:
         try:
@@ -8531,7 +8549,7 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationAddr()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuQ in ["C", "c"]:
         try:
@@ -8541,7 +8559,7 @@ def menuEOnchainONLY(menuQ): # Dev Donation access Menu
             donationLN()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuQ in ["R", "r"]:
         menuSelection()
@@ -8555,7 +8573,7 @@ def menuF(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -8565,7 +8583,7 @@ def menuF(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -8579,7 +8597,7 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationAddrTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuV in ["B", "b"]:
         try:
@@ -8589,7 +8607,7 @@ def menuFOnchainONLY(menuV): # Tester Donation access Menu
             donationLNTst()
             t.sleep(50)
             menuSelection()
-        except:
+        except Exception:
             menuSelection()
     elif menuV in ["R", "r"]:
         menuSelection()
@@ -8678,6 +8696,7 @@ def testClockRemote():
         print("<<< Cancel Control + C")
         input("Enter To Apply...")
         settingsClock["gradient"] = "color"
-        pickle.dump(settingsClock, open("pyblocksettingsClock.conf", "wb"))
-    except:
+        with open("pyblocksettingsClock.conf", "w") as f:
+            json.dump(settingsClock, f, indent=2)
+    except Exception:
         pass
