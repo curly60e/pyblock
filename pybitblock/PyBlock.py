@@ -1951,46 +1951,90 @@ def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_onl
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, d['blocks'], version)
 
-    # Build menu items
-    menu_items = """
+    # Build Rich categorized menu
+    from rich.columns import Columns
+    from rich.text import Text as RText
 
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
-    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
-    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
-    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
-    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
-    \u001b[38;5;202mL.\033[0;37;40m Latest Block
-    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
-    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mP.\033[0;37;40m Block Monitor"""
+    print(header)
 
+    # Blockchain section
+    col1 = RText()
+    col1.append("  BLOCKCHAIN\n", style="bold rgb(255,102,0) underline")
+    col1.append("  A.  ", style="bold rgb(255,102,0)")
+    col1.append("Console\n", style="white")
+    col1.append("  C.  ", style="bold rgb(255,102,0)")
+    col1.append("Blockchain Info\n", style="white")
+    col1.append("  D.  ", style="bold rgb(255,102,0)")
+    col1.append("Run the Numbers\n", style="white")
+    col1.append("  L.  ", style="bold rgb(255,102,0)")
+    col1.append("Latest Block\n", style="white")
+    col1.append("  M.  ", style="bold rgb(255,102,0)")
+    col1.append("Moscow Time\n", style="white")
+    col1.append("  B.  ", style="bold rgb(255,102,0)")
+    col1.append("Genesis Block\n", style="white")
+    col1.append("  J.  ", style="bold rgb(255,102,0)")
+    col1.append("Whitepaper\n", style="white")
+
+    # Monitoring section
+    col2 = RText()
+    col2.append("  MONITORING\n", style="bold cyan underline")
+    col2.append("  S.  ", style="bold cyan")
+    col2.append("Mempool\n", style="white")
+    col2.append("  U.  ", style="bold cyan")
+    col2.append("Unconfirmed Txs\n", style="white")
+    col2.append("  V.  ", style="bold cyan")
+    col2.append("Block Visualizer\n", style="white")
+    col2.append("  P.  ", style="bold cyan")
+    col2.append("Block Monitor\n", style="white")
+    col2.append("  X.  ", style="bold cyan")
+    col2.append("Node Monitor\n", style="white")
+    col2.append("  Y.  ", style="bold cyan")
+    col2.append("Mempool Monitor\n", style="white")
+    col2.append("  K.  ", style="bold cyan")
+    col2.append("Peers Monitor\n", style="white")
+
+    # Tools section
+    col3 = RText()
+    col3.append("  TOOLS\n", style="bold green underline")
+    col3.append("  E.  ", style="bold green")
+    col3.append("Decode HEX\n", style="white")
+    col3.append("  F.  ", style="bold green")
+    col3.append("QR from Address\n", style="white")
+    col3.append("  G.  ", style="bold green")
+    col3.append("Tx Confirmations\n", style="white")
+    col3.append("  N.  ", style="bold green")
+    col3.append("Mempool Search\n", style="white")
+    col3.append("  O.  ", style="bold green")
+    col3.append("OP_RETURN\n", style="white")
+    col3.append("  H.  ", style="bold green")
+    col3.append("Miscellaneous\n", style="white")
+    col3.append("  I.  ", style="bold green")
+    col3.append("ColdCore\n", style="white")
+
+    # Stats & Mining section
+    col4 = RText()
+    col4.append("  STATS & MINING\n", style="bold yellow underline")
+    col4.append("  Z.  ", style="bold yellow")
+    col4.append("Stats\n", style="white")
+    col4.append("  Q.  ", style="bold yellow")
+    col4.append("Hashrate\n", style="white")
+    col4.append("  CM. ", style="bold yellow")
+    col4.append("CLI Miner\n", style="white")
+    col4.append("  ONM.", style="bold yellow")
+    col4.append(" Own Node Miner\n", style="white")
+    col4.append("  VG. ", style="bold yellow")
+    col4.append("Vanity Generator\n", style="white")
     if mode == "onchain_only":
-        menu_items += """
-    \u001b[38;5;202mW.\033[0;37;40m Wallet"""
+        col4.append("  W.  ", style="bold yellow")
+        col4.append("Wallet\n", style="white")
 
-    menu_items += """
-    \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mS.\033[0;37;40m Mempool
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
-    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
-    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
-    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
-    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h"""
-
-    print(header + menu_items)
-    bitcoincoremenuLocalControl(input("\033[1;32;40mSelect option: \033[0;37;40m"), mode)
+    console.print()
+    console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
+    console.print()
+    console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    console.print()
+    print("\x1b[?25h")
+    bitcoincoremenuLocalControl(rich_prompt("Select option"), mode)
 
 def bitcoincoremenuLOCAL():
     bitcoincoremenuLocal("local")
