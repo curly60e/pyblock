@@ -1824,6 +1824,17 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
     sysinfo()
     pathexec()
 
+    # Validate bitcoincli path before attempting to use it
+    if mode in ("local", "onchain_only") and not path.get('bitcoincli'):
+        if path.get('ip_port') and path.get('rpcuser'):
+            mode = "remote"  # Fall back to RPC mode
+        else:
+            show_error("Bitcoin CLI path not configured. Redirecting to Lite Mode.")
+            import time as _t
+            _t.sleep(2)
+            MainMenuCROPPED()
+            return
+
     # Fetch BTC price for status bar
     try:
         _price_r = requests.get("https://mempool.space/api/v1/prices", timeout=3)
@@ -7407,15 +7418,8 @@ def main():
         except KeyboardInterrupt:
             print("\n")
             sys.exit(0)
-        except PermissionError as e:
-            if str(e).endswith("''"):
-                show_error("Bitcoin CLI path is not configured. Please set it up.")
-                logger.error("Empty bitcoincli path in bclock.conf")
-                introINIT()
-            else:
-                logger.error("Fatal error: %s", e)
-                sys.exit(101)
         except Exception as e:
+            show_error(str(e))
             logger.error("Fatal error: %s", e)
             sys.exit(101)
 
