@@ -888,6 +888,8 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             clear()
             close()
             design()
+        except KeyboardInterrupt:
+            break
         except Exception as e:
             logger.debug("Loop interrupted: %s", e)
             break
@@ -7421,8 +7423,7 @@ def main():
                 set_terminal_background()
                 menuSelection()
         except KeyboardInterrupt:
-            print("\n")
-            sys.exit(0)
+            continue  # Ctrl+C returns to main menu
         except Exception as e:
             show_error(str(e))
             logger.error("Fatal error: %s", e)
