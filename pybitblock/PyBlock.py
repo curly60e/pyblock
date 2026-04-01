@@ -1827,15 +1827,17 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
 
     # Validate bitcoincli path before attempting to use it
     if mode in ("local", "onchain_only") and not path.get('bitcoincli'):
-        if path.get('ip_port') and path.get('rpcuser'):
-            mode = "remote"  # Fall back to RPC mode
-        else:
-            show_error("Bitcoin CLI path not configured. Redirecting to Lite Mode.")
-            import time as _t
-            _t.sleep(2)
-            from SPV.spvblock import MainMenuCROPPED as _lite_menu
-            _lite_menu()
-            return
+        show_error("Bitcoin CLI path not configured. Redirecting to Lite Mode.")
+        t.sleep(2)
+        from SPV.spvblock import MainMenuCROPPED as _lite_menu
+        _lite_menu()
+        return
+    if mode == "remote" and not lndconnectload.get('tls'):
+        show_error("Remote node not configured. Redirecting to Lite Mode.")
+        t.sleep(2)
+        from SPV.spvblock import MainMenuCROPPED as _lite_menu
+        _lite_menu()
+        return
 
     # Fetch BTC price for status bar
     try:
