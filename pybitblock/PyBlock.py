@@ -54,7 +54,9 @@ logger = get_logger("PyBlock")
 
 version = "4.0"
 
-def rpc(method, params=[]):
+def rpc(method, params=None):
+    if params is None:
+        params = []
     payload = json.dumps({
         "jsonrpc": "2.0",
         "id": "minebet",

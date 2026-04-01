@@ -45,7 +45,9 @@ else:
     with open("blndconnect.conf", "w") as f:
         json.dump(lndconnectload, f, indent=2) # Save the file 'bclock.conf'
 
-def rpc(method, params=[]):
+def rpc(method, params=None):
+    if params is None:
+        params = []
     payload = json.dumps({
         "jsonrpc": "2.0",
         "id": "minebet",
