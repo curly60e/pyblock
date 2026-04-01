@@ -70,7 +70,8 @@ def opreturnOnchainONLY():
             url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
         else:
             cert_path = lndconnectload["tls"]
-            macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+            with open(lndconnectload["macaroon"], 'rb') as f:
+                macaroon = codecs.encode(f.read(), 'hex')
             headers = {'Grpc-Metadata-macaroon': macaroon}
             url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
             r = requests.get(url, headers=headers, verify=cert_path)
@@ -96,8 +97,9 @@ def opreturn():
     try:
         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
         if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-            lndconnectData= json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            with open("blndconnect.conf", "r") as f:
+                lndconnectData = json.load(f) # Load the file 'bclock.conf'
+                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
         else:
             clear()
             blogo()
@@ -112,8 +114,9 @@ def opreturn():
 
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
         if os.path.isfile('bclock.conf') or os.path.isfile('blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = json.load(open("bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
+            with open("bclock.conf", "r") as f:
+                pathv = json.load(f) # Load the file 'bclock.conf'
+                path = pathv # Copy the variable pathv to 'path'
         else:
             blogo()
             print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
@@ -147,13 +150,15 @@ def opreturn():
         node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            with open("blndconnect.conf", "r") as f:
+                lndconnectData = json.load(f) # Load the file 'bclock.conf'
+                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + b + "\n")
                 payinvoice()
                 cert_path = lndconnectload["tls"]
-                macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+                with open(lndconnectload["macaroon"], 'rb') as f:
+                    macaroon = codecs.encode(f.read(), 'hex')
                 headers = {'Grpc-Metadata-macaroon': macaroon}
                 url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
                 r = requests.get(url, headers=headers, verify=cert_path)
@@ -203,7 +208,8 @@ def opreturn():
                 url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
             else:
                 cert_path = lndconnectload["tls"]
-                macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+                with open(lndconnectload["macaroon"], 'rb') as f:
+                    macaroon = codecs.encode(f.read(), 'hex')
                 headers = {'Grpc-Metadata-macaroon': macaroon}
                 url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
                 r = requests.get(url, headers=headers, verify=cert_path)
@@ -283,7 +289,7 @@ def gameroom():
 
 def statsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
+        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\\--" | tr -d '*' | tr -d '"' """
         a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
@@ -378,14 +384,25 @@ def satoshiConn():
 
 def whalalConn():
     try:
-        conn = """curl -s 'https://api.whale-alert.io/v1/transactions?api_key=3LYGErNwoCSj6QUsWOWdpEuGTuYxakMZ&limit=7&min_value=5000000&currency=btc' | jq  -C '.transactions[]' | tr -d '{|}|,|"|:|' | grep -E "blockchain|amount" -A 8 | grep -v -E "\--|from|symbol|to|id" | xargs -L 1 | sed 's/blockchain/PyBLØCK/g' | sed 's/amount/₿/g' | sed 's/_usd/=$/g' | sed 's/bitcoin/WHALE ALERT/g' | grep -E ' '"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        api_key = os.environ.get("WHALE_ALERT_API_KEY", "")
+        if not api_key:
+            print("\n\033[1;31;40mSet WHALE_ALERT_API_KEY environment variable to use Whale Alert.\033[0;37;40m")
+            input("\nContinue...")
+            return
+        url = "https://api.whale-alert.io/v1/transactions"
+        params = {"api_key": api_key, "limit": 7, "min_value": 5000000, "currency": "btc"}
+        response = requests.get(url, params=params)
+        data = response.json()
         clear()
         blogo()
         closed()
         output = render("whale alert", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
+        for tx in data.get("transactions", []):
+            blockchain = tx.get("blockchain", "unknown")
+            amount = tx.get("amount", 0)
+            amount_usd = tx.get("amount_usd", 0)
+            print(f" WHALE ALERT ₿ {amount} =${amount_usd:.0f}")
         input("\a\nContinue...")
     except Exception:
         pass
@@ -864,8 +881,9 @@ def loadFileConnLNBits(lnbitLoad):
     lnbitLoad = {"wallet_name":"", "wallet_id":"", "admin_key":"", "invoice_read_key":""}
 
     if os.path.isfile('lnbit.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lnbitData= json.load(open("lnbit.conf", "r")) # Load the file 'bclock.conf'
-        lnbitLoad = lnbitData # Copy the variable pathv to 'path'
+        with open("lnbit.conf", "r") as f:
+            lnbitData = json.load(f) # Load the file 'bclock.conf'
+            lnbitLoad = lnbitData # Copy the variable pathv to 'path'
     else:
         clear()
         blogo()
@@ -933,8 +951,9 @@ def lnbitCreateNewInvoice():
         while True:
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                with open("blndconnect.conf", "r") as f:
+                    lndconnectData = json.load(f) # Load the file 'bclock.conf'
+                    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     print("\nInvoice: " + c + "\n")
                     payinvoice()
@@ -1302,8 +1321,9 @@ def loadFileConnLNPay(lnpayLoad):
     lnpayLoad = {"key":""}
 
     if os.path.isfile('lnpay.conf'): # Check if the file 'bclock.conf' is in the same folder
-        lnpayData= json.load(open("lnpay.conf", "r")) # Load the file 'bclock.conf'
-        lnpayLoad = lnpayData # Copy the variable pathv to 'path'
+        with open("lnpay.conf", "r") as f:
+            lnpayData = json.load(f) # Load the file 'bclock.conf'
+            lnpayLoad = lnpayData # Copy the variable pathv to 'path'
     else:
         clear()
         blogo()
@@ -1343,8 +1363,9 @@ def loadFileConnOpenNode(opennodeLoad):
     opennodeLoad = {"key":"","wdr":"","inv":""}
 
     if os.path.isfile('opennode.conf'): # Check if the file 'bclock.conf' is in the same folder
-        opennodeData= json.load(open("opennode.conf", "r")) # Load the file 'bclock.conf'
-        opennodeLoad = opennodeData # Copy the variable pathv to 'path'
+        with open("opennode.conf", "r") as f:
+            opennodeData = json.load(f) # Load the file 'bclock.conf'
+            opennodeLoad = opennodeData # Copy the variable pathv to 'path'
     else:
         clear()
         blogo()
@@ -1489,8 +1510,9 @@ def OpenNodecreatecharge():
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                        with open("blndconnect.conf", "r") as f:
+                            lndconnectData = json.load(f) # Load the file 'bclock.conf'
+                            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
                             print("\nInvoice: " + mm + "\n")
                             payinvoice()
@@ -1556,7 +1578,8 @@ def OpenNodecreatecharge():
                 if pay in ["I", "i"]:
                     node_not = input("Do you want to pay this invoice with your node? Y/n: ")
                     if node_not in ["Y", "y"]:
-                        lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
+                        with open("blndconnect.conf", "r") as f:
+                            lndconnectData = json.load(f) # Load the file 'bclock.conf'
                         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
                         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                         if lndconnectload['ip_port']:
@@ -1759,8 +1782,9 @@ def loadFileTippinMe(tippinmeLoad):
     tippinmeLoad = {"key":""}
 
     if os.path.isfile('tippinme.conf'): # Check if the file 'bclock.conf' is in the same folder
-        tippinmeData= json.load(open("tippinme.conf", "r")) # Load the file 'bclock.conf'
-        tippinmeLoad = tippinmeData # Copy the variable pathv to 'path'
+        with open("tippinme.conf", "r") as f:
+            tippinmeData = json.load(f) # Load the file 'bclock.conf'
+            tippinmeLoad = tippinmeData # Copy the variable pathv to 'path'
     else:
         clear()
         blogo()
@@ -1812,8 +1836,9 @@ def tippinmeGetInvoice():
         node_not = input("Do you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            with open("blndconnect.conf", "r") as f:
+                lndconnectData = json.load(f) # Load the file 'bclock.conf'
+                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + ln1 + "\n")
                 payinvoice()
@@ -1837,8 +1862,9 @@ def loadFileConnTallyCo(tallycoLoad):
     tallycoLoad = {"tallyco.conf":"","id":""}
 
     if os.path.isfile('tallyco.conf'): # Check if the file 'bclock.conf' is in the same folder
-        tallyData= json.load(open("tallyco.conf", "r")) # Load the file 'bclock.conf'
-        tallycoLoad = tallyData # Copy the variable pathv to 'path'
+        with open("tallyco.conf", "r") as f:
+            tallyData = json.load(f) # Load the file 'bclock.conf'
+            tallycoLoad = tallyData # Copy the variable pathv to 'path'
     else:
         clear()
         blogo()
@@ -1951,8 +1977,9 @@ def tallycoDonateid():
             node_not = input("Do you want to pay this tip with your node? Y/n: ")
             if node_not in ["Y", "y"]:
                 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-                lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-                lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+                with open("blndconnect.conf", "r") as f:
+                    lndconnectData = json.load(f) # Load the file 'bclock.conf'
+                    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
                 if lndconnectload['ip_port']:
                     e = d['lightning_pay_request']
                     f = e.lower()

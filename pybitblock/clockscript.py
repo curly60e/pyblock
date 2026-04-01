@@ -34,8 +34,9 @@ def rectangle(n):
 def blogo():
 
     if os.path.isfile('config/pyblocksettings.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("config/pyblocksettings.conf", "r")) # Load the file 'bclock.conf'
-        settings = settingsv # Copy the variable pathv to 'path'
+        with open("config/pyblocksettings.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
+            settings = settingsv # Copy the variable pathv to 'path'
     else:
         settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         with open("config/pyblocksettings.conf", "w") as f:
@@ -53,20 +54,22 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
         try:
             clear()
             design()
-        except:
+        except Exception:
             break
 
 def pathexec():
     global path
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
+    with open("config/bclock.conf", "r") as f:
+        pathv = json.load(f) # Load the file 'bclock.conf'
+        path = pathv # Copy the variable pathv to 'path'
 
 def design():
     while True:
         if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            settingsv = json.load(open("config/pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
-            settingsClock = settingsv # Copy the variable pathv to 'path'
+            with open("config/pyblocksettingsClock.conf", "r") as f:
+                settingsv = json.load(f) # Load the file 'bclock.conf'
+                settingsClock = settingsv # Copy the variable pathv to 'path'
         else:
             settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
             with open("config/pyblocksettingsClock.conf", "w") as f:
@@ -141,8 +144,9 @@ while True: # Loop
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
+            with open("config/bclock.conf", "r") as f:
+                pathv = json.load(f) # Load the file 'bclock.conf'
+                path = pathv # Copy the variable pathv to 'path'
         else:
             blogo()
             print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
@@ -160,6 +164,6 @@ while True: # Loop
         artist()
 
 
-    except:
+    except Exception:
         print("\n")
         sys.exit(101)

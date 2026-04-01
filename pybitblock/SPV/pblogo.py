@@ -8,8 +8,9 @@ from cfonts import render, say
 def blogo():
 
     if os.path.isfile('config/pyblocksettinconfig/gs.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("config/pyblocksettings.conf", "r")) # Load the file 'bclock.conf'
-        settings = settingsv # Copy the variable pathv to 'path'
+        with open("config/pyblocksettings.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
+            settings = settingsv # Copy the variable pathv to 'path'
     else:
         settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         with open("config/pyblocksettings.conf", "w") as f:
@@ -57,7 +58,7 @@ def tick():
 \033[0;37;40m""")
 
 def canceled():
-    print("""
+    print(r"""
                    )              (         (
    (     (      ( /(    (         )\ )      )\ )
    )\    )\     )\())   )\   (   (()/(  (  (()/(

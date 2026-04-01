@@ -11,8 +11,9 @@ settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 def blogo():
 
     if os.path.isfile('pyblocksettings.conf') or os.path.isfile('pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("pyblocksettings.conf", "r")) # Load the file 'bclock.conf'
-        settings = settingsv # Copy the variable pathv to 'path'
+        with open("pyblocksettings.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
+            settings = settingsv # Copy the variable pathv to 'path'
     else:
         settings = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         with open("pyblocksettings.conf", "w") as f:
@@ -29,8 +30,9 @@ def clear(): # clear the screen
     subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
 
 if os.path.isfile('blndconnect.conf'): # Check if the file 'bclock.conf' is in the same folder
-    lndconnectData= json.load(open("blndconnect.conf", "r")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    with open("blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
+        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 else:
     clear()
     blogo()
@@ -52,15 +54,17 @@ def rpc(method, params=[]):
     })
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = json.load(open("bclock.conf", "r")) # Load the file 'bclock.conf'
-        path = pathv # Copy the variable pathv to 'path'
+        with open("bclock.conf", "r") as f:
+            pathv = json.load(f) # Load the file 'bclock.conf'
+            path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
 
 def remotegetblock():
     if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
-        settingsClock = settingsv # Copy the variable pathv to 'path'
+        with open("pyblocksettingsClock.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
+            settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
         with open("pyblocksettingsClock.conf", "w") as f:
@@ -87,6 +91,6 @@ while True:
         blogo()
         remotegetblock()
         tmp()
-    except:
+    except Exception:
         print("\n")
         sys.exit(101)

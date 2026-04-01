@@ -35,8 +35,9 @@ def rectangle(n):
 def pathexec():
     global path
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-    path = pathv # Copy the variable pathv to 'path'
+    with open("config/bclock.conf", "r") as f:
+        pathv = json.load(f) # Load the file 'bclock.conf'
+        path = pathv # Copy the variable pathv to 'path'
 
 def counttxs():
     try:
@@ -108,7 +109,7 @@ def counttxs():
                 print("\033[0;37;40m\x1b[?25l")
                 a = b
                 nn = e
-    except:
+    except Exception:
         pass
 
 
@@ -120,8 +121,9 @@ while True: # Loop
         path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
 
         if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
+            with open("config/bclock.conf", "r") as f:
+                pathv = json.load(f) # Load the file 'bclock.conf'
+                path = pathv # Copy the variable pathv to 'path'
         else:
             blogo()
             print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
@@ -139,6 +141,6 @@ while True: # Loop
         counttxs()
 
 
-    except:
+    except Exception:
         print("\n")
         sys.exit(101)

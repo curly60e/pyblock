@@ -39,7 +39,8 @@ def rpc(method, params=[]):
     })
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     if os.path.isfile('bclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = json.load(open("bclock.conf", "r")) # Load the file 'bclock.conf'
+        with open("bclock.conf", "r") as f:
+            pathv = json.load(f) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
     return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
 
@@ -80,7 +81,8 @@ def remoteHalving():
 
 def remotegetblock():
     if os.path.isfile('pyblocksettingsClock.conf') or os.path.isfile('pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
+        with open("pyblocksettingsClock.conf", "r") as f:
+            settingsv = json.load(f) # Load the file 'bclock.conf'
         settingsClock = settingsv # Copy the variable pathv to 'path'
     else:
         settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
@@ -123,7 +125,7 @@ def remotegetblockcount(): # get access to bitcoin-cli with the command getblock
             ----------------------------------------------------------------------------
             """.format(d['chain'], d['blocks'], d['bestblockhash'], d['difficulty'], d['verificationprogress'], d['size_on_disk'], d['pruned']))
             t.sleep(2)
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 def remoteconsole(): # get into the console from bitcoin-cli
@@ -139,13 +141,14 @@ def runthenumbersConn():
         c = str(b)
         print(c)
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def consoleLN(): # get into the console from bitcoin-cli
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
@@ -155,7 +158,8 @@ def consoleLN(): # get into the console from bitcoin-cli
         print(lsd1)
 
 def locallistpeersQQ():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -185,8 +189,7 @@ def locallistpeersQQ():
                     with open(f'{hash}.png', "wb") as f:
                         rh.img.save(f, format="png")
 
-                    img_path = open(f'{hash}.png', "rb")
-                    img = Image.open(img_path)
+                    img = Image.open(f'{hash}.png')
 
                     h = 1
                     w = int((img.width / img.height) * 5)
@@ -195,8 +198,7 @@ def locallistpeersQQ():
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
-                img_path = open(f'{hash}.png', "rb")
-                img = Image.open(img_path)
+                img = Image.open(f'{hash}.png')
 
                 h = 1
                 w = int((img.width / img.height) * 5)
@@ -221,8 +223,7 @@ def locallistpeersQQ():
                     rh = Robohash(hash)
                     rh.assemble(roboset='set1')
 
-                    img_path = open(f'{hash}.png', "rb")
-                    img = Image.open(img_path)
+                    img = Image.open(f'{hash}.png')
 
                     h = 20
                     w = int((img.width / img.height) * 50)
@@ -261,11 +262,12 @@ def locallistpeersQQ():
                 input("\nContinue... ")
             elif pp in ["N", "n"]:
                 input("\nContinue... ")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 def localconnectpeer():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         clear()
@@ -280,11 +282,12 @@ def localconnectpeer():
         lsd0 = str(lsd)
         print(lsd0)
         input("\nContinue... ")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def locallistchaintxns():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -335,11 +338,12 @@ def locallistchaintxns():
                     print("\033[0;37;40m")
                     qr.clear()
             input("\nContinue... ")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 def locallistinvoices():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -387,11 +391,12 @@ def locallistinvoices():
                     print("\033[0;37;40m")
                     qr.clear()
             input("\nContinue... ")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 def locallistchannels():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
     lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
@@ -416,8 +421,7 @@ def locallistchannels():
                     with open(f'{hash}.png', "wb") as f:
                         rh.img.save(f, format="png")
 
-                    img_path = open(f'{hash}.png', "rb")
-                    img = Image.open(img_path)
+                    img = Image.open(f'{hash}.png')
 
                     h = 1
                     w = int((img.width / img.height) * 5)
@@ -426,8 +430,7 @@ def locallistchannels():
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
-                img_path = open(f'{hash}.png', "rb")
-                img = Image.open(img_path)
+                img = Image.open(f'{hash}.png')
 
                 h = 1
                 w = int((img.width / img.height) * 5)
@@ -452,8 +455,7 @@ def locallistchannels():
                     rh = Robohash(hash)
                     rh.assemble(roboset='set1')
 
-                    img_path = open(f'{hash}.png', "rb")
-                    img = Image.open(img_path)
+                    img = Image.open(f'{hash}.png')
 
                     h = 20
                     w = int((img.width / img.height) * 50)
@@ -482,11 +484,12 @@ def locallistchannels():
                     print("----------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 def localgetinfo():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -505,8 +508,7 @@ def localgetinfo():
         with open(f'{hash}.png', "wb") as f:
             rh.img.save(f, format="png")
 
-        img_path = open(f'{hash}.png', "rb")
-        img = Image.open(img_path)
+        img = Image.open(f'{hash}.png')
 
         h = 20
         w = int((img.width / img.height) * 50)
@@ -515,8 +517,7 @@ def localgetinfo():
         img_arr = np.asarray(img)
         h,w,c = img_arr.shape
 
-    img_path = open(f'{hash}.png', "rb")
-    img = Image.open(img_path)
+    img = Image.open(f'{hash}.png')
 
     h = 20
     w = int((img.width / img.height) * 50)
@@ -553,7 +554,8 @@ def localgetinfo():
     input("\nContinue... ")
 
 def localaddinvoice():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " addinvoice"
     lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
@@ -603,11 +605,12 @@ def localaddinvoice():
                 print("\033[0;37;40m")
                 t.sleep(2)
                 break
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localpayinvoice():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         invoiceN = input("Insert the invoice to pay: ")
@@ -623,11 +626,12 @@ def localpayinvoice():
         else:
             subprocess.run([lndconnectload['ln']] + lncli.split() + [invoice])
         t.sleep(2)
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localgetnetworkinfo():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " getnetworkinfo"
     lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
@@ -649,12 +653,14 @@ def localgetnetworkinfo():
     input("\nContinue... ")
 
 def localFullProtocol():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
 
     proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
+    # NOTE: shell=True used for hardcoded pipe chains (no user input); lower risk but not ideal
     p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
     p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
     p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
@@ -662,6 +668,7 @@ def localFullProtocol():
     proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
+    # NOTE: shell=True used for hardcoded pipe chains (no user input); lower risk but not ideal
     p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
     p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
     p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
@@ -669,7 +676,8 @@ def localFullProtocol():
 
 
 def localkeysend():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -688,11 +696,12 @@ def localkeysend():
         )
 
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatsendA():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -716,33 +725,38 @@ def localchatsendA():
         )
 
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatnewA():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
+        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
         subprocess.run("""lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatlistA():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f)
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
+        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
         subprocess.run("""lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatsendB():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -767,33 +781,38 @@ def localchatsendB():
         )
 
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatnewB():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
+        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
         subprocess.run("""lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatlistB():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f)
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
+        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
         subprocess.run("""lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatsendC():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
@@ -818,34 +837,39 @@ def localchatsendC():
         )
 
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatnewC():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tRead.\n")
+        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
         subprocess.run("""lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchatlistC():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f)
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     try:
         closed()
         print("\n\tList.\n")
         lncli = " listpayments "
+        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
         subprocess.run("""lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
         input("\nContinue...")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def localchannelbalance():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " channelbalance"
     lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
@@ -864,7 +888,8 @@ def localchannelbalance():
     input("\nContinue... ")
 
 def localnewaddress():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " newaddress p2wkh"
     lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
@@ -885,7 +910,8 @@ def localnewaddress():
     input("\nContinue... ")
 
 def localbalanceOC():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " walletbalance"
     lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
@@ -901,7 +927,8 @@ def localbalanceOC():
 
 
 def localrebalancelnd():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
     while True:
@@ -934,16 +961,18 @@ def localrebalancelnd():
             fromtonode = "python3 rebalance.py -f {} -t {} -a {} --max-fee-factor {}".format(fromnode,tonode,amt,fee)
             subprocess.run(["python3", "rebalance.py", "-f", fromnode, "-t", tonode, "-a", amt, "--max-fee-factor", fee])
             input("Continue...")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 # Remote connection with rest -------------------------------------
 
 def getnewinvoice():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     qr = qrcode.QRCode(
     version=1,
@@ -1006,14 +1035,16 @@ def getnewinvoice():
                 print("\033[0;37;40m")
                 t.sleep(2)
                 break
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def payinvoice():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     try:
         while True:
@@ -1040,7 +1071,7 @@ def payinvoice():
                 r.json()['error']
                 print("\nThe Invoice don't have an amount. Please insert an Invoice with amount. \n")
                 continue
-            except:
+            except Exception as e:  # Catch specific exceptions
                 break
         ok, checking_id, fee_msat, error_message = r.ok, None, 0, None
         r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path,)
@@ -1059,14 +1090,16 @@ def payinvoice():
             canceled()
         print("\033[0;37;40m")
         t.sleep(2)
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def getnewaddress():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     qr = qrcode.QRCode(
     version=1,
@@ -1085,11 +1118,12 @@ def getnewaddress():
         print("Bitcoin Address: " + addr['address'])
         qr.clear()
         input("\nContinue... ")
-    except:
+    except Exception as e:  # Catch specific exceptions
         pass
 
 def listinvoice():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -1098,7 +1132,8 @@ def listinvoice():
     border=4,
     )
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -1137,12 +1172,13 @@ def listinvoice():
                     print("\033[0;37;40m")
                     qr.clear()
             input("\nContinue... ")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
     input("\nContinue... ")
 
 def getinfo():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     qr = qrcode.QRCode(
     version=1,
@@ -1151,7 +1187,8 @@ def getinfo():
     border=4,
     )
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -1163,8 +1200,7 @@ def getinfo():
         with open(f'{hash}.png', "wb") as f:
             rh.img.save(f, format="png")
 
-        img_path = open(f'{hash}.png', "rb")
-        img = Image.open(img_path)
+        img = Image.open(f'{hash}.png')
 
         h = 20
         w = int((img.width / img.height) * 50)
@@ -1173,8 +1209,7 @@ def getinfo():
         img_arr = np.asarray(img)
         h,w,c = img_arr.shape
 
-    img_path = open(f'{hash}.png', "rb")
-    img = Image.open(img_path)
+    img = Image.open(f'{hash}.png')
 
     h = 20
     w = int((img.width / img.height) * 50)
@@ -1225,10 +1260,12 @@ def get_color(r, g, b):
     return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
 
 def channels():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -1252,8 +1289,7 @@ def channels():
                     with open(f'{hash}.png', "wb") as f:
                         rh.img.save(f, format="png")
 
-                    img_path = open(f'{hash}.png', "rb")
-                    img = Image.open(img_path)
+                    img = Image.open(f'{hash}.png')
 
                     h = 1
                     w = int((img.width / img.height) * 5)
@@ -1262,8 +1298,7 @@ def channels():
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
-                img_path = open(f'{hash}.png', "rb")
-                img = Image.open(img_path)
+                img = Image.open(f'{hash}.png')
 
                 h = 1
                 w = int((img.width / img.height) * 5)
@@ -1288,8 +1323,7 @@ def channels():
                     rh = Robohash(hash)
                     rh.assemble(roboset='set1')
 
-                    img_path = open(f'{hash}.png', "rb")
-                    img = Image.open(img_path)
+                    img = Image.open(f'{hash}.png')
 
                     h = 20
                     w = int((img.width / img.height) * 50)
@@ -1318,14 +1352,16 @@ def channels():
                     print("----------------------------------------------------------------------------------------------------\n")
 
             input("\nContinue... ")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 def channelbalance():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -1350,7 +1386,8 @@ def listonchaintxs():
     border=4,
     )
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/transactions'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -1393,14 +1430,16 @@ def listonchaintxs():
                     print("\033[0;37;40m")
                     qr.clear()
             input("\nContinue... ")
-        except:
+        except Exception as e:  # Catch specific exceptions
             break
 
 def balanceOC():
-    lndconnectData= json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f:
+        lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as f:
+        macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/balance/blockchain'.format(lndconnectload["ip_port"])
     r = requests.get(url, headers=headers, verify=cert_path)
