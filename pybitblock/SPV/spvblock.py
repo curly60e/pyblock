@@ -36,6 +36,7 @@ from config import cfg
 from log import get_logger
 from shared.display import clear, close, sysinfo, rectangle, delay_print
 from shared.formatting import get_ansi_color_code, get_color
+from shared.ui import status_bar, show_error, loading
 logger = get_logger("SPV")
 
 
@@ -4470,6 +4471,12 @@ def MainMenuCROPPED(): #Main Menu
     di = json.loads(nn)
     a = di
     b = str(a)
+    try:
+        _price_r = requests.get("https://mempool.space/api/v1/prices", timeout=3)
+        _btc_price = f"{_price_r.json().get('USD', ''):,}"
+    except Exception:
+        _btc_price = ""
+    status_bar(mode="lite", block_height=b, btc_price=_btc_price)
     print("""\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m\a

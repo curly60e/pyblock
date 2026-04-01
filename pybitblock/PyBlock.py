@@ -67,6 +67,7 @@ from menu import select_color
 from log import get_logger
 from shared.display import clear, close, sysinfo, rectangle, delay_print
 from shared.formatting import get_ansi_color_code, get_color
+from shared.ui import status_bar, show_error, loading
 logger = get_logger("PyBlock")
 
 
@@ -1807,10 +1808,18 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
     sysinfo()
     pathexec()
 
+    # Fetch BTC price for status bar
+    try:
+        _price_r = requests.get("https://mempool.space/api/v1/prices", timeout=3)
+        _btc_price = f"{_price_r.json().get('USD', ''):,}"
+    except Exception:
+        _btc_price = ""
+
     if mode == "remote":
         lndconnectexec()
         path_remote = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-        pathv = json.load(open("config/bclock.conf", "r"))
+        with open("config/bclock.conf", "r") as f:
+            pathv = json.load(f)
         path_remote = pathv
         n = "Local" if path_remote['bitcoincli'] else "Remote"
         blk = rpc('getblockchaininfo')
@@ -1841,6 +1850,9 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
         b = json.loads(a)
         d = b
         alias = None
+
+    # Status bar
+    status_bar(mode=mode, block_height=str(d.get('blocks', '')), btc_price=_btc_price)
 
     # Build header
     if alias is not None:
