@@ -80,20 +80,22 @@ def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
             combined.append_text(separator)
         combined.append_text(part)
 
-    console.print(f"    ", end="")
-    console.print(combined)
+    console.print(Panel(combined, expand=False, style="on default", border_style="dim", padding=(0, 2)))
 
 
 def rich_sysinfo(cpu_percent, mem_percent):
-    """Render CPU and Memory with colored bars."""
+    """Render CPU and Memory with colored bars in a panel."""
     cpu_color = "green" if cpu_percent < 70 else ("yellow" if cpu_percent < 90 else "red")
     mem_color = "green" if mem_percent < 70 else ("yellow" if mem_percent < 90 else "red")
 
     cpu_bar = _make_bar(cpu_percent, cpu_color)
     mem_bar = _make_bar(mem_percent, mem_color)
 
-    console.print(f"    [italic yellow]CPU[/]     {cpu_bar} [bold {cpu_color}]{cpu_percent}%[/]")
-    console.print(f"    [italic yellow]Memory[/]  {mem_bar} [bold {mem_color}]{mem_percent}%[/]")
+    text = Text.from_markup(
+        f"[italic yellow]CPU[/]     {cpu_bar} [bold {cpu_color}]{cpu_percent}%[/]\n"
+        f"[italic yellow]Memory[/]  {mem_bar} [bold {mem_color}]{mem_percent}%[/]"
+    )
+    console.print(Panel(text, expand=False, style="on default", border_style="dim"))
 
 
 def _make_bar(percent, color):
@@ -104,18 +106,21 @@ def _make_bar(percent, color):
 
 
 def rich_menu(title, items, footer_text=""):
-    """Render a styled menu.
+    """Render a styled menu in a panel.
 
     Args:
         title: Menu section title
         items: List of (key, label, style) tuples
         footer_text: Optional text below the menu
     """
-    console.print()
+    lines = []
     for key, label, style in items:
-        console.print(f"    [bold {style}]{key}.[/] {label}")
+        lines.append(f"[bold {style}]{key}.[/] {label}")
     if footer_text:
-        console.print(f"    [dim]{footer_text}[/dim]")
+        lines.append(f"\n[dim]{footer_text}[/dim]")
+
+    content = Text.from_markup("\n".join(lines))
+    console.print(Panel(content, expand=False, style="on default", border_style="dim", padding=(1, 2)))
     console.print()
 
 
@@ -165,8 +170,7 @@ def rich_header(node_type, block_height, version, alias=None):
     info.append("Version: ", style="bold white")
     info.append(f"{version}", style="dim")
 
-    console.print(f"    ", end="")
-    console.print(info)
+    console.print(Panel(info, expand=False, style="on default", border_style="dim", padding=(0, 2)))
 
 
 def rich_loading(label="Loading"):
