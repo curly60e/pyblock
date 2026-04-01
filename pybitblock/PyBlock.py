@@ -70,7 +70,7 @@ from shared.display import clear, close, sysinfo, rectangle, delay_print
 from shared.formatting import get_ansi_color_code, get_color
 from shared.ui import status_bar, show_error, loading
 from shared.rich_ui import (
-    console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
+    console as rich_console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
 )
 logger = get_logger("PyBlock")
 
@@ -880,7 +880,8 @@ def some_other_function():
     run_display_node_info()
 
 def execute_visualizer():
-    block_visualizer.run_visualizer()
+    import block_viz
+    block_viz.interactive_visualizer(use_cli=True)
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
@@ -1793,30 +1794,120 @@ def callColdCore():
     blogo()
     close()
     try:
-        if not os.path.isfile('$HOME/.pyblock/public.txt'):
-            msg = """
-            \033[0;37;40m-------------------------\a\u001b[31;1mFILE NOT FOUND\033[0;37;40m----------------------------
-                    To ColdCore works it needs to import your wallet's
-                        public information on your coldcard, go to
-                        -----------------------------------------
-                        |                                       |
-                        |    \033[1;37;40mAdvanced > MicroSD > Dump Summary\033[0;37;40m  |
-                        |                                       |
-                        -----------------------------------------
-                             Copy the file \033[1;37;40mpublic.txt\033[0;37;40m inside
-                                the main \u001b[31;1mpyblock\033[0;37;40m folder
-              (see: https://coldcardwallet.com/docs/microsd#dump-summary-file)
-            -------------------------------------------------------------------"""
-            print(msg)
-            input("\nContinue...")
+        from rich.panel import Panel as RPanel
+        from rich.text import Text as RText
+
+        home = os.path.expanduser("~")
+        pyblock_dir = os.path.join(home, ".pyblock")
+        public_file = os.path.join(pyblock_dir, "public.txt")
+        coldcore_dir = os.path.join(pyblock_dir, "coldcore")
+        coldcore_bin = os.path.join(home, ".local", "bin", "coldcore")
+
+        has_public = os.path.isfile(public_file)
+        has_coldcore = os.path.isfile(coldcore_bin) or subprocess.run(
+            ["which", "coldcore"], capture_output=True).returncode == 0
+        has_cli = bool(path.get("bitcoincli"))
+
+        # Status panel
+        status = RText()
+        status.append("  ColdCore Status\n\n", style="bold white")
+        status.append("  Bitcoin CLI:  ", style="dim")
+        if has_cli:
+            status.append("Connected", style="bold green")
+            try:
+                info = subprocess.run([path["bitcoincli"], "getblockchaininfo"],
+                                      capture_output=True, text=True, timeout=5)
+                if info.returncode == 0:
+                    d = json.loads(info.stdout)
+                    status.append(f"  (Block {d.get('blocks', '?')})", style="dim")
+            except Exception:
+                pass
         else:
-            if not os.path.isdir('$HOME/.pyblock/coldcore'):
-                subprocess.run(["git", "clone", "https://github.com/jamesob/coldcore.git"])
-                subprocess.run(["chmod", "+x", "coldcore"], cwd="coldcore")
-                subprocess.run(["cp", "coldcore", os.path.expanduser("~/.local/bin/coldcore")], cwd="coldcore")
+            status.append("Not configured", style="bold red")
+        status.append("\n")
+        status.append("  ColdCore:     ", style="dim")
+        status.append("Installed" if has_coldcore else "Not installed",
+                       style="bold green" if has_coldcore else "bold yellow")
+        status.append("\n")
+        status.append("  Wallet File:  ", style="dim")
+        if has_public:
+            status.append("Found", style="bold green")
+            try:
+                status.append(f"  ({os.path.getsize(public_file):,} bytes)", style="dim")
+            except Exception:
+                pass
+        else:
+            status.append("Not found", style="bold red")
+        status.append("\n")
+
+        rich_console.print(RPanel(status, title="[bold cyan]ColdCore[/]",
+                                   style="on default", border_style="cyan",
+                                   expand=False, padding=(1, 2)))
+
+        if not has_public:
+            guide = RText()
+            guide.append("  Setup Guide\n\n", style="bold yellow")
+            guide.append("  Step 1  ", style="bold white")
+            guide.append("On your Coldcard go to:\n", style="white")
+            guide.append("          Advanced > MicroSD > Dump Summary\n\n", style="bold cyan")
+            guide.append("  Step 2  ", style="bold white")
+            guide.append("Copy ", style="white")
+            guide.append("public.txt", style="bold white")
+            guide.append(" from SD card to:\n", style="white")
+            guide.append(f"          {public_file}\n\n", style="bold cyan")
+            guide.append("  Step 3  ", style="bold white")
+            guide.append("Run this option again\n\n", style="white")
+            guide.append("  Docs:   ", style="dim")
+            guide.append("coldcardwallet.com/docs/microsd#dump-summary-file\n", style="dim")
+
+            rich_console.print(RPanel(guide, title="[bold yellow]Setup Required[/]",
+                                       style="on default", border_style="yellow",
+                                       expand=False, padding=(1, 2)))
+
+            if not os.path.isdir(pyblock_dir):
+                create = input("\n    Create ~/.pyblock directory? (Y/n): ").strip().lower()
+                if create in ("y", "yes", ""):
+                    os.makedirs(pyblock_dir, exist_ok=True)
+                    rich_console.print("    [green]Created ~/.pyblock/[/]")
+            input("\n    Press Enter to continue...")
+        else:
+            if not has_coldcore:
+                rich_console.print("\n    [yellow]Installing ColdCore...[/]")
+                os.makedirs(pyblock_dir, exist_ok=True)
+                if not os.path.isdir(coldcore_dir):
+                    subprocess.run(["git", "clone", "--depth", "1",
+                                    "https://github.com/jamesob/coldcore.git"], cwd=pyblock_dir)
+                subprocess.run(["chmod", "+x", "coldcore"], cwd=coldcore_dir)
+                os.makedirs(os.path.join(home, ".local", "bin"), exist_ok=True)
+                subprocess.run(["cp", "coldcore", coldcore_bin], cwd=coldcore_dir)
+                rich_console.print("    [green]ColdCore installed![/]\n")
+
+            if has_cli:
+                try:
+                    wallets = subprocess.run([path["bitcoincli"], "listwallets"],
+                                             capture_output=True, text=True, timeout=5)
+                    if wallets.returncode == 0:
+                        wlist = json.loads(wallets.stdout)
+                        for wname in wlist[:3]:
+                            bal = subprocess.run(
+                                [path["bitcoincli"], f"-rpcwallet={wname}", "getbalance"],
+                                capture_output=True, text=True, timeout=5)
+                            if bal.returncode == 0:
+                                winfo = RText()
+                                winfo.append(f"  Wallet: ", style="dim")
+                                winfo.append(f"{wname}\n", style="bold white")
+                                winfo.append(f"  Balance: ", style="dim")
+                                winfo.append(f"{bal.stdout.strip()} BTC\n", style="bold green")
+                                rich_console.print(RPanel(winfo, style="on default",
+                                                           border_style="green", expand=False, padding=(0, 2)))
+                except Exception:
+                    pass
+
+            rich_console.print("\n    [bold cyan]Launching ColdCore...[/]\n")
             subprocess.run(["coldcore"])
     except Exception as e:
-        logger.debug("Menu error: %s", e)
+        show_error(str(e))
+        logger.debug("ColdCore error: %s", e)
         menuSelection()
 
 #--------------------------------- Menu section -----------------------------------
@@ -1950,46 +2041,90 @@ def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_onl
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
     \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, d['blocks'], version)
 
-    # Build menu items
-    menu_items = """
+    # Build Rich categorized menu
+    from rich.columns import Columns
+    from rich.text import Text as RText
 
-    \u001b[38;5;202mA.\033[0;37;40m Bitcoin-cli Console
-    \u001b[38;5;202mB.\033[0;37;40m Show Genesis Block
-    \u001b[38;5;202mC.\033[0;37;40m Show Blockchain Information
-    \u001b[38;5;202mD.\033[0;37;40m Run the Numbers
-    \u001b[38;5;202mE.\033[0;37;40m Decode in HEX
-    \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
-    \u001b[38;5;202mG.\033[0;37;40m Show confirmations from a transaction
-    \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
-    \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
-    \u001b[38;5;202mK.\033[0;37;40m Peers Monitor
-    \u001b[38;5;202mL.\033[0;37;40m Latest Block
-    \u001b[38;5;202mM.\033[0;37;40m Moscow Time
-    \u001b[38;5;202mN.\033[0;37;40m Mempool Search
-    \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
-    \u001b[38;5;202mP.\033[0;37;40m Block Monitor"""
+    print(header)
 
+    # Blockchain section
+    col1 = RText()
+    col1.append("  BLOCKCHAIN\n", style="bold rgb(255,102,0) underline")
+    col1.append("  A.  ", style="bold rgb(255,102,0)")
+    col1.append("Console\n", style="white")
+    col1.append("  C.  ", style="bold rgb(255,102,0)")
+    col1.append("Blockchain Info\n", style="white")
+    col1.append("  D.  ", style="bold rgb(255,102,0)")
+    col1.append("Run the Numbers\n", style="white")
+    col1.append("  L.  ", style="bold rgb(255,102,0)")
+    col1.append("Latest Block\n", style="white")
+    col1.append("  M.  ", style="bold rgb(255,102,0)")
+    col1.append("Moscow Time\n", style="white")
+    col1.append("  B.  ", style="bold rgb(255,102,0)")
+    col1.append("Genesis Block\n", style="white")
+    col1.append("  J.  ", style="bold rgb(255,102,0)")
+    col1.append("Whitepaper\n", style="white")
+
+    # Monitoring section
+    col2 = RText()
+    col2.append("  MONITORING\n", style="bold cyan underline")
+    col2.append("  S.  ", style="bold cyan")
+    col2.append("Mempool\n", style="white")
+    col2.append("  U.  ", style="bold cyan")
+    col2.append("Unconfirmed Txs\n", style="white")
+    col2.append("  V.  ", style="bold cyan")
+    col2.append("Block Visualizer\n", style="white")
+    col2.append("  P.  ", style="bold cyan")
+    col2.append("Block Monitor\n", style="white")
+    col2.append("  X.  ", style="bold cyan")
+    col2.append("Node Monitor\n", style="white")
+    col2.append("  Y.  ", style="bold cyan")
+    col2.append("Mempool Monitor\n", style="white")
+    col2.append("  K.  ", style="bold cyan")
+    col2.append("Peers Monitor\n", style="white")
+
+    # Tools section
+    col3 = RText()
+    col3.append("  TOOLS\n", style="bold green underline")
+    col3.append("  E.  ", style="bold green")
+    col3.append("Decode HEX\n", style="white")
+    col3.append("  F.  ", style="bold green")
+    col3.append("QR from Address\n", style="white")
+    col3.append("  G.  ", style="bold green")
+    col3.append("Tx Confirmations\n", style="white")
+    col3.append("  N.  ", style="bold green")
+    col3.append("Mempool Search\n", style="white")
+    col3.append("  O.  ", style="bold green")
+    col3.append("OP_RETURN\n", style="white")
+    col3.append("  H.  ", style="bold green")
+    col3.append("Miscellaneous\n", style="white")
+    col3.append("  I.  ", style="bold green")
+    col3.append("ColdCore\n", style="white")
+
+    # Stats & Mining section
+    col4 = RText()
+    col4.append("  STATS & MINING\n", style="bold yellow underline")
+    col4.append("  Z.  ", style="bold yellow")
+    col4.append("Stats\n", style="white")
+    col4.append("  Q.  ", style="bold yellow")
+    col4.append("Hashrate\n", style="white")
+    col4.append("  CM. ", style="bold yellow")
+    col4.append("CLI Miner\n", style="white")
+    col4.append("  ONM.", style="bold yellow")
+    col4.append(" Own Node Miner\n", style="white")
+    col4.append("  VG. ", style="bold yellow")
+    col4.append("Vanity Generator\n", style="white")
     if mode == "onchain_only":
-        menu_items += """
-    \u001b[38;5;202mW.\033[0;37;40m Wallet"""
+        col4.append("  W.  ", style="bold yellow")
+        col4.append("Wallet\n", style="white")
 
-    menu_items += """
-    \u001b[38;5;202mZ.\033[0;37;40m Stats
-    \u001b[38;5;202mQ.\033[0;37;40m Hashrate
-    \u001b[38;5;202mS.\033[0;37;40m Mempool
-    \u001b[38;5;202mU.\033[0;37;40m Unconfirmed Txs
-    \u001b[38;5;202mV.\033[0;37;40m Block Visualizer
-    \u001b[38;5;202mX.\033[0;37;40m Node Monitor
-    \u001b[38;5;202mY.\033[0;37;40m Mempool Monitor
-    \u001b[38;5;202mCM.\033[0;37;40m CLI Miner
-    \u001b[38;5;202mONM.\033[0;37;40m Own Node Miner
-    \u001b[38;5;202mVG.\033[0;37;40m Vanity Generator
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h"""
-
-    print(header + menu_items)
-    bitcoincoremenuLocalControl(input("\033[1;32;40mSelect option: \033[0;37;40m"), mode)
+    rich_console.print()
+    rich_console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    bitcoincoremenuLocalControl(rich_prompt("Select option"), mode)
 
 def bitcoincoremenuLOCAL():
     bitcoincoremenuLocal("local")
@@ -2223,35 +2358,81 @@ def lightningnetworkLOCAL():
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
-    print("""\t\t
+    from rich.columns import Columns
+    from rich.text import Text as RText
+
+    header = """\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n, alias['alias'], d['blocks'], version)
+    print(header)
 
-    \u001b[33;1mA.\033[0;37;40m Lncli Console
-    \u001b[33;1mB.\033[0;37;40m New Invoice
-    \u001b[33;1mC.\033[0;37;40m Pay Invoice
-    \u001b[33;1mD.\033[0;37;40m Make a KeySend Payment
-    \u001b[33;1mE.\033[0;37;40m New Bitcoin Address
-    \u001b[33;1mF.\033[0;37;40m List Invoices
-    \u001b[33;1mG.\033[0;37;40m Channel Balance
-    \u001b[33;1mH.\033[0;37;40m Show Channels
-    \u001b[33;1mI.\033[0;37;40m Rebalance Channel
-    \u001b[33;1mJ.\033[0;37;40m Show Peers
-    \u001b[33;1mK.\033[0;37;40m Connect Peers
-    \u001b[33;1mL.\033[0;37;40m Onchain Balance
-    \u001b[33;1mM.\033[0;37;40m List Onchain Transactions
-    \u001b[33;1mN.\033[0;37;40m Get Node Info
-    \u001b[33;1mO.\033[0;37;40m Get Network Information
-    \u001b[33;1mP.\033[0;37;40m PyChat
-    \u001b[33;1mZ.\033[0;37;40m Stats
-    \u001b[33;1mT.\033[0;37;40m Ranking
-    \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
-    lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"
+
+    # Invoices section
+    col1 = RText()
+    col1.append("  INVOICES\n", style="bold yellow underline")
+    col1.append("  A.  ", style="bold yellow")
+    col1.append("Lncli Console\n", style="white")
+    col1.append("  B.  ", style="bold yellow")
+    col1.append("New Invoice\n", style="white")
+    col1.append("  C.  ", style="bold yellow")
+    col1.append("Pay Invoice\n", style="white")
+    col1.append("  D.  ", style="bold yellow")
+    col1.append("Make a KeySend Payment\n", style="white")
+    col1.append("  F.  ", style="bold yellow")
+    col1.append("List Invoices\n", style="white")
+
+    # Channels section
+    col2 = RText()
+    col2.append("  CHANNELS\n", style="bold cyan underline")
+    col2.append("  G.  ", style="bold cyan")
+    col2.append("Channel Balance\n", style="white")
+    col2.append("  H.  ", style="bold cyan")
+    col2.append("Show Channels\n", style="white")
+    col2.append("  I.  ", style="bold cyan")
+    col2.append("Rebalance Channel\n", style="white")
+    col2.append("  E.  ", style="bold cyan")
+    col2.append("New Bitcoin Address\n", style="white")
+    col2.append("  L.  ", style="bold cyan")
+    col2.append("Onchain Balance\n", style="white")
+    col2.append("  M.  ", style="bold cyan")
+    col2.append("List Onchain Transactions\n", style="white")
+
+    # Node section
+    col3 = RText()
+    col3.append("  NODE\n", style="bold green underline")
+    col3.append("  N.  ", style="bold green")
+    col3.append("Get Node Info\n", style="white")
+    col3.append("  O.  ", style="bold green")
+    col3.append("Get Network Information\n", style="white")
+    col3.append("  J.  ", style="bold green")
+    col3.append("Show Peers\n", style="white")
+    col3.append("  K.  ", style="bold green")
+    col3.append("Connect Peers\n", style="white")
+    col3.append("  Z.  ", style="bold green")
+    col3.append("Stats\n", style="white")
+    col3.append("  T.  ", style="bold green")
+    col3.append("Ranking\n", style="white")
+
+    # Chat & LNBits section
+    col4 = RText()
+    col4.append("  CHAT & LNBITS\n", style="bold magenta underline")
+    col4.append("  P.  ", style="bold magenta")
+    col4.append("PyChat\n", style="white")
+    col4.append("  Q.  ", style="bold magenta")
+    col4.append(f"LNBits List LNURL  {lnbitspaid}\n", style="white")
+    col4.append("  S.  ", style="bold magenta")
+    col4.append(f"LNBits Create LNURL  {lnbitspaid}\n", style="white")
+
+    rich_console.print()
+    rich_console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    lightningnetworkLOCALcontrol(rich_prompt("Select option"))
 
 def chatConn():
     clear()
@@ -2386,28 +2567,67 @@ def lightningnetworkREMOTE():
     r = requests.get(url, headers=headers, verify=cert_path)
     alias = r.json()
 
-    print("""\t\t
+    from rich.columns import Columns
+    from rich.text import Text as RText
+
+    header = """\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(a, alias['alias'], d['blocks'], version)
+    print(header)
 
-    \u001b[33;1mA.\033[0;37;40m New Invoice
-    \u001b[33;1mB.\033[0;37;40m Pay Invoice
-    \u001b[33;1mC.\033[0;37;40m New Bitcoin Address
-    \u001b[33;1mD.\033[0;37;40m List Invoices
-    \u001b[33;1mE.\033[0;37;40m Channel Balance
-    \u001b[33;1mF.\033[0;37;40m Show Channels
-    \u001b[33;1mG.\033[0;37;40m Onchain Balance
-    \u001b[33;1mH.\033[0;37;40m List Onchain Transactions
-    \u001b[33;1mI.\033[0;37;40m Get Node Info
-    \u001b[33;1mZ.\033[0;37;40m Stats
-    \u001b[33;1mT.\033[0;37;40m Ranking
-    \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version , lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
-    lightningnetworkREMOTEcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"
+
+    # Invoices section
+    col1 = RText()
+    col1.append("  INVOICES\n", style="bold yellow underline")
+    col1.append("  A.  ", style="bold yellow")
+    col1.append("New Invoice\n", style="white")
+    col1.append("  B.  ", style="bold yellow")
+    col1.append("Pay Invoice\n", style="white")
+    col1.append("  D.  ", style="bold yellow")
+    col1.append("List Invoices\n", style="white")
+
+    # Channels section
+    col2 = RText()
+    col2.append("  CHANNELS\n", style="bold cyan underline")
+    col2.append("  E.  ", style="bold cyan")
+    col2.append("Channel Balance\n", style="white")
+    col2.append("  F.  ", style="bold cyan")
+    col2.append("Show Channels\n", style="white")
+    col2.append("  C.  ", style="bold cyan")
+    col2.append("New Bitcoin Address\n", style="white")
+    col2.append("  G.  ", style="bold cyan")
+    col2.append("Onchain Balance\n", style="white")
+    col2.append("  H.  ", style="bold cyan")
+    col2.append("List Onchain Transactions\n", style="white")
+
+    # Node section
+    col3 = RText()
+    col3.append("  NODE\n", style="bold green underline")
+    col3.append("  I.  ", style="bold green")
+    col3.append("Get Node Info\n", style="white")
+    col3.append("  Z.  ", style="bold green")
+    col3.append("Stats\n", style="white")
+    col3.append("  T.  ", style="bold green")
+    col3.append("Ranking\n", style="white")
+
+    # LNBits section
+    col4 = RText()
+    col4.append("  LNBITS\n", style="bold magenta underline")
+    col4.append("  Q.  ", style="bold magenta")
+    col4.append(f"LNBits List LNURL  {lnbitspaid}\n", style="white")
+    col4.append("  S.  ", style="bold magenta")
+    col4.append(f"LNBits Create LNURL  {lnbitspaid}\n", style="white")
+
+    rich_console.print()
+    rich_console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    lightningnetworkREMOTEcontrol(rich_prompt("Select option"))
 
 def APIMenuLOCAL():
     clear()
@@ -2437,35 +2657,83 @@ def APIMenuLOCAL():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
+    from rich.columns import Columns
+    from rich.text import Text as RText
+
+    header = """\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n if path['bitcoincli'] else a, alias['alias'], d['blocks'], version)
+    print(header)
 
-    \033[1;32;40mA.\033[0;37;40m TippinMe     FREE
-    \033[1;32;40mB.\033[0;37;40m Tallycoin    FREE
-    \033[1;32;40mC.\033[0;37;40m Mempool      FREE
-    \033[1;32;40mD.\033[0;37;40m CoinGecko    FREE
-    \033[1;32;40mE.\033[0;37;40m Rate.sx      FREE
-    \033[1;32;40mF.\033[0;37;40m BWT          FREE
-    \033[1;32;40mG.\033[0;37;40m LNBits       \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mH.\033[0;37;40m LNPay        \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mI.\033[0;37;40m OpenNode     \033[3;35;40m{opennodepaid}\033[0;37;40m
-    \033[1;32;40mJ.\033[0;37;40m SatNode      FREE
-    \033[1;32;40mK.\033[0;37;40m Weather      FREE
-    \033[1;32;40mL.\033[0;37;40m Arcade       FREE
-    \033[1;32;40mM.\033[0;37;40m Whale Alert  FREE
-    \033[1;32;40mN.\033[0;37;40m Nostr        FREE
-    \033[1;32;40mQ.\033[0;37;40m Ocean        FREE
-    \033[1;32;40mS.\033[0;37;40m Braiins Pool FREE
-    \033[1;32;40mT.\033[0;37;40m TinySeed     FREE
-    \033[1;32;40mU.\033[0;37;40m UTXOracle    FREE
-    \033[1;32;40mW.\033[0;37;40m CK Pool      FREE
-    \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool FREE
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
-    platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM"
+    lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM"
+    opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"
+
+    # Lightning APIs section
+    col1 = RText()
+    col1.append("  LIGHTNING APIS\n", style="bold cyan underline")
+    col1.append("  G.  ", style="bold cyan")
+    col1.append(f"LNBits  {lnbitspaid}\n", style="white")
+    col1.append("  H.  ", style="bold cyan")
+    col1.append(f"LNPay  {lnpaypaid}\n", style="white")
+    col1.append("  F.  ", style="bold cyan")
+    col1.append("BWT  FREE\n", style="white")
+    col1.append("  D.  ", style="bold cyan")
+    col1.append("CoinGecko  FREE\n", style="white")
+    col1.append("  L.  ", style="bold cyan")
+    col1.append("Arcade  FREE\n", style="white")
+
+    # Payment section
+    col2 = RText()
+    col2.append("  PAYMENT\n", style="bold green underline")
+    col2.append("  I.  ", style="bold green")
+    col2.append(f"OpenNode  {opennodepaid}\n", style="white")
+    col2.append("  A.  ", style="bold green")
+    col2.append("TippinMe  FREE\n", style="white")
+    col2.append("  B.  ", style="bold green")
+    col2.append("Tallycoin  FREE\n", style="white")
+    col2.append("  M.  ", style="bold green")
+    col2.append("Whale Alert  FREE\n", style="white")
+    col2.append("  T.  ", style="bold green")
+    col2.append("TinySeed  FREE\n", style="white")
+
+    # Data & Feeds section
+    col3 = RText()
+    col3.append("  DATA & FEEDS\n", style="bold yellow underline")
+    col3.append("  K.  ", style="bold yellow")
+    col3.append("Weather  FREE\n", style="white")
+    col3.append("  E.  ", style="bold yellow")
+    col3.append("Rate.sx  FREE\n", style="white")
+    col3.append("  N.  ", style="bold yellow")
+    col3.append("Nostr  FREE\n", style="white")
+    col3.append("  U.  ", style="bold yellow")
+    col3.append("UTXOracle  FREE\n", style="white")
+
+    # Tools & Mining section
+    col4 = RText()
+    col4.append("  TOOLS & MINING\n", style="bold rgb(255,165,0) underline")
+    col4.append("  J.  ", style="bold rgb(255,165,0)")
+    col4.append("SatNode  FREE\n", style="white")
+    col4.append("  C.  ", style="bold rgb(255,165,0)")
+    col4.append("Mempool  FREE\n", style="white")
+    col4.append("  Q.  ", style="bold rgb(255,165,0)")
+    col4.append("Ocean  FREE\n", style="white")
+    col4.append("  S.  ", style="bold rgb(255,165,0)")
+    col4.append("Braiins Pool  FREE\n", style="white")
+    col4.append("  W.  ", style="bold rgb(255,165,0)")
+    col4.append("CK Pool  FREE\n", style="white")
+    col4.append("  Z.  ", style="bold rgb(255,165,0)")
+    col4.append("PyBLOCK Pool  FREE\n", style="white")
+
+    rich_console.print()
+    rich_console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    platfformsLOCALcontrol(rich_prompt("Select option"))
 
 def APIMenuLOCALOnchainONLY():
     clear()
@@ -2490,36 +2758,86 @@ def APIMenuLOCALOnchainONLY():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
+    from rich.columns import Columns
+    from rich.text import Text as RText
+
+    header = """\t\t
     \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
     \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    \033[1;37;40mVersion\033[0;37;40m: {}""".format(n if path['bitcoincli'] else a, d['blocks'], version)
+    print(header)
 
-    \033[1;32;40mA.\033[0;37;40m TippinMe      FREE
-    \033[1;32;40mB.\033[0;37;40m Tallycoin     FREE
-    \033[1;32;40mC.\033[0;37;40m Mempool       FREE
-    \033[1;32;40mD.\033[0;37;40m CoinGecko     FREE
-    \033[1;32;40mE.\033[0;37;40m Rate.sx       FREE
-    \033[1;32;40mF.\033[0;37;40m BWT           FREE
-    \033[1;32;40mG.\033[0;37;40m LNBits        \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mH.\033[0;37;40m LNPay         \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mI.\033[0;37;40m OpenNode      \033[3;35;40m{opennodepaid}\033[0;37;40m
-    \033[1;32;40mJ.\033[0;37;40m SatNode       FREE
-    \033[1;32;40mK.\033[0;37;40m Weather       FREE
-    \033[1;32;40mL.\033[0;37;40m Arcade        FREE
-    \033[1;32;40mM.\033[0;37;40m Whale Alert   FREE
-    \033[1;32;40mN.\033[0;37;40m Nostr         FREE
-    \033[1;32;40mP.\033[0;37;40m PhoenixD      FREE
-    \033[1;32;40mQ.\033[0;37;40m Ocean Pool    FREE
-    \033[1;32;40mR.\033[0;37;40m Luxor Pool    FREE
-    \033[1;32;40mS.\033[0;37;40m Braiins Pool  FREE
-    \033[1;32;40mT.\033[0;37;40m TinySeed      FREE
-    \033[1;32;40mU.\033[0;37;40m UTXOracle     FREE
-    \033[1;32;40mW.\033[0;37;40m CK Pool       FREE
-    \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool  FREE
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
-    platfformsLOCALcontrolOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM"
+    lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM"
+    opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"
+
+    # Lightning APIs section
+    col1 = RText()
+    col1.append("  LIGHTNING APIS\n", style="bold cyan underline")
+    col1.append("  G.  ", style="bold cyan")
+    col1.append(f"LNBits  {lnbitspaid}\n", style="white")
+    col1.append("  H.  ", style="bold cyan")
+    col1.append(f"LNPay  {lnpaypaid}\n", style="white")
+    col1.append("  F.  ", style="bold cyan")
+    col1.append("BWT  FREE\n", style="white")
+    col1.append("  D.  ", style="bold cyan")
+    col1.append("CoinGecko  FREE\n", style="white")
+    col1.append("  L.  ", style="bold cyan")
+    col1.append("Arcade  FREE\n", style="white")
+    col1.append("  P.  ", style="bold cyan")
+    col1.append("PhoenixD  FREE\n", style="white")
+
+    # Payment section
+    col2 = RText()
+    col2.append("  PAYMENT\n", style="bold green underline")
+    col2.append("  I.  ", style="bold green")
+    col2.append(f"OpenNode  {opennodepaid}\n", style="white")
+    col2.append("  A.  ", style="bold green")
+    col2.append("TippinMe  FREE\n", style="white")
+    col2.append("  B.  ", style="bold green")
+    col2.append("Tallycoin  FREE\n", style="white")
+    col2.append("  M.  ", style="bold green")
+    col2.append("Whale Alert  FREE\n", style="white")
+    col2.append("  T.  ", style="bold green")
+    col2.append("TinySeed  FREE\n", style="white")
+
+    # Data & Feeds section
+    col3 = RText()
+    col3.append("  DATA & FEEDS\n", style="bold yellow underline")
+    col3.append("  K.  ", style="bold yellow")
+    col3.append("Weather  FREE\n", style="white")
+    col3.append("  E.  ", style="bold yellow")
+    col3.append("Rate.sx  FREE\n", style="white")
+    col3.append("  N.  ", style="bold yellow")
+    col3.append("Nostr  FREE\n", style="white")
+    col3.append("  U.  ", style="bold yellow")
+    col3.append("UTXOracle  FREE\n", style="white")
+
+    # Tools & Mining section
+    col4 = RText()
+    col4.append("  TOOLS & MINING\n", style="bold rgb(255,165,0) underline")
+    col4.append("  J.  ", style="bold rgb(255,165,0)")
+    col4.append("SatNode  FREE\n", style="white")
+    col4.append("  C.  ", style="bold rgb(255,165,0)")
+    col4.append("Mempool  FREE\n", style="white")
+    col4.append("  Q.  ", style="bold rgb(255,165,0)")
+    col4.append("Ocean Pool  FREE\n", style="white")
+    col4.append("  R.  ", style="bold rgb(255,165,0)")
+    col4.append("Luxor Pool  FREE\n", style="white")
+    col4.append("  S.  ", style="bold rgb(255,165,0)")
+    col4.append("Braiins Pool  FREE\n", style="white")
+    col4.append("  W.  ", style="bold rgb(255,165,0)")
+    col4.append("CK Pool  FREE\n", style="white")
+    col4.append("  Z.  ", style="bold rgb(255,165,0)")
+    col4.append("PyBLOCK Pool  FREE\n", style="white")
+
+    rich_console.print()
+    rich_console.print(Columns([col1, col2, col3, col4], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/dim] [yellow]Return[/yellow]")
+    rich_console.print()
+    print("\x1b[?25h")
+    platfformsLOCALcontrolOnchainONLY(rich_prompt("Select option"))
 
 def decodeHex():
     clear()
@@ -2835,20 +3153,21 @@ def runTheNumbersMenu():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Countdown Block
-    \033[1;32;40mB.\033[0;37;40m Countdown Halving
-    \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
-    \033[1;32;40mE.\033[0;37;40m Epoch
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ))
-    runTheNumbersControl(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Node[/]: [bold yellow]{alias['alias']}[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] Countdown Block")
+    rich_console.print("    [bold cyan]B.[/] Countdown Halving")
+    rich_console.print("    [bold cyan]C.[/] Audit")
+    rich_console.print("    [bold cyan]D.[/] Templates & Blocks")
+    rich_console.print("    [bold cyan]E.[/] Epoch")
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    runTheNumbersControl(rich_prompt("Select option"))
 
 def runTheNumbersMenuOnchainONLY():
     clear()
@@ -2873,19 +3192,20 @@ def runTheNumbersMenuOnchainONLY():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Countdown Block
-    \033[1;32;40mB.\033[0;37;40m Countdown Halving
-    \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
-    \033[1;32;40mE.\033[0;37;40m Epoch
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ))
-    runTheNumbersControlOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] Countdown Block")
+    rich_console.print("    [bold cyan]B.[/] Countdown Halving")
+    rich_console.print("    [bold cyan]C.[/] Audit")
+    rich_console.print("    [bold cyan]D.[/] Templates & Blocks")
+    rich_console.print("    [bold cyan]E.[/] Epoch")
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    runTheNumbersControlOnchainONLY(rich_prompt("Select option"))
 
 def runTheNumbersMenuConn():
     clear()
@@ -2915,20 +3235,21 @@ def runTheNumbersMenuConn():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[1;32;40mA.\033[0;37;40m Countdown Block
-    \033[1;32;40mB.\033[0;37;40m Countdown Halving
-    \033[1;32;40mC.\033[0;37;40m Audit
-    \033[1;32;40mD.\033[0;37;40m Templates & Blocks
-    \033[1;32;40mE.\033[0;37;40m Epoch
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version ))
-    runTheNumbersControlConn(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Node[/]: [bold yellow]{alias['alias']}[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] Countdown Block")
+    rich_console.print("    [bold cyan]B.[/] Countdown Halving")
+    rich_console.print("    [bold cyan]C.[/] Audit")
+    rich_console.print("    [bold cyan]D.[/] Templates & Blocks")
+    rich_console.print("    [bold cyan]E.[/] Epoch")
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    runTheNumbersControlConn(rich_prompt("Select option"))
 
 def weatherMenuOnchainONLY():
     clear()
@@ -3491,24 +3812,43 @@ def APILnbit():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    from rich.columns import Columns
+    from rich.text import Text as RText
 
-    \033[0;37;40mLNBits SN:{} \033[1;34;40mPremium\033[0;37;40m
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Node[/]: [bold yellow]{alias['alias']}[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print(f"    LNBits SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
 
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m New PayWall
-    \033[1;32;40mD.\033[0;37;40m Delete PayWall
-    \033[1;32;40mE.\033[0;37;40m List PayWalls
-    \033[1;32;40mF.\033[0;37;40m Create LNURL
-    \033[1;32;40mG.\033[0;37;40m List LNURL
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], ))
-    menuLNBPI(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    col1 = RText()
+    col1.append("  INVOICES\n", style="bold yellow underline")
+    col1.append("  A. ", style="bold yellow")
+    col1.append("New Invoice\n", style="white")
+    col1.append("  B. ", style="bold yellow")
+    col1.append("Pay Invoice\n", style="white")
+
+    col2 = RText()
+    col2.append("  MANAGE\n", style="bold cyan underline")
+    col2.append("  C. ", style="bold cyan")
+    col2.append("New PayWall\n", style="white")
+    col2.append("  D. ", style="bold cyan")
+    col2.append("Delete PayWall\n", style="white")
+    col2.append("  E. ", style="bold cyan")
+    col2.append("List PayWalls\n", style="white")
+    col2.append("  F. ", style="bold cyan")
+    col2.append("Create LNURL\n", style="white")
+    col2.append("  G. ", style="bold cyan")
+    col2.append("List LNURL\n", style="white")
+
+    rich_console.print(Columns([col1, col2], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNBPI(rich_prompt("Select option"))
 
 def APILnbitOnchainONLY():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
@@ -3542,23 +3882,42 @@ def APILnbitOnchainONLY():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    from rich.columns import Columns
+    from rich.text import Text as RText
 
-    \033[0;37;40mLNBits SN:{} \033[1;34;40mPremium\033[0;37;40m
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print(f"    LNBits SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
 
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m New PayWall
-    \033[1;32;40mD.\033[0;37;40m Delete PayWall
-    \033[1;32;40mE.\033[0;37;40m List PayWalls
-    \033[1;32;40mF.\033[0;37;40m Create LNURL
-    \033[1;32;40mG.\033[0;37;40m List LNURL
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, bitLN['NN'], ))
-    menuLNBPIOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    col1 = RText()
+    col1.append("  INVOICES\n", style="bold yellow underline")
+    col1.append("  A. ", style="bold yellow")
+    col1.append("New Invoice\n", style="white")
+    col1.append("  B. ", style="bold yellow")
+    col1.append("Pay Invoice\n", style="white")
+
+    col2 = RText()
+    col2.append("  MANAGE\n", style="bold cyan underline")
+    col2.append("  C. ", style="bold cyan")
+    col2.append("New PayWall\n", style="white")
+    col2.append("  D. ", style="bold cyan")
+    col2.append("Delete PayWall\n", style="white")
+    col2.append("  E. ", style="bold cyan")
+    col2.append("List PayWalls\n", style="white")
+    col2.append("  F. ", style="bold cyan")
+    col2.append("Create LNURL\n", style="white")
+    col2.append("  G. ", style="bold cyan")
+    col2.append("List LNURL\n", style="white")
+
+    rich_console.print(Columns([col1, col2], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNBPIOnchainONLY(rich_prompt("Select option"))
 
 def APILnPay():
     bitLN = {"NN":"","pd":""}
@@ -3592,22 +3951,22 @@ def APILnPay():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mLNPay SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Invoices
-    \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], ))
-    menuLNPAY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Node[/]: [bold yellow]{alias['alias']}[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print(f"    LNPay SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Invoices")
+    rich_console.print("    [bold cyan]E.[/] Transfer Between Wallets")
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNPAY(rich_prompt("Select option"))
 
 def APILnPayOnchainONLY():
     bitLN = {"NN":"","pd":""}
@@ -3636,21 +3995,21 @@ def APILnPayOnchainONLY():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mLNPay SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Invoices
-    \033[1;32;40mE.\033[0;37;40m Transfer Between Wallets
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version, bitLN['NN'], ))
-    menuLNPAYOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print(f"    LNPay SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Invoices")
+    rich_console.print("    [bold cyan]E.[/] Transfer Between Wallets")
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuLNPAYOnchainONLY(rich_prompt("Select option"))
 
 def APIOpenNode():
     bitLN = {"NN":"","pd":""}
@@ -3684,22 +4043,22 @@ def APIOpenNode():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mNode\033[0;37;40m: \033[1;33;40m{}\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mOpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Payments
-    \033[1;32;40mS.\033[0;37;40m Status
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , alias['alias'], d['blocks'], version, bitLN['NN'], ))
-    menuOpenNode(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Node[/]: [bold yellow]{alias['alias']}[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print(f"    OpenNode SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Payments")
+    rich_console.print("    [bold cyan]S.[/] Status")
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuOpenNode(rich_prompt("Select option"))
 
 def APIOpenNodeOnchainONLY():
     bitLN = {"NN":"","pd":""}
@@ -3728,21 +4087,21 @@ def APIOpenNodeOnchainONLY():
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
         alias = r.json()
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
-
-    \033[0;37;40mOpenNode SN:{} \033[1;34;40mPremium\033[0;37;40m
-
-    \033[1;32;40mA.\033[0;37;40m New Invoice
-    \033[1;32;40mB.\033[0;37;40m Pay Invoice
-    \033[1;32;40mC.\033[0;37;40m Wallet Balance
-    \033[1;32;40mD.\033[0;37;40m List Payments
-    \033[1;32;40mS.\033[0;37;40m Status
-    \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a , d['blocks'], version, bitLN['NN'], ()))
-    menuOpenNodeOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version}")
+    rich_console.print(f"    OpenNode SN:{bitLN['NN']} [bold blue]Premium[/]")
+    rich_console.print()
+    rich_console.print("    [bold cyan]A.[/] New Invoice")
+    rich_console.print("    [bold cyan]B.[/] Pay Invoice")
+    rich_console.print("    [bold cyan]C.[/] Wallet Balance")
+    rich_console.print("    [bold cyan]D.[/] List Payments")
+    rich_console.print("    [bold cyan]S.[/] Status")
+    rich_console.print("    [dim]Enter.[/] [yellow]Return[/]")
+    rich_console.print()
+    print("\x1b[?25h")
+    menuOpenNodeOnchainONLY(rich_prompt("Select option"))
 
 def APITippinMe():
     clear()
@@ -7235,22 +7594,43 @@ def nostrConn():
         blk = rpc('getblockchaininfo')
         d = blk
 
-    print("""\t\t
-    \033[1;37;40m{}\033[0;37;40m: \033[1;31;40mPyBLOCK\033[0;37;40m
-    \033[1;37;40mBlock\033[0;37;40m: \033[1;32;40m{}\033[0;37;40m
-    \033[1;37;40mVersion\033[0;37;40m: {}
+    from rich.columns import Columns
+    from rich.text import Text as RText
 
-    \033[1;32;40mA.\033[0;37;40m Linux   x64
-    \033[1;32;40mB.\033[0;37;40m Linux   arm64
-    \033[1;32;40mC.\033[0;37;40m Mac     x64
-    \033[1;32;40mD.\033[0;37;40m Mac     arm64 (SOON)
-    \033[1;32;40mE.\033[0;37;40m Windows
-    \033[1;32;40mS.\033[0;37;40m Bip39
-    \033[1;32;40mW.\033[0;37;40m QR
-    \033[1;32;40mZ.\033[0;37;40m Bija
-    \u001b[31;1mR.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n if path['bitcoincli'] else a, d['blocks'], version ()))
-    nostrmenu(input("\033[1;32;40mSelect option: \033[0;37;40m"))
+    rich_console.print()
+    rich_console.print(f"    [bold white]{n if path['bitcoincli'] else a}[/]: [bold red]PyBLOCK[/]")
+    rich_console.print(f"    [bold white]Block[/]: [bold green]{d['blocks']}[/]")
+    rich_console.print(f"    [bold white]Version[/]: {version()}")
+    rich_console.print()
+
+    col1 = RText()
+    col1.append("  CONSOLE\n", style="bold cyan underline")
+    col1.append("  A. ", style="bold cyan")
+    col1.append("Linux AMD64\n", style="white")
+    col1.append("  B. ", style="bold cyan")
+    col1.append("Linux ARM64\n", style="white")
+    col1.append("  C. ", style="bold cyan")
+    col1.append("macOS x64\n", style="white")
+    col1.append("  D. ", style="bold cyan")
+    col1.append("macOS ARM64 (SOON)\n", style="white")
+    col1.append("  E. ", style="bold cyan")
+    col1.append("Windows\n", style="white")
+
+    col2 = RText()
+    col2.append("  TOOLS\n", style="bold green underline")
+    col2.append("  S. ", style="bold green")
+    col2.append("Seed BIP39\n", style="white")
+    col2.append("  W. ", style="bold green")
+    col2.append("QR Seed\n", style="white")
+    col2.append("  Z. ", style="bold green")
+    col2.append("Bija\n", style="white")
+
+    rich_console.print(Columns([col1, col2], padding=(0, 2), expand=False))
+    rich_console.print()
+    rich_console.print("    [bold red]R.[/] Return")
+    rich_console.print()
+    print("\x1b[?25h")
+    nostrmenu(rich_prompt("Select option"))
 
 
 def testClockRemote():
