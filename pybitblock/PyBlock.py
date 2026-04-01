@@ -26,7 +26,6 @@ from imgterminal import createimagebitaxe, set_terminal_background
 from datetime import datetime, timedelta
 from sha256 import ex
 from cfonts import render, say
-from SPV.spvblock import MainMenuCROPPED
 from clone import gitclone, satnode
 from donation import donationAddr, donationPayNym, donationLN, donationAddrTst, donationLNTst, decodeQR
 from feed import readFile
@@ -1833,7 +1832,8 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
             show_error("Bitcoin CLI path not configured. Redirecting to Lite Mode.")
             import time as _t
             _t.sleep(2)
-            MainMenuCROPPED()
+            from SPV.spvblock import MainMenuCROPPED as _lite_menu
+            _lite_menu()
             return
 
     # Fetch BTC price for status bar
@@ -5149,7 +5149,8 @@ def menuSelection():
             path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCAL()
         elif chln == "C":
-            MainMenuCROPPED()
+            from SPV.spvblock import MainMenuCROPPED as _lite_menu
+            _lite_menu()
     else:
         if os.path.isfile('config/blndconnect.conf'):
             chln['offchain'] = "offchain"
