@@ -12,7 +12,7 @@ from textual.timer import Timer
 from textual.binding import Binding
 
 from tui.widgets.status_bar import StatusBar
-from tui.screens.main_menu import MainMenuScreen
+from tui.widgets.main_menu import MainMenu
 from tui.workers.data_fetcher import fetch_block_height, fetch_btc_price, fetch_fees
 
 
@@ -55,7 +55,12 @@ class PyBlockApp(App):
     CSS = CSS
 
     BINDINGS = [
-        Binding("ctrl+q", "quit", "Quit", show=True, priority=True),
+        Binding("a", "select('pyblock')", "PyBLOCK", show=True),
+        Binding("b", "select('bitcoin')", "Bitcoin", show=True),
+        Binding("l", "select('lightning')", "Lightning", show=True),
+        Binding("p", "select('platforms')", "Platforms", show=True),
+        Binding("s", "select('settings')", "Settings", show=True),
+        Binding("q", "quit", "Quit", show=True),
         Binding("ctrl+r", "refresh_data", "Refresh", show=True),
     ]
 
@@ -67,7 +72,7 @@ class PyBlockApp(App):
     def compose(self) -> ComposeResult:
         yield StatusBar(id="status-bar")
         yield Vertical(
-            MainMenuScreen(mode=self.mode),
+            MainMenu(mode=self.mode, id="main-menu"),
             id="content",
         )
         yield self._build_fees_panel()
@@ -106,6 +111,9 @@ class PyBlockApp(App):
             f"[yellow]Medium:[/yellow]   {fees.get('halfHourFee', '?')}\n"
             f"[dim]Slow:[/dim]     {fees.get('hourFee', '?')}\n"
         )
+
+    def action_select(self, section):
+        self.notify(f"Opening {section}...", timeout=2)
 
     def action_refresh_data(self):
         self._do_refresh()
