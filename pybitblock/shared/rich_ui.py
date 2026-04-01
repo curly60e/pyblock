@@ -97,12 +97,12 @@ def rich_sysinfo(cpu_percent, mem_percent):
     table.add_column(width=5, justify="right")
     table.add_row(
         Text("CPU", style="italic yellow"),
-        Text(cpu_bar),
+        Text.from_markup(cpu_bar),
         Text(f"{cpu_percent}%", style=f"bold {cpu_color}"),
     )
     table.add_row(
         Text("Memory", style="italic yellow"),
-        Text(mem_bar),
+        Text.from_markup(mem_bar),
         Text(f"{mem_percent}%", style=f"bold {mem_color}"),
     )
     console.print(table)
