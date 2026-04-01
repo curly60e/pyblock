@@ -165,6 +165,7 @@ def counttxs():
                 a = b
                 nn = e
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def slDIFFConn():
@@ -190,6 +191,7 @@ def slDIFFConn():
         """)
         input("\a\nContinue...")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def slPOOLConn():
@@ -204,6 +206,7 @@ def slPOOLConn():
         print(a)
         input("\a\nContinue...")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def getPoolSlushCheck():
@@ -222,6 +225,7 @@ def getPoolSlushCheck():
             api = input("Insert Braiins API KEY: ")
             with open("config/braiinsAPI.conf", "w") as f: json.dump(api, f, indent=2)
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
     while True:
@@ -302,6 +306,7 @@ def ckpoolpoolLOCALOnchainONLY():
             api = input("Insert CKPool Wallet.Worker: ")
             with open("config/CKPOOLAPI.conf", "w") as f: json.dump(api, f, indent=2)
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
     while True:
@@ -459,6 +464,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
             api = input("Insert your PyBLOCK Pool Wallet: ")
             with open("config/PYBLOCKPOOLAPI.conf", "w") as f: json.dump(api, f, indent=2)
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
     while True:
@@ -566,6 +572,7 @@ def searchTXS():
 
             input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def untxsConn():
@@ -614,6 +621,7 @@ def untxsConn():
                         subprocess.run(decodeTX, shell=True)
                 input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def getnewaddressOnchain():
@@ -1259,6 +1267,7 @@ def blockTmpConn():
         print(a)
         input("\a\nContinue...")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 #-----------------------------END Block Templates--------------------------------
@@ -1280,6 +1289,7 @@ def oceanH(): # show srings
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def oceanB(): # show srings
@@ -1296,6 +1306,7 @@ def oceanB(): # show srings
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def oceanE(): # show srings
@@ -1314,6 +1325,7 @@ def oceanE(): # show srings
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 #---------------------------------ocean pool end----------------------------------
@@ -1694,6 +1706,7 @@ def allblocksConn():
         print(a)
         input("\a\nContinue...")
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 #-----------------------------ENDBLOCKS--------------------------------
@@ -5366,6 +5379,7 @@ def testlogo():
         settings["gradient"] = "color"
         with open("config/pyblocksettings.conf", "w") as f: json.dump(settings, f, indent=2)
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def testlogoRB():
@@ -5386,6 +5400,7 @@ def testlogoRB():
         settings["gradient"] = "grd"
         with open("config/pyblocksettings.conf", "w") as f: json.dump(settings, f, indent=2)
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 def testClock():
@@ -5410,6 +5425,7 @@ def testClock():
         settingsClock["gradient"] = "color"
         with open("config/pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 #--------------------------------- End Menu section -----------------------------------
@@ -6242,6 +6258,7 @@ def bitcoincoremenuLocalControl(bcore, mode=None): #Unified Bitcoin Core local c
             decodeQR()
             input("Continue...")
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["G", "g"]:
         getrawtx()
@@ -6269,39 +6286,46 @@ def bitcoincoremenuLocalControl(bcore, mode=None): #Unified Bitcoin Core local c
         try:
             lastblockdetail.run_urwid()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["V", "v"]:
         try:
             clear()
             execute_visualizer()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["Y", "y"]:
         try:
             asyncio.run(mempool_monitor.display_mempool_info())
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["X", "x"]:
         try:
             clear()
             some_other_function()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["K", "k"]:
         try:
             peers_monitor.run_peers_monitor()()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["N", "n"]:
         try:
             tx_search.search_tx()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["P", "p"]:
         try:
             clear()
             call_blocks()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["CM", "cm"]:
         CoreMiner()
@@ -6514,6 +6538,7 @@ def decodeHexLOCAL(hexloc):
                 else:
                     break
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif hexloc in ["B", "b"]:
         clear()
@@ -6530,6 +6555,7 @@ def decodeHexLOCAL(hexloc):
                 sysinfo()
                 readHexTx()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
 
 def decodeHexLOCALOnchainONLY(hexloc):
@@ -6548,6 +6574,7 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 else:
                     break
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif hexloc in ["B", "b"]:
         clear()
@@ -6564,6 +6591,7 @@ def decodeHexLOCALOnchainONLY(hexloc):
                 sysinfo()
                 readHexTx()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
 
 def lightningnetworkLOCALcontrol(lncore):
@@ -6888,6 +6916,7 @@ def bitcoincoremenuREMOTEcontrol(bcore):
             decodeQR()
             input("Continue...")
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif bcore in ["E", "e"]:
         miscellaneousLOCAL()
@@ -7040,6 +7069,7 @@ def menuD(menuN): # Satnode access Menu
             else:
                 menuSelection()
         except Exception as e:
+            show_error(str(e))
             logger.debug("Suppressed error: %s", e)
     elif menuN in ["R", "r"]:
         menuSelection()
@@ -7225,6 +7255,7 @@ def testClockRemote():
         settingsClock["gradient"] = "color"
         with open("pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
     except Exception as e:
+        show_error(str(e))
         logger.debug("Suppressed error: %s", e)
 
 
