@@ -1,0 +1,48 @@
+manifestVersion: 1
+id: pyblock
+category: bitcoin
+name: PyBLOCK
+version: "4.0.0"
+tagline: Terminal-based Bitcoin & Lightning node dashboard
+description: >-
+  PyBLOCK is a cyberpunk-aesthetic Bitcoin dashboard that runs in your
+  browser via a web terminal. Monitor your Bitcoin node, Lightning
+  channels, mempool, and more with a rich colorful interface.
+
+  Features include:
+  - Real-time block height and BTC price display
+  - Lightning Network channel management and invoicing
+  - Interactive block visualizer with fee-rate treemap
+  - Mempool monitor and fee estimates
+  - OP_RETURN message viewer
+  - Mining pool stats (Ocean, Braiins, CKPool)
+  - Moscow Time converter
+  - Nostr console integration
+  - ColdCore hardware wallet support
+  - And much more...
+
+  PyBLOCK connects directly to your Umbrel's Bitcoin Core and LND nodes.
+  No additional configuration needed — just install and open.
+developer: curly60e
+website: https://pyblock.xyz
+repo: https://github.com/curly60e/pyblock
+support: https://github.com/curly60e/pyblock/issues
+port: 6969
+dependencies:
+  - bitcoin
+  - lightning
+gallery:
+  - 1.png
+  - 2.png
+  - 3.png
+  - 4.png
+path: ""
+defaultUsername: ""
+defaultPassword: ""
+deterministicPassword: false
+releaseNotes: >-
+  Initial Umbrel release. Features Rich terminal UI with categorized
+  menus, interactive block visualizer, and auto-configuration from
+  Umbrel's Bitcoin Core and LND nodes.
+submitter: curly60e
+submission: ""
