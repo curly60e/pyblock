@@ -270,8 +270,7 @@ def statsConn():
 
 def pgpConn():
     try:
-        conn = """curl -s https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get('https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc').text
         clear()
         blogo()
         closed()
@@ -340,8 +339,7 @@ def whalalConn():
 
 def bwtConn():
     try:
-        conn = "curl -s https://bwt.dev/banner.txt"
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get('https://bwt.dev/banner.txt').text
         clear()
         blogo()
         closed()
@@ -512,10 +510,10 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
+            url = f'http://{lang}.wttr.in/{selectData2}?F&{unit}'
         else:
-            cmd = f'curl wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f'http://wttr.in/{selectData}?F'
+        a = requests.get(url).text
         clear()
         blogo()
         print(a)
@@ -570,11 +568,11 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
+            url = f'http://v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'
 
         else:
-            cmd = f'curl v2.wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f'http://v2.wttr.in/{selectData}?F'
+        a = requests.get(url).text
         clear()
         blogo()
         print(a)
@@ -632,8 +630,7 @@ def rateSXList():
         logger.debug("ppi: %s", e)
     while True:
         try:
-            cmd = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            a = requests.get(f'http://{selectFiat}.rate.sx/?F&n=1').text
             clear()
             blogo()
             closed()
@@ -801,15 +798,9 @@ def lnbitCreateNewInvoice():
         memo = input("Memo: ")
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
-        curl = (
-            'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
-            + "'{"
-            + f""""out": false, "amount": {amt}, "memo": "{memo} -PyBLOCK" """
-            + "}'"
-            + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json" """
-        )
-
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        headers = {"X-Api-Key": b, "Content-type": "application/json"}
+        payload = {"out": False, "amount": int(amt), "memo": f"{memo} -PyBLOCK"}
+        sh = requests.post('https://legend.lnbits.com/api/v1/payments', json=payload, headers=headers).text
         clear()
         blogo()
         n = str(sh)
@@ -836,13 +827,8 @@ def lnbitCreateNewInvoice():
                 print(f'Lightning Invoice: {c}')
                 t.sleep(10)
                 dn = str(d['checking_id'])
-                checkcurl = (
-                    f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
-                    + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
-                )
-
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+                headers = {"X-Api-Key": b, "Content-type": "application/json"}
+                rsh = requests.get(f'https://legend.lnbits.com/api/v1/payments/{dn}', headers=headers).text
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -862,29 +848,18 @@ def lnbitPayInvoice():
     bolt = input("Invoice: ")
     a = loadFileConnLNBits(['admin_key'])
     b = str(a['admin_key'])
-    curl = (
-        'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
-        + "'{"
-        + f""""out": true, "bolt11": "{bolt}" """
-        + "}'"
-        + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
-    )
-
     try:
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        headers = {"X-Api-Key": b, "Content-type": "application/json"}
+        payload = {"out": True, "bolt11": bolt}
+        sh = requests.post('https://legend.lnbits.com/api/v1/payments', json=payload, headers=headers).text
         n = str(sh)
         d = json.loads(n)
         dn = str(d['checking_id'])
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
         while True:
-            checkcurl = (
-                f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
-                + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
-            )
-
-
-            rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            headers = {"X-Api-Key": b, "Content-type": "application/json"}
+            rsh = requests.get(f'https://legend.lnbits.com/api/v1/payments/{dn}', headers=headers).text
             clear()
             blogo()
             nn = str(rsh)
@@ -912,15 +887,9 @@ def lnbitCreatePayWall():
                 remember = "true"
             elif remb in ["N", "n"]:
                 remember = "false"
-            curl = (
-                'curl -X POST https://legend.lnbits.com/paywall/api/v1/paywalls -d '
-                + "'{"
-                + f""""url": "{url}", "memo": "{memo}", "description": "{desc}", "amount": {amt}, "remembers": {remember} """
-                + "}'"
-                + f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            headers = {"Content-type": "application/json", "X-Api-Key": b}
+            payload = {"url": url, "memo": memo, "description": desc, "amount": int(amt), "remembers": remember == "true"}
+            sh = requests.post('https://legend.lnbits.com/paywall/api/v1/paywalls', json=payload, headers=headers).text
             clear()
             blogo()
             n = str(sh)
@@ -930,12 +899,8 @@ def lnbitCreatePayWall():
             clear()
             aa = loadFileConnLNBits(['invoice_read_key'])
             bb = str(a['invoice_read_key'])
-            checkcurl = (
-                'curl -X GET https://legend.lnbits.com/paywall/api/v1/paywalls -H'
-                + f""" "X-Api-Key: {bb}" """
-            )
-
-            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            headers = {"X-Api-Key": bb}
+            sh = requests.get('https://legend.lnbits.com/paywall/api/v1/paywalls', headers=headers).text
             clear()
             blogo()
             n = str(sh)
@@ -974,12 +939,8 @@ def lnbitCreatePayWall():
 def lnbitListPawWall():
     a = loadFileConnLNBits(['invoice_read_key'])
     b = str(a['invoice_read_key'])
-    checkcurl = (
-        'curl -X GET https://legend.lnbits.com/paywall/api/v1/paywalls -H'
-        + f""" "X-Api-Key: {b}" """
-    )
-
-    sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+    headers = {"X-Api-Key": b}
+    sh = requests.get('https://legend.lnbits.com/paywall/api/v1/paywalls', headers=headers).text
     clear()
     blogo()
     n = str(sh)
@@ -1021,12 +982,8 @@ def lnbitDeletePayWall():
         try:
             a = loadFileConnLNBits(['invoice_read_key'])
             b = str(a['invoice_read_key'])
-            checkcurl = (
-                'curl -X GET https://legend.lnbits.com/paywall/api/v1/paywalls -H'
-                + f""" "X-Api-Key: {b}" """
-            )
-
-            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            headers = {"X-Api-Key": b}
+            sh = requests.get('https://legend.lnbits.com/paywall/api/v1/paywalls', headers=headers).text
             clear()
             blogo()
             n = str(sh)
@@ -1065,12 +1022,8 @@ def lnbitDeletePayWall():
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
             id = input("Insert PayWall ID: ")
-            curl = (
-                f"curl -X DELETE https://legend.lnbits.com/paywall/api/v1/paywalls/{id}"
-                + f""" -H "X-Api-Key: {b}" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            headers = {"X-Api-Key": b}
+            sh = requests.delete(f'https://legend.lnbits.com/paywall/api/v1/paywalls/{id}', headers=headers).text
             clear()
             blogo()
             print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
@@ -1097,15 +1050,9 @@ def lnbitsLNURLw():
             isunique = input("Is unique? true/false: ")
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            curl = (
-                'curl -X POST https://legend.lnbits.com/withdraw/api/v1/links -d '
-                + """'{"title":"""
-                + f'"{title}", "min_withdrawable": {minwith}, "max_withdrawable": {maxwith}, "uses": {usesw}, "wait_time": {waittime}, "is_unique": {isunique}'
-                + "}'"
-                + f' -H "Content-type: application/json" -H "X-Api-Key: {b}"'
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            headers = {"Content-type": "application/json", "X-Api-Key": b}
+            payload = {"title": title, "min_withdrawable": int(minwith), "max_withdrawable": int(maxwith), "uses": int(usesw), "wait_time": int(waittime), "is_unique": isunique == "true"}
+            sh = requests.post('https://legend.lnbits.com/withdraw/api/v1/links', json=payload, headers=headers).text
             clear()
             blogo()
             n = str(sh)
@@ -1114,9 +1061,8 @@ def lnbitsLNURLw():
             t.sleep(2)
             clear()
             while True:
-                checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
-
-                sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+                headers = {"X-Api-Key": b}
+                sh = requests.get('https://legend.lnbits.com/withdraw/api/v1/links', headers=headers).text
                 clear()
                 blogo()
                 n = str(sh)
@@ -1155,9 +1101,8 @@ def lnbitsLNURLwList():
         while True:
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
-
-            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            headers = {"X-Api-Key": b}
+            sh = requests.get('https://legend.lnbits.com/withdraw/api/v1/links', headers=headers).text
             clear()
             blogo()
             n = str(sh)
@@ -1291,9 +1236,7 @@ def lnpayCreateInvoice():
                 qr.clear()
                 print(f'Lightning Invoice: {invoice["payment_request"]}')
                 t.sleep(10)
-                curl = f'curl -u {b}: https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis'
-
-                rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+                rsh = requests.get(f'https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis', auth=(b, '')).text
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -1377,10 +1320,8 @@ def lnpayPayInvoice():
     try:
         print("\n\tLNPAY PAY INVOICE\n")
         inv = input("\nInvoice: ")
-        curl = f'curl -u{b}: https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}'
-
         clear()
-        rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        rsh = requests.get(f'https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}', auth=(b, '')).text
         nn = str(rsh)
         dd = json.loads(nn)
         clear()
@@ -1489,12 +1430,8 @@ def createFileConnOpenNode():
 def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = (
-        "curl https://api.opennode.co/v1/account/balance -H "
-        + f'"Content-Type: application/json" -H "Authorization: {b}"'
-    )
-
-    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+    headers = {"Content-Type": "application/json", "Authorization": b}
+    sh = requests.get('https://api.opennode.co/v1/account/balance', headers=headers).text
     clear()
     blogo()
     n = str(sh)
@@ -1511,8 +1448,7 @@ def OpenNodelistfunds():
     input("Continue...")
 
 def OpenNodeCheckStatus():
-    curl = "curl -X GET https://status.opennode.com/history.rss"
-    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+    sh = requests.get('https://status.opennode.com/history.rss').text
     clear()
     blogo()
     my_dict=xmltodict.parse(sh)
@@ -1563,16 +1499,9 @@ def OpenNodecreatecharge():
         print("\n----------------------------------------------------------------------------------------------------")
         selection = input("Select a FIAT currency: ")
         amt = input(f"Amount in {selection}: ")
-        curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H '
-            + f'"Authorization: {b}"'
-            + ' -H "Content-Type: application/json" -d '
-            + "'{"
-            + f'"amount": "{amt}", "currency": "{selection.upper()}"'
-            + "}'"
-        )
-
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        headers = {"Authorization": b, "Content-Type": "application/json"}
+        payload = {"amount": amt, "currency": selection.upper()}
+        sh = requests.post('https://api.opennode.co/v1/charges', json=payload, headers=headers).text
         clear()
         blogo()
         n = str(sh)
@@ -1630,16 +1559,9 @@ def OpenNodecreatecharge():
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
-        curl = (
-            'curl https://api.opennode.co/v1/charges -X POST -H'
-            + f'"Authorization: {b}"'
-            + ' -H "Content-Type: application/json" -d '
-            + "'{"
-            + f'"amount": "{amt}", "currency": "BTC"'
-            + "}'"
-        )
-
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        headers = {"Authorization": b, "Content-Type": "application/json"}
+        payload = {"amount": amt, "currency": "BTC"}
+        sh = requests.post('https://api.opennode.co/v1/charges', json=payload, headers=headers).text
         clear()
         blogo()
         n = str(sh)
@@ -1708,14 +1630,9 @@ def OpenNodeiniciatewithdrawal():
         try:
             while True:
                 invoice = input("\nInvoice: ")
-                checkcurl = (
-                    f'curl https://api.opennode.co/v1/charge/decode -X POST -H "Authorization: {b}" -H "Content-Type: application/json" -d '
-                    + "'{"
-                    + f'"pay_req": "{invoice}"'
-                    + "}'"
-                )
-
-                ssh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+                headers = {"Authorization": b, "Content-Type": "application/json"}
+                payload = {"pay_req": invoice}
+                ssh = requests.post('https://api.opennode.co/v1/charge/decode', json=payload, headers=headers).text
                 nn = str(ssh)
                 dd = json.loads(nn)
                 print(dd)
@@ -1744,14 +1661,9 @@ def OpenNodeiniciatewithdrawal():
             print("<<< Cancel Control + C")
             input("\nEnter to Continue... ")
 
-            curl = (
-                f'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {b}"'
-                + " -d '{"
-                + f'"type": "ln", "address": "{invoice}", "callback_url": ""'
-                + "}'"
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            headers = {"Content-Type": "application/json", "Authorization": b}
+            payload = {"type": "ln", "address": invoice, "callback_url": ""}
+            sh = requests.post('https://api.opennode.co/v2/withdrawals', json=payload, headers=headers).text
             n = str(sh)
             d = json.loads(n)
             clear()
@@ -1769,15 +1681,11 @@ def OpenNodeiniciatewithdrawal():
                 print("\n\tMinimum amount 200000 sats\n")
                 address = input("\nBitcoin Address: ")
                 amt = int(input("Amount in sats: "))
-                curl = (
-                    f'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {b}"'
-                    + " -d '{"
-                    + f'"type": "chain", "amount": {amt}, "address": "{address}", "callback_url": ""'
-                    + "}'"
-                )
+                headers = {"Content-Type": "application/json", "Authorization": b}
+                payload = {"type": "chain", "amount": amt, "address": address, "callback_url": ""}
 
                 if amt < 199999:
-                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+                    sh = requests.post('https://api.opennode.co/v2/withdrawals', json=payload, headers=headers).text
                     n = str(sh)
                     d = json.loads(n)
                     print("\n----------------------------------------------------------------------------------------------------")
@@ -1788,7 +1696,7 @@ def OpenNodeiniciatewithdrawal():
                     """.format(d['message']))
                     print("----------------------------------------------------------------------------------------------------\n")
                 elif amt > 200000:
-                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+                    sh = requests.post('https://api.opennode.co/v2/withdrawals', json=payload, headers=headers).text
                     n = str(sh)
                     d = json.loads(n)
                     dd = d['data']
@@ -1821,9 +1729,8 @@ def OpenNodeListPayments():
     )
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = f'curl https://api.opennode.co/v1/withdrawals -H "Content-Type: application/json" -H "Authorization: {b}"'
-
-    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+    headers = {"Content-Type": "application/json", "Authorization": b}
+    sh = requests.get('https://api.opennode.co/v1/withdrawals', headers=headers).text
     clear()
     blogo()
     print("\n\tOPENNODE TRANSACTIONS LIST\n")
@@ -1997,13 +1904,8 @@ def tallycoGetPayment():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = (
-            "curl -d "
-            + f'"type=profile&id={d}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
-            + " -X POST https://api.tallyco.in/v1/payment/request/"
-        )
-
-        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        payload = {"type": "profile", "id": d, "satoshi_amount": amount, "payment_method": lnd_onchain}
+        tallycomethod = requests.post('https://api.tallyco.in/v1/payment/request/', data=payload).text
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -2049,13 +1951,8 @@ def tallycoDonateid():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = (
-            "curl -d "
-            + f'"type=profile&id={donate}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
-            + " -X POST https://api.tallyco.in/v1/payment/request/"
-        )
-
-        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        payload = {"type": "profile", "id": donate, "satoshi_amount": amount, "payment_method": lnd_onchain}
+        tallycomethod = requests.post('https://api.tallyco.in/v1/payment/request/', data=payload).text
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
