@@ -1,8 +1,9 @@
-FROM ubuntu:24.04@sha256:b59d21599a2b151e7f6a8d7b6f0e864fbb4ce8b0c9cf09be2e67f4d6e3b942a4
+FROM ubuntu:24.04
 
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PYBLOCK_PORT=6969
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -25,17 +26,28 @@ RUN git clone --branch 1.7.7 --depth 1 https://github.com/tsl0922/ttyd.git \
 RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 
+# Copy project files
+COPY requirements.txt /app/pyblock/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip \
-    && git clone --depth 1 https://github.com/curly60e/pyblock.git \
-    && cd pyblock \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r /app/pyblock/requirements.txt
+
+COPY . /app/pyblock/
+
+# Entrypoint for auto-configuration
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Create config volume mount point
+RUN mkdir -p /app/pyblock/pybitblock/config
 
 RUN useradd -m -s /bin/bash pyblock \
     && chown -R pyblock:pyblock /app
 
 USER pyblock
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:6969/ || exit 1
+EXPOSE 6969
 
-CMD ["ttyd", "-W", "-p", "6969", "-c", "Running:PyBLOCK", "python3", "pyblock/pybitblock/PyBlock.py"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:${PYBLOCK_PORT:-6969}/ || exit 1
+
+ENTRYPOINT ["/app/entrypoint.sh"]
