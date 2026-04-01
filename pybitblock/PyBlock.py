@@ -1267,8 +1267,8 @@ def oceanH(): # show srings
 
         print(output)
         responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
-        a = subprocess.run(list.split(), capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
+        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
@@ -1284,8 +1284,8 @@ def oceanB(): # show srings
         )
 
         print(output)
-        list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
-        a = subprocess.run(list.split(), capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
+        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
     except Exception as e:
@@ -1301,8 +1301,8 @@ def oceanE(): # show srings
 
         print(output)
         responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
-        a = subprocess.run(list.split(), capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")

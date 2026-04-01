@@ -644,10 +644,10 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
+            cmd = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
         else:
-            list = f'curl wttr.in/{selectData}?F'
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = f'curl wttr.in/{selectData}?F'
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
@@ -702,11 +702,11 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
+            cmd = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
 
         else:
-            list = f'curl v2.wttr.in/{selectData}?F'
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = f'curl v2.wttr.in/{selectData}?F'
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
@@ -764,8 +764,8 @@ def rateSXList():
         pass
     while True:
         try:
-            list = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
-            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
+            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
@@ -819,8 +819,8 @@ def rateSXGraph():
         pass
     while True:
         try:
-            list = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
-            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
+            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()

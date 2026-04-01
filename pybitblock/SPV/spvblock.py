@@ -1120,8 +1120,8 @@ def decodeStrDat(): # show srings
 
         print(output)
         responseC = input("Blk Dat: ")
-        list = f"""curl -s 'https://bitcoinstrings.com/blk'{responseC}.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://bitcoinstrings.com/blk'{responseC}.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nBLK: " + responseC)
@@ -1143,8 +1143,8 @@ def oceanH(): # show srings
 
         print(output)
         responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
@@ -1160,8 +1160,8 @@ def oceanB(): # show srings
         )
 
         print(output)
-        list = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
     except Exception as e:
@@ -1177,8 +1177,8 @@ def oceanE(): # show srings
 
         print(output)
         responseC = input("Your Bitcoin Address: ")
-        list = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
@@ -1344,10 +1344,10 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = f"curl '{lang}.wttr.in/{selectData2}?F&{unit}'"
+            cmd = f"curl '{lang}.wttr.in/{selectData2}?F&{unit}'"
         else:
-            list = f'curl wttr.in/{selectData}?F'
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = f'curl wttr.in/{selectData}?F'
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
@@ -1402,11 +1402,11 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            list = f"curl 'v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'"
+            cmd = f"curl 'v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'"
 
         else:
-            list = f'curl v2.wttr.in/{selectData}?F'
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = f'curl v2.wttr.in/{selectData}?F'
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print(a)
@@ -1464,8 +1464,8 @@ def rateSXList():
         logger.debug("spvblock: %s", e)
     while True:
         try:
-            list = f"curl -s '{selectFiat}.rate.sx/?F&n=1'"
-            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = f"curl -s '{selectFiat}.rate.sx/?F&n=1'"
+            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
@@ -1520,8 +1520,8 @@ def rateSXGraph():
         logger.debug("spvblock: %s", e)
     while True:
         try:
-            list = f"curl -s '{selectFiat}.rate.sx/btc' | grep -v -E 'Use'"
-            a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+            cmd = f"curl -s '{selectFiat}.rate.sx/btc' | grep -v -E 'Use'"
+            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
             clear()
             blogo()
             closed()
@@ -3390,8 +3390,8 @@ def getinfo():
 
         print(output)
         responseC = input("Public Key: ")
-        list = f"curl -s 'https://1ml.com/node/'{responseC}/json'"
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"curl -s 'https://1ml.com/node/'{responseC}/json'"
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nNode: " + responseC)
@@ -3465,8 +3465,8 @@ def localgetinfoC():
 
         print(output)
         responseC = input("Public Key: ")
-        list = f"curl -s https://1ml.com/node/{responseC}/json"
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"curl -s https://1ml.com/node/{responseC}/json"
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nNode: " + responseC)
@@ -3955,8 +3955,8 @@ def readHexBlock():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = f"curl -s 'https://mempool.space/api/tx/{responseC}/hex' "
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"curl -s 'https://mempool.space/api/tx/{responseC}/hex' "
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nHex: " + responseC)
@@ -3975,8 +3975,8 @@ def readHexTx():
 
         print(output)
         responseC = input("BLOCK: ")
-        list = f"curl -s https://mempool.space/api/blocks/{responseC}"
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"curl -s https://mempool.space/api/blocks/{responseC}"
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nBlock: " + responseC)
@@ -3995,8 +3995,8 @@ def console(): # get into the console from bitcoin-cli
 
         print(output)
         responseC = input("RPC Command: ")
-        list = f"""curl -s 'https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content' | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links" """
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        cmd = f"""curl -s 'https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content' | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links" """
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nRPC: " + responseC)
@@ -4067,12 +4067,12 @@ def getrawtx(): # show confirmations from transactions
 
         print(output)
         responseC = input("Tx: ")
-        list = (
+        cmd = (
             f"curl -s https://mempool.space/api/tx/{responseC}"
             + """/merkle-proof | jq -C '.[]'"""
         )
 
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nTx: " + responseC)
@@ -4706,11 +4706,11 @@ def decodeHex(): # show hex
 
         print(output)
         responseC = input("Block Height: ")
-        list = (
+        cmd = (
             f"curl -s 'https://bitcoinexplorer.org/api/block/'{responseC}"
             + """ | jq -C '.[]' | tr -d '{|}|]|,'"""
         )
-        a = subprocess.run(list, shell=True, capture_output=True, text=True).stdout
+        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
         print("\nBlock: " + responseC)
