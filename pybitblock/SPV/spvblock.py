@@ -392,7 +392,7 @@ def opreturnOnchainONLY():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = subprocess.run(f'{lndconnectload["ln"]} decodepayreq {invoice}', shell=True, capture_output=True, text=True).stdout
+            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
@@ -461,7 +461,7 @@ def opreturn():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = subprocess.run(f'{lndconnectload["ln"]} decodepayreq {invoice}', shell=True, capture_output=True, text=True).stdout
+            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
@@ -1023,16 +1023,17 @@ def PickaxeCon():
         output = render(
         "Foreman Pickaxe", colors=['yellow'], align='left', font='tiny'
         )
-        if os.path.isdir ('Pickaxe'):
+        if os.path.isdir('Pickaxe'):
             print("...Follow the steps...")
-        else: # Check if the file 'bclock.conf' is in the same folder
-            subprocess.run("mkdir Pickaxe && cd Pickaxe", shell=True)
+        else:
+            os.makedirs("Pickaxe", exist_ok=True)
             clear()
             blogo()
             print(output)
         responseC = input("Your Foreman apiKey: ")
         responseD = input("Your Foreman clientId: ")
-        subprocess.run(f"cd Pickaxe && curl https://tinyurl.com/service-install -Ls --output install.sh; sudo bash install.sh {responseD} {responseC}", shell=True)
+        subprocess.run(["curl", "https://tinyurl.com/service-install", "-Ls", "--output", "install.sh"], cwd="Pickaxe")
+        subprocess.run(["sudo", "bash", "install.sh", shlex.quote(responseD), shlex.quote(responseC)], cwd="Pickaxe")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -1263,7 +1264,7 @@ def CroppedMinerComputer():
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        subprocess.run(f"cd CroppedMiner && ./minerd -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}", shell=True)
+        subprocess.run(["./minerd", "-a", "sha256d", "-o", "stratum+tcp://pool.pyblock.xyz:4444", "-u", f"{responseC}.PyBLOCK", "-p", responseD, "-t", responseE], cwd="CroppedMiner")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -1285,7 +1286,7 @@ def CroppedMinerRaspberry():
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        subprocess.run(f"cd CroppedMiner && cd cpuminer-multi-arm && ./cpuminer -a sha256d -o stratum+tcp://pool.pyblock.xyz:4444 -u {responseC}.PyBLOCK -p {responseD} -t {responseE}", shell=True)
+        subprocess.run(["./cpuminer", "-a", "sha256d", "-o", "stratum+tcp://pool.pyblock.xyz:4444", "-u", f"{responseC}.PyBLOCK", "-p", responseD, "-t", responseE], cwd=os.path.join("CroppedMiner", "cpuminer-multi-arm"))
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -2831,7 +2832,7 @@ def bip39convert():
         blogo()
         print(output)
         responseC = input("Words to Tiny Seed: ")
-        subprocess.run(f"cd TinySeed && python3 TinySeed.py {responseC}", shell=True)
+        subprocess.run(["python3", "TinySeed.py"] + shlex.split(responseC), cwd="TinySeed")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -4217,7 +4218,7 @@ def callGitNostrLinTerminal():
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_linux_amd64 -k {responseC} -l", shell=True)
+        subprocess.run(["./nostr_console_linux_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -4237,7 +4238,7 @@ def callGitNostrLinarmTerminal():
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_linux_arm64 -k {responseC} -l", shell=True)
+        subprocess.run(["./nostr_console_linux_arm64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -4258,7 +4259,7 @@ def callGitNostrMacTerminal():
 
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_macos_amd64 -k {responseC} -l", shell=True)
+        subprocess.run(["./nostr_console_macos_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -4278,7 +4279,7 @@ def callGitNostrMacarmTerminal():
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_elf64 -k {responseC} -l", shell=True)
+        subprocess.run(["./nostr_console_elf64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -4298,7 +4299,7 @@ def callGitNostrWinTerminal():
         blogo()
         print(output)
         responseC = input("Paste your PrivateKey: ")
-        subprocess.run(f"cd nostr_console_pyblock && ./nostr_console_windows_amd64.exe -k {responseC} -l", shell=True)
+        subprocess.run(["./nostr_console_windows_amd64.exe", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("spvblock: %s", e)
         menuSelection()
@@ -4318,7 +4319,7 @@ def callGitNostrSeedTerminal():
         blogo()
         print(output)
         responseC = input("Hex to BIP39 & BIP39 to Hex: ")
-        subprocess.run(f"cd nostr_seed && python3 nostr_seed.py {responseC}", shell=True)
+        subprocess.run(["python3", "nostr_seed.py"] + shlex.split(responseC), cwd="nostr_seed")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
@@ -4339,7 +4340,7 @@ def callGitNostrQRSeedTerminal():
         blogo()
         print(output)
         responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
-        subprocess.run(f"cd nostr_QRseed && python3 nostr_c_seed_qr.py {responseC}", shell=True)
+        subprocess.run(["python3", "nostr_c_seed_qr.py"] + shlex.split(responseC), cwd="nostr_QRseed")
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("spvblock: %s", e)
