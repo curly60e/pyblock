@@ -21,12 +21,18 @@ def close():
 
 
 def sysinfo():
-    print("    \033[0;37;40m----------------------")
-    print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
-    print(
-        f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
-    )
-    print("    \033[0;37;40m----------------------")
+    try:
+        from shared.rich_ui import rich_sysinfo
+        cpu = psutil.cpu_percent()
+        mem = int(psutil.virtual_memory().percent)
+        rich_sysinfo(cpu, mem)
+    except ImportError:
+        print("    \033[0;37;40m----------------------")
+        print("    \033[3;33;40mCPU Usage: \033[1;32;40m" + str(psutil.cpu_percent()) + "%\033[0;37;40m")
+        print(
+            f"    \033[3;33;40mMemory Usage: \033[1;32;40m{int(psutil.virtual_memory().percent)}% \033[0;37;40m"
+        )
+        print("    \033[0;37;40m----------------------")
 
 
 def rectangle(n):
