@@ -5,7 +5,7 @@ import os
 import subprocess
 import psutil
 import time as t
-from pblogo import *
+from pblogo import blogo
 
 
 def clear(): # clear the screen

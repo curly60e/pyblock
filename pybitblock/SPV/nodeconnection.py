@@ -12,8 +12,7 @@ import sys
 import time as t
 import numpy as np
 from cfonts import render, say
-from art import *
-from pblogo import *
+from pblogo import blogo
 from PIL import Image
 from robohash import Robohash
 from config import cfg

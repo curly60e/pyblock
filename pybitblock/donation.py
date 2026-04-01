@@ -4,7 +4,7 @@
 
 import requests
 import qrcode
-from nodeconnection import *
+# nodeconnection not used in this module
 
 def donationAddr():
     qr = qrcode.QRCode(

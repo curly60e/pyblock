@@ -15,19 +15,17 @@ import sys
 import subprocess
 import requests
 import json
-from imgterminal import *
-from sha256 import *
+from imgterminal import createimagebitaxe
 from cfonts import render, say
-from clone import *
-from donation import *
-from feed import *
-from art import *
-from logos import *
-from sysinf import *
-from pblogo import *
-from apisnd import *
+from clone import gitclone, satnode
+from donation import donationAddr, donationPayNym, donationLN, donationAddrTst, donationLNTst, decodeQR
+from feed import readFile
+from logos import logoA, logoB, logoC
+from sysinf import sysinfoDetail
+from pblogo import blogo, tick, canceled
+from apisnd import apisender, apisenderFile
 from termcolor import colored, cprint
-from terminal_matrix.matrix import *
+from terminal_matrix.matrix import doit
 from PIL import Image
 from robohash import Robohash
 from pycoingecko import CoinGeckoAPI

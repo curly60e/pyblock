@@ -8,9 +8,7 @@ import qrcode
 import requests
 import time as t
 import sys
-from nodeconnection import *
-from pblogo import *
-from logos import *
+from pblogo import blogo
 
 def clear(): # clear the screen
     subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))

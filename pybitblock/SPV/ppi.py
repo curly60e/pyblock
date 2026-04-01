@@ -9,14 +9,12 @@ import os
 import os.path
 import qrcode
 import lnpay_py
-import requests
 import xmltodict
 import time as t
-from art import *
 from cfonts import render, say
-from nodeconnection import *
-from pblogo import *
-from logos import *
+from nodeconnection import clear, closed
+from pblogo import blogo, tick
+from logos import logoB
 from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 from config import cfg

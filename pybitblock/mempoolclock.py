@@ -4,7 +4,7 @@ import subprocess
 import sys
 import base64, codecs, requests
 import time as t
-from pblogo import *
+from pblogo import blogo
 from cfonts import render, say
 
 
