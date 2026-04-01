@@ -7412,4 +7412,17 @@ def main():
             sys.exit(101)
 
 if __name__ == "__main__":
-    main()
+    if "--tui" in sys.argv:
+        from tui.app import run as run_tui
+        mode = "lite"
+        cfg.load()
+        if cfg.has_config('intro.conf'):
+            with open("config/intro.conf", "r") as f:
+                init_data = json.load(f)
+            if init_data.get("fullbtclnd"):
+                mode = "local"
+            elif init_data.get("fullbtc"):
+                mode = "onchain_only"
+        run_tui(mode=mode)
+    else:
+        main()

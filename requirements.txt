@@ -28,6 +28,7 @@ typer-cli>=0.0.13,<1.0
 jq>=1.2,<2.0
 term-image>=0.7,<1.0
 rich>=13.7,<14.0
+textual>=0.89,<1.0
 urwid>=2.6,<3.0
 matplotlib>=3.9,<4.0
 asciimatics>=1.15,<2.0
