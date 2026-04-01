@@ -37,7 +37,7 @@ PYBLOCK_THEME = Theme({
     "pyblock.block": "bold white",
 })
 
-console = Console(theme=PYBLOCK_THEME)
+console = Console(theme=PYBLOCK_THEME, highlight=False, color_system="truecolor")
 
 
 def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
@@ -80,68 +80,47 @@ def rich_status_bar(mode="", block_height="", btc_price="", extra=""):
             combined.append_text(separator)
         combined.append_text(part)
 
-    console.print(Panel(combined, style="pyblock.dim", expand=False, padding=(0, 2)))
+    console.print(Panel(combined, expand=False, style="on default", border_style="dim", padding=(0, 2)))
 
 
 def rich_sysinfo(cpu_percent, mem_percent):
-    """Render CPU and Memory as a compact Rich panel."""
+    """Render CPU and Memory with colored bars in a panel."""
     cpu_color = "green" if cpu_percent < 70 else ("yellow" if cpu_percent < 90 else "red")
     mem_color = "green" if mem_percent < 70 else ("yellow" if mem_percent < 90 else "red")
 
     cpu_bar = _make_bar(cpu_percent, cpu_color)
     mem_bar = _make_bar(mem_percent, mem_color)
 
-    table = Table(show_header=False, box=None, padding=(0, 1))
-    table.add_column(width=10)
-    table.add_column(width=22)
-    table.add_column(width=5, justify="right")
-    table.add_row(
-        Text("CPU", style="italic yellow"),
-        Text.from_markup(cpu_bar),
-        Text(f"{cpu_percent}%", style=f"bold {cpu_color}"),
+    text = Text.from_markup(
+        f"[italic yellow]CPU[/]     {cpu_bar} [bold {cpu_color}]{cpu_percent}%[/]\n"
+        f"[italic yellow]Memory[/]  {mem_bar} [bold {mem_color}]{mem_percent}%[/]"
     )
-    table.add_row(
-        Text("Memory", style="italic yellow"),
-        Text.from_markup(mem_bar),
-        Text(f"{mem_percent}%", style=f"bold {mem_color}"),
-    )
-    console.print(table)
+    console.print(Panel(text, expand=False, style="on default", border_style="dim"))
 
 
 def _make_bar(percent, color):
     """Create a simple text-based progress bar."""
     filled = int(percent / 5)
     empty = 20 - filled
-    return f"[{color}]{'█' * filled}[/{color}][dim]{'░' * empty}[/dim]"
+    return f"[{color}]{'█' * filled}[/{color}][rgb(60,60,60)]{'─' * empty}[/rgb(60,60,60)]"
 
 
 def rich_menu(title, items, footer_text=""):
-    """Render a styled menu table.
+    """Render a styled menu in a panel.
 
     Args:
         title: Menu section title
         items: List of (key, label, style) tuples
         footer_text: Optional text below the menu
     """
-    table = Table(
-        show_header=False,
-        box=None,
-        padding=(0, 1),
-        pad_edge=False,
-    )
-    table.add_column("Key", width=6, justify="right")
-    table.add_column("Label")
-
+    lines = []
     for key, label, style in items:
-        table.add_row(
-            Text(f"{key}.", style=f"bold {style}"),
-            Text(label, style="white"),
-        )
-
-    console.print()
-    console.print(table)
+        lines.append(f"[bold {style}]{key}.[/] {label}")
     if footer_text:
-        console.print(f"    [pyblock.dim]{footer_text}[/pyblock.dim]")
+        lines.append(f"\n[dim]{footer_text}[/dim]")
+
+    content = Text.from_markup("\n".join(lines))
+    console.print(Panel(content, expand=False, style="on default", border_style="dim", padding=(1, 2)))
     console.print()
 
 
@@ -191,7 +170,7 @@ def rich_header(node_type, block_height, version, alias=None):
     info.append("Version: ", style="bold white")
     info.append(f"{version}", style="dim")
 
-    console.print(Panel(info, style="pyblock.dim", expand=False, padding=(0, 2)))
+    console.print(Panel(info, expand=False, style="on default", border_style="dim", padding=(0, 2)))
 
 
 def rich_loading(label="Loading"):

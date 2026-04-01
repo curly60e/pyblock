@@ -2,6 +2,7 @@
 #Tester: __B__T__C__
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
+import codecs
 import os
 import os.path
 import time as t
@@ -887,6 +888,8 @@ def artist(): # here we convert the result of the command 'getblockcount' on a r
             clear()
             close()
             design()
+        except KeyboardInterrupt:
+            break
         except Exception as e:
             logger.debug("Loop interrupted: %s", e)
             break
@@ -1823,6 +1826,20 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
     blogo()
     sysinfo()
     pathexec()
+
+    # Validate bitcoincli path before attempting to use it
+    if mode in ("local", "onchain_only") and not path.get('bitcoincli'):
+        show_error("Bitcoin CLI path not configured. Redirecting to Lite Mode.")
+        t.sleep(2)
+        from SPV.spvblock import MainMenuCROPPED as _lite_menu
+        _lite_menu()
+        return
+    if mode == "remote" and not lndconnectload.get('tls'):
+        show_error("Remote node not configured. Redirecting to Lite Mode.")
+        t.sleep(2)
+        from SPV.spvblock import MainMenuCROPPED as _lite_menu
+        _lite_menu()
+        return
 
     # Fetch BTC price for status bar
     try:
@@ -5137,7 +5154,8 @@ def menuSelection():
             path = pathv # Copy the variable pathv to 'path'
             MainMenuLOCAL()
         elif chln == "C":
-            MainMenuCROPPED()
+            from SPV.spvblock import MainMenuCROPPED as _lite_menu
+            _lite_menu()
     else:
         if os.path.isfile('config/blndconnect.conf'):
             chln['offchain'] = "offchain"
@@ -7405,17 +7423,9 @@ def main():
                 set_terminal_background()
                 menuSelection()
         except KeyboardInterrupt:
-            print("\n")
-            sys.exit(0)
-        except PermissionError as e:
-            if str(e).endswith("''"):
-                show_error("Bitcoin CLI path is not configured. Please set it up.")
-                logger.error("Empty bitcoincli path in bclock.conf")
-                introINIT()
-            else:
-                logger.error("Fatal error: %s", e)
-                sys.exit(101)
+            continue  # Ctrl+C returns to main menu
         except Exception as e:
+            show_error(str(e))
             logger.error("Fatal error: %s", e)
             sys.exit(101)
 
@@ -7427,10 +7437,16 @@ if __name__ == "__main__":
         if cfg.has_config('intro.conf'):
             with open("config/intro.conf", "r") as f:
                 init_data = json.load(f)
-            if init_data.get("fullbtclnd"):
-                mode = "local"
-            elif init_data.get("fullbtc"):
-                mode = "onchain_only"
+            if isinstance(init_data, str):
+                if init_data == "A":
+                    mode = "local"
+                elif init_data == "B":
+                    mode = "onchain_only"
+            elif isinstance(init_data, dict):
+                if init_data.get("fullbtclnd"):
+                    mode = "local"
+                elif init_data.get("fullbtc"):
+                    mode = "onchain_only"
         run_tui(mode=mode)
     else:
         main()
