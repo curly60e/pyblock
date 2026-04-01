@@ -880,7 +880,8 @@ def some_other_function():
     run_display_node_info()
 
 def execute_visualizer():
-    block_visualizer.run_visualizer()
+    import block_viz
+    block_viz.interactive_visualizer(use_cli=True)
 
 def artist(): # here we convert the result of the command 'getblockcount' on a random art design
     while True:
