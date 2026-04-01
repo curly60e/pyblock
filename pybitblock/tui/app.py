@@ -81,7 +81,7 @@ class PyBlockApp(App):
     def compose(self) -> ComposeResult:
         yield StatusBar(id="status-bar")
         yield Vertical(
-            MainMenu(mode=self.mode, id="main-menu"),
+            Static(id="section-view"),
             id="content",
         )
         yield self._build_fees_panel()
@@ -96,6 +96,7 @@ class PyBlockApp(App):
 
     def on_mount(self):
         self.query_one(StatusBar).mode = self.mode
+        self.action_show_menu()
         self.set_interval(30, self._do_refresh)
         self._do_refresh()
 
@@ -127,17 +128,18 @@ class PyBlockApp(App):
 
     def _set_content(self, renderable):
         """Replace the content area with new renderable."""
-        content = self.query_one("#content", Vertical)
-        content.remove_children()
-        widget = Static(renderable, id="section-view")
-        content.mount(widget)
+        try:
+            view = self.query_one("#section-view", Static)
+            view.update(renderable)
+        except Exception:
+            pass
 
     # --- Actions ---
 
     def action_show_menu(self):
-        content = self.query_one("#content", Vertical)
-        content.remove_children()
-        content.mount(MainMenu(mode=self.mode, id="main-menu"))
+        menu = MainMenu(mode=self.mode)
+        # Build the menu renderable
+        self._set_content(menu._build_menu())
 
     def action_select(self, section):
         if section == "pyblock":
@@ -160,10 +162,12 @@ class PyBlockApp(App):
         mempool = fetch_mempool_info()
         blocks = fetch_latest_blocks()
         hashrate = fetch_hashrate()
-        self.call_from_thread(self._render_dashboard, mempool, blocks, hashrate)
+        self.call_from_thread(self._render_dashboard_sync, mempool, blocks, hashrate)
 
-    def _render_dashboard(self, mempool, blocks, hashrate):
-        # Summary panel
+    def _render_dashboard_sync(self, mempool, blocks, hashrate):
+        """Build dashboard as a Rich Group and update the section view."""
+        from rich.console import Group
+
         summary = Table(show_header=False, box=None, padding=(0, 2))
         summary.add_column("Key", style="bold yellow", width=18)
         summary.add_column("Value", style="bold white")
@@ -173,27 +177,21 @@ class PyBlockApp(App):
         summary.add_row("Difficulty", hashrate["difficulty"])
         summary.add_row("Mempool Txs", f"{mempool.get('count', '?'):,}" if isinstance(mempool.get('count'), int) else str(mempool.get('count', '?')))
         summary.add_row("Mempool Size", f"{mempool.get('vsize', 0) / 1_000_000:.1f} MvB" if isinstance(mempool.get('vsize'), (int, float)) else "?")
-        summary_panel = Panel(summary, title="[bold red]PyBLOCK Dashboard[/bold red]", expand=False, padding=(1, 2))
 
-        # Latest blocks table
         blocks_table = Table(title="Latest Blocks", expand=False, padding=(0, 1))
         blocks_table.add_column("Height", style="bold green", width=10)
         blocks_table.add_column("Txs", style="white", width=8, justify="right")
         blocks_table.add_column("Size (MB)", style="cyan", width=10, justify="right")
         blocks_table.add_column("Pool", style="yellow", width=16)
         for b in blocks:
-            blocks_table.add_row(
-                str(b["height"]),
-                str(b["tx_count"]),
-                str(b["size"]),
-                b["pool"],
-            )
-        blocks_panel = Panel(blocks_table, expand=False, padding=(0, 1))
+            blocks_table.add_row(str(b["height"]), str(b["tx_count"]), str(b["size"]), b["pool"])
 
-        content = self.query_one("#content", Vertical)
-        content.remove_children()
-        content.mount(Static(summary_panel, id="dashboard-summary"))
-        content.mount(Static(blocks_panel, id="dashboard-blocks"))
+        dashboard = Group(
+            Panel(summary, title="[bold red]PyBLOCK Dashboard[/bold red]", expand=False, padding=(1, 2)),
+            "",
+            Panel(blocks_table, expand=False, padding=(0, 1)),
+        )
+        self._set_content(dashboard)
 
     def _load_bitcoin(self):
         """Show Bitcoin info panel."""
