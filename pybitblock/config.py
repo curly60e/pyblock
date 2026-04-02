@@ -28,6 +28,11 @@ _DEFAULT_SETTINGS_CLOCK = {
     "generative_art": False,
     "sound": "bell",
     "heartbeat": True,
+    "show_miner_pool": True,
+    "show_block_weight": False,
+    "show_block_times": True,
+    "show_peers": False,
+    "show_moon": False,
 }
 
 

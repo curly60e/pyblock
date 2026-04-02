@@ -5448,6 +5448,13 @@ def clockDisplaySettings():
     \u001b[38;5;27m8.\033[0;37;40m Generative Art         {}
     \u001b[38;5;27m9.\033[0;37;40m Fireworks on Milestones {}
 
+    \033[1;37;40m--- Visual ---\033[0;37;40m
+    \u001b[38;5;27mM.\033[0;37;40m Miner Pool Tag         {}
+    \u001b[38;5;27mW.\033[0;37;40m Block Weight Meter     {}
+    \u001b[38;5;27mT.\033[0;37;40m Block Time Histogram   {}
+    \u001b[38;5;27mP.\033[0;37;40m Peer Count             {}
+    \u001b[38;5;27mL.\033[0;37;40m Moon Phase             {}
+
     \u001b[38;5;27mA.\033[0;37;40m Animation: \033[1;33;40m{}\033[0;37;40m
     \u001b[38;5;27mS.\033[0;37;40m Sound:     \033[1;33;40m{}\033[0;37;40m
     \u001b[33;1mEnter.\033[0;37;40m Return
@@ -5461,6 +5468,11 @@ def clockDisplaySettings():
                 _on_off(s.get('heartbeat', True)),
                 _on_off(s.get('generative_art', False)),
                 _on_off(s.get('fireworks', True)),
+                _on_off(s.get('show_miner_pool', True)),
+                _on_off(s.get('show_block_weight', False)),
+                _on_off(s.get('show_block_times', True)),
+                _on_off(s.get('show_peers', False)),
+                _on_off(s.get('show_moon', False)),
                 s.get('animation', 'matrix'),
                 s.get('sound', 'bell'),
             ))
@@ -5474,9 +5486,20 @@ def clockDisplaySettings():
                 '7': 'heartbeat', '8': 'generative_art',
                 '9': 'fireworks',
             }
+            toggles_alpha = {
+                'M': 'show_miner_pool', 'm': 'show_miner_pool',
+                'W': 'show_block_weight', 'w': 'show_block_weight',
+                'T': 'show_block_times', 't': 'show_block_times',
+                'P': 'show_peers', 'p': 'show_peers',
+                'L': 'show_moon', 'l': 'show_moon',
+            }
 
             if opt in toggles:
                 key = toggles[opt]
+                s[key] = not s.get(key, False)
+                cfg.save("pyblocksettingsClock.conf", s)
+            elif opt in toggles_alpha:
+                key = toggles_alpha[opt]
                 s[key] = not s.get(key, False)
                 cfg.save("pyblocksettingsClock.conf", s)
             elif opt in ['A', 'a']:

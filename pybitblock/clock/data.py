@@ -22,6 +22,7 @@ MEMPOOL_FEES_URL = "https://mempool.space/api/v1/fees/recommended"
 MEMPOOL_HASHRATE_URL = "https://mempool.space/api/v1/mining/hashrate/3d"
 MEMPOOL_HEIGHT_URL = "https://mempool.space/api/blocks/tip/height"
 MEMPOOL_BLOCK_URL = "https://mempool.space/api/block/"
+MEMPOOL_BLOCKS_URL = "https://mempool.space/api/v1/blocks"
 
 
 class ClockData:
@@ -57,6 +58,15 @@ class ClockData:
         self.hashrate_current = 0.0
         self.hashrate_history = []
         self.difficulty = 0.0
+
+        # Visual features
+        self.miner_pool = ""
+        self.block_weight = 0
+        self.max_block_weight = 4_000_000
+        self.peer_count = 0
+        self.block_time_history = []  # last N block intervals in seconds
+        self.streak_type = ""   # "fast", "slow", or ""
+        self.streak_count = 0
 
         # Internal
         self._lock = threading.Lock()
@@ -96,7 +106,6 @@ class ClockData:
     def _get_block_details(self):
         """Fetch full block details for current tip."""
         if self.mode == 'lite':
-            r = requests.get(MEMPOOL_HEIGHT_URL, timeout=10)
             tip_hash = requests.get(
                 "https://mempool.space/api/blocks/tip/hash", timeout=10
             ).text.strip()
@@ -106,6 +115,9 @@ class ClockData:
             self.block_time = block.get('timestamp', int(time.time()))
             self.block_size = block.get('size', 0)
             self.block_tx_count = block.get('tx_count', 0)
+            self.block_weight = block.get('weight', 0)
+            pool = block.get('extras', {})
+            self.miner_pool = pool.get('pool', {}).get('name', '') if isinstance(pool, dict) else ''
         else:
             if self.mode == 'remote':
                 block_hash = self._rpc('getbestblockhash')
@@ -118,6 +130,132 @@ class ClockData:
             self.block_time = block.get('time', int(time.time()))
             self.block_size = block.get('size', 0)
             self.block_tx_count = block.get('nTx', 0)
+            self.block_weight = block.get('weight', 0)
+
+    def _get_peer_count(self):
+        """Fetch connected peer count (local/remote only)."""
+        try:
+            if self.mode == 'local':
+                raw = self._cli('getnetworkinfo')
+                info = json.loads(raw)
+                self.peer_count = info.get('connections', 0)
+            elif self.mode == 'remote':
+                info = self._rpc('getnetworkinfo')
+                self.peer_count = info.get('connections', 0)
+        except Exception:
+            pass
+
+    def _get_miner_pool_local(self):
+        """Extract miner/pool name from coinbase for local/remote mode."""
+        try:
+            if self.mode == 'local':
+                raw = self._cli(f'getblock {self.block_hash} 2')
+                block = json.loads(raw)
+            elif self.mode == 'remote':
+                block = self._rpc('getblock', [self.block_hash, 2])
+            else:
+                return
+            coinbase_tx = block.get('tx', [{}])[0]
+            scriptsig_hex = coinbase_tx.get('vin', [{}])[0].get('coinbase', '')
+            # Decode hex to ASCII, extract readable part
+            try:
+                raw_bytes = bytes.fromhex(scriptsig_hex)
+                ascii_part = ''.join(
+                    c if 32 <= ord(c) < 127 else '' for c in raw_bytes.decode('ascii', errors='replace')
+                )
+                # Common pool tags
+                pools = {
+                    'Foundry': 'Foundry USA',
+                    'AntPool': 'AntPool',
+                    'F2Pool': 'F2Pool',
+                    'ViaBTC': 'ViaBTC',
+                    'Binance': 'Binance Pool',
+                    'Mara': 'MARA Pool',
+                    'MARA': 'MARA Pool',
+                    'Luxor': 'Luxor',
+                    'Ocean': 'OCEAN',
+                    'ocean': 'OCEAN',
+                    'OCEAN': 'OCEAN',
+                    'SBI': 'SBI Crypto',
+                    'Braiins': 'Braiins Pool',
+                    'slush': 'Braiins Pool',
+                    'SpiderPool': 'SpiderPool',
+                    'BTC.com': 'BTC.com',
+                    'Poolin': 'Poolin',
+                    'Titan': 'Titan',
+                }
+                self.miner_pool = ""
+                for tag, name in pools.items():
+                    if tag in ascii_part:
+                        self.miner_pool = name
+                        break
+                if not self.miner_pool and len(ascii_part) > 3:
+                    # Use the longest readable substring
+                    self.miner_pool = ascii_part.strip()[:20]
+            except Exception:
+                pass
+        except Exception:
+            pass
+
+    def _fetch_block_time_history(self):
+        """Fetch recent block timestamps and compute intervals + streaks."""
+        try:
+            if self.mode == 'lite':
+                r = requests.get(MEMPOOL_BLOCKS_URL, timeout=10)
+                blocks = r.json()[:15]
+                timestamps = [b.get('timestamp', 0) for b in blocks]
+            elif self.mode == 'local':
+                timestamps = []
+                h = self.block_height
+                for i in range(15):
+                    bh = self._cli(f'getblockhash {h - i}')
+                    raw = self._cli(f'getblock {bh}')
+                    block = json.loads(raw)
+                    timestamps.append(block.get('time', 0))
+            elif self.mode == 'remote':
+                timestamps = []
+                h = self.block_height
+                for i in range(15):
+                    bh = self._rpc('getblockhash', [h - i])
+                    block = self._rpc('getblock', [bh])
+                    timestamps.append(block.get('time', 0))
+            else:
+                return
+
+            # Timestamps are newest-first, compute intervals
+            intervals = []
+            for i in range(len(timestamps) - 1):
+                diff = abs(timestamps[i] - timestamps[i + 1])
+                intervals.append(diff)
+
+            with self._lock:
+                self.block_time_history = intervals
+
+            # Compute streak
+            streak = 0
+            stype = ""
+            for iv in intervals:
+                if iv < 300:  # <5 min = fast
+                    if stype == "" or stype == "fast":
+                        stype = "fast"
+                        streak += 1
+                    else:
+                        break
+                elif iv > 900:  # >15 min = slow
+                    if stype == "" or stype == "slow":
+                        stype = "slow"
+                        streak += 1
+                    else:
+                        break
+                else:
+                    break
+
+            with self._lock:
+                self.streak_type = stype if streak >= 2 else ""
+                self.streak_count = streak if streak >= 2 else 0
+
+        except Exception:
+            pass
 
     def _calc_epoch(self):
         """Calculate epoch and halving progress from block height."""
@@ -137,7 +275,7 @@ class ClockData:
     # --- API data (background thread) ---
 
     def _fetch_api_data(self):
-        """Fetch fee rates and hashrate from mempool.space (non-blocking)."""
+        """Fetch fee rates, hashrate, block history from APIs (non-blocking)."""
         try:
             r = requests.get(MEMPOOL_FEES_URL, timeout=10)
             fees = r.json()
@@ -160,6 +298,11 @@ class ClockData:
                 ]
         except Exception:
             pass
+
+        self._fetch_block_time_history()
+        self._get_peer_count()
+        if self.mode in ('local', 'remote') and not self.miner_pool:
+            self._get_miner_pool_local()
 
     def _start_bg_fetch(self):
         """Fetch API data in background thread if enough time has passed."""
@@ -197,4 +340,4 @@ class ClockData:
         """Seconds elapsed since the last block timestamp."""
         if self.block_time == 0:
             return 0
-        return int(time.time()) - self.block_time
+        return max(0, int(time.time()) - self.block_time)

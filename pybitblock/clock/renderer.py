@@ -15,6 +15,12 @@ from .widgets import (
     render_epoch_bar,
     render_fees,
     render_utc_time,
+    render_miner_pool,
+    render_block_weight,
+    render_peer_count,
+    render_block_time_histogram,
+    render_streak,
+    render_moon_phase,
 )
 from .sparkline import render_sparkline
 from .generative import hash_art
@@ -75,6 +81,7 @@ class Layout:
         self._height_lines = 0
         self._heartbeat_step = 0
         self._last_rendered_height = None
+        self._countdown_row = 0
 
     def _is_zen(self):
         return self.settings.get('zen_mode', False)
@@ -135,6 +142,7 @@ class Layout:
         w = self.term_width
 
         if s.get('show_countdown', True):
+            self._countdown_row = row
             text = render_countdown(data.seconds_since_block, w)
             self._write(_move(row) + _clear_line() + text)
             row += 2
@@ -144,8 +152,10 @@ class Layout:
                 data.block_height, data.epoch_block,
                 data.blocks_to_halving, data.next_halving_block, w
             )
-            self._write(_move(row) + _clear_line() + text)
-            row += 2
+            lines = text.split('\n')
+            for i, line in enumerate(lines):
+                self._write(_move(row + i) + _clear_line() + line)
+            row += len(lines) + 1
 
         if s.get('show_fee_rates', True):
             text = render_fees(
@@ -158,6 +168,38 @@ class Layout:
             text = render_sparkline(
                 data.hashrate_history, data.hashrate_current, w
             )
+            self._write(_move(row) + _clear_line() + text)
+            row += 2
+
+        if s.get('show_miner_pool', True) and data.miner_pool:
+            text = render_miner_pool(data.miner_pool, w)
+            self._write(_move(row) + _clear_line() + text)
+            row += 2
+
+        if s.get('show_block_weight', False) and data.block_weight > 0:
+            text = render_block_weight(
+                data.block_weight, data.max_block_weight, w
+            )
+            self._write(_move(row) + _clear_line() + text)
+            row += 2
+
+        if s.get('show_block_times', True) and data.block_time_history:
+            text = render_block_time_histogram(data.block_time_history, w)
+            self._write(_move(row) + _clear_line() + text)
+            row += 1
+            if data.streak_count >= 2:
+                text = render_streak(data.streak_type, data.streak_count, w)
+                self._write(_move(row) + _clear_line() + text)
+                row += 1
+            row += 1
+
+        if s.get('show_peers', False) and data.peer_count > 0:
+            text = render_peer_count(data.peer_count, w)
+            self._write(_move(row) + _clear_line() + text)
+            row += 2
+
+        if s.get('show_moon', False):
+            text = render_moon_phase(w)
             self._write(_move(row) + _clear_line() + text)
             row += 2
 
@@ -183,10 +225,10 @@ class Layout:
         """Update only the countdown timer (called every poll cycle)."""
         if self._is_zen() or not self.settings.get('show_countdown', True):
             return
-        # Countdown is rendered right after block height + info line
-        row = 2 + self._height_lines + 2
+        if self._countdown_row == 0:
+            return
         text = render_countdown(data.seconds_since_block, self.term_width)
-        self._write(_move(row) + _clear_line() + text)
+        self._write(_move(self._countdown_row) + _clear_line() + text)
 
     def heartbeat(self, data):
         """Toggle bold/dim on block height for breathing effect."""
