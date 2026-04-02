@@ -4711,10 +4711,10 @@ def lightningnetworkLOCAL():
     \u001b[33;1mP.\033[0;37;40m PyChat
     \u001b[33;1mZ.\033[0;37;40m Stats
     \u001b[33;1mT.\033[0;37;40m Ranking
-    \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40m{lnbitspaid}\033[0;37;40m
+    \u001b[33;1mQ.\033[0;37;40m LNBits List LNURL     \033[3;35;40mFREE\033[0;37;40m
+    \u001b[33;1mS.\033[0;37;40m LNBits Create LNURL   \033[3;35;40mFREE\033[0;37;40m
     \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version , lnbitspaid = "UNLOCKED" if os.path.isfile("lnbitSN.conf") else "LOCKED"))
+    \n\n\x1b[?25h""".format(n,b, version))
     lightningnetworkLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def chatConn():
@@ -4835,9 +4835,9 @@ def APIMenuLOCAL():
     \033[1;32;40mD.\033[0;37;40m CoinGecko
     \033[1;32;40mE.\033[0;37;40m Rate.sx
     \033[1;32;40mF.\033[0;37;40m BWT
-    \033[1;32;40mG.\033[0;37;40m LNBits        \033[3;35;40m{lnbitspaid}\033[0;37;40m
-    \033[1;32;40mH.\033[0;37;40m LNPay         \033[3;35;40m{lnpaypaid}\033[0;37;40m
-    \033[1;32;40mI.\033[0;37;40m OpenNode      \033[3;35;40m{opennodepaid}\033[0;37;40m
+    \033[1;32;40mG.\033[0;37;40m LNBits        \033[3;35;40mFREE\033[0;37;40m
+    \033[1;32;40mH.\033[0;37;40m LNPay         \033[3;35;40mFREE\033[0;37;40m
+    \033[1;32;40mI.\033[0;37;40m OpenNode      \033[3;35;40mFREE\033[0;37;40m
     \033[1;32;40mJ.\033[0;37;40m SatNode
     \033[1;32;40mK.\033[0;37;40m Weather
     \033[1;32;40mL.\033[0;37;40m Arcade
@@ -4854,7 +4854,7 @@ def APIMenuLOCAL():
     \033[1;32;40mX.\033[0;37;40m Template
     \033[1;32;40mZ.\033[0;37;40m PyBLOCK Pool
     \u001b[33;1mEnter.\033[0;37;40m Return
-    \n\n\x1b[?25h""".format(n,b, version ,lnbitspaid = "PAID" if os.path.isfile("lnbitSN.conf") else "PREMIUM", lnpaypaid = "PAID" if os.path.isfile("lnpaySN.conf") else "PREMIUM", opennodepaid = "PAID" if os.path.isfile("opennodeSN.conf") else "PREMIUM"))
+    \n\n\x1b[?25h""".format(n,b, version))
     platfformsLOCALcontrol(input("\033[1;32;40mSelect option: \033[0;37;40m"))
 
 def decodeHex(): # show hex
@@ -6080,216 +6080,22 @@ def menuSelectionLN():
         menuLND()
 
 def aaccPPiLNBits():
-    try:
-        bitLN = {"NN":"","pd":""}
-        if os.path.isfile('config/lnbitSN.conf'):
-            with open("config/lnbitSN.conf", "r") as f:
-                bitData = json.load(f)
-                bitLN = bitData
-            APILnbit()
-        else:
-            qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-            )
-            bitLN['NN'] = randrange(10000000)
-            curl = (
-                'curl -X POST https://lnbits.com/api/v1/payments -d '
-                + "'{"
-                + f""""out": false, "amount": 1000, "memo": "LNBits on PyBLOCK {bitLN['NN']}" """
-                + "}'"
-                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-            clear()
-            blogo()
-            n = str(sh)
-            d = json.loads(n)
-            q = d['payment_request']
-            c = q.lower()
-            while True:
-                print("\033[1;30;47m")
-                qr.add_data(c)
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print(f"Lightning Invoice: {c}")
-                dn = str(d['checking_id'])
-                t.sleep(10)
-                checkcurl = (
-                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                )
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
-                clear()
-                blogo()
-                nn = str(rsh)
-                dd = json.loads(nn)
-                db = dd['paid']
-                if db is not True:
-                    continue
-
-                clear()
-                blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                with open("config/lnbitSN.conf", "w") as f:
-                    json.dump(bitLN, f, indent=2)
-                createFileConnLNBits()
-                break
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        clear()
-        blogo()
-        print("\n\tSERIAL NUMBER NOT FOUND\n")
-        input("Continue...")
+    if os.path.isfile('config/lnbitSN.conf'):
+        APILnbit()
+    else:
+        createFileConnLNBits()
 
 def aaccPPiLNPay():
-    try:
-        bitLN = {"NN":"","pd":""}
-        if os.path.isfile('config/lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            with open("config/lnpaySN.conf", "r") as f:
-                bitData = json.load(f) # Load the file 'bclock.conf'
-                bitLN = bitData # Copy the variable pathv to 'path'
-            APILnPay()
-        else:
-            qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-            )
-            bitLN['NN'] = randrange(10000000)
-            curl = (
-                'curl -X POST https://lnbits.com/api/v1/payments -d '
-                + "'{"
-                + f""""out": false, "amount": 1000, "memo": "LNPay on PyBLOCK {bitLN['NN']}" """
-                + "}'"
-                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-            clear()
-            blogo()
-            n = str(sh)
-            d = json.loads(n)
-            q = d['payment_request']
-            c = q.lower()
-            while True:
-                print("\033[1;30;47m")
-                qr.add_data(c)
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print(f"Lightning Invoice: {c}")
-                dn = str(d['checking_id'])
-                t.sleep(10)
-                checkcurl = (
-                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                )
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
-                clear()
-                blogo()
-                nn = str(rsh)
-                dd = json.loads(nn)
-                db = dd['paid']
-                if db is not True:
-                    continue
-
-                clear()
-                blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                with open("config/lnpaySN.conf", "w") as f:
-                    json.dump(bitLN, f, indent=2)
-                createFileConnLNPay()
-                break
-
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        clear()
-        blogo()
-        print("\n\tSERIAL NUMBER NOT FOUND\n")
-        input("Continue...")
+    if os.path.isfile('config/lnpaySN.conf'):
+        APILnPay()
+    else:
+        createFileConnLNPay()
 
 def aaccPPiOpenNode():
-    try:
-        bitLN = {"NN":"","pd":""}
-        if os.path.isfile('config/opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            with open("config/opennodeSN.conf", "r") as f:
-                bitData = json.load(f) # Load the file 'bclock.conf'
-                bitLN = bitData # Copy the variable pathv to 'path'
-            APIOpenNode()
-        else:
-            qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-            )
-            bitLN['NN'] = randrange(10000000)
-            curl = (
-                'curl -X POST https://lnbits.com/api/v1/payments -d '
-                + "'{"
-                + f""""out": false, "amount": 1000, "memo": "OpenNode on PyBLOCK {bitLN['NN']}" """
-                + "}'"
-                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-            clear()
-            blogo()
-            n = str(sh)
-            d = json.loads(n)
-            q = d['payment_request']
-            c = q.lower()
-            while True:
-                print("\033[1;30;47m")
-                qr.add_data(c)
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print(f"Lightning Invoice: {c}")
-                dn = str(d['checking_id'])
-                t.sleep(10)
-                checkcurl = (
-                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                )
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
-                clear()
-                blogo()
-                nn = str(rsh)
-                dd = json.loads(nn)
-                db = dd['paid']
-                if db is not True:
-                    continue
-
-                clear()
-                blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                with open("config/opennodeSN.conf", "w") as f:
-                    json.dump(bitLN, f, indent=2)
-                createFileConnOpenNode()
-                break
-
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        clear()
-        blogo()
-        print("\n\tSERIAL NUMBER NOT FOUND\n")
-        input("Continue...")
+    if os.path.isfile('config/opennodeSN.conf'):
+        APIOpenNode()
+    else:
+        createFileConnOpenNode()
 
 
 def aaccPPiTippinMe():
@@ -8288,11 +8094,9 @@ def lightningnetworkLOCALcontrol(lncore):
         blogo()
         ranConn()
     elif lncore in ["Q", "q"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLwList()
+        lnbitsLNURLwList()
     elif lncore in ["S", "s"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLw()
+        lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
 
@@ -8632,11 +8436,9 @@ def lightningnetworkREMOTEcontrol(lncore):
         blogo()
         ranConn()
     elif lncore in ["Q", "q"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLwList()
+        lnbitsLNURLwList()
     elif lncore in ["S", "s"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLw()
+        lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
 
