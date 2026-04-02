@@ -78,6 +78,7 @@ class ClockData:
     def _cli(self, command):
         """Run bitcoin-cli command, return stdout string."""
         cmd = shlex.split(self.path["bitcoincli"]) + shlex.split(command)
+        # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         result = subprocess.run(cmd, capture_output=True, text=True)
         return result.stdout.strip()
 

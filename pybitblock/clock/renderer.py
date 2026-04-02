@@ -242,8 +242,6 @@ class Layout:
         lines = output.rstrip('\n').split('\n')
 
         start_row = 2
-        if self._is_zen():
-            start_row = max(1, (self.term_height - len(lines)) // 2)
 
         # Apply dim on odd steps
         wrapper = _dim if self._heartbeat_step % 2 == 1 else lambda x: x

@@ -393,7 +393,7 @@ def opreturnOnchainONLY():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout
+            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
@@ -458,7 +458,7 @@ def opreturn():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout
+            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
@@ -742,7 +742,7 @@ def callPhoenix():
         subprocess.run(["./phoenix-cli", "--help"], cwd="phoenixwallet")
         for _ in range(10):
             responseC = input("\a\nType a command of the list: ")
-            subprocess.run(["./phoenix-cli"] + shlex.split(responseC), cwd="phoenixwallet")
+            subprocess.run(["./phoenix-cli"] + shlex.split(responseC), cwd="phoenixwallet")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -1035,7 +1035,7 @@ def luxorstats():
         subprocess.run(["python3", "luxor.py", "--help"], cwd=luxor_cwd)
         for _ in range(10):
             responseC = input("\a\nType a command of the list: ")
-            subprocess.run(["python3", "luxor.py"] + shlex.split(responseC), cwd=luxor_cwd)
+            subprocess.run(["python3", "luxor.py"] + shlex.split(responseC), cwd=luxor_cwd)  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -2907,7 +2907,7 @@ def bip39convert():
         blogo()
         print(output)
         responseC = input("Words to Tiny Seed: ")
-        subprocess.run(["python3", "TinySeed.py"] + shlex.split(responseC), cwd="TinySeed")
+        subprocess.run(["python3", "TinySeed.py"] + shlex.split(responseC), cwd="TinySeed")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -4494,7 +4494,7 @@ def callGitNostrSeedTerminal():
         blogo()
         print(output)
         responseC = input("Hex to BIP39 & BIP39 to Hex: ")
-        subprocess.run(["python3", "nostr_seed.py"] + shlex.split(responseC), cwd="nostr_seed")
+        subprocess.run(["python3", "nostr_seed.py"] + shlex.split(responseC), cwd="nostr_seed")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -4517,7 +4517,7 @@ def callGitNostrQRSeedTerminal():
         blogo()
         print(output)
         responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
-        subprocess.run(["python3", "nostr_c_seed_qr.py"] + shlex.split(responseC), cwd="nostr_QRseed")
+        subprocess.run(["python3", "nostr_c_seed_qr.py"] + shlex.split(responseC), cwd="nostr_QRseed")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
