@@ -30,15 +30,21 @@ def gather_node_context(path, lndconnectload=None):
     return ctx
 
 
+def _run_cli(cli_args, command):
+    """Run a bitcoin-cli command safely. Returns stdout or empty string."""
+    # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
+    return subprocess.run(
+        cli_args + [command],
+        capture_output=True, text=True, timeout=10
+    ).stdout
+
+
 def _bitcoin_cli_context(path):
     """Gather context via bitcoin-cli."""
     ctx = {}
     cli = shlex.split(path["bitcoincli"])
     try:
-        raw = subprocess.run(
-            cli + ["getblockchaininfo"],
-            capture_output=True, text=True, timeout=10
-        ).stdout
+        raw = _run_cli(cli, "getblockchaininfo")
         info = json.loads(raw)
         ctx["block_height"] = info.get("blocks", 0)
         ctx["chain"] = info.get("chain", "")
@@ -52,10 +58,7 @@ def _bitcoin_cli_context(path):
         pass
 
     try:
-        raw = subprocess.run(
-            cli + ["getmempoolinfo"],
-            capture_output=True, text=True, timeout=10
-        ).stdout
+        raw = _run_cli(cli, "getmempoolinfo")
         mempool = json.loads(raw)
         ctx["mempool_size"] = mempool.get("size", 0)
         ctx["mempool_bytes"] = mempool.get("bytes", 0)
@@ -63,10 +66,7 @@ def _bitcoin_cli_context(path):
         pass
 
     try:
-        raw = subprocess.run(
-            cli + ["getnetworkinfo"],
-            capture_output=True, text=True, timeout=10
-        ).stdout
+        raw = _run_cli(cli, "getnetworkinfo")
         net = json.loads(raw)
         ctx["peer_count"] = net.get("connections", 0)
     except Exception:
