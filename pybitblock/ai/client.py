@@ -10,6 +10,7 @@ import os
 import requests
 
 ASTROLEXIS_API = os.getenv("ASTROLEXIS_API", "https://api.astrolexis.space")
+ASTROLEXIS_API_LOCAL = os.getenv("ASTROLEXIS_API_LOCAL", "http://localhost:10400")
 
 
 class AstrolexisClient:
@@ -23,13 +24,33 @@ class AstrolexisClient:
             "Content-Type": "application/json",
         }
 
+    def _request(self, method, path, **kwargs):
+        """Make request with automatic local fallback."""
+        kwargs.setdefault("timeout", 10)
+        url = f"{self.base_url}{path}"
+        try:
+            r = method(url, headers=self.headers, **kwargs)
+            if r.status_code == 404 and self.base_url != ASTROLEXIS_API_LOCAL:
+                # Fallback to local if available
+                r = method(
+                    f"{ASTROLEXIS_API_LOCAL}{path}",
+                    headers=self.headers, **kwargs
+                )
+            r.raise_for_status()
+            return r
+        except requests.exceptions.ConnectionError:
+            if self.base_url != ASTROLEXIS_API_LOCAL:
+                r = method(
+                    f"{ASTROLEXIS_API_LOCAL}{path}",
+                    headers=self.headers, **kwargs
+                )
+                r.raise_for_status()
+                return r
+            raise
+
     def verify(self):
         """Verify token and get balance."""
-        r = requests.post(
-            f"{self.base_url}/v1/auth/verify",
-            headers=self.headers, timeout=10
-        )
-        r.raise_for_status()
+        r = self._request(requests.post, "/v1/auth/verify")
         return r.json()
 
     def get_balance(self):
@@ -38,22 +59,12 @@ class AstrolexisClient:
 
     def topup(self, amount_sats):
         """Create a Lightning invoice for top-up."""
-        r = requests.post(
-            f"{self.base_url}/v1/topup",
-            headers=self.headers,
-            json={"amount": amount_sats},
-            timeout=10,
-        )
-        r.raise_for_status()
+        r = self._request(requests.post, "/v1/topup", json={"amount": amount_sats})
         return r.json()
 
     def check_payment(self, payment_hash):
         """Check if a top-up invoice has been paid."""
-        r = requests.get(
-            f"{self.base_url}/v1/topup/check/{payment_hash}",
-            headers=self.headers, timeout=10,
-        )
-        r.raise_for_status()
+        r = self._request(requests.get, f"/v1/topup/check/{payment_hash}")
         return r.json()["paid"]
 
     def chat(self, messages, node_context=None,
@@ -69,27 +80,16 @@ class AstrolexisClient:
             payload["node_context"] = node_context
 
         if not stream:
-            r = requests.post(
-                f"{self.base_url}/v1/chat",
-                headers=self.headers,
-                json=payload,
-                timeout=60,
-            )
-            r.raise_for_status()
+            r = self._request(requests.post, "/v1/chat", json=payload, timeout=60)
             return r.json()
 
         return self._stream_chat(payload)
 
     def _stream_chat(self, payload):
         """Internal generator for streaming chat responses."""
-        r = requests.post(
-            f"{self.base_url}/v1/chat",
-            headers=self.headers,
-            json=payload,
-            stream=True,
-            timeout=60,
+        r = self._request(
+            requests.post, "/v1/chat", json=payload, stream=True, timeout=60
         )
-        r.raise_for_status()
 
         for line in r.iter_lines(decode_unicode=True):
             if line and line.startswith("data: "):
@@ -103,9 +103,5 @@ class AstrolexisClient:
 
     def usage(self, days=30):
         """Get usage statistics."""
-        r = requests.get(
-            f"{self.base_url}/v1/usage?days={days}",
-            headers=self.headers, timeout=10,
-        )
-        r.raise_for_status()
+        r = self._request(requests.get, f"/v1/usage?days={days}")
         return r.json()
