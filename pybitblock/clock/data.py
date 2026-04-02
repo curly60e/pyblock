@@ -6,6 +6,7 @@ for fee rates and hashrate.
 """
 
 import json
+import shlex
 import subprocess
 import threading
 import time
@@ -69,7 +70,6 @@ class ClockData:
         self.streak_count = 0
 
         # Internal
-        self._lock = threading.Lock()
         self._bg_thread = None
         self._last_api_fetch = 0
 
@@ -77,8 +77,8 @@ class ClockData:
 
     def _cli(self, command):
         """Run bitcoin-cli command, return stdout string."""
-        cmd = f'{self.path["bitcoincli"]} {command}'
-        result = subprocess.run(cmd.split(), capture_output=True, text=True)
+        cmd = shlex.split(self.path["bitcoincli"]) + shlex.split(command)
+        result = subprocess.run(cmd, capture_output=True, text=True)
         return result.stdout.strip()
 
     def _rpc(self, method, params=None):
@@ -228,8 +228,7 @@ class ClockData:
                 diff = abs(timestamps[i] - timestamps[i + 1])
                 intervals.append(diff)
 
-            with self._lock:
-                self.block_time_history = intervals
+            self.block_time_history = intervals
 
             # Compute streak
             streak = 0
@@ -250,9 +249,8 @@ class ClockData:
                 else:
                     break
 
-            with self._lock:
-                self.streak_type = stype if streak >= 2 else ""
-                self.streak_count = streak if streak >= 2 else 0
+            self.streak_type = stype if streak >= 2 else ""
+            self.streak_count = streak if streak >= 2 else 0
 
         except Exception:
             pass
@@ -279,23 +277,21 @@ class ClockData:
         try:
             r = requests.get(MEMPOOL_FEES_URL, timeout=10)
             fees = r.json()
-            with self._lock:
-                self.fee_fastest = fees.get('fastestFee', 0)
-                self.fee_half_hour = fees.get('halfHourFee', 0)
-                self.fee_hour = fees.get('hourFee', 0)
+            self.fee_fastest = fees.get('fastestFee', 0)
+            self.fee_half_hour = fees.get('halfHourFee', 0)
+            self.fee_hour = fees.get('hourFee', 0)
         except Exception:
             pass
 
         try:
             r = requests.get(MEMPOOL_HASHRATE_URL, timeout=10)
             data = r.json()
-            with self._lock:
-                self.hashrate_current = data.get('currentHashrate', 0)
-                self.difficulty = data.get('currentDifficulty', 0)
-                hashrates = data.get('hashrates', [])
-                self.hashrate_history = [
-                    h.get('avgHashrate', 0) for h in hashrates[-20:]
-                ]
+            self.hashrate_current = data.get('currentHashrate', 0)
+            self.difficulty = data.get('currentDifficulty', 0)
+            hashrates = data.get('hashrates', [])
+            self.hashrate_history = [
+                h.get('avgHashrate', 0) for h in hashrates[-20:]
+            ]
         except Exception:
             pass
 
