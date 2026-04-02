@@ -49,7 +49,7 @@ def _setup_token(cfg):
   Powered by \033[1;36;40mAstrolexis KCode\033[0;37;40m
 
   To use the AI Assistant, you need an Astrolexis token.
-  Get yours at: \033[1;33;40mhttps://astrolexis.com/pyblock\033[0;37;40m
+  Get yours at: \033[1;33;40mhttps://astrolexis.space/pyblock\033[0;37;40m
 
   Enter your token below, or press Enter to cancel.
 """)
