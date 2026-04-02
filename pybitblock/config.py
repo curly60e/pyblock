@@ -18,7 +18,17 @@ import os
 _DEFAULT_PATH = {"ip_port": "", "rpcuser": "", "rpcpass": "", "bitcoincli": ""}
 _DEFAULT_LND = {"ip_port": "", "tls": "", "macaroon": "", "ln": ""}
 _DEFAULT_SETTINGS = {"gradient": "", "design": "block", "colorA": "green", "colorB": "yellow"}
-_DEFAULT_SETTINGS_CLOCK = {"gradient": "", "colorA": "green", "colorB": "yellow"}
+_DEFAULT_SETTINGS_CLOCK = {
+    "gradient": "", "colorA": "green", "colorB": "yellow",
+    "show_countdown": True, "show_epoch_bar": True,
+    "show_fee_rates": True, "show_sparkline": False,
+    "show_utc_time": False, "zen_mode": False,
+    "animation": "matrix",
+    "fireworks": True,
+    "generative_art": False,
+    "sound": "bell",
+    "heartbeat": True,
+}
 
 
 def _env_bitcoin_config():

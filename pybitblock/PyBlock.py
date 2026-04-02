@@ -882,70 +882,11 @@ def some_other_function():
 def execute_visualizer():
     block_visualizer.run_visualizer()
 
-def artist(): # here we convert the result of the command 'getblockcount' on a random art design
-    while True:
-        try:
-            clear()
-            close()
-            design()
-        except KeyboardInterrupt:
-            break
-        except Exception as e:
-            logger.debug("Loop interrupted: %s", e)
-            break
-
-def design():
-    if os.path.isfile('config/pyblocksettingsClock.conf') or os.path.isfile('config/pyblocksettingsClock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        settingsv = json.load(open("config/pyblocksettingsClock.conf", "r")) # Load the file 'bclock.conf'
-        settingsClock = settingsv # Copy the variable pathv to 'path'
-    else:
-        settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
-        with open("config/pyblocksettingsClock.conf", "w") as f: json.dump(settingsClock, f, indent=2)
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
-    b = block
-    a = b
-    output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-    print("\033[0;37;40m\x1b[?25l" + output)
-    while True:
-        x = a
-        bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
-        b = block
-        if b > a:
-            clear()
-            close()
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\a\x1b[?25l" + output)
-            bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-            bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
-            ll = bb
-            bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-            qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
-            yy = json.loads(qq)
-            mm = yy
-            outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\x1b[?25l" + outputsize)
-            outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
-            print("\x1b[?25l" + outputtxs)
-            sh = int(mm['nTx']) / 4
-            shq = int(sh)
-            ss = str(rectangle(shq))
-            print(ss.replace("None",""))
-            t.sleep(10)
-            txs = str(mm['nTx'])
-            if txs == "1":
-                try:
-                    p = subprocess.Popen(['curl', 'https://ascii.live/forrest'])
-                    p.wait(5)
-                except subprocess.TimeoutExpired:
-                    p.kill()
-            print("\033[0;37;40m\x1b[?25l")
-            clear()
-            close()
-            a = b
-            output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
-            print("\x1b[?25l" + output)
+def artist():
+    """Launch the enhanced block clock."""
+    from clock import run_clock
+    mode = "remote" if not path.get("bitcoincli") else "local"
+    run_clock(mode, path, cfg.settings_clock)
 
 
 #--------------------------------- Hex Block Decoder Functions -------------------------------------
@@ -3926,6 +3867,7 @@ def settings4Local():
     \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
     \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
     \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
+    \u001b[38;5;27mD.\033[0;37;40m Clock Display Settings
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, alias['alias'], d['blocks'], version, ()))
     menuSettingsLocal(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -3950,6 +3892,7 @@ def settings4LocalOnchainONLY():
     \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
     \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
     \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
+    \u001b[38;5;27mD.\033[0;37;40m Clock Display Settings
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(n, d['blocks'], version, ()))
     menuSettingsLocalOnchainONLY(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -3980,6 +3923,7 @@ def settings4Remote():
     \u001b[38;5;27mA.\033[0;37;40m Change Logo Design
     \u001b[38;5;27mB.\033[0;37;40m Change Logo Colors
     \u001b[38;5;27mC.\033[0;37;40m Change Clock Colors
+    \u001b[38;5;27mD.\033[0;37;40m Clock Display Settings
     \u001b[33;1mEnter.\033[0;37;40m Return
     \n\n\x1b[?25h""".format(a, alias['alias'], d['blocks'], version, ()))
     menuSettingsRemote(input("\033[1;32;40mSelect option: \033[0;37;40m"))
@@ -5139,36 +5083,29 @@ def colorsSelectRainbowEndOnchainONLY():
 
 def menuSelection():
     chln = {"fullbtclnd":"","fullbtc":"","cropped":""}
-    if os.path.isfile('config/intro.conf'):
-        chain = json.load(open("config/intro.conf", "r"))
-        chln = chain
+    if cfg.has_config('intro.conf'):
+        chln = cfg.intro_mode
         print(chln + "\n")
         if chln == "B":
-            path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
+            path = cfg.path
             MainMenuLOCALChainONLY()
         elif chln == "A":
-            path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-            pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
-            path = pathv # Copy the variable pathv to 'path'
+            path = cfg.path
             MainMenuLOCAL()
         elif chln == "C":
             from SPV.spvblock import MainMenuCROPPED as _lite_menu
             _lite_menu()
     else:
-        if os.path.isfile('config/blndconnect.conf'):
+        if cfg.has_config('blndconnect.conf'):
             chln['offchain'] = "offchain"
         else:
             chln['onchain'] = "onchain"
 
-        with open("config/selection.conf", "w") as f: json.dump(chln, f, indent=2)
+        cfg.save("selection.conf", chln)
 
 
 def menuSelectionLN():
-    lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "lncli":""}
-    lndconnectData = json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = cfg.lndconnectload
     if lndconnectload['ln']:
         menuLNDLOCAL()
     else:
@@ -5452,6 +5389,8 @@ def menuSettingsLocal(menuSTT):
         clear()
         blogo()
         colorsC()
+    elif menuSTT in ["D", "d"]:
+        clockDisplaySettings()
 
 def menuSettingsLocalOnchainONLY(menuSTT):
     if menuSTT in ["A", "a"]:
@@ -5466,6 +5405,8 @@ def menuSettingsLocalOnchainONLY(menuSTT):
         clear()
         blogo()
         colorsCOnchainONLY()
+    elif menuSTT in ["D", "d"]:
+        clockDisplaySettings()
 
 def menuSettingsRemote(menuSTT):
     if menuSTT in ["A", "a"]:
@@ -5480,6 +5421,81 @@ def menuSettingsRemote(menuSTT):
         clear()
         blogo()
         colorsCRemote()
+    elif menuSTT in ["D", "d"]:
+        clockDisplaySettings()
+
+def clockDisplaySettings():
+    """Interactive settings menu for clock display features."""
+    while True:
+        try:
+            clear()
+            blogo()
+            s = cfg.settings_clock
+
+            def _on_off(val):
+                return "\033[1;32;40mON\033[0;37;40m" if val else "\033[1;31;40mOFF\033[0;37;40m"
+
+            print("""\t\t
+    \033[1;37;40mClock Display Settings\033[0;37;40m
+
+    \u001b[38;5;27m1.\033[0;37;40m Countdown Timer        {}
+    \u001b[38;5;27m2.\033[0;37;40m Epoch Progress Bar     {}
+    \u001b[38;5;27m3.\033[0;37;40m Fee Rate Indicator     {}
+    \u001b[38;5;27m4.\033[0;37;40m Hashrate Sparkline     {}
+    \u001b[38;5;27m5.\033[0;37;40m UTC Time Display       {}
+    \u001b[38;5;27m6.\033[0;37;40m Zen Mode               {}
+    \u001b[38;5;27m7.\033[0;37;40m Heartbeat Pulse        {}
+    \u001b[38;5;27m8.\033[0;37;40m Generative Art         {}
+    \u001b[38;5;27m9.\033[0;37;40m Fireworks on Milestones {}
+
+    \u001b[38;5;27mA.\033[0;37;40m Animation: \033[1;33;40m{}\033[0;37;40m
+    \u001b[38;5;27mS.\033[0;37;40m Sound:     \033[1;33;40m{}\033[0;37;40m
+    \u001b[33;1mEnter.\033[0;37;40m Return
+    \n\x1b[?25h""".format(
+                _on_off(s.get('show_countdown', True)),
+                _on_off(s.get('show_epoch_bar', True)),
+                _on_off(s.get('show_fee_rates', True)),
+                _on_off(s.get('show_sparkline', False)),
+                _on_off(s.get('show_utc_time', False)),
+                _on_off(s.get('zen_mode', False)),
+                _on_off(s.get('heartbeat', True)),
+                _on_off(s.get('generative_art', False)),
+                _on_off(s.get('fireworks', True)),
+                s.get('animation', 'matrix'),
+                s.get('sound', 'bell'),
+            ))
+
+            opt = input("\033[1;32;40mSelect option: \033[0;37;40m").strip()
+
+            toggles = {
+                '1': 'show_countdown', '2': 'show_epoch_bar',
+                '3': 'show_fee_rates', '4': 'show_sparkline',
+                '5': 'show_utc_time', '6': 'zen_mode',
+                '7': 'heartbeat', '8': 'generative_art',
+                '9': 'fireworks',
+            }
+
+            if opt in toggles:
+                key = toggles[opt]
+                s[key] = not s.get(key, False)
+                cfg.save("pyblocksettingsClock.conf", s)
+            elif opt in ['A', 'a']:
+                modes = ['matrix', 'odometer', 'none']
+                current = s.get('animation', 'matrix')
+                idx = (modes.index(current) + 1) % len(modes) if current in modes else 0
+                s['animation'] = modes[idx]
+                cfg.save("pyblocksettingsClock.conf", s)
+            elif opt in ['S', 's']:
+                modes = ['bell', 'pattern', 'silent']
+                current = s.get('sound', 'bell')
+                idx = (modes.index(current) + 1) % len(modes) if current in modes else 0
+                s['sound'] = modes[idx]
+                cfg.save("pyblocksettingsClock.conf", s)
+            else:
+                break
+        except KeyboardInterrupt:
+            break
+
 
 def menuColors(menuCLS):
     if menuCLS in ["A", "a"]:
@@ -6085,18 +6101,9 @@ def menuWeatherOnchainONLY(menuWD):
 
 def mainmenuControl(menuS, mode): #Unified execution of Main Menu options
     if menuS in ["A", "a"]:
-        if mode == "remote":
-            while True:
-                try:
-                    clear()
-                    close()
-                    remotegetblock()
-                    tmp()
-                except Exception as e:
-                    logger.debug("Loop interrupted: %s", e)
-                    break
-        else:
-            artist()
+        from clock import run_clock
+        clock_mode = "remote" if mode == "remote" else "local"
+        run_clock(clock_mode, path, cfg.settings_clock)
     elif menuS in ["B", "b"]:
         if mode == "remote":
             bitcoincoremenuREMOTE()
@@ -7435,8 +7442,7 @@ if __name__ == "__main__":
         mode = "lite"
         cfg.load()
         if cfg.has_config('intro.conf'):
-            with open("config/intro.conf", "r") as f:
-                init_data = json.load(f)
+            init_data = cfg.intro_mode
             if isinstance(init_data, str):
                 if init_data == "A":
                     mode = "local"
