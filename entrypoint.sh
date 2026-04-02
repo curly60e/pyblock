@@ -78,6 +78,11 @@ fi
 
 echo "[PyBLOCK] Starting..."
 
+# Ensure UTF-8 for all terminal output (ttyd, AI responses, etc.)
+export LANG="${LANG:-C.UTF-8}"
+export LC_ALL="${LC_ALL:-C.UTF-8}"
+export PYTHONIOENCODING=utf-8
+
 # Launch PyBLOCK via ttyd
 exec ttyd -W -p "${PYBLOCK_PORT:-6969}" \
     ${PYBLOCK_TTYD_AUTH:+-c "$PYBLOCK_TTYD_AUTH"} \

@@ -132,8 +132,8 @@ def _chat_loop(client, path, lndconnectload, balance):
 
     while True:
         try:
-            # Prompt
-            user_input = input(f"  {G}>{D} ").strip()
+            # Prompt — distinct color from AI response
+            user_input = input(f"\n  {Y}pyblock>{D} ").strip()
             if not user_input:
                 continue
 
@@ -172,8 +172,10 @@ def _chat_loop(client, path, lndconnectload, balance):
             except Exception:
                 pass
 
+            # Visual separator between user input and AI response
+            print(f"\n  {C}{'─' * 60}{D}")
+
             # Stream response
-            print()
             full_response = ""
             try:
                 for chunk in client.chat(
@@ -184,6 +186,7 @@ def _chat_loop(client, path, lndconnectload, balance):
                         full_response += text
 
                 _render_response(full_response)
+                print(f"  {C}{'─' * 60}{D}")
 
                 # Add to conversation history
                 conversation.append({
@@ -196,8 +199,8 @@ def _chat_loop(client, path, lndconnectload, balance):
                 except Exception:
                     pass
 
-                # Show cost inline
-                print(f"\n  {DIM}Balance: {balance:,} sats{D}\n")
+                # Show balance below separator
+                print(f"  {DIM}Balance: {balance:,} sats{D}")
 
             except requests.exceptions.HTTPError as e:
                 if e.response is not None and e.response.status_code == 402:
