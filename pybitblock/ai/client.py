@@ -58,7 +58,7 @@ class AstrolexisClient:
 
     def chat(self, messages, node_context=None,
              model="claude-sonnet-4-6", stream=True):
-        """Send a chat query. Yields SSE chunks when streaming."""
+        """Send a chat query. Returns dict or yields SSE chunks."""
         payload = {
             "model": model,
             "messages": messages,
@@ -68,17 +68,28 @@ class AstrolexisClient:
         if node_context:
             payload["node_context"] = node_context
 
+        if not stream:
+            r = requests.post(
+                f"{self.base_url}/v1/chat",
+                headers=self.headers,
+                json=payload,
+                timeout=60,
+            )
+            r.raise_for_status()
+            return r.json()
+
+        return self._stream_chat(payload)
+
+    def _stream_chat(self, payload):
+        """Internal generator for streaming chat responses."""
         r = requests.post(
             f"{self.base_url}/v1/chat",
             headers=self.headers,
             json=payload,
-            stream=stream,
+            stream=True,
             timeout=60,
         )
         r.raise_for_status()
-
-        if not stream:
-            return r.json()
 
         for line in r.iter_lines(decode_unicode=True):
             if line and line.startswith("data: "):
