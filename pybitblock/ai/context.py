@@ -1,6 +1,7 @@
 """Gather Bitcoin/Lightning node data for AI context injection."""
 
 import json
+import shlex
 import subprocess
 
 import requests
@@ -32,10 +33,10 @@ def gather_node_context(path, lndconnectload=None):
 def _bitcoin_cli_context(path):
     """Gather context via bitcoin-cli."""
     ctx = {}
-    cli = path["bitcoincli"]
+    cli = shlex.split(path["bitcoincli"])
     try:
         raw = subprocess.run(
-            [cli, "getblockchaininfo"],
+            cli + ["getblockchaininfo"],
             capture_output=True, text=True, timeout=10
         ).stdout
         info = json.loads(raw)
@@ -52,7 +53,7 @@ def _bitcoin_cli_context(path):
 
     try:
         raw = subprocess.run(
-            [cli, "getmempoolinfo"],
+            cli + ["getmempoolinfo"],
             capture_output=True, text=True, timeout=10
         ).stdout
         mempool = json.loads(raw)
@@ -63,7 +64,7 @@ def _bitcoin_cli_context(path):
 
     try:
         raw = subprocess.run(
-            [cli, "getnetworkinfo"],
+            cli + ["getnetworkinfo"],
             capture_output=True, text=True, timeout=10
         ).stdout
         net = json.loads(raw)
