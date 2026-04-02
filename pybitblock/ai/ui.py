@@ -16,8 +16,11 @@ from pblogo import blogo
 from .client import AstrolexisClient
 from .context import gather_node_context
 
-import io
-_console = Console(file=io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace'))
+# Ensure UTF-8 output for AI responses (accents, ñ, etc.)
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+_console = Console()
 
 # Colors
 G = "\033[1;32;40m"   # green
