@@ -13,7 +13,7 @@ def _color256(n):
 RESET = "\033[0m"
 
 
-def hash_art(block_hash, width=40, height=6):
+def hash_art(block_hash, width=40, height=6, term_width=80):
     """Generate deterministic ASCII art from a block hash string.
 
     Each pair of hex digits maps to a glyph and color.
@@ -29,6 +29,7 @@ def hash_art(block_hash, width=40, height=6):
 
     half_w = width // 2
     lines = []
+    pad = max(0, (term_width - width) // 2)
 
     for row in range(height):
         left = []
@@ -45,8 +46,6 @@ def hash_art(block_hash, width=40, height=6):
         # Mirror for symmetry
         right = list(reversed(left))
         line = ''.join(left) + ''.join(right) + RESET
-        # Center it
-        pad = max(0, (80 - width) // 2)
         lines.append(' ' * pad + line)
 
     return '\n'.join(lines)

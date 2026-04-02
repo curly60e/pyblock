@@ -213,7 +213,7 @@ class Layout:
             row += len(lines) + 1
 
         if s.get('generative_art', False) and data.block_hash:
-            art = hash_art(data.block_hash, min(60, w - 4), 6)
+            art = hash_art(data.block_hash, min(60, w - 4), 6, w)
             lines = art.split('\n')
             for i, line in enumerate(lines):
                 self._write(_move(row + i) + _clear_line() + line)
