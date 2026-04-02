@@ -222,7 +222,7 @@ def getPoolSlushCheck():
     api = ""
     try:
         if os.path.isfile("config/braiinsAPI.conf"):
-            apiv = json.load(open("config/braiinsAPI.conf", "r"))
+            with open("config/braiinsAPI.conf", "r") as f: apiv = json.load(f)
             api = apiv
         else:
             clear()
@@ -303,7 +303,7 @@ def ckpoolpoolLOCALOnchainONLY():
     api = ""
     try:
         if os.path.isfile("config/CKPOOLAPI.conf"):
-            apiv = json.load(open("config/CKPOOLAPI.conf", "r"))
+            with open("config/CKPOOLAPI.conf", "r") as f: apiv = json.load(f)
             api = apiv
         else:
             clear()
@@ -461,7 +461,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
     api = ""
     try:
         if os.path.isfile("config/PYBLOCKPOOLAPI.conf"):
-            apiv = json.load(open("config/PYBLOCKPOOLAPI.conf", "r"))
+            with open("config/PYBLOCKPOOLAPI.conf", "r") as f: apiv = json.load(f)
             api = apiv
         else:
             clear()
@@ -1072,7 +1072,7 @@ def epoch():
 
 def pdfconvert():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/bclock.conf", "r") as f: pathv = json.load(f)
     path = pathv # Copy the variable pathv to 'path'
     if not os.path.isfile("config/bitcoin.pdf"):
         clear()
@@ -3596,7 +3596,7 @@ def mempoolmenuOnchainONLY():
 def APILnbit():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= json.load(open("lnbitSN.conf", "r")) # Load the file 'bclock.conf'
+        with open("lnbitSN.conf", "r") as f: bitData = json.load(f)
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3646,13 +3646,13 @@ def APILnbit():
 
 def APILnbitOnchainONLY():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
-    pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/bclock.conf", "r") as f: pathv = json.load(f)
     path = pathv # Copy the variable pathv to 'path'
-    lndconnectData = json.load(open("config/blndconnect.conf", "r")) # Load the file 'bclock.conf'
+    with open("config/blndconnect.conf", "r") as f: lndconnectData = json.load(f)
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= json.load(open("lnbitSN.conf", "r")) # Load the file 'bclock.conf'
+        with open("lnbitSN.conf", "r") as f: bitData = json.load(f)
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3697,7 +3697,7 @@ def APILnbitOnchainONLY():
 def APILnPay():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= json.load(open("lnpaySN.conf", "r")) # Load the file 'bclock.conf'
+        with open("lnpaySN.conf", "r") as f: bitData = json.load(f)
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3746,7 +3746,7 @@ def APILnPay():
 def APILnPayOnchainONLY():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= json.load(open("lnpaySN.conf", "r")) # Load the file 'bclock.conf'
+        with open("lnpaySN.conf", "r") as f: bitData = json.load(f)
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3789,7 +3789,7 @@ def APILnPayOnchainONLY():
 def APIOpenNode():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= json.load(open("opennodeSN.conf", "r")) # Load the file 'bclock.conf'
+        with open("opennodeSN.conf", "r") as f: bitData = json.load(f)
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -3838,7 +3838,7 @@ def APIOpenNode():
 def APIOpenNodeOnchainONLY():
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-        bitData= json.load(open("opennodeSN.conf", "r")) # Load the file 'bclock.conf'
+        with open("opennodeSN.conf", "r") as f: bitData = json.load(f)
         bitLN = bitData # Copy the variable pathv to 'path'
     clear()
     blogo()
@@ -7353,7 +7353,7 @@ def commandsINIT(initCONF):
         os.makedirs("config", exist_ok=True)
 
     if os.path.isfile('config/intro.conf'):
-        intro = json.load(open("config/intro.conf", "r"))
+        with open("config/intro.conf", "r") as f: intro = json.load(f)
         initCONF = intro
         if initCONF['fullbtclnd']:
             fullbtclnd()
@@ -7398,13 +7398,18 @@ def fullbtc():
         os.makedirs("config", exist_ok=True)
 
     if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
+        with open("config/bclock.conf", "r") as f: pathv = json.load(f)
         path = pathv # Copy the variable pathv to 'path'
     else:
         blogo()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
         print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in 𝗕𝗟𝗔𝗡𝗞.\n")
-        path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
+        ip_port_input = input("Insert IP:PORT to access your remote Bitcoin-Cli node: ").strip()
+        import re
+        if ip_port_input and not re.match(r'^[\w.\-]+:\d+$', ip_port_input):
+            print("\n  Invalid format. Expected: hostname:port (e.g. 192.168.1.1:8332)\n")
+            return
+        path['ip_port'] = f"http://{ip_port_input}"
         path['rpcuser'] = input("RPC User: ")
         path['rpcpass'] = input("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
@@ -7419,13 +7424,18 @@ def fullbtclnd():
         os.makedirs("config", exist_ok=True)
 
     if os.path.isfile('config/bclock.conf') or os.path.isfile('config/blnclock.conf'): # Check if the file 'bclock.conf' is in the same folder
-        pathv = json.load(open("config/bclock.conf", "r")) # Load the file 'bclock.conf'
+        with open("config/bclock.conf", "r") as f: pathv = json.load(f)
         path = pathv # Copy the variable pathv to 'path'
     else:
         blogo()
         print("Welcome to \033[1;31;40mPyBLOCK\033[0;37;40m\n\n")
         print("\n\tIf you are going to use your local node leave IP:PORT/USER/PASSWORD in 𝗕𝗟𝗔𝗡𝗞.\n")
-        path['ip_port'] = "http://{}".format(input("Insert IP:PORT to access your remote Bitcoin-Cli node: "))
+        ip_port_input = input("Insert IP:PORT to access your remote Bitcoin-Cli node: ").strip()
+        import re
+        if ip_port_input and not re.match(r'^[\w.\-]+:\d+$', ip_port_input):
+            print("\n  Invalid format. Expected: hostname:port (e.g. 192.168.1.1:8332)\n")
+            return
+        path['ip_port'] = f"http://{ip_port_input}"
         path['rpcuser'] = input("RPC User: ")
         path['rpcpass'] = input("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
@@ -7433,13 +7443,13 @@ def fullbtclnd():
         with open("config/bclock.conf", "w") as f: json.dump(path, f, indent=2)
 
     if os.path.isfile('config/blndconnect.conf'):
-        lndconnectData= json.load(open("config/blndconnect.conf", "r"))
+        with open("config/blndconnect.conf", "r") as f: lndconnectData = json.load(f)
         lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     else:
         clear()
         blogo()
         if os.path.isfile('config/init.conf'):
-            pqr = json.load(open("config/init.conf", "r"))
+            with open("config/init.conf", "r") as f: pqr = json.load(f)
             yesno = pqr
         else:
             yesno = input("You are going to 𝐜𝐨𝐧𝐧𝐞𝐜𝐭 your 𝐋𝐢𝐠𝐡𝐭𝐧𝐢𝐧𝐠 𝐍𝐨𝐝𝐞, type 𝐘𝐞𝐬 to continue: ")

@@ -196,7 +196,7 @@ def tick():
 \033[0;37;40m""")
 
 def canceled():
-    print("""
+    print(r"""
                    )              (         (
    (     (      ( /(    (         )\ )      )\ )
    )\    )\     )\())   )\   (   (()/(  (  (()/(
@@ -368,23 +368,18 @@ def opreturnOnchainONLY():
 
         print(output)
         message = input("Message: ")
-        curl = (
-            "curl --header "
-            + """"Content-Type: application/json" """
-            + "--request POST  --data "
-            + """'{"message":"""
-            + f'"{message}...PyBLOCK"'
-            + "}'"
-            + " https://opreturnbot.com/api/create"
-        )
-
         while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-        b = str(a)
+        r = requests.post(
+            "https://opreturnbot.com/api/create",
+            json={"message": f"{message}...PyBLOCK"},
+            headers={"Content-Type": "application/json"},
+            timeout=15,
+        )
+        b = r.text
         clear()
         blogo()
         print("\033[1;30;47m")
@@ -438,23 +433,18 @@ def opreturn():
 
         print(output)
         message = input("Message: ")
-        curl = (
-            "curl --header "
-            + """"Content-Type: application/json" """
-            + "--request POST  --data "
-            + """'{"message":"""
-            + f'"{message}...PyBLOCK"'
-            + "}'"
-            + " https://opreturnbot.com/api/create"
-        )
-
         while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-        b = str(a)
+        r = requests.post(
+            "https://opreturnbot.com/api/create",
+            json={"message": f"{message}...PyBLOCK"},
+            headers={"Content-Type": "application/json"},
+            timeout=15,
+        )
+        b = r.text
         clear()
         blogo()
         print("\033[1;30;47m")
@@ -808,7 +798,7 @@ def wallPhoenixBOLT12():
 
 def statsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
+        conn = r"""curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
         a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
@@ -1163,9 +1153,12 @@ def decodeStrDat(): # show srings
         )
 
         print(output)
-        responseC = input("Blk Dat: ")
-        cmd = f"""curl -s 'https://bitcoinstrings.com/blk'{responseC}.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        responseC = input("Blk Dat: ").strip()
+        if not responseC.isdigit():
+            print("\n  Invalid input. Must be a number.\n")
+            return
+        r = requests.get(f"https://bitcoinstrings.com/blk{responseC}.txt", timeout=15)
+        a = r.text
         clear()
         blogo()
         print("\nBLK: " + responseC)
@@ -1187,9 +1180,9 @@ def oceanH(): # show srings
         )
 
         print(output)
-        responseC = input("Your Bitcoin Address: ")
-        cmd = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        responseC = input("Your Bitcoin Address: ").strip()
+        r = requests.get(f"https://ocean.xyz/data/csv/hashrates/worker/{responseC}", timeout=15)
+        a = r.text
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
@@ -1223,9 +1216,9 @@ def oceanE(): # show srings
         )
 
         print(output)
-        responseC = input("Your Bitcoin Address: ")
-        cmd = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        responseC = input("Your Bitcoin Address: ").strip()
+        r = requests.get(f"https://ocean.xyz/template/workers/earningscards?user={responseC}", timeout=15)
+        a = r.text
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
@@ -1400,10 +1393,10 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = f"curl '{lang}.wttr.in/{selectData2}?F&{unit}'"
+            url = f"https://{lang}.wttr.in/{selectData2}?F&{unit}"
         else:
-            cmd = f'curl wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://wttr.in/{selectData}?F"
+        a = requests.get(url, headers={"User-Agent": "curl"}, timeout=15).text
         clear()
         blogo()
         print(a)
@@ -1459,11 +1452,10 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = f"curl 'v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'"
-
+            url = f"https://v2.wttr.in/{selectData2}?{unit}&F&lang={lang}"
         else:
-            cmd = f'curl v2.wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://v2.wttr.in/{selectData}?F"
+        a = requests.get(url, headers={"User-Agent": "curl"}, timeout=15).text
         clear()
         blogo()
         print(a)
@@ -1523,8 +1515,7 @@ def rateSXList():
         logger.debug("spvblock: %s", e)
     while True:
         try:
-            cmd = f"curl -s '{selectFiat}.rate.sx/?F&n=1'"
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            a = requests.get(f"https://{selectFiat}.rate.sx/?F&n=1", headers={"User-Agent": "curl"}, timeout=15).text
             clear()
             blogo()
             closed()
@@ -1581,8 +1572,8 @@ def rateSXGraph():
         logger.debug("spvblock: %s", e)
     while True:
         try:
-            cmd = f"curl -s '{selectFiat}.rate.sx/btc' | grep -v -E 'Use'"
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            r = requests.get(f"https://{selectFiat}.rate.sx/btc", headers={"User-Agent": "curl"}, timeout=15)
+            a = '\n'.join(line for line in r.text.splitlines() if 'Use' not in line)
             clear()
             blogo()
             closed()
