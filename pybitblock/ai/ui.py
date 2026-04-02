@@ -16,10 +16,6 @@ from pblogo import blogo
 from .client import AstrolexisClient
 from .context import gather_node_context
 
-# Ensure UTF-8 output for AI responses (accents, ñ, etc.)
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-
 _console = Console()
 
 # Colors
@@ -89,10 +85,18 @@ def _setup_token(cfg):
 
 
 def _render_response(text):
-    """Render AI response using Rich Markdown for proper formatting."""
-    _console.print()
-    _console.print(Markdown(text), width=min(80, _console.width - 4))
-    _console.print()
+    """Render AI response using Rich Markdown with forced UTF-8 output."""
+    import io
+    width = min(80, _console.width - 4)
+    buf = io.StringIO()
+    temp = Console(file=buf, width=width, force_terminal=True)
+    temp.print()
+    temp.print(Markdown(text), width=width)
+    temp.print()
+    rendered = buf.getvalue()
+    # Write as UTF-8 bytes directly to avoid encoding issues
+    sys.stdout.buffer.write(rendered.encode('utf-8'))
+    sys.stdout.buffer.flush()
 
 
 def _status_line(balance):
