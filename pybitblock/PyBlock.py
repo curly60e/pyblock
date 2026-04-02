@@ -96,18 +96,34 @@ def pathexec():
 def lndconnectexec():
     global lndconnectload
     lndconnectload = cfg.lndconnectload
+def _run_btc(command):
+    """Run bitcoin-cli safely with shlex-parsed args."""
+    # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
+    return subprocess.run(
+        [path['bitcoincli']] + shlex.split(command),
+        capture_output=True, text=True
+    ).stdout
+
+
+def _run_ln(command):
+    """Run lightning CLI safely with shlex-parsed args."""
+    # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
+    return subprocess.run(
+        [lndconnectload['ln']] + shlex.split(command),
+        capture_output=True, text=True
+    ).stdout
+
+
 #-----------------------------Slush--------------------------------
 
 def counttxs():
     try:
-        bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+        block = subprocess.run([path["bitcoincli"], "getblockcount"], capture_output=True, text=True).stdout
         b = block
         a = b
         pathexec()
         clear()
-        getrawmempool = " getrawmempool"
-        gnaa = subprocess.run([path['bitcoincli']] + getrawmempool.split(), capture_output=True, text=True).stdout
+        gnaa = subprocess.run([path['bitcoincli'], "getrawmempool"], capture_output=True, text=True).stdout
         gna1 = str(gnaa)
         d = json.loads(gna1)
         e = len(d)
@@ -116,11 +132,10 @@ def counttxs():
         getrawmempool = " getrawmempool"
         while True:
             x = a
-            bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+            block = subprocess.run([path["bitcoincli"], "getblockcount"], capture_output=True, text=True).stdout
             b = block
             pathexec()
-            gnaa = subprocess.run([path['bitcoincli']] + getrawmempool.split(), capture_output=True, text=True).stdout
+            gnaa = subprocess.run([path['bitcoincli'], "getrawmempool"], capture_output=True, text=True).stdout
             gna1 = str(gnaa)
             d = json.loads(gna1)
             e = len(d)
@@ -144,11 +159,9 @@ def counttxs():
                 print("\n\n\n")
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
                 print("\a\x1b[?25l" + output)
-                bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-                bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
-                ll = bb
-                bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-                qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
+                bb = subprocess.run([path["bitcoincli"], "getbestblockhash"], capture_output=True, text=True).stdout
+                ll = bb.strip()
+                qq = subprocess.run([path["bitcoincli"], "getblock", ll], capture_output=True, text=True).stdout
                 yy = json.loads(qq)
                 mm = yy
                 outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
@@ -176,7 +189,7 @@ def counttxs():
 def slDIFFConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/difficulty-stats"""
-        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
+        a = subprocess.run(shlex.split(conn), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -202,7 +215,7 @@ def slDIFFConn():
 def slPOOLConn():
     try:
         conn = """curl -s https://insights.braiins.com/api/v1.0/pool-stats?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
-        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
+        a = subprocess.run(shlex.split(conn), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -240,11 +253,11 @@ def getPoolSlushCheck():
             slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
 
 
-            c = subprocess.run(slushpoolbtc.split(), capture_output=True, text=True).stdout
+            c = subprocess.run(shlex.split(slushpoolbtc), capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['btc']
 
-            cblock = subprocess.run(slushpoolbtcblock.split(), capture_output=True, text=True).stdout
+            cblock = subprocess.run(shlex.split(slushpoolbtcblock), capture_output=True, text=True).stdout
             dblock = json.loads(cblock)
             fblock = dblock['btc']
             eblock = fblock['blocks']
@@ -319,7 +332,7 @@ def ckpoolpoolLOCALOnchainONLY():
             ckpool = f"curl https://solo.ckpool.org/users/{api} 2>/dev/null"
 
 
-            c = subprocess.run(ckpool.split(), capture_output=True, text=True).stdout
+            c = subprocess.run(shlex.split(ckpool), capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -427,7 +440,7 @@ def MemShell():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -436,7 +449,7 @@ def MemShell():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -477,7 +490,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
             pyblockpool = f"curl https://pyblock.xyz:8443/users/{api} 2>/dev/null"
 
 
-            c = subprocess.run(pyblockpool.split(), capture_output=True, text=True).stdout
+            c = subprocess.run(shlex.split(pyblockpool), capture_output=True, text=True).stdout
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -516,7 +529,7 @@ def getblock(): # get access to bitcoin-cli with the command getblockchaininfo
     while True:
         try:
             bitcoincli = " getblockchaininfo"
-            a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+            a = _run_btc(bitcoincli)
             b = json.loads(a)
             d = b
             print(d)
@@ -552,7 +565,7 @@ def searchTXS():
             output = render("search txs", colors=['yellow'], align='left', font='tiny')
             print(output)
             tx = input("Search Tx ID: ")
-            gnta = subprocess.run([path['bitcoincli']] + (gettxout + tx + " 1").split(), capture_output=True, text=True).stdout
+            gnta = _run_btc(gettxout + tx + " 1")
             gnt1 = str(gnta)
             gnt2 = json.loads(gnt1)
             if gnt2['bestblock']:
@@ -592,14 +605,14 @@ def untxsConn():
 
             print(output)
             getrawmempool = " getrawmempool"
-            gnaa = subprocess.run([path['bitcoincli']] + getrawmempool.split(), capture_output=True, text=True).stdout
+            gnaa = _run_btc(getrawmempool)
             gna1 = str(gnaa)
             d = json.loads(gna1)
             getrawtrans = " getrawtransaction "
             for b in d:
                 n = "".join(map(str, b))
                 m = getrawtrans + n + " 1"
-                gnba = subprocess.run([path['bitcoincli']] + m.split(), capture_output=True, text=True).stdout
+                gnba = _run_btc(m)
                 gnb1 = str(gnba)
                 abc = json.loads(gnb1)
                 ab = abc['vout']
@@ -642,11 +655,11 @@ def getnewaddressOnchain():
         getbal = " getbalance"
         getfeemempool = " getmempoolinfo"
         getunconfirm = " getunconfirmedbalance"
-        gnaa = subprocess.run([path['bitcoincli']] + getadd.split(), capture_output=True, text=True).stdout
+        gnaa = _run_btc(getadd)
         gna1 = str(gnaa)
-        gnbb = subprocess.run([path['bitcoincli']] + getbal.split(), capture_output=True, text=True).stdout
+        gnbb = _run_btc(getbal)
         gnb1 = str(gnbb)
-        gnua = subprocess.run([path['bitcoincli']] + getunconfirm.split(), capture_output=True, text=True).stdout
+        gnua = _run_btc(getunconfirm)
         gnub = str(gnua)
         output = render(
             str(f'{gnb1} BTC'), colors=['yellow'], align='left', font='tiny'
@@ -670,11 +683,11 @@ def getnewaddressOnchain():
         while True:
             x = a
             z = b
-            gnbb = subprocess.run([path['bitcoincli']] + getbal.split(), capture_output=True, text=True).stdout
+            gnbb = _run_btc(getbal)
             gnb1 = str(gnbb)
-            gnaaq = subprocess.run([path['bitcoincli']] + getfeemempool.split(), capture_output=True, text=True).stdout
+            gnaaq = _run_btc(getfeemempool)
             gna1q = str(gnaaq)
-            gnua = subprocess.run([path['bitcoincli']] + getunconfirm.split(), capture_output=True, text=True).stdout
+            gnua = _run_btc(getunconfirm)
             gnub = str(gnua)
             d = json.loads(gna1q)
             if gnub > a or gnb1 > b:
@@ -682,7 +695,7 @@ def getnewaddressOnchain():
                 blogo()
                 close()
                 getadd = " getnewaddress"
-                gnaa = subprocess.run([path['bitcoincli']] + getadd.split(), capture_output=True, text=True).stdout
+                gnaa = _run_btc(getadd)
                 gna1 = str(gnaa)
                 output = render(
                     str(f'{gnb1} BTC'),
@@ -697,7 +710,7 @@ def getnewaddressOnchain():
                 print("Unconfrmed: \u001b[31;1m{} BTC\033[0;37;40m".format(gnub.replace("\n","")))
                 print("---------------------------------------------------------------")
                 getfeemempool = " getmempoolinfo"
-                gnaaq = subprocess.run([path['bitcoincli']] + getfeemempool.split(), capture_output=True, text=True).stdout
+                gnaaq = _run_btc(getfeemempool)
                 gna1q = str(gnaaq)
                 d = json.loads(gna1q)
                 print("\033[1;30;47m")
@@ -723,7 +736,7 @@ def gettransactionsOnchain():
             clear()
             blogo()
             close()
-            gnaa = subprocess.run([path['bitcoincli']] + listtxs.split(), capture_output=True, text=True).stdout
+            gnaa = _run_btc(listtxs)
             gna1 = str(gnaa)
             d = json.loads(gna1)
             gnbb = subprocess.run([path['bitcoincli'], 'getbalance'], capture_output=True, text=True).stdout
@@ -764,7 +777,7 @@ def dumppk(): #
         print(output)
         responseC = input("Bitcoin Address: ")
         bitcoincli = " dumpprivkey "
-        subprocess.run([path['bitcoincli']] + (bitcoincli + responseC).split())
+        _run_btc(bitcoincli + responseC)
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("Wallet menu error: %s", e)
@@ -777,7 +790,7 @@ def wallmenu(): #
         output = render("Your Wallet info", colors=['yellow'], align='left', font='tiny')
         print(output)
         bitcoincli = " getwalletinfo"
-        subprocess.run([path['bitcoincli']] + bitcoincli.split())
+        _run_btc(bitcoincli)
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("Wallet menu error: %s", e)
@@ -791,7 +804,7 @@ def inffmenu(): #
         print(output)
         responseC = input("Bitcoin Address: ")
         bitcoincli = " getaddressinfo "
-        subprocess.run([path['bitcoincli']] + (bitcoincli + responseC).split())
+        _run_btc(bitcoincli + responseC)
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("Wallet menu error: %s", e)
@@ -804,7 +817,7 @@ def miningmenu(): #
         output = render("Minning info", colors=['yellow'], align='left', font='tiny')
         print(output)
         bitcoincli = " getmininginfo"
-        subprocess.run([path['bitcoincli']] + bitcoincli.split())
+        _run_btc(bitcoincli)
         input("\a\nContinue...")
     except Exception as e:
         logger.debug("Wallet menu error: %s", e)
@@ -812,17 +825,17 @@ def miningmenu(): #
 
 def getblockcount(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getblockcount"
-    subprocess.run([path['bitcoincli']] + bitcoincli.split())
+    _run_btc(bitcoincli)
 
 def getbestblockhash(): # get access to bitcoin-cli with the command getblockcount
     bitcoincli = " getbestblockhash"
-    subprocess.run([path['bitcoincli']] + bitcoincli.split())
+    _run_btc(bitcoincli)
 
 def getgenesis(): # get and decode Genesis block
     output = render("genesis", colors=['yellow'], align='left', font='tiny')
     print(output)
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
-    subprocess.run([path['bitcoincli']] + bitcoincli.split())
+    _run_btc(bitcoincli)
 
 def _is_hex(s):
     """Validate that a string is hexadecimal only (safe for CLI args)."""
@@ -863,7 +876,7 @@ def console(): # get into the console from bitcoin-cli
             sysinfo()
             close()
             console()
-        lsd0 = subprocess.run([path['bitcoincli']] + cle.split(), capture_output=True, text=True).stdout
+        lsd0 = _run_btc(cle)
         lsd1 = str(lsd0)
         print(lsd1)
 
@@ -908,7 +921,7 @@ def getrawtx(): # show confirmatins from transactions
 You can decode that block in HEX and see what's inside.\033[0;37;40m""")
             else:
                 bitcoincli = " getrawtransaction "
-                lsd0 = subprocess.run([path['bitcoincli']] + (bitcoincli + tx + " 1").split(), capture_output=True, text=True).stdout
+                lsd0 = _run_btc(bitcoincli + tx + " 1")
                 lsd1 = str(lsd0)
                 lsda = lsd1.split(',')
                 lsdb = lsda[-3]
@@ -929,12 +942,11 @@ You can decode that block in HEX and see what's inside.\033[0;37;40m""")
 
 def runthenumbers():
     bitcoincli = " gettxoutsetinfo"
-    subprocess.run([path['bitcoincli']] + bitcoincli.split())
+    _run_btc(bitcoincli)
     input("\nContinue...")
 
 def countdownblock():
-    bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-    block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+    block = _run_btc("getblockcount")
     b = block
     try:
         a = input("Insert your block target: ")
@@ -950,8 +962,7 @@ def countdownblock():
         print(f'Remaining: {str(q)}' + " Blocks\n")
         while a > b:
             try:
-                bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-                block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+                block = _run_btc("getblockcount")
                 b = block
                 if a == b:
                     break
@@ -1006,8 +1017,7 @@ def countdownblockConn():
 
 
 def localHalving():
-    bitcoincli = f'{path["bitcoincli"]} getblockcount'
-    block_count = int(subprocess.run(bitcoincli.split(), capture_output=True, text=True).stdout.strip())  # Leer y convertir el conteo de bloques directamente a int
+    block_count = int(_run_btc("getblockcount").strip())
 
     # Suponemos 64 halvings, aunque técnicamente podrían ser más
     max_halvings = 64
@@ -1049,8 +1059,7 @@ def epoch():
             blogo()
             output = render("BITCOIN EPOCH CLOCK", colors=['yellow'], align='left', font='tiny')
             print(output)
-            bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+            block = _run_btc("getblockcount")
             b = block
             c = b
             oneh = 0 + int(c) / 2016
@@ -1154,12 +1163,12 @@ def robotNym():
     try:
         if path['bitcoincli']:
             lncli = " getinfo"
-            lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+            lsd = _run_ln(lncli)
             lsd0 = str(lsd)
             alias = json.loads(lsd0)
         else:
             cert_path = lndconnectload["tls"]
-            macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+            with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
             headers = {'Grpc-Metadata-macaroon': macaroon}
             url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
             r = requests.get(url, headers=headers, verify=cert_path)
@@ -1212,7 +1221,7 @@ def callGitCashu():
 def blockTmpConn():
     try:
         conn = """curl -s https://miningpool.observer/template-and-block | html2text | grep "Template and Block for" -A 13 """
-        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
+        a = subprocess.run(shlex.split(conn), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1238,7 +1247,7 @@ def oceanH(): # show srings
         print(output)
         responseC = input("Your Bitcoin Address: ")
         cmd = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
-        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
+        a = subprocess.run(shlex.split(cmd), capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
@@ -1256,7 +1265,7 @@ def oceanB(): # show srings
 
         print(output)
         cmd = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
-        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
+        a = subprocess.run(shlex.split(cmd), capture_output=True, text=True).stdout
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
     except Exception as e:
@@ -1274,7 +1283,7 @@ def oceanE(): # show srings
         print(output)
         responseC = input("Your Bitcoin Address: ")
         cmd = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
-        a = subprocess.run(cmd.split(), capture_output=True, text=True).stdout
+        a = subprocess.run(shlex.split(cmd), capture_output=True, text=True).stdout
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
@@ -1651,7 +1660,7 @@ def wallPhoenixBOLT12():
 def allblocksConn():
     try:
         conn = """curl -s https://raw.githubusercontent.com/jlopp/bitcoin-blocks-by-mining-pool/master/blocks.csv """
-        a = subprocess.run(conn.split(), capture_output=True, text=True).stdout
+        a = subprocess.run(shlex.split(conn), capture_output=True, text=True).stdout
         clear()
         blogo()
         closed()
@@ -1775,7 +1784,7 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -1784,18 +1793,18 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
         lndconnectexec()
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:  # onchain_only
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
         alias = None
@@ -1841,14 +1850,14 @@ def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_onl
 
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     if mode == "local":
         lndconnectexec()
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -1965,12 +1974,12 @@ def OwnNodeMiner(menuMin):
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -1979,7 +1988,7 @@ def OwnNodeMiner(menuMin):
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2004,7 +2013,7 @@ def OwnNodeMinerONCHAIN():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
@@ -2027,7 +2036,7 @@ def walletmenuLOCALOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
@@ -2054,12 +2063,12 @@ def bitcoincoremenuLOCALOPRETURN():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2084,7 +2093,7 @@ def bitcoincoremenuLOCALOPRETURNOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
@@ -2111,7 +2120,7 @@ def bitcoincoremenuREMOTE():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -2146,7 +2155,7 @@ def bitcoincoremenuREMOTEOPRETURN():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -2173,12 +2182,12 @@ def lightningnetworkLOCAL():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2266,12 +2275,12 @@ def chatConn():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2295,12 +2304,12 @@ def pyCHATA():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2324,12 +2333,12 @@ def pyCHATB():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2353,12 +2362,12 @@ def pyCHATC():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2385,7 +2394,7 @@ def lightningnetworkREMOTE():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -2462,12 +2471,12 @@ def APIMenuLOCAL():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2476,7 +2485,7 @@ def APIMenuLOCAL():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2564,7 +2573,7 @@ def APIMenuLOCALOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -2573,7 +2582,7 @@ def APIMenuLOCALOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2663,12 +2672,12 @@ def decodeHex():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -2692,7 +2701,7 @@ def decodeHexOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
@@ -2716,12 +2725,12 @@ def miscellaneousLOCAL():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2730,7 +2739,7 @@ def miscellaneousLOCAL():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2764,7 +2773,7 @@ def miscellaneousLOCALOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -2773,7 +2782,7 @@ def miscellaneousLOCALOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2806,7 +2815,7 @@ def PhoenixConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -2815,7 +2824,7 @@ def PhoenixConn():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2845,7 +2854,7 @@ def OceanConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -2854,7 +2863,7 @@ def OceanConn():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2880,7 +2889,7 @@ def slushpoolREMOTEOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -2889,7 +2898,7 @@ def slushpoolREMOTEOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2915,7 +2924,7 @@ def slushpoolLOCALOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -2924,7 +2933,7 @@ def slushpoolLOCALOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2950,12 +2959,12 @@ def runTheNumbersMenu():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -2964,7 +2973,7 @@ def runTheNumbersMenu():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2993,7 +3002,7 @@ def runTheNumbersMenuOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3002,7 +3011,7 @@ def runTheNumbersMenuOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3030,12 +3039,12 @@ def runTheNumbersMenuConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3044,7 +3053,7 @@ def runTheNumbersMenuConn():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3073,7 +3082,7 @@ def weatherMenuOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3082,7 +3091,7 @@ def weatherMenuOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3107,12 +3116,12 @@ def weatherMenu():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3121,7 +3130,7 @@ def weatherMenu():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3147,12 +3156,12 @@ def dnt(): # Donation selection menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3161,7 +3170,7 @@ def dnt(): # Donation selection menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3187,7 +3196,7 @@ def dntOnchainONLY(): # Donation selection menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3196,7 +3205,7 @@ def dntOnchainONLY(): # Donation selection menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3222,12 +3231,12 @@ def dntDev(): # Dev Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3236,7 +3245,7 @@ def dntDev(): # Dev Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3263,7 +3272,7 @@ def dntDevOnchainONLY(): # Dev Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3272,7 +3281,7 @@ def dntDevOnchainONLY(): # Dev Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3298,12 +3307,12 @@ def dntTst(): # Tester Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3312,7 +3321,7 @@ def dntTst(): # Tester Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3338,7 +3347,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3347,7 +3356,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3373,12 +3382,12 @@ def satnodeMenu(): # Satnode Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3387,7 +3396,7 @@ def satnodeMenu(): # Satnode Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3415,7 +3424,7 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3424,7 +3433,7 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3451,12 +3460,12 @@ def rateSX():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3465,7 +3474,7 @@ def rateSX():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3491,7 +3500,7 @@ def rateSXOncainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3500,7 +3509,7 @@ def rateSXOncainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3525,12 +3534,12 @@ def mempoolmenu():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3539,7 +3548,7 @@ def mempoolmenu():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3566,7 +3575,7 @@ def mempoolmenuOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3575,7 +3584,7 @@ def mempoolmenuOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3606,12 +3615,12 @@ def APILnbit():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3620,7 +3629,7 @@ def APILnbit():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3662,7 +3671,7 @@ def APILnbitOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3671,7 +3680,7 @@ def APILnbitOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3707,12 +3716,12 @@ def APILnPay():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3721,7 +3730,7 @@ def APILnPay():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3756,7 +3765,7 @@ def APILnPayOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3765,7 +3774,7 @@ def APILnPayOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3799,12 +3808,12 @@ def APIOpenNode():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3813,7 +3822,7 @@ def APIOpenNode():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3848,7 +3857,7 @@ def APIOpenNodeOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3857,7 +3866,7 @@ def APIOpenNodeOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3887,12 +3896,12 @@ def APITippinMe():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3901,7 +3910,7 @@ def APITippinMe():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3928,7 +3937,7 @@ def APITippinMeOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -3937,7 +3946,7 @@ def APITippinMeOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3963,12 +3972,12 @@ def APITallyCo():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -3977,7 +3986,7 @@ def APITallyCo():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4005,7 +4014,7 @@ def APITallyCoOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -4014,7 +4023,7 @@ def APITallyCoOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4042,12 +4051,12 @@ def settings4Local():
     lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(lncli)
     lsd0 = str(lsd)
     alias = json.loads(lsd0)
 
@@ -4073,7 +4082,7 @@ def settings4LocalOnchainONLY():
     #lndconnectexec()
     n = "Local" if path['bitcoincli'] else "Remote"
     bitcoincli = " getblockchaininfo"
-    a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+    a = _run_btc(bitcoincli)
     b = json.loads(a)
     d = b
 
@@ -4101,7 +4110,7 @@ def settings4Remote():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -4130,12 +4139,12 @@ def designQ():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4144,7 +4153,7 @@ def designQ():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4180,7 +4189,7 @@ def designQOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -4190,7 +4199,7 @@ def designQOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4226,12 +4235,12 @@ def designC():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4240,7 +4249,7 @@ def designC():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4276,7 +4285,7 @@ def designCOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -4286,7 +4295,7 @@ def designCOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4322,12 +4331,12 @@ def designCRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4336,7 +4345,7 @@ def designCRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4372,12 +4381,12 @@ def colors():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4386,7 +4395,7 @@ def colors():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4413,7 +4422,7 @@ def colorsOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -4423,7 +4432,7 @@ def colorsOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4450,12 +4459,12 @@ def colorsC():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4464,7 +4473,7 @@ def colorsC():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4490,7 +4499,7 @@ def colorsCOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:
@@ -4499,7 +4508,7 @@ def colorsCOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4525,12 +4534,12 @@ def colorsCRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4539,7 +4548,7 @@ def colorsCRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4565,12 +4574,12 @@ def colorsSelectFront():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4579,7 +4588,7 @@ def colorsSelectFront():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4612,7 +4621,7 @@ def colorsSelectFrontOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -4622,7 +4631,7 @@ def colorsSelectFrontOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4655,12 +4664,12 @@ def colorsSelectFrontClock():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4669,7 +4678,7 @@ def colorsSelectFrontClock():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4702,7 +4711,7 @@ def colorsSelectFrontClockOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -4712,7 +4721,7 @@ def colorsSelectFrontClockOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4745,12 +4754,12 @@ def colorsSelectFrontClockRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4759,7 +4768,7 @@ def colorsSelectFrontClockRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4792,12 +4801,12 @@ def colorsSelectBack():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4806,7 +4815,7 @@ def colorsSelectBack():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4839,7 +4848,7 @@ def colorsSelectBackOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "RemotcolorsCe"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -4849,7 +4858,7 @@ def colorsSelectBackOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4882,16 +4891,16 @@ def colorsSelectBackClock():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4900,7 +4909,7 @@ def colorsSelectBackClock():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4933,7 +4942,7 @@ def colorsSelectBackClockOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -4943,7 +4952,7 @@ def colorsSelectBackClockOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4976,12 +4985,12 @@ def colorsSelectBackClockRemote():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -4990,7 +4999,7 @@ def colorsSelectBackClockRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5023,12 +5032,12 @@ def colorsSelectRainbow():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -5037,7 +5046,7 @@ def colorsSelectRainbow():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5063,7 +5072,7 @@ def colorsSelectRainbowOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -5073,7 +5082,7 @@ def colorsSelectRainbowOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5099,12 +5108,12 @@ def colorsSelectRainbowStart():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -5113,7 +5122,7 @@ def colorsSelectRainbowStart():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5146,7 +5155,7 @@ def colorsSelectRainbowStartOnchaiONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
@@ -5156,7 +5165,7 @@ def colorsSelectRainbowStartOnchaiONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5189,12 +5198,12 @@ def colorsSelectRainbowEnd():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -5203,7 +5212,7 @@ def colorsSelectRainbowEnd():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5236,12 +5245,12 @@ def colorsSelectRainbowEndOnchainONLY():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
 
         lncli = " getinfo"
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(lncli)
         lsd0 = str(lsd)
         alias = json.loads(lsd0)
     else:
@@ -5250,7 +5259,7 @@ def colorsSelectRainbowEndOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
+        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5392,8 +5401,7 @@ def testlogoRB():
 def testClock():
     pathexec()
     #lndconnectexec()
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
-    block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+    block = _run_btc("getblockcount")
     b = block
     output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='left')
     print(output)
@@ -7296,7 +7304,7 @@ def nostrConn():
     if path['bitcoincli']:
         n = "Local" if path['bitcoincli'] else "Remote"
         bitcoincli = " getblockchaininfo"
-        a = subprocess.run([path['bitcoincli']] + bitcoincli.split(), capture_output=True, text=True).stdout
+        a = _run_btc(bitcoincli)
         b = json.loads(a)
         d = b
     else:

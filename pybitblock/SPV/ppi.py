@@ -510,9 +510,9 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            url = f'http://{lang}.wttr.in/{selectData2}?F&{unit}'
+            url = f'https://{lang}.wttr.in/{selectData2}?F&{unit}'
         else:
-            url = f'http://wttr.in/{selectData}?F'
+            url = f'https://wttr.in/{selectData}?F'
         a = requests.get(url).text
         clear()
         blogo()
@@ -568,10 +568,10 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            url = f'http://v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'
+            url = f'https://v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'
 
         else:
-            url = f'http://v2.wttr.in/{selectData}?F'
+            url = f'https://v2.wttr.in/{selectData}?F'
         a = requests.get(url).text
         clear()
         blogo()
@@ -630,7 +630,7 @@ def rateSXList():
         logger.debug("ppi: %s", e)
     while True:
         try:
-            a = requests.get(f'http://{selectFiat}.rate.sx/?F&n=1').text
+            a = requests.get(f'https://{selectFiat}.rate.sx/?F&n=1').text
             clear()
             blogo()
             closed()

@@ -74,18 +74,15 @@ def design():
             settingsClock = {"gradient":"", "design":"block", "colorA":"green", "colorB":"yellow"}
             with open("config/pyblocksettingsClock.conf", "w") as f:
                 json.dump(settingsClock, f, indent=2)
-        bitcoinclient = path['bitcoincli'] + " getblockcount"
-        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+        block = subprocess.run([path['bitcoincli'], 'getblockcount'], capture_output=True, text=True).stdout # 'getblockcount' convert to string
         b = block
         a = b
         blogo()
         output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
         print("\x1b[?25l" + output)
-        bitcoinclient = path['bitcoincli'] + " getbestblockhash"
-        bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
+        bb = subprocess.run([path['bitcoincli'], 'getbestblockhash'], capture_output=True, text=True).stdout
         ll = bb
-        bitcoinclientgetblock = path['bitcoincli'] + " getblock " + ll
-        qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
+        qq = subprocess.run([path['bitcoincli'], 'getblock', ll.strip()], capture_output=True, text=True).stdout
         yy = json.loads(qq)
         mm = yy
         outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
@@ -98,19 +95,16 @@ def design():
         print(ss.replace("None",""))
         while True:
             x = a
-            bitcoinclient = path['bitcoincli'] + " getblockcount"
-            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+            block = subprocess.run([path['bitcoincli'], 'getblockcount'], capture_output=True, text=True).stdout # 'getblockcount' convert to string
             b = block
             if b > a:
                 clear()
                 blogo()
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center')
                 print("\a\x1b[?25l" + output)
-                bitcoinclient = path['bitcoincli'] + " getbestblockhash"
-                bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
+                bb = subprocess.run([path['bitcoincli'], 'getbestblockhash'], capture_output=True, text=True).stdout
                 ll = bb
-                bitcoinclientgetblock = path['bitcoincli'] + " getblock " + ll
-                qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
+                qq = subprocess.run([path['bitcoincli'], 'getblock', ll.strip()], capture_output=True, text=True).stdout
                 yy = json.loads(qq)
                 mm = yy
                 outputsize = render(str(mm['size']) + " bytes", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')

@@ -1,5 +1,6 @@
 """Gather Bitcoin/Lightning node data for AI context injection."""
 
+import codecs
 import json
 import shlex
 import subprocess
@@ -156,15 +157,13 @@ def _lightning_context(lndconnectload):
     """Gather Lightning node context from LND."""
     ctx = {}
     try:
-        import codecs
         cert_path = lndconnectload.get("tls", "")
         macaroon_path = lndconnectload.get("macaroon", "")
         if not cert_path or not macaroon_path:
             return ctx
 
-        macaroon = codecs.encode(
-            open(macaroon_path, "rb").read(), "hex"
-        )
+        with open(macaroon_path, "rb") as f:
+            macaroon = codecs.encode(f.read(), "hex")
         headers = {"Grpc-Metadata-macaroon": macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path, timeout=10)

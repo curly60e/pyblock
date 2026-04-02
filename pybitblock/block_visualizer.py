@@ -10,19 +10,19 @@ from execute_load_config import load_config
 path, settings, settingsClock = load_config()
 
 # Función para ejecutar comandos de bitcoin-cli y obtener resultados
-def bitcoin_cli(command):
-    result = subprocess.run([path["bitcoincli"]] + command.split(), capture_output=True, text=True)
+def bitcoin_cli(*args):
+    result = subprocess.run([path["bitcoincli"]] + list(args), capture_output=True, text=True)
     return result.stdout.strip()
 
 # Función para obtener los datos del último bloque
 def fetch_block_data():
     # Obtener el hash del último bloque
-    blockhash = bitcoin_cli('getbestblockhash')
+    blockhash = bitcoin_cli("getbestblockhash")
     # Eliminar impresión del hash del bloque
     # print(f"Block Hash: {blockhash}")
 
     # Obtener los detalles del último bloque con detalles completos de las transacciones
-    block_details = bitcoin_cli(f'getblock {blockhash} 2')
+    block_details = bitcoin_cli("getblock", blockhash, "2")
     block_data = json.loads(block_details)
 
     # Extraer weights y fees desde los datos del bloque
