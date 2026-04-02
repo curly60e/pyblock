@@ -1729,38 +1729,6 @@ def callGitUTXOracle():
     except Exception as e:
         logger.debug("Menu error: %s", e)
         menuSelection()
-#---------------------------------ColdCore-----------------------------------------
-def callColdCore():
-    clear()
-    blogo()
-    close()
-    try:
-        if not os.path.isfile('$HOME/.pyblock/public.txt'):
-            msg = """
-            \033[0;37;40m-------------------------\a\u001b[31;1mFILE NOT FOUND\033[0;37;40m----------------------------
-                    To ColdCore works it needs to import your wallet's
-                        public information on your coldcard, go to
-                        -----------------------------------------
-                        |                                       |
-                        |    \033[1;37;40mAdvanced > MicroSD > Dump Summary\033[0;37;40m  |
-                        |                                       |
-                        -----------------------------------------
-                             Copy the file \033[1;37;40mpublic.txt\033[0;37;40m inside
-                                the main \u001b[31;1mpyblock\033[0;37;40m folder
-              (see: https://coldcardwallet.com/docs/microsd#dump-summary-file)
-            -------------------------------------------------------------------"""
-            print(msg)
-            input("\nContinue...")
-        else:
-            if not os.path.isdir('$HOME/.pyblock/coldcore'):
-                subprocess.run(["git", "clone", "https://github.com/jamesob/coldcore.git"])
-                subprocess.run(["chmod", "+x", "coldcore"], cwd="coldcore")
-                subprocess.run(["cp", "coldcore", os.path.expanduser("~/.local/bin/coldcore")], cwd="coldcore")
-            subprocess.run(["coldcore"])
-    except Exception as e:
-        logger.debug("Menu error: %s", e)
-        menuSelection()
-
 #--------------------------------- Menu section -----------------------------------
 
 def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remote"
@@ -1949,8 +1917,6 @@ def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_onl
     col3.append("OP_RETURN\n", style="white")
     col3.append("  H.  ", style="bold green")
     col3.append("Miscellaneous\n", style="white")
-    col3.append("  I.  ", style="bold green")
-    col3.append("ColdCore\n", style="white")
 
     # Stats & Mining section
     col4 = RText()
@@ -6535,8 +6501,6 @@ def bitcoincoremenuLocalControl(bcore, mode=None): #Unified Bitcoin Core local c
         getrawtx()
     elif bcore in ["H", "h"]:
         miscellaneousLOCALOnchainONLY()
-    elif bcore in ["I", "i"]:
-        callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:

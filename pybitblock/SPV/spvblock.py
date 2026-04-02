@@ -4579,38 +4579,7 @@ def callGitCashu():
         os.makedirs("Cashu", exist_ok=True)
     subprocess.run(["cashu"], cwd="Cashu")
 
-#---------------------------------ColdCore-----------------------------------------
-def callColdCore():
-    clear()
-    blogo()
-    close()
-    try:
-        if not os.path.isfile('$HOME/.pyblock/public.txt'):
-            msg = """
-            \033[0;37;40m-------------------------\a\u001b[31;1mFILE NOT FOUND\033[0;37;40m----------------------------
-                    To ColdCore works it needs to import your wallet's
-                        public information on your coldcard, go to
-                        -----------------------------------------
-                        |                                       |
-                        |    \033[1;37;40mAdvanced > MicroSD > Dump Summary\033[0;37;40m  |
-                        |                                       |
-                        -----------------------------------------
-                             Copy the file \033[1;37;40mpublic.txt\033[0;37;40m inside
-                                the main \u001b[31;1mpyblock\033[0;37;40m folder
-              (see: https://coldcardwallet.com/docs/microsd#dump-summary-file)
-            -------------------------------------------------------------------"""
-            print(msg)
-            input("\nContinue...")
-        else:
-            if not os.path.isdir('$HOME/.pyblock/coldcore'):
-                subprocess.run(["git", "clone", "https://github.com/jamesob/coldcore.git"])
-                subprocess.run(["chmod", "+x", "coldcore"], cwd="coldcore")
-                subprocess.run(["cp", "coldcore", os.path.expanduser("~/.local/bin/coldcore")], cwd="coldcore")
-            subprocess.run("coldcore", shell=True)
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        menuSelection()
+
 
 #--------------------------------- Menu section -----------------------------------
 
@@ -4671,7 +4640,6 @@ def bitcoincoremenuLOCAL():
     \u001b[38;5;202mF.\033[0;37;40m Show QR from a Bitcoin Address
     \u001b[38;5;202mG.\033[0;37;40m Show Merkle Proof from a Tx
     \u001b[38;5;202mH.\033[0;37;40m Miscellaneous
-    \u001b[38;5;202mI.\033[0;37;40m ColdCore
     \u001b[38;5;202mJ.\033[0;37;40m Whitepaper
     \u001b[38;5;202mM.\033[0;37;40m Moscow Time
     \u001b[38;5;202mO.\033[0;37;40m OP_RETURN
@@ -7898,8 +7866,6 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         getrawtx()
     elif bcore in ["H", "h"]:
         miscellaneousLOCAL()
-    elif bcore in ["I", "i"]:
-        callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
@@ -7968,8 +7934,6 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         getrawtx()
     elif bcore in ["H", "h"]:
         miscellaneousLOCAL(misce)
-    elif bcore in ["I", "i"]:
-        callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
