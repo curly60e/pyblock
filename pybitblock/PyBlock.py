@@ -1808,6 +1808,7 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
         items.append(("L", "Lightning", "yellow"))
     items.extend([
         ("P", "Platforms", "rgb(0,200,0)"),
+        ("I", "AI Assistant", "cyan"),
         ("S", "Settings", "blue"),
         ("X", "Donate", "white"),
         ("Q", "Exit", "rgb(128,0,255)"),
@@ -6186,6 +6187,10 @@ def mainmenuControl(menuS, mode): #Unified execution of Main Menu options
             APIMenuLOCALOnchainONLY()
         else:
             APIMenuLOCAL()
+    elif menuS in ["I", "i"]:
+        from ai import ai_menu
+        lnd = lndconnectload if mode != "onchain_only" else None
+        ai_menu(path, lnd)
     elif menuS in ["X", "x"]:
         if mode == "onchain_only":
             dntOnchainONLY()
