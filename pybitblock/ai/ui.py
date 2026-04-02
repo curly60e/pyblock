@@ -16,7 +16,8 @@ from pblogo import blogo
 from .client import AstrolexisClient
 from .context import gather_node_context
 
-_console = Console()
+import io
+_console = Console(file=io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace'))
 
 # Colors
 G = "\033[1;32;40m"   # green
