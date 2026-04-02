@@ -11,6 +11,7 @@ import html2text
 import qrcode
 import random
 import xmltodict
+import shlex
 import sys
 import subprocess
 import requests
@@ -615,14 +616,12 @@ def untxsConn():
                             f"TxID: \u001b[38;5;40m{b} \033[0;37;40m| \u001b[31;1mAmount: \u001b[38;5;202m{value['value']} BTC \033[0;37;40m| \u001b[31;1mOP_RETURN: \u001b[38;5;27m{knx['asm']}\033[0;37;40m | \u001b[31;1mType: \u001b[31;1m{knx['type']}\u001b[33;1m"
                         )
 
-                        decodeTX = (
-                            path['bitcoincli']
-                            + f" getrawtransaction {b}"
-                            + " | xxd -r -p | hexyl -n 256"
-                        )
-
                         print("OP_RETURN Hex: ")
-                        subprocess.run(decodeTX, shell=True)
+                        if _is_hex(b):
+                            cli = shlex.split(path['bitcoincli'])
+                            raw = subprocess.run(cli + ["getrawtransaction", b], capture_output=True).stdout
+                            xxd = subprocess.run(["xxd", "-r", "-p"], input=raw, capture_output=True)
+                            subprocess.run(["hexyl", "-n", "256"], input=xxd.stdout)
                 input("\n\033[?25l\033[0;37;40m\n\033[AContinue...\033[A")
     except Exception as e:
         show_error(str(e))
@@ -825,26 +824,31 @@ def getgenesis(): # get and decode Genesis block
     bitcoincli = " getblock 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f 0 | xxd -r -p | hexyl -n 256"
     subprocess.run([path['bitcoincli']] + bitcoincli.split())
 
-def readHexBlock(): # Hex Decoder using Hexyl on local node
-    hexa = input("Add the Block Hash you want to decode: ")
-    blocknumber = input("Add the Block number: ")
-    decodeBlock = (
-        path['bitcoincli']
-        + f" getblock {hexa} {blocknumber}"
-        + " | xxd -r -p | hexyl -n 256"
-    )
+def _is_hex(s):
+    """Validate that a string is hexadecimal only (safe for CLI args)."""
+    import re
+    return bool(re.match(r'^[0-9a-fA-F]+$', s))
 
-    subprocess.run(decodeBlock, shell=True)
+def readHexBlock(): # Hex Decoder using Hexyl on local node
+    hexa = input("Add the Block Hash you want to decode: ").strip()
+    blocknumber = input("Add the Block number: ").strip()
+    if not _is_hex(hexa) or not blocknumber.isdigit():
+        print("\n  Invalid input. Block hash must be hex, number must be numeric.\n")
+        return
+    cli = shlex.split(path['bitcoincli'])
+    raw = subprocess.run(cli + ["getblock", hexa, blocknumber], capture_output=True).stdout
+    xxd = subprocess.run(["xxd", "-r", "-p"], input=raw, capture_output=True)
+    subprocess.run(["hexyl", "-n", "256"], input=xxd.stdout)
 
 def readHexTx(): # Hex Decoder using Hexyl on an external node
-    hexa = input("Add the Transaction ID. you want to decode: ")
-    decodeTX = (
-        path['bitcoincli']
-        + f" getrawtransaction {hexa}"
-        + " | xxd -r -p | hexyl -n 256"
-    )
-
-    subprocess.run(decodeTX, shell=True)
+    hexa = input("Add the Transaction ID you want to decode: ").strip()
+    if not _is_hex(hexa):
+        print("\n  Invalid input. Transaction ID must be hexadecimal.\n")
+        return
+    cli = shlex.split(path['bitcoincli'])
+    raw = subprocess.run(cli + ["getrawtransaction", hexa], capture_output=True).stdout
+    xxd = subprocess.run(["xxd", "-r", "-p"], input=raw, capture_output=True)
+    subprocess.run(["hexyl", "-n", "256"], input=xxd.stdout)
 
 def tmp():
     t.sleep(15)
@@ -1106,8 +1110,10 @@ def pdfconvert():
             ---------------------------------
             """)
             input("Continue...")
+            # Static pipeline to extract the Bitcoin whitepaper from the blockchain
+            # No user input — all values are hardcoded constants
             bitcoincli = """seq 0 947 | (while read -r n; do bitcoin-cli gettxout 54e48e5f5c656b26c3bca14a8c95aa583d07ebe84dde3b7dd4a78f4e4186e713 $n | jq -r '.scriptPubKey.asm' | awk '{ print $2 $3 $4 }'; done) | tr -d '\n' | cut -c 17-368600 | xxd -r -p > bitcoin.pdf """
-            subprocess.run(bitcoincli, shell=True)
+            subprocess.run(bitcoincli, shell=True)  # nosemgrep: shell-true-static-command
             clear()
             blogo()
             close()

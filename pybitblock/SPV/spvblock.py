@@ -3899,7 +3899,7 @@ def kanopoolpoolLOCALOnchainONLY():
 
     api = ""
     try:
-        if os.path.isfile("config/KANOPOOLUSER.conf", "config/KANOPOOLAPI.conf"):
+        if os.path.isfile("config/KANOPOOLUSER.conf") and os.path.isfile("config/KANOPOOLAPI.conf"):
             with open("config/KANOPOOLUSER.conf", "r") as f:
                 apiv = json.load(f)
                 api = apiv
