@@ -141,6 +141,10 @@ def _chat_loop(client, path, lndconnectload, balance):
                 continue
             if upper == "U":
                 _show_usage(client)
+                try:
+                    balance = client.get_balance()
+                except Exception:
+                    pass
                 print(f"\n{_status_line(balance)}\n")
                 continue
             if upper == "C":
