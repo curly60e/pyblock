@@ -4,6 +4,7 @@
 
 
 import base64, codecs, json, requests
+import shlex
 import subprocess
 import os
 import os.path
@@ -20,6 +21,15 @@ from robohash import Robohash
 
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
 settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
+
+
+def _run_ln(*args):
+    """Run lightning CLI safely."""
+    # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
+    return subprocess.run(
+        [lndconnectload['ln']] + list(args),
+        capture_output=True, text=True
+    )
 
 
 def clear(): # clear the screen
@@ -154,7 +164,7 @@ def consoleLN(): # get into the console from bitcoin-cli
     print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
-        lsd = subprocess.run([lndconnectload['ln']] + cle.split(), capture_output=True, text=True)
+        lsd = _run_ln(*shlex.split(cle))
         lsd1 = str(lsd.stdout)
         print(lsd1)
 
@@ -175,7 +185,7 @@ def locallistpeersQQ():
         blogo()
         print("\033[0;37;40m")
         print("<<< Back to the Main Menu Press Control + C.\n\n")
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(*shlex.split(lncli)).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         n = d['peers']
@@ -256,7 +266,7 @@ def locallistpeersQQ():
 
             pp = input("\nDo you want to disconnect? Y/n: ")
             if pp in ["Y", "y"]:
-                lsd = subprocess.run([lndconnectload['ln'], "disconnect", nd], capture_output=True, text=True).stdout
+                lsd = _run_ln("disconnect", nd).stdout
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 print("\n\tDisconnected from peer " + nd)
@@ -279,7 +289,7 @@ def localconnectpeer():
         print("\n\tCONNECT TO NEW PEER\n")
         a = input("Insert PeerID@IP:PORT: ")
         lncli = " connect "
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split() + [a], capture_output=True, text=True).stdout
+        lsd = _run_ln(*shlex.split(lncli), a).stdout
         lsd0 = str(lsd)
         print(lsd0)
         input("\nContinue... ")
@@ -297,7 +307,7 @@ def locallistchaintxns():
     border=4,
     )
     lncli = " listchaintxns"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     n = d['transactions']
@@ -353,7 +363,7 @@ def locallistinvoices():
     border=4,
     )
     lncli = " listinvoices"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     n = d['invoices']
@@ -400,7 +410,7 @@ def locallistchannels():
         lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     n = d['channels']
@@ -499,7 +509,7 @@ def localgetinfo():
     border=4,
     )
     lncli = " getinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     hash = d['identity_pubkey']
@@ -559,7 +569,7 @@ def localaddinvoice():
         lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " addinvoice"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     qr = qrcode.QRCode(
@@ -572,7 +582,7 @@ def localaddinvoice():
         amount = input("Amount in sats: ")
         mem = input("Memo: ")
         memo = mem.replace(" ","_")
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split() + ["--memo", "{}-PyBLOCK".format(memo), "--amt", amount], capture_output=True, text=True).stdout
+        lsd = _run_ln(*shlex.split(lncli), "--memo", "{}-PyBLOCK".format(memo), "--amt", amount).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         print("\033[1;30;47m")
@@ -583,11 +593,11 @@ def localaddinvoice():
         print("Lightning Invoice: " + d['payment_request'])
         b = str(d['payment_request'])
         while True:
-            lsd = subprocess.run([lndconnectload['ln'], "decodepayreq", b], capture_output=True, text=True).stdout
+            lsd = _run_ln("decodepayreq", b).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             r = d['payment_hash']
-            lsdn = subprocess.run([lndconnectload['ln'], "lookupinvoice", r], capture_output=True, text=True).stdout
+            lsdn = _run_ln("lookupinvoice", r).stdout
             lsdn0 = str(lsdn)
             n = json.loads(lsdn0)
             if n['state'] == 'SETTLED':
@@ -617,15 +627,15 @@ def localpayinvoice():
         invoiceN = input("Insert the invoice to pay: ")
         invoice = invoiceN.lower()
         lncli = " payinvoice "
-        lsd = subprocess.run([lndconnectload['ln'], "decodepayreq", invoice], capture_output=True, text=True).stdout
+        lsd = _run_ln("decodepayreq", invoice).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         if d['num_satoshis'] == "0":
             amt = " --amt "
             amount =  input("Amount in satoshis: ")
-            subprocess.run([lndconnectload['ln']] + lncli.split() + [invoice] + amt.split() + [amount])
+            _run_ln(*shlex.split(lncli), invoice, *shlex.split(amt), amount)
         else:
-            subprocess.run([lndconnectload['ln']] + lncli.split() + [invoice])
+            _run_ln(*shlex.split(lncli), invoice)
         t.sleep(2)
     except Exception as e:  # Catch specific exceptions
         pass
@@ -635,7 +645,7 @@ def localgetnetworkinfo():
         lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " getnetworkinfo"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     print("\n----------------------------------------------------------------------------------------------------")
@@ -873,7 +883,7 @@ def localchannelbalance():
         lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " channelbalance"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     print("""
@@ -893,7 +903,7 @@ def localnewaddress():
         lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " newaddress p2wkh"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     qr = qrcode.QRCode(
@@ -915,7 +925,7 @@ def localbalanceOC():
         lndconnectData = json.load(f) # Load the file 'bclock.conf'
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " walletbalance"
-    lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+    lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
     d = json.loads(lsd0)
     print("\n----------------------------------------------------------------------------------------------------")
@@ -933,7 +943,7 @@ def localrebalancelnd():
     lndconnectload = lndconnectData # Copy the variable pathv to 'path'
     lncli = " listchannels"
     while True:
-        lsd = subprocess.run([lndconnectload['ln']] + lncli.split(), capture_output=True, text=True).stdout
+        lsd = _run_ln(*shlex.split(lncli)).stdout
         lsd0 = str(lsd)
         d = json.loads(lsd0)
         n = d['channels']

@@ -18,7 +18,6 @@ description: >-
   - Mining pool stats (Ocean, Braiins, CKPool)
   - Moscow Time converter
   - Nostr console integration
-  - ColdCore hardware wallet support
   - And much more...
 
   PyBLOCK connects directly to your Umbrel's Bitcoin Core and LND nodes.

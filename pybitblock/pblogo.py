@@ -7,7 +7,7 @@ from cfonts import render, say
 
 def blogo():
 
-    if os.path.isfile('config/pyblocksettinconfig/gs.conf') or os.path.isfile('config/pyblocksettings.conf'): # Check if the file 'bclock.conf' is in the same folder
+    if os.path.isfile('config/pyblocksettings.conf'):
         with open("config/pyblocksettings.conf", "r") as f:
             settingsv = json.load(f) # Load the file 'bclock.conf'
             settings = settingsv # Copy the variable pathv to 'path'

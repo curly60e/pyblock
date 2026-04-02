@@ -644,10 +644,10 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = "curl '" + lang + ".wttr.in/" + selectData2 + "?F&" + unit + "'"
+            url = f"https://{lang}.wttr.in/{selectData2}?F&{unit}"
         else:
-            cmd = f'curl wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://wttr.in/{selectData}?F"
+        a = requests.get(url, headers={"User-Agent": "curl"}, timeout=15).text
         clear()
         blogo()
         print(a)
@@ -702,11 +702,10 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = "curl 'v2.wttr.in/" + selectData2 + "?" + unit + "&F&lang=" + lang + "'"
-
+            url = f"https://v2.wttr.in/{selectData2}?{unit}&F&lang={lang}"
         else:
-            cmd = f'curl v2.wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://v2.wttr.in/{selectData}?F"
+        a = requests.get(url, headers={"User-Agent": "curl"}, timeout=15).text
         clear()
         blogo()
         print(a)

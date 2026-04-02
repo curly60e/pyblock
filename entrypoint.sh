@@ -38,9 +38,9 @@ LNDEOF
     echo "[PyBLOCK] LND configured: ${LND_IP_PORT:-local paths only}"
 fi
 
-# Auto-set mode if specified
+# Auto-set mode if specified (PYBLOCK_MODE always overwrites)
 PYBLOCK_MODE="${PYBLOCK_MODE:-}"
-if [ -n "$PYBLOCK_MODE" ] && [ ! -f "$CONFIG_DIR/intro.conf" ]; then
+if [ -n "$PYBLOCK_MODE" ]; then
     echo "\"${PYBLOCK_MODE}\"" > "$CONFIG_DIR/intro.conf"
     echo "[PyBLOCK] Mode set to: ${PYBLOCK_MODE}"
 elif [ -n "$BITCOIN_RPC_HOST" ] && [ ! -f "$CONFIG_DIR/intro.conf" ]; then
@@ -77,6 +77,11 @@ SCEOF
 fi
 
 echo "[PyBLOCK] Starting..."
+
+# Ensure UTF-8 for all terminal output (ttyd, AI responses, etc.)
+export LANG="${LANG:-C.UTF-8}"
+export LC_ALL="${LC_ALL:-C.UTF-8}"
+export PYTHONIOENCODING=utf-8
 
 # Launch PyBLOCK via ttyd
 exec ttyd -W -p "${PYBLOCK_PORT:-6969}" \

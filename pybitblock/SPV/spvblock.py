@@ -196,7 +196,7 @@ def tick():
 \033[0;37;40m""")
 
 def canceled():
-    print("""
+    print(r"""
                    )              (         (
    (     (      ( /(    (         )\ )      )\ )
    )\    )\     )\())   )\   (   (()/(  (  (()/(
@@ -368,23 +368,18 @@ def opreturnOnchainONLY():
 
         print(output)
         message = input("Message: ")
-        curl = (
-            "curl --header "
-            + """"Content-Type: application/json" """
-            + "--request POST  --data "
-            + """'{"message":"""
-            + f'"{message}...PyBLOCK"'
-            + "}'"
-            + " https://opreturnbot.com/api/create"
-        )
-
         while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-        b = str(a)
+        r = requests.post(
+            "https://opreturnbot.com/api/create",
+            json={"message": f"{message}...PyBLOCK"},
+            headers={"Content-Type": "application/json"},
+            timeout=15,
+        )
+        b = r.text
         clear()
         blogo()
         print("\033[1;30;47m")
@@ -398,7 +393,7 @@ def opreturnOnchainONLY():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout
+            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
@@ -438,23 +433,18 @@ def opreturn():
 
         print(output)
         message = input("Message: ")
-        curl = (
-            "curl --header "
-            + """"Content-Type: application/json" """
-            + "--request POST  --data "
-            + """'{"message":"""
-            + f'"{message}...PyBLOCK"'
-            + "}'"
-            + " https://opreturnbot.com/api/create"
-        )
-
         while len(message) > 70:
             clear()
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        a = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-        b = str(a)
+        r = requests.post(
+            "https://opreturnbot.com/api/create",
+            json={"message": f"{message}...PyBLOCK"},
+            headers={"Content-Type": "application/json"},
+            timeout=15,
+        )
+        b = r.text
         clear()
         blogo()
         print("\033[1;30;47m")
@@ -468,7 +458,7 @@ def opreturn():
             invoiceN = b
             invoice = invoiceN.lower()
             lncli = " payinvoice "
-            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout
+            lsd = subprocess.run(shlex.split(lndconnectload["ln"]) + ["decodepayreq", invoice], capture_output=True, text=True).stdout  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
             lsd0 = str(lsd)
             d = json.loads(lsd0)
             url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
@@ -752,7 +742,7 @@ def callPhoenix():
         subprocess.run(["./phoenix-cli", "--help"], cwd="phoenixwallet")
         for _ in range(10):
             responseC = input("\a\nType a command of the list: ")
-            subprocess.run(["./phoenix-cli"] + shlex.split(responseC), cwd="phoenixwallet")
+            subprocess.run(["./phoenix-cli"] + shlex.split(responseC), cwd="phoenixwallet")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -808,7 +798,7 @@ def wallPhoenixBOLT12():
 
 def statsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
+        conn = r"""curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
         a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
         clear()
         blogo()
@@ -1045,7 +1035,7 @@ def luxorstats():
         subprocess.run(["python3", "luxor.py", "--help"], cwd=luxor_cwd)
         for _ in range(10):
             responseC = input("\a\nType a command of the list: ")
-            subprocess.run(["python3", "luxor.py"] + shlex.split(responseC), cwd=luxor_cwd)
+            subprocess.run(["python3", "luxor.py"] + shlex.split(responseC), cwd=luxor_cwd)  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -1163,9 +1153,12 @@ def decodeStrDat(): # show srings
         )
 
         print(output)
-        responseC = input("Blk Dat: ")
-        cmd = f"""curl -s 'https://bitcoinstrings.com/blk'{responseC}.txt | html2text | grep -v "blk" | grep -v "files" | grep -v "Advertisement" | grep -v "BitcoinStrings" """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        responseC = input("Blk Dat: ").strip()
+        if not responseC.isdigit():
+            print("\n  Invalid input. Must be a number.\n")
+            return
+        r = requests.get(f"https://bitcoinstrings.com/blk{responseC}.txt", timeout=15)
+        a = r.text
         clear()
         blogo()
         print("\nBLK: " + responseC)
@@ -1187,9 +1180,9 @@ def oceanH(): # show srings
         )
 
         print(output)
-        responseC = input("Your Bitcoin Address: ")
-        cmd = f"""curl -s 'https://ocean.xyz/data/csv/hashrates/worker/{responseC}' | html2text """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        responseC = input("Your Bitcoin Address: ").strip()
+        r = requests.get(f"https://ocean.xyz/data/csv/hashrates/worker/{responseC}", timeout=15)
+        a = r.text
         print("\nAddress: " + responseC)
         print("\nHashrate:\n" + a)
         input("\a\nContinue...")
@@ -1223,9 +1216,9 @@ def oceanE(): # show srings
         )
 
         print(output)
-        responseC = input("Your Bitcoin Address: ")
-        cmd = f"""curl -s 'https://ocean.xyz/template/workers/earningscards?user={responseC}' | html2text """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        responseC = input("Your Bitcoin Address: ").strip()
+        r = requests.get(f"https://ocean.xyz/template/workers/earningscards?user={responseC}", timeout=15)
+        a = r.text
         print("\nAddress: " + responseC)
         print("\nEarnings:\n" + a)
         input("\a\nContinue...")
@@ -1400,10 +1393,10 @@ def wttrDataV1():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = f"curl '{lang}.wttr.in/{selectData2}?F&{unit}'"
+            url = f"https://{lang}.wttr.in/{selectData2}?F&{unit}"
         else:
-            cmd = f'curl wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://wttr.in/{selectData}?F"
+        a = requests.get(url, headers={"User-Agent": "curl"}, timeout=15).text
         clear()
         blogo()
         print(a)
@@ -1459,11 +1452,10 @@ def wttrDataV2():
             selectData2 = input("Insert your data \033[1;31;40m*\033[0;37;40m : ")
             lang = input("Insert your language: ")
             unit = input("Insert your metric units: ")
-            cmd = f"curl 'v2.wttr.in/{selectData2}?{unit}&F&lang={lang}'"
-
+            url = f"https://v2.wttr.in/{selectData2}?{unit}&F&lang={lang}"
         else:
-            cmd = f'curl v2.wttr.in/{selectData}?F'
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://v2.wttr.in/{selectData}?F"
+        a = requests.get(url, headers={"User-Agent": "curl"}, timeout=15).text
         clear()
         blogo()
         print(a)
@@ -1523,8 +1515,7 @@ def rateSXList():
         logger.debug("spvblock: %s", e)
     while True:
         try:
-            cmd = f"curl -s '{selectFiat}.rate.sx/?F&n=1'"
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            a = requests.get(f"https://{selectFiat}.rate.sx/?F&n=1", headers={"User-Agent": "curl"}, timeout=15).text
             clear()
             blogo()
             closed()
@@ -1581,8 +1572,8 @@ def rateSXGraph():
         logger.debug("spvblock: %s", e)
     while True:
         try:
-            cmd = f"curl -s '{selectFiat}.rate.sx/btc' | grep -v -E 'Use'"
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            r = requests.get(f"https://{selectFiat}.rate.sx/btc", headers={"User-Agent": "curl"}, timeout=15)
+            a = '\n'.join(line for line in r.text.splitlines() if 'Use' not in line)
             clear()
             blogo()
             closed()
@@ -2916,7 +2907,7 @@ def bip39convert():
         blogo()
         print(output)
         responseC = input("Words to Tiny Seed: ")
-        subprocess.run(["python3", "TinySeed.py"] + shlex.split(responseC), cwd="TinySeed")
+        subprocess.run(["python3", "TinySeed.py"] + shlex.split(responseC), cwd="TinySeed")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -3899,7 +3890,7 @@ def kanopoolpoolLOCALOnchainONLY():
 
     api = ""
     try:
-        if os.path.isfile("config/KANOPOOLUSER.conf", "config/KANOPOOLAPI.conf"):
+        if os.path.isfile("config/KANOPOOLUSER.conf") and os.path.isfile("config/KANOPOOLAPI.conf"):
             with open("config/KANOPOOLUSER.conf", "r") as f:
                 apiv = json.load(f)
                 api = apiv
@@ -4503,7 +4494,7 @@ def callGitNostrSeedTerminal():
         blogo()
         print(output)
         responseC = input("Hex to BIP39 & BIP39 to Hex: ")
-        subprocess.run(["python3", "nostr_seed.py"] + shlex.split(responseC), cwd="nostr_seed")
+        subprocess.run(["python3", "nostr_seed.py"] + shlex.split(responseC), cwd="nostr_seed")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -4526,7 +4517,7 @@ def callGitNostrQRSeedTerminal():
         blogo()
         print(output)
         responseC = input("Hex to BIP39 QR & BIP39 to Hex QR: ")
-        subprocess.run(["python3", "nostr_c_seed_qr.py"] + shlex.split(responseC), cwd="nostr_QRseed")
+        subprocess.run(["python3", "nostr_c_seed_qr.py"] + shlex.split(responseC), cwd="nostr_QRseed")  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -4579,38 +4570,7 @@ def callGitCashu():
         os.makedirs("Cashu", exist_ok=True)
     subprocess.run(["cashu"], cwd="Cashu")
 
-#---------------------------------ColdCore-----------------------------------------
-def callColdCore():
-    clear()
-    blogo()
-    close()
-    try:
-        if not os.path.isfile('$HOME/.pyblock/public.txt'):
-            msg = """
-            \033[0;37;40m-------------------------\a\u001b[31;1mFILE NOT FOUND\033[0;37;40m----------------------------
-                    To ColdCore works it needs to import your wallet's
-                        public information on your coldcard, go to
-                        -----------------------------------------
-                        |                                       |
-                        |    \033[1;37;40mAdvanced > MicroSD > Dump Summary\033[0;37;40m  |
-                        |                                       |
-                        -----------------------------------------
-                             Copy the file \033[1;37;40mpublic.txt\033[0;37;40m inside
-                                the main \u001b[31;1mpyblock\033[0;37;40m folder
-              (see: https://coldcardwallet.com/docs/microsd#dump-summary-file)
-            -------------------------------------------------------------------"""
-            print(msg)
-            input("\nContinue...")
-        else:
-            if not os.path.isdir('$HOME/.pyblock/coldcore'):
-                subprocess.run(["git", "clone", "https://github.com/jamesob/coldcore.git"])
-                subprocess.run(["chmod", "+x", "coldcore"], cwd="coldcore")
-                subprocess.run(["cp", "coldcore", os.path.expanduser("~/.local/bin/coldcore")], cwd="coldcore")
-            subprocess.run("coldcore", shell=True)
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        menuSelection()
+
 
 #--------------------------------- Menu section -----------------------------------
 
@@ -6336,216 +6296,22 @@ def menuSelectionLN():
         menuLND()
 
 def aaccPPiLNBits():
-    try:
-        bitLN = {"NN":"","pd":""}
-        if os.path.isfile('config/lnbitSN.conf'):
-            with open("config/lnbitSN.conf", "r") as f:
-                bitData = json.load(f)
-                bitLN = bitData
-            APILnbit()
-        else:
-            qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-            )
-            bitLN['NN'] = randrange(10000000)
-            curl = (
-                'curl -X POST https://lnbits.com/api/v1/payments -d '
-                + "'{"
-                + f""""out": false, "amount": 1000, "memo": "LNBits on PyBLOCK {bitLN['NN']}" """
-                + "}'"
-                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-            clear()
-            blogo()
-            n = str(sh)
-            d = json.loads(n)
-            q = d['payment_request']
-            c = q.lower()
-            while True:
-                print("\033[1;30;47m")
-                qr.add_data(c)
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print(f"Lightning Invoice: {c}")
-                dn = str(d['checking_id'])
-                t.sleep(10)
-                checkcurl = (
-                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                )
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
-                clear()
-                blogo()
-                nn = str(rsh)
-                dd = json.loads(nn)
-                db = dd['paid']
-                if db is not True:
-                    continue
-
-                clear()
-                blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                with open("config/lnbitSN.conf", "w") as f:
-                    json.dump(bitLN, f, indent=2)
-                createFileConnLNBits()
-                break
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        clear()
-        blogo()
-        print("\n\tSERIAL NUMBER NOT FOUND\n")
-        input("Continue...")
+    if os.path.isfile('config/lnbitSN.conf'):
+        APILnbit()
+    else:
+        createFileConnLNBits()
 
 def aaccPPiLNPay():
-    try:
-        bitLN = {"NN":"","pd":""}
-        if os.path.isfile('config/lnpaySN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            with open("config/lnpaySN.conf", "r") as f:
-                bitData = json.load(f) # Load the file 'bclock.conf'
-                bitLN = bitData # Copy the variable pathv to 'path'
-            APILnPay()
-        else:
-            qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-            )
-            bitLN['NN'] = randrange(10000000)
-            curl = (
-                'curl -X POST https://lnbits.com/api/v1/payments -d '
-                + "'{"
-                + f""""out": false, "amount": 1000, "memo": "LNPay on PyBLOCK {bitLN['NN']}" """
-                + "}'"
-                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-            clear()
-            blogo()
-            n = str(sh)
-            d = json.loads(n)
-            q = d['payment_request']
-            c = q.lower()
-            while True:
-                print("\033[1;30;47m")
-                qr.add_data(c)
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print(f"Lightning Invoice: {c}")
-                dn = str(d['checking_id'])
-                t.sleep(10)
-                checkcurl = (
-                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                )
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
-                clear()
-                blogo()
-                nn = str(rsh)
-                dd = json.loads(nn)
-                db = dd['paid']
-                if db is not True:
-                    continue
-
-                clear()
-                blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                with open("config/lnpaySN.conf", "w") as f:
-                    json.dump(bitLN, f, indent=2)
-                createFileConnLNPay()
-                break
-
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        clear()
-        blogo()
-        print("\n\tSERIAL NUMBER NOT FOUND\n")
-        input("Continue...")
+    if os.path.isfile('config/lnpaySN.conf'):
+        APILnPay()
+    else:
+        createFileConnLNPay()
 
 def aaccPPiOpenNode():
-    try:
-        bitLN = {"NN":"","pd":""}
-        if os.path.isfile('config/opennodeSN.conf'): # Check if the file 'bclock.conf' is in the same folder
-            with open("config/opennodeSN.conf", "r") as f:
-                bitData = json.load(f) # Load the file 'bclock.conf'
-                bitLN = bitData # Copy the variable pathv to 'path'
-            APIOpenNode()
-        else:
-            qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-            )
-            bitLN['NN'] = randrange(10000000)
-            curl = (
-                'curl -X POST https://lnbits.com/api/v1/payments -d '
-                + "'{"
-                + f""""out": false, "amount": 1000, "memo": "OpenNode on PyBLOCK {bitLN['NN']}" """
-                + "}'"
-                + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94 " -H "Content-type: application/json" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
-            clear()
-            blogo()
-            n = str(sh)
-            d = json.loads(n)
-            q = d['payment_request']
-            c = q.lower()
-            while True:
-                print("\033[1;30;47m")
-                qr.add_data(c)
-                qr.print_ascii()
-                print("\033[0;37;40m")
-                qr.clear()
-                print(f"Lightning Invoice: {c}")
-                dn = str(d['checking_id'])
-                t.sleep(10)
-                checkcurl = (
-                    f'curl -X GET https://lnbits.com/api/v1/payments/{dn}'
-                    + """ -H "X-Api-Key: 1d646820055e4e2da218e801eaacfc94" -H "Content-type: application/json" """
-                )
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
-                clear()
-                blogo()
-                nn = str(rsh)
-                dd = json.loads(nn)
-                db = dd['paid']
-                if db is not True:
-                    continue
-
-                clear()
-                blogo()
-                tick()
-                bitLN['pd'] = "PAID"
-                with open("config/opennodeSN.conf", "w") as f:
-                    json.dump(bitLN, f, indent=2)
-                createFileConnOpenNode()
-                break
-
-    except Exception as e:
-        show_error(str(e))
-        logger.debug("spvblock: %s", e)
-        clear()
-        blogo()
-        print("\n\tSERIAL NUMBER NOT FOUND\n")
-        input("Continue...")
+    if os.path.isfile('config/opennodeSN.conf'):
+        APIOpenNode()
+    else:
+        createFileConnOpenNode()
 
 
 def aaccPPiTippinMe():
@@ -8122,8 +7888,6 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         getrawtx()
     elif bcore in ["H", "h"]:
         miscellaneousLOCAL()
-    elif bcore in ["I", "i"]:
-        callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
@@ -8192,8 +7956,6 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         getrawtx()
     elif bcore in ["H", "h"]:
         miscellaneousLOCAL(misce)
-    elif bcore in ["I", "i"]:
-        callColdCore()
     elif bcore in ["J", "j"]:
         pdfconvert()
     elif bcore in ["M", "m"]:
@@ -8548,11 +8310,9 @@ def lightningnetworkLOCALcontrol(lncore):
         blogo()
         ranConn()
     elif lncore in ["Q", "q"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLwList()
+        lnbitsLNURLwList()
     elif lncore in ["S", "s"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLw()
+        lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
 
@@ -8892,11 +8652,9 @@ def lightningnetworkREMOTEcontrol(lncore):
         blogo()
         ranConn()
     elif lncore in ["Q", "q"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLwList()
+        lnbitsLNURLwList()
     elif lncore in ["S", "s"]:
-        if os.path.isfile("lnbitSN.conf"):
-            lnbitsLNURLw()
+        lnbitsLNURLw()
     elif lncore in ["R", "r"]:
         menuSelection()
 

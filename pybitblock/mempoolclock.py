@@ -41,27 +41,23 @@ def pathexec():
 
 def counttxs():
     try:
-        bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-        block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+        block = subprocess.run([path["bitcoincli"], "getblockcount"], capture_output=True, text=True).stdout # 'getblockcount' convert to string
         b = block
         a = b
         pathexec()
         clear()
-        getrawmempool = " getrawmempool"
-        gnaa = subprocess.run((path['bitcoincli'] + getrawmempool).split(), capture_output=True, text=True).stdout
+        gnaa = subprocess.run([path['bitcoincli'], "getrawmempool"], capture_output=True, text=True).stdout
         gna1 = str(gnaa)
         d = json.loads(gna1)
         e = len(d)
         n = e / 10
         nn = n
-        getrawmempool = " getrawmempool"
         while True:
             x = a
-            bitcoinclient = f'{path["bitcoincli"]} getblockcount'
-            block = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout # 'getblockcount' convert to string
+            block = subprocess.run([path["bitcoincli"], "getblockcount"], capture_output=True, text=True).stdout # 'getblockcount' convert to string
             b = block
             pathexec()
-            gnaa = subprocess.run((path['bitcoincli'] + getrawmempool).split(), capture_output=True, text=True).stdout
+            gnaa = subprocess.run([path['bitcoincli'], "getrawmempool"], capture_output=True, text=True).stdout
             gna1 = str(gnaa)
             d = json.loads(gna1)
             e = len(d)
@@ -85,11 +81,9 @@ def counttxs():
                 print("\n\n\n")
                 output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')
                 print("\a\x1b[?25l" + output)
-                bitcoinclient = f'{path["bitcoincli"]} getbestblockhash'
-                bb = subprocess.run(str(bitcoinclient).split(), capture_output=True, text=True).stdout
+                bb = subprocess.run([path["bitcoincli"], "getbestblockhash"], capture_output=True, text=True).stdout
                 ll = bb
-                bitcoinclientgetblock = f'{path["bitcoincli"]} getblock {ll}'
-                qq = subprocess.run(bitcoinclientgetblock.split(), capture_output=True, text=True).stdout
+                qq = subprocess.run([path["bitcoincli"], "getblock", ll.strip()], capture_output=True, text=True).stdout
                 yy = json.loads(qq)
                 mm = yy
                 outputtxs = render(str(mm['nTx']) + " txs", colors=[settingsClock['colorA'], settingsClock['colorB']], align='center', font='tiny')

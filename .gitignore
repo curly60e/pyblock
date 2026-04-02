@@ -5,9 +5,13 @@ __pycache__/
 **/__pycache__
 **/*.pyc
 
-# pyblock stuff
+# pyblock config (contains credentials, API keys, tokens)
+pybitblock/config/*.conf
+pybitblock/SPV/config/*.conf
+pybitblock/config/
 pyblocksettings.conf
 *.pickle.bak
+*.log
 
 # C extensions
 *.so
