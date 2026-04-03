@@ -3,8 +3,9 @@
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
-import base64, codecs, json, requests
+import base64, codecs, json, re, requests
 import subprocess
+import html2text as html2text_mod
 import os
 import os.path
 import qrcode
@@ -212,8 +213,21 @@ def opreturn_view():
 
 def opretminer():
     try:
-        conn = """curl -s 'https://bitcointicker.co/latestblocks/' | xargs --null | html2text | grep "Coinbase" -A 70 | tr -d '|' | grep -v "Coinbase" | grep '6.25'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://bitcointicker.co/latestblocks/', timeout=10)
+        converter = html2text_mod.HTML2Text()
+        text = converter.handle(response.text)
+        lines = text.splitlines()
+        capturing = False
+        captured = []
+        for line in lines:
+            if "Coinbase" in line:
+                capturing = True
+                continue
+            if capturing:
+                captured.append(line)
+                if len(captured) >= 70:
+                    break
+        a = "\n".join(l.replace("|", "") for l in captured if "6.25" in l) + "\n"
         clear()
         blogo()
         closed()
@@ -252,8 +266,24 @@ def gameroom():
 
 def statsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\\--" | tr -d '*' | tr -d '"' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://www.bitcoinblockhalf.com/', timeout=10)
+        converter = html2text_mod.HTML2Text()
+        text = converter.handle(response.text)
+        lines = text.splitlines()
+        captured = []
+        capturing = False
+        count = 0
+        for line in lines:
+            if re.search(r"Total", line):
+                capturing = True
+                count = 0
+            if capturing:
+                if "--" not in line:
+                    captured.append(line.replace("*", "").replace('"', ""))
+                count += 1
+                if count > 10:
+                    capturing = False
+        a = "\n".join(captured) + "\n"
         clear()
         blogo()
         closed()
@@ -290,8 +320,13 @@ def pgpConn():
 
 def satoshiConn():
     try:
-        conn = """curl -s https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html | html2text | tail -n 82 | grep -v "Unsubscribe" | grep -v "Next message" | grep -v "Previous message"| grep -v "Messages sorted" | grep -v "More information" | grep -v "list]" """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html', timeout=10)
+        converter = html2text_mod.HTML2Text()
+        text = converter.handle(response.text)
+        lines = text.splitlines()
+        tail = lines[-82:] if len(lines) >= 82 else lines
+        exclude = ["Unsubscribe", "Next message", "Previous message", "Messages sorted", "More information", "list]"]
+        a = "\n".join(l for l in tail if not any(ex in l for ex in exclude)) + "\n"
         clear()
         blogo()
         closed()
@@ -353,8 +388,17 @@ def bwtConn():
 
 def datesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ','"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://bitcoinexplorer.org/fun', timeout=10)
+        converter = html2text_mod.HTML2Text()
+        text = converter.handle(response.text)
+        lines = text.splitlines()
+        filtered = []
+        for line in lines:
+            if "20" in line and "https" not in line and " " in line:
+                filtered.append(line.replace("[", "").replace(",", ""))
+            if len(filtered) >= 46:
+                break
+        a = "\n".join(filtered) + "\n"
         clear()
         blogo()
         closed()
@@ -370,8 +414,18 @@ def datesConn():
 
 def quotesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://bitcoinexplorer.org/api/quotes/all', timeout=10)
+        data = response.json()
+        out_lines = []
+        for item in data:
+            if isinstance(item, dict):
+                for key, val in item.items():
+                    label = key.replace("text", "Quote").replace("speaker", "By").replace("url", "Link").replace("date", "Date")
+                    line = f'  "{label}": "{val}"'
+                    if "conQuote" not in line:
+                        out_lines.append(line)
+                out_lines.append("")
+        a = "\n".join(out_lines) + "\n"
         clear()
         blogo()
         closed()
@@ -387,8 +441,17 @@ def quotesConn():
 
 def miningConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://bitcoinexplorer.org/api/mining/hashrate', timeout=10)
+        data = response.json()
+        out_lines = []
+        for item in (data if isinstance(data, list) else [data]):
+            if isinstance(item, dict):
+                for key, val in item.items():
+                    out_lines.append(f'  "{key}": {json.dumps(val)}')
+                out_lines.append("")
+            else:
+                out_lines.append(str(item))
+        a = "\n".join(out_lines) + "\n"
         clear()
         blogo()
         closed()
@@ -404,8 +467,21 @@ def miningConn():
 
 def stalnConn():
     try:
-        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://1ml.com', timeout=10)
+        converter = html2text_mod.HTML2Text()
+        text = converter.handle(response.text)
+        lines = [l.strip() for l in text.splitlines() if l.strip()]
+        captured = []
+        skip = 0
+        for i, line in enumerate(lines):
+            if skip > 0:
+                captured.append(line)
+                skip -= 1
+                continue
+            if re.search(r"Number", line):
+                captured.append(line)
+                skip = 8
+        a = "\n".join(captured) + "\n"
         clear()
         blogo()
         closed()
@@ -423,9 +499,21 @@ def stalnConn():
 #-----------------------------StatRanking--------------------------------
 def ranConn():
     try:
-        conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g'
-"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get('https://1ml.com/node?order=capacity&json=true', timeout=10)
+        data = response.json()
+        out_lines = []
+        exclude = ["last_update", "color", "noderank", "addresses"]
+        for item in (data if isinstance(data, list) else [data]):
+            if isinstance(item, dict):
+                for key, val in item.items():
+                    if any(ex in key for ex in exclude):
+                        continue
+                    label = key.replace("alias", "Node").replace("capacity", "RANK")
+                    line = f'  "{label}": {json.dumps(val)}'
+                    if " " in line:
+                        out_lines.append(line)
+                out_lines.append("")
+        a = "\n".join(out_lines) + "\n"
         clear()
         blogo()
         closed()

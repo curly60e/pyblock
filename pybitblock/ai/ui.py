@@ -1,5 +1,6 @@
 """Terminal UI for PyBLOCK AI Assistant."""
 
+import getpass
 import logging
 import sys
 import time
@@ -68,7 +69,7 @@ def _setup_token(cfg):
 
   Enter your token below, or press Enter to cancel.
 """)
-    token = input("  Token: ").strip()
+    token = getpass.getpass("  Token: ").strip()
     if not token:
         return None
 

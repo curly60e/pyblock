@@ -66,32 +66,12 @@ def apisender():
         elif 'lightning_invoice' in sh0:
             break
 
-    sh1 = str(sh0)
-    shh = sh1.split(',')
-    invoice = str(shh[6])
-
-    #---------------Token-----------
-    authtoken = str(shh[0])
-    authtoken1 = authtoken.split(':')
-    token = authtoken1[1]
-    #---------------End Token-------
-
-    #---------------Order-----------
-    uuid = str(shh[1])
-    uuid1 = uuid.split(':')
-    order = uuid1[1]
-    #---------------End Order-------
-
-    #---------------Amount----------
-    msat = str(shh[3])
-    msat1 = msat.split(':')
-    amount = msat1[1]
-    #---------------End Amount------
-
-    orderid = str(shh[1])
-    ln1 = invoice.split(':')
-    ln2 = str(ln1[1])
-    cln = ln2.strip('"')
+    data = json.loads(sh0)
+    token = data.get("auth_token", "")
+    order = data.get("uuid", "")
+    amount = str(data.get("bid", 0))
+    invoice_data = data.get("lightning_invoice", {})
+    cln = invoice_data.get("payreq", "")
     logger.debug("Token: %s..., Order: %s", token[:8] + "***", order)
     print("\033[0;37;40mYour Order Number: \033[1;31;40m" + order + "\033[0;37;40m")
     print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m\n")
@@ -130,6 +110,10 @@ def apisenderFile():
     )
     url = 'https://api.blockstream.space/order'
     filepath = input("\nInsert the path to the File: ")
+    filepath = os.path.abspath(filepath)
+    if not os.path.isfile(filepath):
+        print("File not found.")
+        return
     print("ATENTION: Minimum amount for sending a File is 50000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     with open(filepath, 'rb') as f:
@@ -142,6 +126,10 @@ def apisenderFile():
                 print("Try again...\n")
                 url = 'https://api.blockstream.space/order'
                 filepath = input("\nInsert the path to the File: ")
+                filepath = os.path.abspath(filepath)
+                if not os.path.isfile(filepath):
+                    print("File not found.")
+                    return
                 print("ATENTION: Minimum amount for sending a File is 50000 MSats")
                 amountmsat = input("\nInsert the amount in MSats: ")
                 with open(filepath, 'rb') as f:
@@ -152,32 +140,12 @@ def apisenderFile():
         except (KeyError, ValueError):
             break
 
-    sh1 = str(sh0)
-    shh = sh1.split(',')
-    invoice = str(shh[6])
-
-    #---------------Token-----------
-    authtoken = str(shh[0])
-    authtoken1 = authtoken.split(':')
-    token = authtoken1[1]
-    #---------------End Token-------
-
-    #---------------Order-----------
-    uuid = str(shh[1])
-    uuid1 = uuid.split(':')
-    order = uuid1[1]
-    #---------------End Order-------
-
-    #---------------Amount----------
-    msat = str(shh[3])
-    msat1 = msat.split(':')
-    amount = msat1[1]
-    #---------------End Amount------
-
-    orderid = str(shh[1])
-    ln1 = invoice.split(':')
-    ln2 = str(ln1[1])
-    cln = ln2.strip('"')
+    data = json.loads(sh0)
+    token = data.get("auth_token", "")
+    order = data.get("uuid", "")
+    amount = str(data.get("bid", 0))
+    invoice_data = data.get("lightning_invoice", {})
+    cln = invoice_data.get("payreq", "")
     logger.debug("Token: %s..., Order: %s", token[:8] + "***", order)
     print("\033[0;37;40mYour Order Number: \033[1;31;40m" + order + "\033[0;37;40m")
     print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m")

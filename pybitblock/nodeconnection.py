@@ -3,7 +3,8 @@
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
-import base64, codecs, requests
+import codecs, requests
+import logging
 import shlex
 import subprocess
 import os
@@ -16,11 +17,12 @@ except ImportError:
     import json
 import time as t
 import numpy as np
-from cfonts import render, say
+from cfonts import render
 from pblogo import blogo
 from PIL import Image
 from robohash import Robohash
 
+logger = logging.getLogger(__name__)
 
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
 settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
@@ -161,8 +163,10 @@ def runthenumbersConn():
         c = str(b)
         print(c)
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
@@ -296,8 +300,10 @@ def localconnectpeer():
         lsd0 = str(lsd)
         print(lsd0)
         input("\nContinue... ")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def locallistchaintxns():
     lndconnectload = _load_lnd_config()
@@ -609,8 +615,10 @@ def localaddinvoice():
                 print("\033[0;37;40m")
                 t.sleep(2)
                 break
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localpayinvoice():
     lndconnectload = _load_lnd_config()
@@ -628,8 +636,10 @@ def localpayinvoice():
         else:
             _run_ln(*shlex.split(lncli), invoice)
         t.sleep(2)
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localgetnetworkinfo():
     lndconnectload = _load_lnd_config()
@@ -652,24 +662,59 @@ def localgetnetworkinfo():
     print("----------------------------------------------------------------------------------------------------\n")
     input("\nContinue... ")
 
+def _process_lncli_output(command, grep_pattern, sed_from, sed_to):
+    """Run an lncli command and process output in pure Python.
+
+    Replaces shell pipe chains (grep | tr | sed | xxd -r -p) with safe
+    Python-native equivalents.  No shell=True is used.
+
+    Args:
+        command: lncli sub-command, e.g. "listinvoices" or "listpayments".
+        grep_pattern: string to filter lines on (equivalent to grep).
+        sed_from: string to replace in matching lines (equivalent to sed 's/…').
+        sed_to: replacement hex string (equivalent to sed '…/…/g').
+
+    Returns:
+        Decoded text produced by the pipeline.
+    """
+    result = subprocess.run(
+        ["lncli", command], capture_output=True, text=True
+    )
+    lines = result.stdout.splitlines()
+    filtered = [line for line in lines if grep_pattern in line]
+    processed = []
+    for line in filtered:
+        # tr -d '"' | tr -d ','
+        line = line.replace('"', '').replace(',', '')
+        # sed replacement
+        line = line.replace(sed_from, sed_to)
+        # strip whitespace (html2text-like cleanup) then hex-decode
+        line = line.strip()
+        try:
+            decoded = bytes.fromhex(line).decode('utf-8', errors='replace')
+            processed.append(decoded)
+        except ValueError:
+            # If the line isn't valid hex after processing, keep it as-is
+            processed.append(line)
+    return "\n".join(processed)
+
+
 def localFullProtocol():
     lndconnectload = _load_lnd_config()
 
-    proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto3 = """lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    # NOTE: shell=True used for hardcoded pipe chains (no user input); lower risk but not ideal
-    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
-    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
-    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
+    p1 = _process_lncli_output("listinvoices", "34349334", "34349334",
+                               "0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a")
+    p2 = _process_lncli_output("listinvoices", "7629171", "7629171",
+                               "0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a")
+    p3 = _process_lncli_output("listinvoices", "34343434", "34343434",
+                               "0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a")
 
-    proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto2 = """lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    # NOTE: shell=True used for hardcoded pipe chains (no user input); lower risk but not ideal
-    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
-    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
-    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
+    p1 = _process_lncli_output("listpayments", "34349334", "34349334",
+                               "0a0a202d5079424c4f434b204d6573736167653a200a")
+    p2 = _process_lncli_output("listpayments", "7629171", "7629171",
+                               "0a0a202d5079424c4f434b204d6573736167653a200a")
+    p3 = _process_lncli_output("listpayments", "34343434", "34343434",
+                               "0a0a202d5079424c4f434b204d6573736167653a200a")
 
 
 
@@ -692,8 +737,10 @@ def localkeysend():
         )
 
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatsendA():
     lndconnectload = _load_lnd_config()
@@ -719,30 +766,36 @@ def localchatsendA():
         )
 
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatnewA():
     lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tRead.\n")
-        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
-        subprocess.run("""lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
+        print(_process_lncli_output("listinvoices", "34349334", "34349334",
+                                    "0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a"))
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatlistA():
     lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tList.\n")
-        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
-        subprocess.run("""lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
+        print(_process_lncli_output("listpayments", "34349334", "34349334",
+                                    "0a0a202d5079424c4f434b204d6573736167653a200a"))
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatsendB():
     lndconnectload = _load_lnd_config()
@@ -769,30 +822,36 @@ def localchatsendB():
         )
 
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatnewB():
     lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tRead.\n")
-        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
-        subprocess.run("""lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
+        print(_process_lncli_output("listinvoices", "7629171", "7629171",
+                                    "0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a"))
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatlistB():
     lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tList.\n")
-        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
-        subprocess.run("""lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
+        print(_process_lncli_output("listpayments", "7629171", "7629171",
+                                    "0a0a202d5079424c4f434b204d6573736167653a200a"))
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatsendC():
     lndconnectload = _load_lnd_config()
@@ -819,31 +878,36 @@ def localchatsendC():
         )
 
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatnewC():
     lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tRead.\n")
-        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
-        subprocess.run("""lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
+        print(_process_lncli_output("listinvoices", "34343434", "34343434",
+                                    "0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a"))
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchatlistC():
     lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tList.\n")
-        lncli = " listpayments "
-        # NOTE: shell=True used for hardcoded pipe chain (no user input); lower risk but not ideal
-        subprocess.run("""lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null""", shell=True)
+        print(_process_lncli_output("listpayments", "34343434", "34343434",
+                                    "0a0a202d5079424c4f434b204d6573736167653a200a"))
         input("\nContinue...")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def localchannelbalance():
     lndconnectload = _load_lnd_config()
@@ -1005,8 +1069,10 @@ def getnewinvoice():
                 print("\033[0;37;40m")
                 t.sleep(2)
                 break
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def payinvoice():
     lndconnectload = _load_lnd_config()
@@ -1058,8 +1124,10 @@ def payinvoice():
             canceled()
         print("\033[0;37;40m")
         t.sleep(2)
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def getnewaddress():
     lndconnectload = _load_lnd_config()
@@ -1084,8 +1152,10 @@ def getnewaddress():
         print("Bitcoin Address: " + addr['address'])
         qr.clear()
         input("\nContinue... ")
-    except Exception as e:  # Catch specific exceptions
+    except (KeyboardInterrupt, EOFError):
         pass
+    except Exception as e:
+        logger.debug("nodeconnection: %s", e)
 
 def listinvoice():
     lndconnectload = _load_lnd_config()

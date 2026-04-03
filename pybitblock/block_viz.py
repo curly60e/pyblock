@@ -167,7 +167,7 @@ def fetch_block_cli(height=None):
             "transactions": transactions,
             "total_fee": sum(t["fee"] for t in transactions),
         }
-    except Exception:
+    except (subprocess.SubprocessError, json.JSONDecodeError, KeyError, OSError):
         return fetch_block_api(height)
 
 

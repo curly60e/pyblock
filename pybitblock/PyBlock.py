@@ -6,18 +6,16 @@ import codecs
 import os
 import os.path
 import time as t
-import psutil
 import html2text
 import qrcode
 import random
-import xmltodict
 import shlex
 import sys
+import getpass
 import subprocess
 import requests
 import json
 import lastblockdetail
-import block_visualizer
 import mempool_monitor
 import asyncio
 import peers_monitor
@@ -1173,7 +1171,7 @@ def bip39convert():
         clear()
         blogo()
         print(output)
-        responseC = input("Words to Tiny Seed: ")
+        responseC = getpass.getpass("Words to Tiny Seed: ")
         subprocess.run(["python3", "TinySeed.py", responseC], cwd="TinySeed")
         input("\a\nContinue...")
     except Exception as e:
@@ -1343,7 +1341,7 @@ def callGitNostrLinTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_linux_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1367,7 +1365,7 @@ def callGitNostrLinarmTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_linux_arm64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1390,7 +1388,7 @@ def callGitNostrMacTerminal():
         blogo()
 
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_macos_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1414,7 +1412,7 @@ def callGitNostrMacarmTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_elf64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1436,7 +1434,7 @@ def callGitNostrWinTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_windows_amd64.exe", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1652,7 +1650,7 @@ def wallPhoenix():
         output = render(
         "PhoenixD Invoice Maker", colors=['yellow'], align='left', font='tiny'
         )
-        responseC = input("Your PhoenixD Password: ")
+        responseC = getpass.getpass("Your PhoenixD Password: ")
         responseD = input("Your Description: ")
         responseE = input("Amount in Sats: ")
         r = requests.post('http://localhost:9740/createinvoice', auth=('', responseC), data={'description': responseD, 'amountSat': responseE})
@@ -1669,7 +1667,7 @@ def wallPhoenixBOLT12():
         output = render(
         "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
         )
-        responseC = input("Your PhoenixD Password: ")
+        responseC = getpass.getpass("Your PhoenixD Password: ")
         r = requests.get('http://localhost:9740/getoffer', auth=('', responseC))
         print(r.text)
         input("\a\nContinue...")
@@ -7635,7 +7633,7 @@ def fullbtc():
             return
         path['ip_port'] = f"http://{ip_port_input}"
         path['rpcuser'] = input("RPC User: ")
-        path['rpcpass'] = input("RPC Password: ")
+        path['rpcpass'] = getpass.getpass("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
         with open("config/bclock.conf", "w") as f: json.dump(path, f, indent=2)
@@ -7661,7 +7659,7 @@ def fullbtclnd():
             return
         path['ip_port'] = f"http://{ip_port_input}"
         path['rpcuser'] = input("RPC User: ")
-        path['rpcpass'] = input("RPC Password: ")
+        path['rpcpass'] = getpass.getpass("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
         with open("config/bclock.conf", "w") as f: json.dump(path, f, indent=2)
