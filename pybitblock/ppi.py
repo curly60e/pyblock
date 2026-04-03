@@ -3,22 +3,36 @@
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
-import base64, codecs, json, requests
+import base64, codecs, requests
+import logging
 import subprocess
 import os
 import os.path
 import qrcode
 import xmltodict
 import time as t
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 from cfonts import render, say
 from pblogo import blogo
 from logos import logoB
 #from lnpay_py.wallet import LNPayWallet
 from pycoingecko import CoinGeckoAPI
 
+logger = logging.getLogger(__name__)
+
+# Allowed fiat currency codes for rate.sx
+_VALID_FIAT_CODES = {
+    'AUD', 'BRL', 'CAD', 'CHF', 'CLP', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP',
+    'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK',
+    'NZD', 'PHP', 'PKR', 'PLN', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'TWD',
+    'USD',
+}
+
 def clear(): # clear the screen
-    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
+    subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))  # noqa: S603 - hardcoded safe commands only
 
 def closed():
     print("<<< Back Control + C.\n\n")
@@ -45,7 +59,7 @@ def opreturnOnchainONLY():
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        resp = requests.post('https://opreturnbot.com/api/create', json={'message': message + '...PyBLOCK'})
+        resp = requests.post('https://opreturnbot.com/api/create', json={'message': message + '...PyBLOCK'}, timeout=10)
         b = resp.text
         clear()
         blogo()
@@ -59,7 +73,6 @@ def opreturnOnchainONLY():
         if lndconnectload['ln']:
             invoiceN = b
             invoice = invoiceN.lower()
-            lncli = " payinvoice "
             lsd = subprocess.run([lndconnectload["ln"], "decodepayreq", invoice], capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             d = json.loads(lsd0)
@@ -70,18 +83,18 @@ def opreturnOnchainONLY():
                 macaroon = codecs.encode(f.read(), 'hex')
             headers = {'Grpc-Metadata-macaroon': macaroon}
             url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
-            r = requests.get(url, headers=headers, verify=cert_path)
+            r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
             s = r.json()
             url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         responseB = str(response.text)
         responseC = responseB
         clear()
         blogo()
         print("\nTransaction ID: " + responseC)
         input("\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, subprocess.SubprocessError, OSError) as e:
+        logger.debug("opreturnOnchainONLY error: %s", e)
 
 def opreturn():
     qr = qrcode.QRCode(
@@ -141,7 +154,7 @@ def opreturn():
             blogo()
             print("Error! Only 80 characters allowed!")
             message = input("\nMessage: ")
-        resp = requests.post('https://opreturnbot.com/api/create', json={'message': message + '...PyBLOCK'})
+        resp = requests.post('https://opreturnbot.com/api/create', json={'message': message + '...PyBLOCK'}, timeout=10)
         b = resp.text
         node_not = input("\nDo you want to pay this invoice with your node? Y/n: ")
         if node_not in ["Y", "y"]:
@@ -157,10 +170,10 @@ def opreturn():
                     macaroon = codecs.encode(f.read(), 'hex')
                 headers = {'Grpc-Metadata-macaroon': macaroon}
                 url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
-                r = requests.get(url, headers=headers, verify=cert_path)
+                r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
                 s = r.json()
                 url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
-                response = requests.get(url)
+                response = requests.get(url, timeout=10)
                 responseB = str(response.text)
                 responseC = responseB
                 clear()
@@ -172,12 +185,11 @@ def opreturn():
                 localpayinvoice()
                 invoiceN = b
                 invoice = invoiceN.lower()
-                lncli = " payinvoice "
                 lsd = subprocess.run([lndconnectload["ln"], "decodepayreq", invoice], capture_output=True, text=True).stdout
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
                 url = f"https://opreturnbot.com/api/status/{d['payment_hash']}"
-                response = requests.get(url)
+                response = requests.get(url, timeout=10)
                 responseB = str(response.text)
                 responseC = responseB
                 clear()
@@ -197,7 +209,6 @@ def opreturn():
             if lndconnectload['ln']:
                 invoiceN = b
                 invoice = invoiceN.lower()
-                lncli = " payinvoice "
                 lsd = subprocess.run([lndconnectload["ln"], "decodepayreq", invoice], capture_output=True, text=True).stdout
                 lsd0 = str(lsd)
                 d = json.loads(lsd0)
@@ -208,18 +219,18 @@ def opreturn():
                     macaroon = codecs.encode(f.read(), 'hex')
                 headers = {'Grpc-Metadata-macaroon': macaroon}
                 url = f'https://{lndconnectload["ip_port"]}/v1/payreq/{b}'
-                r = requests.get(url, headers=headers, verify=cert_path)
+                r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
                 s = r.json()
                 url = f"https://opreturnbot.com/api/status/{s['payment_hash']}"
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             responseB = str(response.text)
             responseC = responseB
             clear()
             blogo()
             print("\nTransaction ID: " + responseC)
             input("\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, subprocess.SubprocessError, OSError) as e:
+        logger.debug("opreturn error: %s", e)
 
 def opreturn_view():
     try:
@@ -232,7 +243,7 @@ def opreturn_view():
         print(output)
         responseC = input("TX ID: ")
         url2 = f'https://opreturnbot.com/api/view/{responseC}'
-        r = requests.get(url2)
+        r = requests.get(url2, timeout=10)
         r2 = str(r.text)
         r3 = r2
         clear()
@@ -240,13 +251,35 @@ def opreturn_view():
         print("\nTransaction ID: " + responseC)
         print(f'OP_RETURN Message: {r3}')
         input("\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, KeyError) as e:
+        logger.debug("opreturn_view error: %s", e)
 
 def opretminer():
     try:
-        conn = """curl -s 'https://bitcointicker.co/latestblocks/' | xargs --null | html2text | grep "Coinbase" -A 70 | tr -d '|' | grep -v "Coinbase" | grep '6.25'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://bitcointicker.co/latestblocks/', timeout=15)
+        raw_html = resp.text
+        # Use html2text subprocess (safe: no user input)
+        proc = subprocess.run(
+            ["html2text"],
+            input=raw_html, capture_output=True, text=True
+        )
+        lines = proc.stdout.splitlines()
+        filtered = []
+        capture = False
+        capture_count = 0
+        for line in lines:
+            stripped = line.replace('|', '')
+            if "Coinbase" in line:
+                capture = True
+                capture_count = 0
+                continue
+            if capture:
+                capture_count += 1
+                if capture_count > 70:
+                    capture = False
+                elif '6.25' in stripped:
+                    filtered.append(stripped)
+        a = '\n'.join(filtered)
         clear()
         blogo()
         closed()
@@ -257,8 +290,8 @@ def opretminer():
         print(output)
         print(a)
         input("")
-    except Exception:
-        pass
+    except (requests.RequestException, subprocess.SubprocessError, OSError) as e:
+        logger.debug("opretminer error: %s", e)
 
 #-----------------------------GAMES--------------------------------
 #------------------------------------------------------------------
@@ -275,18 +308,36 @@ def gameroom():
         --------------------------------------
         """.format(closed()))
         input("\a\nContinue...")
-        conn = "ssh gameroom@bitreich.org"
-        subprocess.run(conn, shell=True)
-    except Exception:
-        pass
+        subprocess.run(["ssh", "gameroom@bitreich.org"])
+    except (subprocess.SubprocessError, OSError) as e:
+        logger.debug("gameroom error: %s", e)
 #----------------------------------------------------------------------
 
 #-----------------------------Stats--------------------------------
 
 def statsConn():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\\--" | tr -d '*' | tr -d '"' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://www.bitcoinblockhalf.com/', timeout=15)
+        proc = subprocess.run(
+            ["html2text"],
+            input=resp.text, capture_output=True, text=True
+        )
+        lines = proc.stdout.splitlines()
+        filtered = []
+        capture = False
+        capture_count = 0
+        for line in lines:
+            cleaned = line.replace('*', '').replace('"', '')
+            if "Total" in line:
+                capture = True
+                capture_count = 0
+            if capture:
+                capture_count += 1
+                if capture_count > 11:
+                    capture = False
+                elif '--' not in cleaned:
+                    filtered.append(cleaned)
+        a = '\n'.join(filtered)
         clear()
         blogo()
         closed()
@@ -294,8 +345,8 @@ def statsConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, subprocess.SubprocessError, OSError) as e:
+        logger.debug("statsConn error: %s", e)
 
 #-----------------------------END Stats--------------------------------
 
@@ -303,8 +354,8 @@ def statsConn():
 
 def pgpConn():
     try:
-        conn = """curl -s https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc', timeout=15)
+        a = resp.text
         clear()
         blogo()
         closed()
@@ -315,8 +366,8 @@ def pgpConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except requests.RequestException as e:
+        logger.debug("pgpConn error: %s", e)
 
 #-----------------------------END PGP--------------------------------
 
@@ -324,24 +375,24 @@ def pgpConn():
 def mtConn():  # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
-            a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout.strip()  # Leer y eliminar espacios en blanco
-            sats = a.lstrip('0.')  # Eliminar ceros iniciales y el punto decimal
+            resp = requests.get('https://blockchain.info/tobtc', params={'currency': 'USD', 'value': '1'}, timeout=10)
+            a = resp.text.strip()
+            sats = a.lstrip('0.')
             clear()
             blogo()
             closed()
             output = render("Moscow Time", colors=['yellow'], align='left', font='tiny')
-            outputT = render(f"{sats[:4]} sats", colors=['green'], align='left', font='tiny')  # Mostrar solo los primeros 4 dígitos
+            outputT = render(f"{sats[:4]} sats", colors=['green'], align='left', font='tiny')
             print(output)
             print(outputT)
             input("\a\nContinue...")
-        except Exception:
+        except (requests.RequestException, ValueError, KeyboardInterrupt):
             break
 
 def mtclock():
     try:
-        conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://blockchain.info/tobtc', params={'currency': 'USD', 'value': '1'}, timeout=10)
+        a = resp.text.strip()
         clear()
         blogo()
         closed()
@@ -350,8 +401,8 @@ def mtclock():
         print(output)
         print(outputT)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except requests.RequestException as e:
+        logger.debug("mtclock error: %s", e)
 
 #-----------------------------END MT--------------------------------
 
@@ -359,8 +410,17 @@ def mtclock():
 
 def satoshiConn():
     try:
-        conn = """curl -s https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html | html2text | tail -n 82 | grep -v "Unsubscribe" | grep -v "Next message" | grep -v "Previous message"| grep -v "Messages sorted" | grep -v "More information" | grep -v "list]" """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html', timeout=15)
+        proc = subprocess.run(
+            ["html2text"],
+            input=resp.text, capture_output=True, text=True
+        )
+        lines = proc.stdout.splitlines()
+        # Take last 82 lines, filter out navigation text
+        tail_lines = lines[-82:] if len(lines) >= 82 else lines
+        exclude = ["Unsubscribe", "Next message", "Previous message", "Messages sorted", "More information", "list]"]
+        filtered = [l for l in tail_lines if not any(ex in l for ex in exclude)]
+        a = '\n'.join(filtered)
         clear()
         blogo()
         closed()
@@ -371,8 +431,8 @@ def satoshiConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, subprocess.SubprocessError, OSError) as e:
+        logger.debug("satoshiConn error: %s", e)
 
 #-----------------------------END Satoshi--------------------------------
 
@@ -387,7 +447,7 @@ def whalalConn():
             return
         url = "https://api.whale-alert.io/v1/transactions"
         params = {"api_key": api_key, "limit": 7, "min_value": 5000000, "currency": "btc"}
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=10)
         data = response.json()
         clear()
         blogo()
@@ -400,31 +460,43 @@ def whalalConn():
             amount_usd = tx.get("amount_usd", 0)
             print(f" WHALE ALERT ₿ {amount} =${amount_usd:.0f}")
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+        logger.debug("whalalConn error: %s", e)
 
 #-----------------------------END Whale Alert--------------------------------
 #-----------------------------bwt.dev--------------------------------
 
 def bwtConn():
     try:
-        conn = "curl -s https://bwt.dev/banner.txt"
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://bwt.dev/banner.txt', timeout=10)
+        a = resp.text
         clear()
         blogo()
         closed()
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except requests.RequestException as e:
+        logger.debug("bwtConn error: %s", e)
 
 #-----------------------------END bwt.dev--------------------------------
 #-----------------------------Dates--------------------------------
 
 def datesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ','"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://bitcoinexplorer.org/fun', timeout=15)
+        proc = subprocess.run(
+            ["html2text"],
+            input=resp.text, capture_output=True, text=True
+        )
+        lines = proc.stdout.splitlines()
+        filtered = []
+        for line in lines:
+            if '20' in line and 'https' not in line and ' ' in line:
+                cleaned = line.replace('[', '').replace(',', '')
+                filtered.append(cleaned)
+                if len(filtered) >= 46:
+                    break
+        a = '\n'.join(filtered)
         clear()
         blogo()
         closed()
@@ -432,50 +504,85 @@ def datesConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, subprocess.SubprocessError, OSError) as e:
+        logger.debug("datesConn error: %s", e)
 
 #-----------------------------END Dates--------------------------------
 #-----------------------------Quotes--------------------------------
 
 def quotesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://bitcoinexplorer.org/api/quotes/all', timeout=10)
+        data = resp.json()
         clear()
         blogo()
         closed()
         output = render("quotes", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
+        for quote in data:
+            text = quote.get('text', '')
+            speaker = quote.get('speaker', '')
+            url = quote.get('url', '')
+            date = quote.get('date', '')
+            if 'conQuote' not in text:
+                print(f'  Quote: {text}')
+                print(f'  By: {speaker}')
+                if url:
+                    print(f'  Link: {url}')
+                if date:
+                    print(f'  Date: {date}')
+                print()
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+        logger.debug("quotesConn error: %s", e)
 
 #-----------------------------END Quotes--------------------------------
 #-----------------------------Hashrate--------------------------------
 
 def miningConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/api/mining/hashrate" | jq -C '.[]' | tr -d '{|}|]|,' | tr -d '"'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://bitcoinexplorer.org/api/mining/hashrate', timeout=10)
+        data = resp.json()
         clear()
         blogo()
         closed()
         output = render("hashrate", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
+        for key, value in data.items():
+            if isinstance(value, dict):
+                for k, v in value.items():
+                    print(f'  {k}: {v}')
+            else:
+                print(f'  {key}: {value}')
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+        logger.debug("miningConn error: %s", e)
 
 #-----------------------------END Hashrate--------------------------------
 #-----------------------------StatsLN--------------------------------
 
 def stalnConn():
     try:
-        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://1ml.com', timeout=15)
+        proc = subprocess.run(
+            ["html2text"],
+            input=resp.text, capture_output=True, text=True
+        )
+        lines = proc.stdout.splitlines()
+        filtered = []
+        capture = False
+        capture_count = 0
+        for line in lines:
+            stripped = ' '.join(line.split())
+            if "Number" in line:
+                capture = True
+                capture_count = 0
+            if capture:
+                filtered.append(stripped)
+                capture_count += 1
+                if capture_count > 8:
+                    capture = False
+        a = '\n'.join(filtered)
         clear()
         blogo()
         closed()
@@ -486,25 +593,31 @@ def stalnConn():
         print(output)
         print(a)
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, subprocess.SubprocessError, OSError) as e:
+        logger.debug("stalnConn error: %s", e)
 
 #-----------------------------END StatsLN--------------------------------
 #-----------------------------StatRanking--------------------------------
 def ranConn():
     try:
-        conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g'
-"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        resp = requests.get('https://1ml.com/node?order=capacity&json=true', timeout=15)
+        data = resp.json()
         clear()
         blogo()
         closed()
         output = render("ranking", colors=['yellow'], align='left', font='tiny')
         print(output)
-        print(a)
+        exclude_keys = {'last_update', 'color', 'noderank', 'addresses'}
+        for node in data:
+            if isinstance(node, dict):
+                for k, v in node.items():
+                    if k not in exclude_keys:
+                        label = 'Node' if k == 'alias' else ('RANK' if k == 'capacity' else k)
+                        print(f'  {label}: {v}')
+                print()
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.debug("ranConn error: %s", e)
 #-----------------------------END Ranking--------------------------------
 
 def trustednode():
@@ -526,8 +639,8 @@ def trustednode():
         input("\a\nContinue...")
         conn = ["telnet", "cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion", "6023"]
         subprocess.run(conn)
-    except Exception:
-        pass
+    except (subprocess.SubprocessError, OSError) as e:
+        logger.debug("trustednode error: %s", e)
 #-----------------------------END GAMES--------------------------------
 
 #-----------------------------Node Miner--------------------------------
@@ -541,8 +654,8 @@ def CoreMiner():
         input("\a\n...Mining...")
         subprocess.run([path['bitcoincli'], "-generate", "1", "2147483647"])
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (subprocess.SubprocessError, OSError, KeyError) as e:
+        logger.debug("CoreMiner error: %s", e)
 
 def OwnNodeMinerComputer():
     try:
@@ -566,8 +679,8 @@ def OwnNodeMinerComputer():
         responseF = input("Select Your Threads, 2, 4, 6, 8, 10, ..: ")
         subprocess.run(["./minerd", "-a", "sha256d", "-O", f"{responseC}:{responseD}", "-o", "http://127.0.0.1:8332", f"--coinbase-addr={responseE}", "-t", responseF], cwd="OwnNodeMiner")
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (subprocess.SubprocessError, OSError) as e:
+        logger.debug("OwnNodeMinerComputer error: %s", e)
 
 def OwnNodeMinerRaspberry():
     try:
@@ -590,8 +703,8 @@ def OwnNodeMinerRaspberry():
         responseF = input("Select Your Threads, 2, 4, 6, 8, 10, ..: ")
         subprocess.run(["./cpuminer", "-a", "sha256d", "-O", f"{responseC}:{responseD}", "-o", "http://127.0.0.1:8332", f"--coinbase-addr={responseE}", "-t", responseF], cwd="OwnNodeMiner/cpuminer-multi-arm")
         input("\a\nContinue...")
-    except Exception:
-        pass
+    except (subprocess.SubprocessError, OSError) as e:
+        logger.debug("OwnNodeMinerRaspberry error: %s", e)
 #-----------------------------Node Miner--------------------------------
 
 #-----------------------------wttr.in--------------------------------
@@ -652,8 +765,8 @@ def wttrDataV1():
         blogo()
         print(a)
         input("Continue...")
-    except Exception:
-        pass
+    except requests.RequestException as e:
+        logger.debug("wttrDataV1 error: %s", e)
 
 def wttrDataV2():
     try:
@@ -710,8 +823,8 @@ def wttrDataV2():
         blogo()
         print(a)
         input("Continue...")
-    except Exception:
-        pass
+    except requests.RequestException as e:
+        logger.debug("wttrDataV2 error: %s", e)
 
 
 #-----------------------------END wttr.in--------------------------------
@@ -758,19 +871,23 @@ def rateSXList():
                 -------------------------------------------
         """
         print(fiat)
-        selectFiat = input("Insert a Fiat currency: ")
-    except Exception:
-        pass
+        selectFiat = input("Insert a Fiat currency: ").strip().upper()
+        if selectFiat not in _VALID_FIAT_CODES:
+            print(f"Invalid currency code: {selectFiat}")
+            return
+    except (KeyboardInterrupt, EOFError):
+        return
     while True:
         try:
-            cmd = "curl -s '" + selectFiat + ".rate.sx/?F&n=1'"
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://{selectFiat}.rate.sx/?F&n=1"
+            resp = requests.get(url, headers={"User-Agent": "curl"}, timeout=15)
+            a = resp.text
             clear()
             blogo()
             closed()
             print(a)
             t.sleep(20)
-        except Exception:
+        except (requests.RequestException, KeyboardInterrupt):
             break
 
 def rateSXGraph():
@@ -813,19 +930,25 @@ def rateSXGraph():
                 -------------------------------------------
         """
         print(fiat)
-        selectFiat = input("Insert a Fiat currency: ")
-    except Exception:
-        pass
+        selectFiat = input("Insert a Fiat currency: ").strip().upper()
+        if selectFiat not in _VALID_FIAT_CODES:
+            print(f"Invalid currency code: {selectFiat}")
+            return
+    except (KeyboardInterrupt, EOFError):
+        return
     while True:
         try:
-            cmd = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            url = f"https://{selectFiat}.rate.sx/btc"
+            resp = requests.get(url, headers={"User-Agent": "curl"}, timeout=15)
+            lines = resp.text.splitlines()
+            filtered = [l for l in lines if 'Use' not in l]
+            a = '\n'.join(filtered)
             clear()
             blogo()
             closed()
             print(a)
             t.sleep(20)
-        except Exception:
+        except (requests.RequestException, KeyboardInterrupt):
             break
 
 #-----------------------------END RATE.SX--------------------------------
@@ -864,8 +987,8 @@ def CoingeckoPP():
         ------------------------------------------------------------------
         """.format(usd,eur,gbp,jpy,aud))
         input("Continue...")
-    except Exception:
-        pass
+    except (requests.RequestException, KeyError, ValueError) as e:
+        logger.debug("CoingeckoPP error: %s", e)
 
 #-----------------------------END COINGECKO--------------------------------
 
@@ -932,7 +1055,7 @@ def lnbitCreateNewInvoice():
         b = str(a['invoice_read_key'])
         headers = {"X-Api-Key": b, "Content-type": "application/json"}
         payload = {"out": False, "amount": int(amt), "memo": f"{memo} -PyBLOCK"}
-        sh = requests.post("https://legend.lnbits.com/api/v1/payments", json=payload, headers=headers).text
+        sh = requests.post("https://legend.lnbits.com/api/v1/payments", json=payload, headers=headers, timeout=10).text
         clear()
         blogo()
         n = str(sh)
@@ -963,7 +1086,7 @@ def lnbitCreateNewInvoice():
                 t.sleep(10)
                 dn = str(d['checking_id'])
                 headers = {"X-Api-Key": b, "Content-type": "application/json"}
-                rsh = requests.get(f"https://legend.lnbits.com/api/v1/payments/{dn}", headers=headers).text
+                rsh = requests.get(f"https://legend.lnbits.com/api/v1/payments/{dn}", headers=headers, timeout=10).text
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -976,8 +1099,8 @@ def lnbitCreateNewInvoice():
                 tick()
                 t.sleep(2)
                 break
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, OSError) as e:
+        logger.debug("lnbitCreateNewInvoice error: %s", e)
 
 def lnbitPayInvoice():
     bolt = input("Invoice: ")
@@ -987,7 +1110,7 @@ def lnbitPayInvoice():
     payload = {"out": True, "bolt11": bolt}
 
     try:
-        sh = requests.post("https://legend.lnbits.com/api/v1/payments", json=payload, headers=headers).text
+        sh = requests.post("https://legend.lnbits.com/api/v1/payments", json=payload, headers=headers, timeout=10).text
         n = str(sh)
         d = json.loads(n)
         dn = str(d['checking_id'])
@@ -995,7 +1118,7 @@ def lnbitPayInvoice():
         b = str(a['invoice_read_key'])
         while True:
             headers = {"X-Api-Key": b, "Content-type": "application/json"}
-            rsh = requests.get(f"https://legend.lnbits.com/api/v1/payments/{dn}", headers=headers).text
+            rsh = requests.get(f"https://legend.lnbits.com/api/v1/payments/{dn}", headers=headers, timeout=10).text
             clear()
             blogo()
             nn = str(rsh)
@@ -1006,8 +1129,8 @@ def lnbitPayInvoice():
             tick()
             t.sleep(2)
             break
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+        logger.debug("lnbitPayInvoice error: %s", e)
 
 def lnbitCreatePayWall():
     while True:
@@ -1025,7 +1148,7 @@ def lnbitCreatePayWall():
             b = str(a['admin_key'])
             headers = {"X-Api-Key": b, "Content-type": "application/json"}
             payload = {"url": url, "memo": memo, "description": desc, "amount": int(amt), "remembers": remember == "true"}
-            sh = requests.post("https://legend.lnbits.com/paywall/api/v1/paywalls", json=payload, headers=headers).text
+            sh = requests.post("https://legend.lnbits.com/paywall/api/v1/paywalls", json=payload, headers=headers, timeout=10).text
             clear()
             blogo()
             n = str(sh)
@@ -1036,7 +1159,7 @@ def lnbitCreatePayWall():
             aa = loadFileConnLNBits(['invoice_read_key'])
             bb = str(a['invoice_read_key'])
             headers = {"X-Api-Key": bb}
-            sh = requests.get("https://legend.lnbits.com/paywall/api/v1/paywalls", headers=headers).text
+            sh = requests.get("https://legend.lnbits.com/paywall/api/v1/paywalls", headers=headers, timeout=10).text
             clear()
             blogo()
             n = str(sh)
@@ -1080,14 +1203,14 @@ def lnbitCreatePayWall():
                 input("Continue...")
             clear()
             blogo()
-        except Exception:
+        except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt):
             break
 
 def lnbitListPawWall():
     a = loadFileConnLNBits(['invoice_read_key'])
     b = str(a['invoice_read_key'])
     headers = {"X-Api-Key": b}
-    sh = requests.get("https://legend.lnbits.com/paywall/api/v1/paywalls", headers=headers).text
+    sh = requests.get("https://legend.lnbits.com/paywall/api/v1/paywalls", headers=headers, timeout=10).text
     clear()
     blogo()
     n = str(sh)
@@ -1117,7 +1240,7 @@ def lnbitListPawWall():
                     Wallet: {}
                     """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
-        except Exception:
+        except (json.JSONDecodeError, KeyError, KeyboardInterrupt):
             break
         input("Continue...")
         clear()
@@ -1129,7 +1252,7 @@ def lnbitDeletePayWall():
             a = loadFileConnLNBits(['invoice_read_key'])
             b = str(a['invoice_read_key'])
             headers = {"X-Api-Key": b}
-            sh = requests.get("https://legend.lnbits.com/paywall/api/v1/paywalls", headers=headers).text
+            sh = requests.get("https://legend.lnbits.com/paywall/api/v1/paywalls", headers=headers, timeout=10).text
             clear()
             blogo()
             n = str(sh)
@@ -1159,7 +1282,7 @@ def lnbitDeletePayWall():
                             Wallet: {}
                             """.format(s['id'], s['amount'], s['description'], s['memo'], s['extras'], s['remembers'], s['url'], s['wallet']))
                             print("----------------------------------------------------------------------------------------------------------------\n")
-                except Exception:
+                except (json.JSONDecodeError, KeyError, KeyboardInterrupt):
                     break
                 input("Continue...")
                 break
@@ -1168,13 +1291,13 @@ def lnbitDeletePayWall():
             b = str(a['admin_key'])
             id = input("Insert PayWall ID: ")
             headers = {"X-Api-Key": b}
-            sh = requests.delete(f"https://legend.lnbits.com/paywall/api/v1/paywalls/{id}", headers=headers).text
+            sh = requests.delete(f"https://legend.lnbits.com/paywall/api/v1/paywalls/{id}", headers=headers, timeout=10).text
             clear()
             blogo()
             print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
             t.sleep(2)
             clear()
-        except Exception:
+        except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt):
             break
 
 def lnbitsLNURLw():
@@ -1196,7 +1319,7 @@ def lnbitsLNURLw():
             b = str(a['admin_key'])
             headers = {"X-Api-Key": b, "Content-type": "application/json"}
             payload = {"title": title, "min_withdrawable": int(minwith), "max_withdrawable": int(maxwith), "uses": int(usesw), "wait_time": int(waittime), "is_unique": isunique == "true"}
-            sh = requests.post("https://legend.lnbits.com/withdraw/api/v1/links", json=payload, headers=headers).text
+            sh = requests.post("https://legend.lnbits.com/withdraw/api/v1/links", json=payload, headers=headers, timeout=10).text
             clear()
             blogo()
             n = str(sh)
@@ -1206,7 +1329,7 @@ def lnbitsLNURLw():
             clear()
             while True:
                 headers = {"X-Api-Key": b}
-                sh = requests.get("https://legend.lnbits.com/withdraw/api/v1/links", headers=headers).text
+                sh = requests.get("https://legend.lnbits.com/withdraw/api/v1/links", headers=headers, timeout=10).text
                 clear()
                 blogo()
                 n = str(sh)
@@ -1236,7 +1359,7 @@ def lnbitsLNURLw():
                 input("Continue...")
                 clear()
                 blogo()
-        except Exception:
+        except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt):
             break
 
 def lnbitsLNURLwList():
@@ -1245,7 +1368,7 @@ def lnbitsLNURLwList():
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
             headers = {"X-Api-Key": b}
-            sh = requests.get("https://legend.lnbits.com/withdraw/api/v1/links", headers=headers).text
+            sh = requests.get("https://legend.lnbits.com/withdraw/api/v1/links", headers=headers, timeout=10).text
             clear()
             blogo()
             n = str(sh)
@@ -1273,7 +1396,7 @@ def lnbitsLNURLwList():
                     """.format(s['id'], s['lnurl'], s['wait_time'], s['uses'], s['used'], s['min_withdrawable'], s['max_withdrawable']))
                     print("----------------------------------------------------------------------------------------------------------------\n")
             input("Continue...")
-    except Exception:
+    except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt):
         print("\n")
 
 #-------------------------1d646820055e4e2da218e801eaacfc94----END LNBITS--------------------------------
@@ -1363,7 +1486,7 @@ def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
     headers = {"Content-Type": "application/json", "Authorization": b}
-    sh = requests.get("https://api.opennode.co/v1/account/balance", headers=headers).text
+    sh = requests.get("https://api.opennode.co/v1/account/balance", headers=headers, timeout=10).text
     clear()
     blogo()
     n = str(sh)
@@ -1380,7 +1503,7 @@ def OpenNodelistfunds():
     input("Continue...")
 
 def OpenNodeCheckStatus():
-    sh = requests.get("https://status.opennode.com/history.rss").text
+    sh = requests.get("https://status.opennode.com/history.rss", timeout=10).text
     clear()
     blogo()
     my_dict=xmltodict.parse(sh)
@@ -1433,7 +1556,7 @@ def OpenNodecreatecharge():
         amt = input(f"Amount in {selection}: ")
         headers = {"Authorization": b, "Content-Type": "application/json"}
         payload = {"amount": amt, "currency": selection.upper()}
-        sh = requests.post("https://api.opennode.co/v1/charges", json=payload, headers=headers).text
+        sh = requests.post("https://api.opennode.co/v1/charges", json=payload, headers=headers, timeout=10).text
         clear()
         blogo()
         n = str(sh)
@@ -1489,13 +1612,13 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except Exception:
+            except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt):
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
         headers = {"Authorization": b, "Content-Type": "application/json"}
         payload = {"amount": amt, "currency": "BTC"}
-        sh = requests.post("https://api.opennode.co/v1/charges", json=payload, headers=headers).text
+        sh = requests.post("https://api.opennode.co/v1/charges", json=payload, headers=headers, timeout=10).text
         clear()
         blogo()
         n = str(sh)
@@ -1551,7 +1674,7 @@ def OpenNodecreatecharge():
                 input("\nContinue...")
                 clear()
                 blogo()
-            except Exception:
+            except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt):
                 break
 
 def OpenNodeiniciatewithdrawal():
@@ -1568,7 +1691,7 @@ def OpenNodeiniciatewithdrawal():
                 invoice = input("\nInvoice: ")
                 headers = {"Authorization": b, "Content-Type": "application/json"}
                 payload = {"pay_req": invoice}
-                ssh = requests.post("https://api.opennode.co/v1/charge/decode", json=payload, headers=headers).text
+                ssh = requests.post("https://api.opennode.co/v1/charge/decode", json=payload, headers=headers, timeout=10).text
                 nn = str(ssh)
                 dd = json.loads(nn)
                 print(dd)
@@ -1599,15 +1722,15 @@ def OpenNodeiniciatewithdrawal():
 
             headers = {"Authorization": b, "Content-Type": "application/json"}
             payload = {"type": "ln", "address": invoice, "callback_url": ""}
-            sh = requests.post("https://api.opennode.co/v2/withdrawals", json=payload, headers=headers).text
+            sh = requests.post("https://api.opennode.co/v2/withdrawals", json=payload, headers=headers, timeout=10).text
             n = str(sh)
             d = json.loads(n)
             clear()
             blogo()
             tick()
             t.sleep(2)
-        except Exception:
-            pass
+        except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+            logger.debug("OpenNodeiniciatewithdrawal LN error: %s", e)
 
     elif lnchain in ["O", "o"]:
         try:
@@ -1620,7 +1743,7 @@ def OpenNodeiniciatewithdrawal():
                 payload = {"type": "chain", "amount": amt, "address": address, "callback_url": ""}
 
                 if amt < 199999:
-                    sh = requests.post("https://api.opennode.co/v2/withdrawals", json=payload, headers=headers).text
+                    sh = requests.post("https://api.opennode.co/v2/withdrawals", json=payload, headers=headers, timeout=10).text
                     n = str(sh)
                     d = json.loads(n)
                     print("\n----------------------------------------------------------------------------------------------------")
@@ -1631,7 +1754,7 @@ def OpenNodeiniciatewithdrawal():
                     """.format(d['message']))
                     print("----------------------------------------------------------------------------------------------------\n")
                 elif amt > 200000:
-                    sh = requests.post("https://api.opennode.co/v2/withdrawals", json=payload, headers=headers).text
+                    sh = requests.post("https://api.opennode.co/v2/withdrawals", json=payload, headers=headers, timeout=10).text
                     n = str(sh)
                     d = json.loads(n)
                     dd = d['data']
@@ -1651,8 +1774,8 @@ def OpenNodeiniciatewithdrawal():
                     logoB()
                     t.sleep(2)
                     break
-        except Exception:
-            pass
+        except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:
+            logger.debug("OpenNodeiniciatewithdrawal onchain error: %s", e)
 
 def OpenNodeListPayments():
     qr = qrcode.QRCode(
@@ -1664,7 +1787,7 @@ def OpenNodeListPayments():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
     headers = {"Content-Type": "application/json", "Authorization": b}
-    sh = requests.get("https://api.opennode.co/v1/withdrawals", headers=headers).text
+    sh = requests.get("https://api.opennode.co/v1/withdrawals", headers=headers, timeout=10).text
     clear()
     blogo()
     print("\n\tOPENNODE TRANSACTIONS LIST\n")
@@ -1702,7 +1825,7 @@ def OpenNodeListPayments():
             clear()
             blogo()
             print("\n\tOPENNODE TRANSACTIONS LIST\n")
-        except Exception:
+        except (json.JSONDecodeError, KeyError, KeyboardInterrupt):
             break
 
 #-----------------------------END OPENNODE--------------------------------
@@ -1753,7 +1876,7 @@ def tippinmeGetInvoice():
         clear()
         blogo()
         url = f'https://api.tippin.me/v1/public/addinvoice/{b}/{q}'
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         responseB = str(response.text)
         responseC = responseB
         lnreq = responseC.split(',')
@@ -1783,8 +1906,8 @@ def tippinmeGetInvoice():
             print(f'LND Invoice: {ln1}')
             response.close()
             input("Continue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, IndexError, OSError) as e:
+        logger.debug("tippinmeGetInvoice error: %s", e)
 
 #-----------------------------END TIPPINME--------------------------------
 #-----------------------------TALLYCOIN------------------------------
@@ -1841,7 +1964,7 @@ def tallycoGetPayment():
                     \n""")
         lnd_onchain = input("Payment Method: ")
         payload = {"type": "profile", "id": d, "satoshi_amount": amount, "payment_method": lnd_onchain}
-        tallycomethod = requests.post("https://api.tallyco.in/v1/payment/request/", data=payload).text
+        tallycomethod = requests.post("https://api.tallyco.in/v1/payment/request/", data=payload, timeout=10).text
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -1866,8 +1989,8 @@ def tallycoGetPayment():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+        logger.debug("tallycoGetPayment error: %s", e)
 
 
 def tallycoDonateid():
@@ -1888,7 +2011,7 @@ def tallycoDonateid():
                     \n""")
         lnd_onchain = input("Payment Method: ")
         payload = {"type": "profile", "id": donate, "satoshi_amount": amount, "payment_method": lnd_onchain}
-        tallycomethod = requests.post("https://api.tallyco.in/v1/payment/request/", data=payload).text
+        tallycomethod = requests.post("https://api.tallyco.in/v1/payment/request/", data=payload, timeout=10).text
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -1930,8 +2053,8 @@ def tallycoDonateid():
             print(f'Bitcoin Address: {e}')
             qr.clear()
             input("\nContinue...")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, OSError) as e:
+        logger.debug("tallycoDonateid error: %s", e)
 
 
 #-----------------------------END TALLYCOIN------------------------------
@@ -1940,7 +2063,7 @@ def tallycoDonateid():
 def fee():
     try:
         while True:
-            r = requests.get('https://mempool.space/api/v1/fees/recommended')
+            r = requests.get('https://mempool.space/api/v1/fees/recommended', timeout=10)
             r.headers['Content-Type']
             n = r.text
             di = json.loads(n)
@@ -1956,8 +2079,8 @@ def fee():
             """.format(di['fastestFee'], di['halfHourFee'], di['hourFee']))
             t.sleep(5)
             print("\n\t    Getting New Information")
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt) as e:
+        logger.debug("fee error: %s", e)
 
 def blocks():
     try:
@@ -1965,7 +2088,7 @@ def blocks():
             clear()
             blogo()
             print("\n\t             Getting New Information")
-            r = requests.get('https://mempool.space/api/v1/fees/mempool-blocks')
+            r = requests.get('https://mempool.space/api/v1/fees/mempool-blocks', timeout=10)
             r.headers['Content-Type']
             n = r.text
             di = json.loads(n)
@@ -1986,8 +2109,8 @@ def blocks():
                 <<< Back Control + C
                 """.format(q['blockSize'], q['blockVSize'], q['nTx'], q['totalFees'], q['medianFee']))
                 t.sleep(3)
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, KeyboardInterrupt) as e:
+        logger.debug("blocks error: %s", e)
 
 
 #-----------------------------END MEMPOOL.SPACE------------------------------

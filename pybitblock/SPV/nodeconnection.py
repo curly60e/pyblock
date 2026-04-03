@@ -5,6 +5,7 @@
 
 import base64, codecs, json, requests
 import subprocess
+import html2text
 import os
 import os.path
 import qrcode
@@ -41,7 +42,7 @@ def rpc(method, params=None):
         "params": params
     })
     path = cfg.path
-    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload, timeout=10).json()['result']
 
 def remoteHalving():
     try:
@@ -77,8 +78,10 @@ def remoteconsole(): # get into the console from bitcoin-cli
 
 def runthenumbersConn():
     try:
-        conn = 'curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C '
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get("https://get.txoutset.info/", timeout=10)
+        converter = html2text.HTML2Text()
+        text = converter.handle(response.text)
+        a = "\n".join(line for line in text.splitlines() if "UTC" not in line)
         clear()
         blogo()
         closed()
@@ -129,7 +132,7 @@ def channels():
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     n = a['channels']
     while True:

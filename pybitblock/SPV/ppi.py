@@ -685,8 +685,15 @@ def rateSXGraph():
         logger.debug("ppi: %s", e)
     while True:
         try:
-            cmd = "curl -s '" + selectFiat + """.rate.sx/btc' | grep -v -E 'Use'"""
-            a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+            if not selectFiat.isalnum():
+                logger.debug("ppi: invalid fiat currency code: %s", selectFiat)
+                break
+            url = f"https://{selectFiat}.rate.sx/btc"
+            resp = requests.get(url, timeout=15)
+            resp.raise_for_status()
+            a = "\n".join(
+                line for line in resp.text.splitlines() if "Use" not in line
+            )
             clear()
             blogo()
             closed()

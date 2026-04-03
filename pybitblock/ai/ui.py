@@ -1,5 +1,6 @@
 """Terminal UI for PyBLOCK AI Assistant."""
 
+import logging
 import sys
 import time
 
@@ -7,6 +8,8 @@ import qrcode
 import requests
 from rich.console import Console
 from rich.markdown import Markdown
+
+logger = logging.getLogger(__name__)
 
 from shared.display import clear
 from pblogo import blogo
@@ -125,7 +128,8 @@ def _chat_loop(client, path, lndconnectload, balance):
     # Gather context once at start, refresh on new blocks
     try:
         context = gather_node_context(path, lndconnectload)
-    except Exception:
+    except (requests.RequestException, OSError, ValueError, KeyError) as e:
+        logger.debug("Initial node context gather failed: %s", e)
         context = {}
 
     while True:
@@ -149,8 +153,8 @@ def _chat_loop(client, path, lndconnectload, balance):
                 _show_usage(client)
                 try:
                     balance = client.get_balance()
-                except Exception:
-                    pass
+                except (requests.RequestException, KeyError, ValueError) as e:
+                    logger.debug("Balance refresh failed: %s", e)
                 print(f"\n{_status_line(balance)}\n")
                 continue
             if upper == "C":
@@ -167,8 +171,8 @@ def _chat_loop(client, path, lndconnectload, balance):
             # Refresh context periodically
             try:
                 context = gather_node_context(path, lndconnectload)
-            except Exception:
-                pass
+            except (requests.RequestException, OSError, ValueError, KeyError) as e:
+                logger.debug("Node context refresh failed: %s", e)
 
             # Visual separator between user input and AI response
             print(f"\n  {C}{'─' * 60}{D}")
@@ -194,8 +198,8 @@ def _chat_loop(client, path, lndconnectload, balance):
                 # Update balance
                 try:
                     balance = client.get_balance()
-                except Exception:
-                    pass
+                except (requests.RequestException, KeyError, ValueError) as e:
+                    logger.debug("Post-chat balance refresh failed: %s", e)
 
                 # Show balance below separator
                 print(f"  {DIM}Balance: {balance:,} sats{D}")
@@ -266,8 +270,8 @@ def _topup_flow(client):
         print("\033[1;30;47m")
         qr.print_ascii()
         print(D)
-    except Exception:
-        pass
+    except (ValueError, OSError) as e:
+        logger.debug("QR code generation failed: %s", e)
 
     print(f"  {invoice}\n")
     print(f"  Pay with any Lightning wallet. Waiting for payment...\n")
@@ -284,8 +288,8 @@ def _topup_flow(client):
                 )
                 time.sleep(2)
                 return new_balance
-        except Exception:
-            pass
+        except (requests.RequestException, KeyError, ValueError) as e:
+            logger.debug("Payment check failed: %s", e)
         sys.stdout.write(".")
         sys.stdout.flush()
 

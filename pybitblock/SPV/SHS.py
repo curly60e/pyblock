@@ -7,12 +7,13 @@ import hashlib
 import binascii
 from pprint import pprint
 import random
+import secrets
 import signal
 import sys
 signal.signal(signal.SIGINT, lambda x, y: sys.exit(0))
 
 address = '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
-nonce   = hex(random.randint(0,2**32-1))[2:].zfill(8)
+nonce   = hex(secrets.randbelow(2**32))[2:].zfill(8)
 host    = 'pool.pyblock.xyz'
 port    = 3333
 
@@ -44,7 +45,7 @@ def main():
         target = (nbits[2:]+'00'*(int(nbits[:2],16) - 3)).zfill(64)
         print('\nNbits: {}\n\nTarget: {}\n'.format(nbits,target))
 
-        extranonce2 = hex(random.randint(0,2**32-1))[2:].zfill(2*extranonce2_size)
+        extranonce2 = hex(secrets.randbelow(2**32))[2:].zfill(2*extranonce2_size)
 
         coinbase = coinb1 + extranonce1 + extranonce2 + coinb2
         coinbase_hash_bin = hashlib.sha256(hashlib.sha256(binascii.unhexlify(coinbase)).digest()).digest()
@@ -61,7 +62,7 @@ def main():
         print('Merkle Root: {}\n'.format(merkle_root))
 
         def noncework():
-            nonce   = hex(random.randint(0,2**32-1))[2:].zfill(8)
+            nonce   = hex(secrets.randbelow(2**32))[2:].zfill(8)
             blockheader = version + prevhash + merkle_root + nbits + ntime + nonce +\
                 '000000800000000000000000000000000000000000000000000000000000000000000000000000000000000080020000'
 

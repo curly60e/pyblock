@@ -3,14 +3,17 @@
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
-import base64, codecs, json, requests
+import base64, codecs, requests
 import shlex
 import subprocess
 import os
 import os.path
 import qrcode
 import sys
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 import time as t
 import numpy as np
 from cfonts import render, say
@@ -21,6 +24,12 @@ from robohash import Robohash
 
 lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
 settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
+
+
+def _load_lnd_config():
+    """Load LND connection configuration."""
+    with open("config/blndconnect.conf", "r") as f:
+        return json.load(f)
 
 
 def _run_ln(*args):
@@ -53,7 +62,7 @@ def rpc(method, params=None):
         with open("bclock.conf", "r") as f:
             pathv = json.load(f) # Load the file 'bclock.conf'
         path = pathv # Copy the variable pathv to 'path'
-    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload, timeout=10).json()['result']
 
 def remoteHalving():
 
@@ -158,9 +167,7 @@ def runthenumbersConn():
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
 def consoleLN(): # get into the console from bitcoin-cli
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     print("\t\033[0;37;40mThis is \033[1;33;40mLncli's \033[0;37;40mconsole. Type your respective commands you want to display.\n\n")
     while True:
         cle = input("\033[1;32;40mconsole $>: \033[0;37;40m")
@@ -169,9 +176,7 @@ def consoleLN(): # get into the console from bitcoin-cli
         print(lsd1)
 
 def locallistpeersQQ():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -277,9 +282,7 @@ def locallistpeersQQ():
             break
 
 def localconnectpeer():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         clear()
         print("\033[1;32;40m")
@@ -297,9 +300,7 @@ def localconnectpeer():
         pass
 
 def locallistchaintxns():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -353,9 +354,7 @@ def locallistchaintxns():
             break
 
 def locallistinvoices():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -406,9 +405,7 @@ def locallistinvoices():
             break
 
 def locallistchannels():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     lncli = " listchannels"
     lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
@@ -499,9 +496,7 @@ def locallistchannels():
             break
 
 def localgetinfo():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -565,9 +560,7 @@ def localgetinfo():
     input("\nContinue... ")
 
 def localaddinvoice():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     lncli = " addinvoice"
     lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
@@ -620,9 +613,7 @@ def localaddinvoice():
         pass
 
 def localpayinvoice():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         invoiceN = input("Insert the invoice to pay: ")
         invoice = invoiceN.lower()
@@ -641,9 +632,7 @@ def localpayinvoice():
         pass
 
 def localgetnetworkinfo():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     lncli = " getnetworkinfo"
     lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
@@ -664,9 +653,7 @@ def localgetnetworkinfo():
     input("\nContinue... ")
 
 def localFullProtocol():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
 
     proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
     proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
@@ -687,9 +674,7 @@ def localFullProtocol():
 
 
 def localkeysend():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tYou are going to send a payment using KeySend - Note: You don't need any invoice, just your peer ID.\n")
@@ -711,9 +696,7 @@ def localkeysend():
         pass
 
 def localchatsendA():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tWrite.\n")
@@ -740,9 +723,7 @@ def localchatsendA():
         pass
 
 def localchatnewA():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tRead.\n")
@@ -753,9 +734,7 @@ def localchatnewA():
         pass
 
 def localchatlistA():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f)
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tList.\n")
@@ -766,9 +745,7 @@ def localchatlistA():
         pass
 
 def localchatsendB():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tWrite.\n")
@@ -796,9 +773,7 @@ def localchatsendB():
         pass
 
 def localchatnewB():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tRead.\n")
@@ -809,9 +784,7 @@ def localchatnewB():
         pass
 
 def localchatlistB():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f)
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tList.\n")
@@ -822,9 +795,7 @@ def localchatlistB():
         pass
 
 def localchatsendC():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tWrite.\n")
@@ -852,9 +823,7 @@ def localchatsendC():
         pass
 
 def localchatnewC():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tRead.\n")
@@ -865,9 +834,7 @@ def localchatnewC():
         pass
 
 def localchatlistC():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f)
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     try:
         closed()
         print("\n\tList.\n")
@@ -879,9 +846,7 @@ def localchatlistC():
         pass
 
 def localchannelbalance():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     lncli = " channelbalance"
     lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
@@ -899,9 +864,7 @@ def localchannelbalance():
     input("\nContinue... ")
 
 def localnewaddress():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     lncli = " newaddress p2wkh"
     lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
@@ -921,9 +884,7 @@ def localnewaddress():
     input("\nContinue... ")
 
 def localbalanceOC():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     lncli = " walletbalance"
     lsd = _run_ln(*shlex.split(lncli)).stdout
     lsd0 = str(lsd)
@@ -938,9 +899,7 @@ def localbalanceOC():
 
 
 def localrebalancelnd():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     lncli = " listchannels"
     while True:
         lsd = _run_ln(*shlex.split(lncli)).stdout
@@ -978,9 +937,7 @@ def localrebalancelnd():
 # Remote connection with rest -------------------------------------
 
 def getnewinvoice():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     cert_path = lndconnectload["tls"]
     with open(lndconnectload["macaroon"], 'rb') as f:
         macaroon = codecs.encode(f.read(), 'hex')
@@ -1004,6 +961,7 @@ def getnewinvoice():
                 headers=headers,
                 verify=cert_path,
                 json={"memo": f'{memo} -PyBLOCK'},
+                timeout=10,
             )
 
         else:
@@ -1012,6 +970,7 @@ def getnewinvoice():
                 headers=headers,
                 verify=cert_path,
                 json={"value": amount, "memo": f'{memo} -PyBLOCK'},
+                timeout=10,
             )
 
 
@@ -1025,10 +984,10 @@ def getnewinvoice():
         b = str(a['payment_request'])
         while True:
             url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"], b)
-            r = requests.get(url, headers=headers, verify=cert_path)
+            r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
             a = r.json()
             url = 'https://{}/v1/invoice/{}'.format(lndconnectload["ip_port"],a['payment_hash'])
-            rr = requests.get(url, headers=headers, verify=cert_path)
+            rr = requests.get(url, headers=headers, verify=cert_path, timeout=10)
             m = rr.json()
             if m['state'] == 'SETTLED':
                 print("\033[1;32;40m")
@@ -1050,9 +1009,7 @@ def getnewinvoice():
         pass
 
 def payinvoice():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     cert_path = lndconnectload["tls"]
     with open(lndconnectload["macaroon"], 'rb') as f:
         macaroon = codecs.encode(f.read(), 'hex')
@@ -1061,7 +1018,7 @@ def payinvoice():
         while True:
             bolt11N = input("Insert the invoice to pay: ")
             url = 'https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11N)
-            r = requests.get(url, headers=headers, verify=cert_path)
+            r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
             s = r.json()
             print("\n----------------------------------------------------------------------------------------------------")
             print("""
@@ -1076,7 +1033,7 @@ def payinvoice():
             input("\nEnter to Continue... ")
             bolt11 = bolt11N.lower()
             r = requests.post(
-                url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}
+                url='https://{}/v1/channels/transactions'.format(lndconnectload["ip_port"]), headers=headers, verify=cert_path, json={"payment_request": bolt11}, timeout=10
             )
             try:
                 r.json()['error']
@@ -1085,7 +1042,7 @@ def payinvoice():
             except Exception as e:  # Catch specific exceptions
                 break
         ok, checking_id, fee_msat, error_message = r.ok, None, 0, None
-        r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path,)
+        r = requests.get(url='https://{}/v1/payreq/{}'.format(lndconnectload["ip_port"],bolt11), headers=headers, verify=cert_path, timeout=10)
         t.sleep(5)
         if r.ok:
             checking_id = r.json()["payment_hash"]
@@ -1105,9 +1062,7 @@ def payinvoice():
         pass
 
 def getnewaddress():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     cert_path = lndconnectload["tls"]
     with open(lndconnectload["macaroon"], 'rb') as f:
         macaroon = codecs.encode(f.read(), 'hex')
@@ -1120,7 +1075,7 @@ def getnewaddress():
     )
     try:
         url = 'https://{}/v1/newaddress'.format(lndconnectload["ip_port"])
-        r = requests.get(url, headers=headers, verify=cert_path)
+        r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
         addr = r.json()
         print("\033[1;30;47m")
         qr.add_data(addr['address'])
@@ -1133,9 +1088,7 @@ def getnewaddress():
         pass
 
 def listinvoice():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -1147,7 +1100,7 @@ def listinvoice():
         macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/invoices'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     n = a['invoices']
     while True:
@@ -1188,9 +1141,7 @@ def listinvoice():
     input("\nContinue... ")
 
 def getinfo():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -1202,7 +1153,7 @@ def getinfo():
         macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     hash = a['identity_pubkey']
     rh = Robohash(hash)
@@ -1271,15 +1222,13 @@ def get_color(r, g, b):
     return "\x1b[48;5;{}m \x1b[0m".format(int(get_ansi_color_code(r,g,b)))
 
 def channels():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     cert_path = lndconnectload["tls"]
     with open(lndconnectload["macaroon"], 'rb') as f:
         macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     n = a['channels']
     while True:
@@ -1367,15 +1316,13 @@ def channels():
             break
 
 def channelbalance():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     cert_path = lndconnectload["tls"]
     with open(lndconnectload["macaroon"], 'rb') as f:
         macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/balance/channels'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     print("""
     ---------------------------------------------------------
@@ -1401,7 +1348,7 @@ def listonchaintxs():
         macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/transactions'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     n = a['transactions']
     while True:
@@ -1445,15 +1392,13 @@ def listonchaintxs():
             break
 
 def balanceOC():
-    with open("config/blndconnect.conf", "r") as f:
-        lndconnectData = json.load(f) # Load the file 'bclock.conf'
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     cert_path = lndconnectload["tls"]
     with open(lndconnectload["macaroon"], 'rb') as f:
         macaroon = codecs.encode(f.read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/balance/blockchain'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     print("\n----------------------------------------------------------------------------------------------------")
     print("\n\tLOCAL ONCHAIN BALANCE\n")

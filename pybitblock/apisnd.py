@@ -2,6 +2,7 @@
 #PyBLOCK its a clock of the Bitcoin blockchain.
 
 import json
+import logging
 import os
 import subprocess
 import qrcode
@@ -9,6 +10,8 @@ import requests
 import time as t
 import sys
 from pblogo import blogo
+
+logger = logging.getLogger(__name__)
 
 def clear(): # clear the screen
     subprocess.run(['clear'] if os.name != 'nt' else ['cls'], shell=(os.name == 'nt'))
@@ -34,7 +37,7 @@ def apisender():
     sentby = " - PyBLOCK."
     print("\n\tATENTION: YOU NEED TO PAY \033[1;31;40m" + q + "\033[0;37;40m MilliSats")
     amountmsat = input("\nInsert the amount in MSats: ")
-    response = requests.post(url, data={'bid': amountmsat, 'message': message + sentby})
+    response = requests.post(url, data={'bid': amountmsat, 'message': message + sentby}, timeout=10)
     clear()
     blogo()
     sh0 = response.text
@@ -56,7 +59,7 @@ def apisender():
             sentby = " - PyBLOCK."
             print("\n\tATENTION: YOU NEED TO PAY \033[1;31;40m" + q + "\033[0;37;40m MilliSats")
             amountmsat = input("\nInsert the amount in MSats: ")
-            response = requests.post(url, data={'bid': amountmsat, 'message': message + sentby})
+            response = requests.post(url, data={'bid': amountmsat, 'message': message + sentby}, timeout=10)
             clear()
             blogo()
             sh0 = response.text
@@ -89,7 +92,7 @@ def apisender():
     ln1 = invoice.split(':')
     ln2 = str(ln1[1])
     cln = ln2.strip('"')
-    print("\n\033[0;37;40mYour Token Authorization: \033[1;31;40m" + token + "\033[0;37;40m")
+    logger.debug("Token: %s..., Order: %s", token[:8] + "***", order)
     print("\033[0;37;40mYour Order Number: \033[1;31;40m" + order + "\033[0;37;40m")
     print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m\n")
     clear()
@@ -97,7 +100,8 @@ def apisender():
     node_not = input("Do you want to pay this message with your node? Y/n: ")
     if node_not in ["Y", "y"]:
         lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-        lndconnectData = json.load(open("blndconnect.conf", "r"))
+        with open("blndconnect.conf", "r") as f:
+            lndconnectData = json.load(f)
         lndconnectload = lndconnectData
         if lndconnectload['ip_port']:
             print("\nInvoice: " + cln + "\n")
@@ -129,7 +133,7 @@ def apisenderFile():
     print("ATENTION: Minimum amount for sending a File is 50000 MSats")
     amountmsat = input("\nInsert the amount in MSats: ")
     with open(filepath, 'rb') as f:
-        response = requests.post(url, data={'bid': amountmsat}, files={'file': f})
+        response = requests.post(url, data={'bid': amountmsat}, files={'file': f}, timeout=10)
     sh0 = response.text
     while True:
         try:
@@ -141,7 +145,7 @@ def apisenderFile():
                 print("ATENTION: Minimum amount for sending a File is 50000 MSats")
                 amountmsat = input("\nInsert the amount in MSats: ")
                 with open(filepath, 'rb') as f:
-                    response = requests.post(url, data={'bid': amountmsat}, files={'file': f})
+                    response = requests.post(url, data={'bid': amountmsat}, files={'file': f}, timeout=10)
                 sh0 = response.text
             elif 'lightning_invoice' in sh0:
                 break
@@ -174,7 +178,7 @@ def apisenderFile():
     ln1 = invoice.split(':')
     ln2 = str(ln1[1])
     cln = ln2.strip('"')
-    print("\n\033[0;37;40mYour Token Authorization: \033[1;31;40m" + token + "\033[0;37;40m")
+    logger.debug("Token: %s..., Order: %s", token[:8] + "***", order)
     print("\033[0;37;40mYour Order Number: \033[1;31;40m" + order + "\033[0;37;40m")
     print("\033[0;37;40mAmount in MSats: \033[1;33;40m" + amount + "\033[0;37;40m")
     clear()
@@ -183,7 +187,8 @@ def apisenderFile():
         node_not = input("Do you want to pay this message with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'blndconnect.conf'
+            with open("blndconnect.conf", "r") as f:
+                lndconnectData = json.load(f) # Load the file 'blndconnect.conf'
             lndconnectload = lndconnectData # Copy the variable pathv to 'path'
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + cln + "\n")
@@ -214,7 +219,7 @@ def devAddr():
     )
     print("\n\t\t\033[1;33;44mGive us some love and \033[1;31;44mDONATE\033[1;33;44m us! We will appreciate it. This will be a boost to continue this beautiful project! \033[0;37;40m")
     url = 'https://api.tippin.me/v1/public/addinvoice/royalfield370'
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
     responseB = str(response.text)
     responseC = responseB
     lnreq = responseC.split(',')
@@ -230,8 +235,9 @@ def devAddr():
         node_not = input("Do you want to pay this tip with your node? Y/n: ")
         if node_not in ["Y", "y"]:
             lndconnectload = {"ip_port":"", "tls":"", "macaroon":"", "ln":""}
-            lndconnectData = json.load(open("blndconnect.conf", "r")) # Load the file 'blndconnect.conf'
-            lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+            with open("blndconnect.conf", "r") as f:
+                lndconnectData = json.load(f)
+            lndconnectload = lndconnectData
             if lndconnectload['ip_port']:
                 print("\nInvoice: " + ln1 + "\n")
                 payinvoice()

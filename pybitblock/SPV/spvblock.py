@@ -2,8 +2,11 @@
 #Tester: __B__T__C__
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
+import ipaddress
 import os
 import os.path
+import re
+import signal
 import time as t
 import psutil
 import html2text
@@ -41,6 +44,47 @@ from shared.rich_ui import (
     console as rich_console, rich_status_bar, rich_header, rich_menu, rich_error, rich_prompt
 )
 logger = get_logger("SPV")
+
+
+def _validate_hex(value, max_len=66):
+    """Validate that value contains only hex characters."""
+    if not re.match(r'^[0-9a-fA-F]+$', value) or len(value) > max_len:
+        raise ValueError(f"Invalid hex input: {value}")
+    return value
+
+
+def _validate_numeric(value, max_len=10):
+    """Validate that value contains only numeric characters."""
+    if not re.match(r'^[0-9]+$', value) or len(value) > max_len:
+        raise ValueError(f"Invalid numeric input: {value}")
+    return value
+
+
+def _validate_alnum(value, max_len=64):
+    """Validate that value contains only alphanumeric/underscore characters."""
+    if not re.match(r'^[a-zA-Z0-9_]+$', value) or len(value) > max_len:
+        raise ValueError(f"Invalid input: {value}")
+    return value
+
+
+def _validate_ip(value):
+    """Validate that value is a valid IPv4 or IPv6 address."""
+    try:
+        ipaddress.ip_address(value.strip())
+    except ValueError:
+        raise ValueError(f"Invalid IP address: {value}")
+    return value.strip()
+
+
+def _kill_process_by_name(script_name):
+    """Kill processes matching script_name using psutil instead of shell pipes."""
+    for proc in psutil.process_iter(['pid', 'cmdline']):
+        try:
+            cmdline = proc.info.get('cmdline') or []
+            if any(script_name in arg for arg in cmdline):
+                os.kill(proc.info['pid'], signal.SIGKILL)
+        except (psutil.NoSuchProcess, psutil.AccessDenied, ProcessLookupError):
+            pass
 
 
 version = "4.0"
@@ -323,18 +367,18 @@ def gitclone():
     url = "https://github.com/curly60e/satellite"
     subprocess.run(["git", "clone", url])
     os.makedirs("satellite/api/examples/.gnupg", exist_ok=True)
-    subprocess.run("gpg --full-generate-key --homedir satellite/api/examples/.gnupg", shell=True)
+    subprocess.run(["gpg", "--full-generate-key", "--homedir", "satellite/api/examples/.gnupg"])
 
 def satnode():
     try:
-        subprocess.run("python3 satellite/api/examples/demo-rx.py &", shell=True)
+        subprocess.Popen(["python3", "satellite/api/examples/demo-rx.py"])
         t.sleep(5)
-        subprocess.run("python3 satellite/api/examples/api_data_reader.py --demo  --plaintext ", shell=True)
+        subprocess.run(["python3", "satellite/api/examples/api_data_reader.py", "--demo", "--plaintext"])
     except Exception as e:
         show_error(str(e))
         logger.debug("spvblock: %s", e)
-        subprocess.run("ps -ef | grep api_data_reader.py | grep -v grep | awk '{print $2}' | xargs kill -9", shell=True)
-        subprocess.run("ps -ef | grep demo-rx.py | grep -v grep | awk '{print $2}' | xargs kill -9", shell=True)
+        _kill_process_by_name("api_data_reader.py")
+        _kill_process_by_name("demo-rx.py")
 
 def matrixsc():
     if os.path.isdir('$HOME/pyblock/terminal_matrix'):
@@ -345,7 +389,7 @@ def matrixsc():
 
 def main():
     scriptpath = os.path.join(os.path.dirname(__file__), 'PyBlock.py')
-    subprocess.run(f"python3 {scriptpath}", shell=True)
+    subprocess.run(["python3", scriptpath])
 
 
 if __name__ == "__main__":
@@ -507,8 +551,25 @@ def opreturn_view():
 
 def opretminer():
     try:
-        conn = """curl -s 'https://bitcointicker.co/latestblocks/' | xargs --null | html2text | grep "Coinbase" -A 70 | tr -d '|' | grep -v "Coinbase" | grep '6.25'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://bitcointicker.co/latestblocks/", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if "Coinbase" in _line:
+                _capture = True
+                _count = 0
+                continue
+            if _capture:
+                _count += 1
+                _clean = _line.replace("|", "")
+                if "6.25" in _clean:
+                    _filtered.append(_clean)
+                if _count > 70:
+                    _capture = False
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -535,6 +596,7 @@ def bitaxeA(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
+        _validate_ip(responseC)
         url = f"http://{responseC}/api/ws"
         try:
             r = requests.get(url, timeout=10)
@@ -556,6 +618,7 @@ def bitaxeB(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
+        _validate_ip(responseC)
         try:
             r = requests.get(f"http://{responseC}/api/system/info", timeout=10)
             a = json.dumps(r.json(), indent=2)
@@ -578,6 +641,7 @@ def bitaxeC(): # show srings
 
         print(output)
         responseC = input("Your Bitaxe ip XXX.XXX.XXX.XXX: ")
+        _validate_ip(responseC)
         try:
             r = requests.post(f"http://{responseC}/api/system/restart", timeout=10)
             a = r.text
@@ -798,8 +862,23 @@ def wallPhoenixBOLT12():
 
 def statsConn():
     try:
-        conn = r"""curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Total" -A 10  | grep -v -E "\--" | tr -d '*' | tr -d '"' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://www.bitcoinblockhalf.com/", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if re.search(r"Total", _line):
+                _capture = True
+                _count = 0
+            if _capture:
+                _count += 1
+                if "--" not in _line:
+                    _filtered.append(_line.replace("*", "").replace('"', ""))
+                if _count > 10:
+                    break
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -817,8 +896,22 @@ def statsConn():
 
 def blockTmpConn():
     try:
-        conn = """curl -s https://miningpool.observer/template-and-block | html2text | grep "Template and Block for" -A 13 """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://miningpool.observer/template-and-block", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if "Template and Block for" in _line:
+                _capture = True
+                _count = 0
+            if _capture:
+                _filtered.append(_line)
+                _count += 1
+                if _count > 13:
+                    break
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -836,8 +929,7 @@ def blockTmpConn():
 
 def unspendableConn():
     try:
-        conn = """curl -s https://get.txoutset.info/unspendable.csv """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://get.txoutset.info/unspendable.csv", timeout=30).text
         clear()
         blogo()
         closed()
@@ -857,7 +949,7 @@ def SHS():
         blogo()
         output = render("SHS - Symbolic Hash Satoshi", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"python3 SHS.py", shell=True)
+        subprocess.run(["python3", "SHS.py"])
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -868,8 +960,7 @@ def SHS():
 
 def pgpConn():
     try:
-        conn = """curl -s https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://web.archive.org/web/20110228054007/http://www.bitcoin.org/Satoshi_Nakamoto.asc", timeout=30).text
         clear()
         blogo()
         closed()
@@ -890,8 +981,7 @@ def pgpConn():
 def mtConn():  # here we convert the result of the command 'getblockcount' on a random art design
     while True:
         try:
-            conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
-            a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout.strip()  # Leer y eliminar espacios en blanco
+            a = requests.get("https://blockchain.info/tobtc?currency=USD&value=1", timeout=30).text.strip()  # Leer y eliminar espacios en blanco
             sats = a.lstrip('0.')  # Eliminar ceros iniciales y el punto decimal
             clear()
             blogo()
@@ -908,8 +998,7 @@ def mtConn():  # here we convert the result of the command 'getblockcount' on a 
 
 def mtclock():
     try:
-        conn = """curl -s 'https://blockchain.info/tobtc?currency=USD&value=1' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://blockchain.info/tobtc?currency=USD&value=1", timeout=30).text
         clear()
         blogo()
         closed()
@@ -927,8 +1016,12 @@ def mtclock():
 
 def satoshiConn():
     try:
-        conn = """curl -s https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html | html2text | tail -n 82 | grep -v "Unsubscribe" | grep -v "Next message" | grep -v "Previous message"| grep -v "Messages sorted" | grep -v "More information" | grep -v "list]" """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://www.metzdowd.com/pipermail/cryptography/2009-January/014994.html", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _tail = _lines[-82:] if len(_lines) >= 82 else _lines
+        _exclude = ["Unsubscribe", "Next message", "Previous message", "Messages sorted", "More information", "list]"]
+        a = "\n".join(l for l in _tail if not any(ex in l for ex in _exclude))
         clear()
         blogo()
         closed()
@@ -978,8 +1071,7 @@ def whalalConn():
 
 def bwtConn():
     try:
-        conn = "curl -s https://bwt.dev/banner.txt"
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://bwt.dev/banner.txt", timeout=30).text
         clear()
         blogo()
         closed()
@@ -994,8 +1086,7 @@ def bwtConn():
 
 def allblocksConn():
     try:
-        conn = """curl -s https://raw.githubusercontent.com/jlopp/bitcoin-blocks-by-mining-pool/master/blocks.csv """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://raw.githubusercontent.com/jlopp/bitcoin-blocks-by-mining-pool/master/blocks.csv", timeout=30).text
         clear()
         blogo()
         closed()
@@ -1073,8 +1164,11 @@ def PickaxeCon():
 
 def datesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/fun" | html2text | grep "20" | grep -v -E "https" | grep -E " " | head -n 46 | tr -d '[' | tr -d ','"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://bitcoinexplorer.org/fun", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = [l.replace("[", "").replace(",", "") for l in _text.split("\n")
+                   if "20" in l and "https" not in l and " " in l]
+        a = "\n".join(_lines[:46])
         clear()
         blogo()
         closed()
@@ -1091,8 +1185,9 @@ def datesConn():
 
 def missingConn():
     try:
-        conn = """curl -s https://miningpool.observer/missing/feed.xml | html2text | grep -v "link" | grep -v "https" | grep -v "Missing Transaction" """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _xml = requests.get("https://miningpool.observer/missing/feed.xml", timeout=30).text
+        _text = html2text.html2text(_xml)
+        a = "\n".join(l for l in _text.split("\n") if "link" not in l and "https" not in l and "Missing Transaction" not in l)
         clear()
         blogo()
         closed()
@@ -1109,8 +1204,15 @@ def missingConn():
 
 def quotesConn():
     try:
-        conn = """curl -s "https://bitcoinexplorer.org/api/quotes/all" | jq -C '.[]' | tr -d '{|}|]|,' | sed 's/text/Quote/g' | sed 's/speaker/By/g' | sed 's/url/Link/g' | sed 's/date/Date/g' | grep -v -E 'conQuote'"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        quotes_data = requests.get("https://bitcoinexplorer.org/api/quotes/all", timeout=30).json()
+        lines = []
+        for q in quotes_data:
+            for k, v in q.items():
+                label = k.replace("text", "Quote").replace("speaker", "By").replace("url", "Link").replace("date", "Date")
+                if "conQuote" not in label:
+                    lines.append(f"  {label}: {v}")
+            lines.append("")
+        a = "\n".join(lines)
         clear()
         blogo()
         closed()
@@ -1127,8 +1229,7 @@ def quotesConn():
 
 def miningConn():
     try:
-        conn = """curl -s "https://blockchain.info/q/hashrate" """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://blockchain.info/q/hashrate", timeout=30).text
         clear()
         blogo()
         closed()
@@ -1199,8 +1300,7 @@ def oceanB(): # show srings
         )
 
         print(output)
-        cmd = f"""curl -s 'https://ocean.xyz/data/json/blocksfound' | jq -C .[] """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        a = json.dumps(requests.get("https://ocean.xyz/data/json/blocksfound", timeout=30).json(), indent=2)
         print("\nBlocks:\n" + a)
         input("\a\nContinue...")
     except Exception as e:
@@ -1231,8 +1331,22 @@ def oceanE(): # show srings
 
 def stalnConn():
     try:
-        conn = """curl -s 'https://1ml.com' | html2text | xargs -L 1 | grep -E "Number" -A 8"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://1ml.com", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if re.search(r"Number", _line):
+                _capture = True
+                _count = 0
+            if _capture:
+                _filtered.append(_line.strip())
+                _count += 1
+                if _count > 8:
+                    _capture = False
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -1251,9 +1365,16 @@ def stalnConn():
 #-----------------------------StatRanking--------------------------------
 def ranConn():
     try:
-        conn = """curl -s 'https://1ml.com/node?order=capacity&json=true' | jq -C '.[]' | xargs -L 1  | tr -d '{|}|]|,' | grep -v -E "last_update|color|noderank" | sed 's/alias/Node/g' | grep -v -E "addresses" | grep -E " " | sed 's/capacity/RANK/g'
-"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _data = requests.get("https://1ml.com/node?order=capacity&json=true", timeout=30).json()
+        _lines = []
+        for _node in _data:
+            for k, v in _node.items():
+                if k in ("last_update", "color", "noderank", "addresses"):
+                    continue
+                label = k.replace("alias", "Node").replace("capacity", "RANK")
+                _lines.append(f"  {label}: {v}")
+            _lines.append("")
+        a = "\n".join(_lines)
         clear()
         blogo()
         closed()
@@ -1283,8 +1404,7 @@ def trustednode():
         """
         print(addv)
         input("\a\nContinue...")
-        conn = "telnet cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion 6023"
-        subprocess.run(conn, shell=True)
+        subprocess.run(["telnet", "cut45oarvxfvfydrjery6slyeca4zpal7tljygdt5bji7l3jsrrgwkad.onion", "6023"])
     except Exception as e:
         show_error(str(e))
         logger.debug("spvblock: %s", e)
@@ -1592,8 +1712,14 @@ def rateSXGraph():
 def PyBLOCKTemplate():
     while True:
         try:
-            conn = """curl -s "https://pool.pyblock.xyz/getblocktemplate.php" | jq -C '.transactions[]' | xargs -L 1  | tr -d '{|}|]|,' | tr -d '"' | grep -E ' ' | grep -vE 'depends'"""
-            a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+            _data = requests.get("https://pool.pyblock.xyz/getblocktemplate.php", timeout=30).json()
+            _lines = []
+            for _tx in _data.get("transactions", []):
+                for k, v in _tx.items():
+                    if k != "depends":
+                        _lines.append(f"  {k}: {v}")
+                _lines.append("")
+            a = "\n".join(_lines)
             clear()
             blogo()
             closed()
@@ -1706,15 +1832,12 @@ def lnbitCreateNewInvoice():
         memo = input("Memo: ")
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
-        curl = (
-            'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
-            + "'{"
-            + f""""out": false, "amount": {amt}, "memo": "{memo} -PyBLOCK" """
-            + "}'"
-            + f""" -H "X-Api-Key: {b} " -H "Content-type: application/json" """
-        )
-
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        sh = requests.post(
+            "https://legend.lnbits.com/api/v1/payments",
+            json={"out": False, "amount": int(amt), "memo": f"{memo} -PyBLOCK"},
+            headers={"X-Api-Key": b, "Content-type": "application/json"},
+            timeout=30
+        ).text
         clear()
         blogo()
         n = str(sh)
@@ -1744,13 +1867,11 @@ def lnbitCreateNewInvoice():
                 print(f'Lightning Invoice: {c}')
                 t.sleep(10)
                 dn = str(d['checking_id'])
-                checkcurl = (
-                    f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
-                    + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
-                )
-
-
-                rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+                rsh = requests.get(
+                    f"https://legend.lnbits.com/api/v1/payments/{dn}",
+                    headers={"X-Api-Key": b, "Content-type": "application/json"},
+                    timeout=30
+                ).text
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -1771,29 +1892,24 @@ def lnbitPayInvoice():
     bolt = input("Invoice: ")
     a = loadFileConnLNBits(['admin_key'])
     b = str(a['admin_key'])
-    curl = (
-        'curl -X POST https://legend.lnbits.com/api/v1/payments -d '
-        + "'{"
-        + f""""out": true, "bolt11": "{bolt}" """
-        + "}'"
-        + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
-    )
-
     try:
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        sh = requests.post(
+            "https://legend.lnbits.com/api/v1/payments",
+            json={"out": True, "bolt11": bolt},
+            headers={"X-Api-Key": b, "Content-type": "application/json"},
+            timeout=30
+        ).text
         n = str(sh)
         d = json.loads(n)
         dn = str(d['checking_id'])
         a = loadFileConnLNBits(['invoice_read_key'])
         b = str(a['invoice_read_key'])
         while True:
-            checkcurl = (
-                f'curl -X GET https://legend.lnbits.com/api/v1/payments/{dn}'
-                + f""" -H "X-Api-Key: {b}" -H "Content-type: application/json" """
-            )
-
-
-            rsh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            rsh = requests.get(
+                f"https://legend.lnbits.com/api/v1/payments/{dn}",
+                headers={"X-Api-Key": b, "Content-type": "application/json"},
+                timeout=30
+            ).text
             clear()
             blogo()
             nn = str(rsh)
@@ -1822,15 +1938,12 @@ def lnbitCreatePayWall():
             elif remb in ["N", "n"]:
                 remember = "false"
             b = str(a['admin_key'])
-            curl = (
-                'curl -X POST https://legend.lnbits.com/paywall/api/v1/paywalls -d '
-                + "'{"
-                + f""""url": "{url}", "memo": "{memo}", "description": "{desc}", "amount": {amt}, "remembers": {remember} """
-                + "}'"
-                + f""" -H  "Content-type: application/json" -H "X-Api-Key: {b}" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            sh = requests.post(
+                "https://legend.lnbits.com/paywall/api/v1/paywalls",
+                json={"url": url, "memo": memo, "description": desc, "amount": int(amt), "remembers": remember == "true"},
+                headers={"Content-type": "application/json", "X-Api-Key": b},
+                timeout=30
+            ).text
             clear()
             blogo()
             n = str(sh)
@@ -1840,10 +1953,11 @@ def lnbitCreatePayWall():
             clear()
             aa = loadFileConnLNBits(['invoice_read_key'])
             bb = str(a['invoice_read_key'])
-            checkcurl = f"""curl -X GET https://lnbits.com/paywall/api/v1/paywalls -H "X-Api-Key: {bb}" """
-
-
-            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            sh = requests.get(
+                "https://lnbits.com/paywall/api/v1/paywalls",
+                headers={"X-Api-Key": bb},
+                timeout=30
+            ).text
             clear()
             blogo()
             n = str(sh)
@@ -1895,12 +2009,11 @@ def lnbitCreatePayWall():
 def lnbitListPawWall():
     a = loadFileConnLNBits(['invoice_read_key'])
     b = str(a['invoice_read_key'])
-    checkcurl = (
-        'curl -X GET https://legend.lnbits.com/paywall/api/v1/paywalls -H'
-        + f""" "X-Api-Key: {b}" """
-    )
-
-    sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+    sh = requests.get(
+        "https://legend.lnbits.com/paywall/api/v1/paywalls",
+        headers={"X-Api-Key": b},
+        timeout=30
+    ).text
     clear()
     blogo()
     n = str(sh)
@@ -1943,12 +2056,11 @@ def lnbitDeletePayWall():
         try:
             a = loadFileConnLNBits(['invoice_read_key'])
             b = str(a['invoice_read_key'])
-            checkcurl = (
-                'curl -X GET https://legend.lnbits.com/paywall/api/v1/paywalls -H'
-                + f""" "X-Api-Key: {b}" """
-            )
-
-            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            sh = requests.get(
+                "https://legend.lnbits.com/paywall/api/v1/paywalls",
+                headers={"X-Api-Key": b},
+                timeout=30
+            ).text
             clear()
             blogo()
             n = str(sh)
@@ -1988,12 +2100,11 @@ def lnbitDeletePayWall():
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
             id = input("Insert PayWall ID: ")
-            curl = (
-                f"curl -X DELETE https://legend.lnbits.com/paywall/api/v1/paywalls/{id}"
-                + f""" -H "X-Api-Key: {b}" """
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            sh = requests.delete(
+                f"https://legend.lnbits.com/paywall/api/v1/paywalls/{id}",
+                headers={"X-Api-Key": b},
+                timeout=30
+            ).text
             clear()
             blogo()
             print("\n\tPAYWALL DELETED SUCCESSFULLY\n")
@@ -2021,15 +2132,12 @@ def lnbitsLNURLw():
             isunique = input("Is unique? true/false: ")
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            curl = (
-                'curl -X POST https://legend.lnbits.com/withdraw/api/v1/links -d '
-                + """'{"title":"""
-                + f'"{title}", "min_withdrawable": {minwith}, "max_withdrawable": {maxwith}, "uses": {usesw}, "wait_time": {waittime}, "is_unique": {isunique}'
-                + "}'"
-                + f' -H "Content-type: application/json" -H "X-Api-Key: {b}"'
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            sh = requests.post(
+                "https://legend.lnbits.com/withdraw/api/v1/links",
+                json={"title": title, "min_withdrawable": int(minwith), "max_withdrawable": int(maxwith), "uses": int(usesw), "wait_time": int(waittime), "is_unique": isunique == "true"},
+                headers={"Content-type": "application/json", "X-Api-Key": b},
+                timeout=30
+            ).text
             clear()
             blogo()
             n = str(sh)
@@ -2038,9 +2146,11 @@ def lnbitsLNURLw():
             t.sleep(2)
             clear()
             while True:
-                checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
-
-                sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+                sh = requests.get(
+                    "https://legend.lnbits.com/withdraw/api/v1/links",
+                    headers={"X-Api-Key": b},
+                    timeout=30
+                ).text
                 clear()
                 blogo()
                 n = str(sh)
@@ -2080,9 +2190,11 @@ def lnbitsLNURLwList():
         while True:
             a = loadFileConnLNBits(['admin_key'])
             b = str(a['admin_key'])
-            checkcurl = f'curl -X GET https://legend.lnbits.com/withdraw/api/v1/links -H "X-Api-Key: {b}"'
-
-            sh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+            sh = requests.get(
+                "https://legend.lnbits.com/withdraw/api/v1/links",
+                headers={"X-Api-Key": b},
+                timeout=30
+            ).text
             clear()
             blogo()
             n = str(sh)
@@ -2220,9 +2332,11 @@ def lnpayCreateInvoice():
                 qr.clear()
                 print(f'Lightning Invoice: {invoice["payment_request"]}')
                 t.sleep(10)
-                curl = f'curl -u {b}: https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis'
-
-                rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+                rsh = requests.get(
+                    f'https://api.lnpay.co/v1/lntx/{invoice["id"]}?fields=settled,num_satoshis',
+                    auth=(b, ''),
+                    timeout=30
+                ).text
                 clear()
                 blogo()
                 nn = str(rsh)
@@ -2308,10 +2422,12 @@ def lnpayPayInvoice():
     try:
         print("\n\tLNPAY PAY INVOICE\n")
         inv = input("\nInvoice: ")
-        curl = f'curl -u{b}: https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}'
-
         clear()
-        rsh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        rsh = requests.get(
+            f"https://api.lnpay.co/v1/node/default/payments/decodeinvoice?payment_request={inv}",
+            auth=(b, ''),
+            timeout=30
+        ).text
         nn = str(rsh)
         dd = json.loads(nn)
         clear()
@@ -2422,10 +2538,11 @@ def createFileConnOpenNode():
 def OpenNodelistfunds():
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = f'curl https://api.opennode.co/v1/account/balance -H "Content-Type: application/json" -H "Authorization: {b}"'
-
-
-    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+    sh = requests.get(
+        "https://api.opennode.co/v1/account/balance",
+        headers={"Content-Type": "application/json", "Authorization": b},
+        timeout=30
+    ).text
     clear()
     blogo()
     n = str(sh)
@@ -2442,8 +2559,7 @@ def OpenNodelistfunds():
     input("Continue...")
 
 def OpenNodeCheckStatus():
-    curl = "curl -X GET https://status.opennode.com/history.rss"
-    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+    sh = requests.get("https://status.opennode.com/history.rss", timeout=30).text
     clear()
     blogo()
     my_dict=xmltodict.parse(sh)
@@ -2494,16 +2610,12 @@ def OpenNodecreatecharge():
         print("\n----------------------------------------------------------------------------------------------------")
         selection = input("Select a FIAT currency: ")
         amt = input(f"Amount in {selection}: ")
-        curl = (
-            f'curl https://api.opennode.co/v1/charges -X POST -H "Authorization: {b}"'
-            + ' -H "Content-Type: application/json" -d '
-            + "'{"
-            + f'"amount": "{amt}", "currency": "{selection.upper()}"'
-            + "}'"
-        )
-
-
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        sh = requests.post(
+            "https://api.opennode.co/v1/charges",
+            headers={"Authorization": b, "Content-Type": "application/json"},
+            json={"amount": amt, "currency": selection.upper()},
+            timeout=30
+        ).text
         clear()
         blogo()
         n = str(sh)
@@ -2565,16 +2677,12 @@ def OpenNodecreatecharge():
                 break
     elif fiat in ["N", "n"]:
         amt = input("Amount in sats: ")
-        curl = (
-            f'curl https://api.opennode.co/v1/charges -X POST -H"Authorization: {b}"'
-            + ' -H "Content-Type: application/json" -d '
-            + "'{"
-            + f'"amount": "{amt}", "currency": "BTC"'
-            + "}'"
-        )
-
-
-        sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        sh = requests.post(
+            "https://api.opennode.co/v1/charges",
+            headers={"Authorization": b, "Content-Type": "application/json"},
+            json={"amount": amt, "currency": "BTC"},
+            timeout=30
+        ).text
         clear()
         blogo()
         n = str(sh)
@@ -2647,14 +2755,12 @@ def OpenNodeiniciatewithdrawal():
         try:
             while True:
                 invoice = input("\nInvoice: ")
-                checkcurl = (
-                    f'curl https://api.opennode.co/v1/charge/decode -X POST -H "Authorization: {b}" -H "Content-Type: application/json" -d '
-                    + "'{"
-                    + f'"pay_req": "{invoice}"'
-                    + "}'"
-                )
-
-                ssh = subprocess.run(checkcurl, shell=True, capture_output=True, text=True).stdout
+                ssh = requests.post(
+                    "https://api.opennode.co/v1/charge/decode",
+                    headers={"Authorization": b, "Content-Type": "application/json"},
+                    json={"pay_req": invoice},
+                    timeout=30
+                ).text
                 nn = str(ssh)
                 dd = json.loads(nn)
                 print(dd)
@@ -2683,14 +2789,12 @@ def OpenNodeiniciatewithdrawal():
             print("<<< Cancel Control + C")
             input("\nEnter to Continue... ")
 
-            curl = (
-                f'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {b}"'
-                + " -d '{"
-                + f'"type": "ln", "address": "{invoice}", "callback_url": ""'
-                + "}'"
-            )
-
-            sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+            sh = requests.post(
+                "https://api.opennode.co/v2/withdrawals",
+                headers={"Content-Type": "application/json", "Authorization": b},
+                json={"type": "ln", "address": invoice, "callback_url": ""},
+                timeout=30
+            ).text
             n = str(sh)
             d = json.loads(n)
             clear()
@@ -2709,15 +2813,15 @@ def OpenNodeiniciatewithdrawal():
                 print("\n\tMinimum amount 200000 sats\n")
                 address = input("\nBitcoin Address: ")
                 amt = int(input("Amount in sats: "))
-                curl = (
-                    f'curl https://api.opennode.co/v2/withdrawals -X POST -H "Content-Type: application/json" -H "Authorization: {b}"'
-                    + " -d '{"
-                    + f'"type": "chain", "amount": {amt}, "address": "{address}", "callback_url": ""'
-                    + "}'"
-                )
+                _withdrawal_payload = {"type": "chain", "amount": amt, "address": address, "callback_url": ""}
 
                 if amt < 199999:
-                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+                    sh = requests.post(
+                        "https://api.opennode.co/v2/withdrawals",
+                        headers={"Content-Type": "application/json", "Authorization": b},
+                        json=_withdrawal_payload,
+                        timeout=30
+                    ).text
                     n = str(sh)
                     d = json.loads(n)
                     print("\n----------------------------------------------------------------------------------------------------")
@@ -2728,7 +2832,12 @@ def OpenNodeiniciatewithdrawal():
                     """.format(d['message']))
                     print("----------------------------------------------------------------------------------------------------\n")
                 elif amt > 200000:
-                    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+                    sh = requests.post(
+                        "https://api.opennode.co/v2/withdrawals",
+                        headers={"Content-Type": "application/json", "Authorization": b},
+                        json=_withdrawal_payload,
+                        timeout=30
+                    ).text
                     n = str(sh)
                     d = json.loads(n)
                     dd = d['data']
@@ -2762,9 +2871,11 @@ def OpenNodeListPayments():
     )
     a = loadFileConnOpenNode(['wdr'])
     b = str(a['wdr'])
-    curl = f'curl https://api.opennode.co/v1/withdrawals -H "Content-Type: application/json" -H "Authorization: {b}"'
-
-    sh = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+    sh = requests.get(
+        "https://api.opennode.co/v1/withdrawals",
+        headers={"Content-Type": "application/json", "Authorization": b},
+        timeout=30
+    ).text
     clear()
     blogo()
     print("\n\tOPENNODE TRANSACTIONS LIST\n")
@@ -2968,13 +3079,11 @@ def tallycoGetPayment():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = (
-            "curl -d "
-            + f'"type=profile&id={d}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
-            + " -X POST https://api.tallyco.in/v1/payment/request/"
-        )
-
-        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        tallycomethod = requests.post(
+            "https://api.tallyco.in/v1/payment/request/",
+            data={"type": "profile", "id": d, "satoshi_amount": amount, "payment_method": lnd_onchain},
+            timeout=30
+        ).text
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -3021,13 +3130,11 @@ def tallycoDonateid():
                  'btc'= Bitcoin Onchain Payment
                     \n""")
         lnd_onchain = input("Payment Method: ")
-        curl = (
-            "curl -d "
-            + f'"type=profile&id={donate}&satoshi_amount={amount}&payment_method={lnd_onchain}"'
-            + " -X POST https://api.tallyco.in/v1/payment/request/"
-        )
-
-        tallycomethod = subprocess.run(curl, shell=True, capture_output=True, text=True).stdout
+        tallycomethod = requests.post(
+            "https://api.tallyco.in/v1/payment/request/",
+            data={"type": "profile", "id": donate, "satoshi_amount": amount, "payment_method": lnd_onchain},
+            timeout=30
+        ).text
         n = str(tallycomethod)
         d = json.loads(n)
         clear()
@@ -3247,8 +3354,8 @@ def remoteconsole(): # get into the console from bitcoin-cli
 
 def runthenumbersConn():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        coins_data = requests.get("https://bitcoinexplorer.org/api/blockchain/coins", timeout=30).json()
+        a = "\n".join(f"{k}: {v}" for k, v in coins_data.items() if "supply" in k.lower())
         clear()
         blogo()
         closed()
@@ -3262,8 +3369,8 @@ def runthenumbersConn():
 
 def channelbalance():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        coins_data = requests.get("https://bitcoinexplorer.org/api/blockchain/coins", timeout=30).json()
+        a = "\n".join(f"{k}: {v}" for k, v in coins_data.items() if "supply" in k.lower())
         clear()
         blogo()
         closed()
@@ -3301,8 +3408,8 @@ def listonchaintxs():
 
 def balanceOC():
     try:
-        conn = """curl -s https://bitcoinexplorer.org/api/blockchain/coins | jq | grep -E "supply" | awk '{print $2}' | tr -d '"' | tr -d ',' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        coins_data = requests.get("https://bitcoinexplorer.org/api/blockchain/coins", timeout=30).json()
+        a = "\n".join(f"{k}: {v}" for k, v in coins_data.items() if "supply" in k.lower())
         clear()
         blogo()
         closed()
@@ -3502,9 +3609,9 @@ def getinfo():
         )
 
         print(output)
-        responseC = input("Public Key: ")
-        cmd = f"curl -s 'https://1ml.com/node/'{responseC}/json'"
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        responseC = _validate_hex(input("Public Key: "), max_len=66)
+        resp = requests.get(f"https://1ml.com/node/{responseC}/json", timeout=10)
+        a = resp.text
         clear()
         blogo()
         print("\nNode: " + responseC)
@@ -3517,8 +3624,22 @@ def getinfo():
 
 def consoleLNC(): # get into the console from bitcoin-cli
     try:
-        conn = """curl -s https://github.com/tomosaigon/lncli-commands | html2text | grep -E "## COMMANDS" -A 120"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://github.com/tomosaigon/lncli-commands", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if re.search(r"## COMMANDS", _line):
+                _capture = True
+                _count = 0
+            if _capture:
+                _filtered.append(_line)
+                _count += 1
+                if _count > 120:
+                    break
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -3585,8 +3706,7 @@ def localgetinfoC():
 
         print(output)
         responseC = input("Public Key: ")
-        cmd = f"curl -s https://1ml.com/node/{responseC}/json"
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        a = requests.get(f"https://1ml.com/node/{responseC}/json", timeout=30).text
         clear()
         blogo()
         print("\nNode: " + responseC)
@@ -3616,8 +3736,23 @@ def localpayinvoiceC():
 
 def localgetnetworkinfoC():
     try:
-        conn = """curl -s https://1ml.com/trends | html2text | grep -E "Increase|Decrease" -A 4 | tr -d '{|}|]|,' | tr -d '"' | tr -d '* [' | tr -d '-' | tr -d '#' | xargs -L 1"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://1ml.com/trends", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if re.search(r"Increase|Decrease", _line):
+                _capture = True
+                _count = 0
+            if _capture:
+                _clean = _line.translate(str.maketrans("", "", '{}|],\'"*[-#'))
+                _filtered.append(_clean.strip())
+                _count += 1
+                if _count > 4:
+                    _capture = False
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -3636,8 +3771,7 @@ def localgetnetworkinfoC():
 
 def slDIFFConn():
     try:
-        conn = """curl -s https://insights.braiins.com/api/v1.0/difficulty-stats"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://insights.braiins.com/api/v1.0/difficulty-stats", timeout=30).text
         clear()
         blogo()
         closed()
@@ -3662,8 +3796,15 @@ def slDIFFConn():
 
 def slPOOLConn():
     try:
-        conn = """curl -s https://insights.braiins.com/api/v1.0/pool-stats?json=1 | jq -C '.[]' | tr -d '{|}|]|,' | xargs -L 1 | grep -E " " """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _data = requests.get("https://insights.braiins.com/api/v1.0/pool-stats?json=1", timeout=30).json()
+        _lines = []
+        for item in _data:
+            if isinstance(item, dict):
+                for k, v in item.items():
+                    _lines.append(f"  {k}: {v}")
+            else:
+                _lines.append(f"  {item}")
+        a = "\n".join(_lines)
         clear()
         blogo()
         closed()
@@ -3698,16 +3839,12 @@ def getPoolSlushCheck():
 
     while True:
         try:
-            slushpoolbtc = f"curl https://pool.braiins.com/accounts/profile/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
-
-            slushpoolbtcblock = f"curl https://pool.braiins.com/stats/json/btc/ -H 'SlushPool-Auth-Token:{api}' 2>/dev/null"
-
-
-            c = subprocess.run(slushpoolbtc, shell=True, capture_output=True, text=True).stdout
+            _braiins_headers = {"SlushPool-Auth-Token": api}
+            c = requests.get("https://pool.braiins.com/accounts/profile/json/btc/", headers=_braiins_headers, timeout=30).text
             d = json.loads(c)
             f = d['btc']
 
-            cblock = subprocess.run(slushpoolbtcblock, shell=True, capture_output=True, text=True).stdout
+            cblock = requests.get("https://pool.braiins.com/stats/json/btc/", headers=_braiins_headers, timeout=30).text
             dblock = json.loads(cblock)
             fblock = dblock['btc']
             eblock = fblock['blocks']
@@ -3782,10 +3919,7 @@ def ckpoolpoolLOCALOnchainONLY():
 
     while True:
         try:
-            ckpool = f"curl https://solo.ckpool.org/users/{api} 2>/dev/null"
-
-
-            c = subprocess.run(ckpool, shell=True, capture_output=True, text=True).stdout
+            c = requests.get(f"https://solo.ckpool.org/users/{api}", timeout=30).text
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -3844,10 +3978,7 @@ def pyblockpoolpoolLOCALOnchainONLY():
 
     while True:
         try:
-            pyblockpool = f"curl https://pyblock.xyz:8443/users/{api} 2>/dev/null"
-
-
-            c = subprocess.run(pyblockpool, shell=True, capture_output=True, text=True).stdout
+            c = requests.get(f"https://pyblock.xyz:8443/users/{api}", timeout=30).text
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -3912,10 +4043,7 @@ def kanopoolpoolLOCALOnchainONLY():
 
     while True:
         try:
-            kanopool = f"curl https://kano.is/index.php?k=api&username={api}&api={api2}&json=y&work=y 2>/dev/null"
-
-
-            c = subprocess.run(kanopool, shell=True, capture_output=True, text=True).stdout
+            c = requests.get(f"https://kano.is/index.php?k=api&username={api}&api={api2}&json=y&work=y", timeout=30).text
             d = json.loads(c)
             f = d['worker']
             e = f[0]
@@ -3954,8 +4082,23 @@ def kanopoolpoolLOCALOnchainONLY():
 
 def getblock():
     try:
-        conn = """curl -s https://developer.bitcoin.org/reference/rpc/getblockchaininfo.html | html2text | grep -E Result -A 50 | grep -v Result """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://developer.bitcoin.org/reference/rpc/getblockchaininfo.html", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if re.search(r"Result", _line) and not _capture:
+                _capture = True
+                _count = 0
+                continue
+            if _capture:
+                _filtered.append(_line)
+                _count += 1
+                if _count >= 50:
+                    break
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -3992,8 +4135,8 @@ def searchTXS():
 
 def untxsConn():
     try:
-        conn = """curl -s https://mempool.space/api/mempool/txids | jq -C '.[]' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        txids = requests.get("https://mempool.space/api/mempool/txids", timeout=30).json()
+        a = "\n".join(str(txid) for txid in txids)
         clear()
         blogo()
         closed()
@@ -4074,8 +4217,23 @@ def getbestblockhash():
 
 def getgenesis():
     try:
-        conn = """curl -s https://en.bitcoin.it/wiki/Genesis_block | html2text | grep -E 52706 -A 48 | grep -v 52706"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://en.bitcoin.it/wiki/Genesis_block", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if "52706" in _line and not _capture:
+                _capture = True
+                _count = 0
+                continue
+            if _capture:
+                _filtered.append(_line)
+                _count += 1
+                if _count >= 48:
+                    break
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -4097,8 +4255,7 @@ def readHexBlock():
 
         print(output)
         responseC = input("BLOCK: ")
-        cmd = f"curl -s 'https://mempool.space/api/tx/{responseC}/hex' "
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        a = requests.get(f"https://mempool.space/api/tx/{responseC}/hex", timeout=30).text
         clear()
         blogo()
         print("\nHex: " + responseC)
@@ -4118,8 +4275,7 @@ def readHexTx():
 
         print(output)
         responseC = input("BLOCK: ")
-        cmd = f"curl -s https://mempool.space/api/blocks/{responseC}"
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        a = requests.get(f"https://mempool.space/api/blocks/{responseC}", timeout=30).text
         clear()
         blogo()
         print("\nBlock: " + responseC)
@@ -4139,8 +4295,18 @@ def console(): # get into the console from bitcoin-cli
 
         print(output)
         responseC = input("RPC Command: ")
-        cmd = f"""curl -s 'https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content' | html2text | grep -E "Arguments" -A 777 | grep -E -v "Recent|https|http|version|commit|released|Hidden Service|on Twitter|explorer|###### Project|###### App Details|###### Links" """
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get(f"https://bitcoinexplorer.org/rpc-browser?method={responseC}#Help-Content", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _exclude = ["Recent", "https", "http", "version", "commit", "released", "Hidden Service", "on Twitter", "explorer", "###### Project", "###### App Details", "###### Links"]
+        _filtered = []
+        _capture = False
+        for _line in _lines:
+            if re.search(r"Arguments", _line):
+                _capture = True
+            if _capture and not any(ex in _line for ex in _exclude):
+                _filtered.append(_line)
+        a = "\n".join(_filtered)
         clear()
         blogo()
         print("\nRPC: " + responseC)
@@ -4213,12 +4379,7 @@ def getrawtx(): # show confirmations from transactions
 
         print(output)
         responseC = input("Tx: ")
-        cmd = (
-            f"curl -s https://mempool.space/api/tx/{responseC}"
-            + """/merkle-proof | jq -C '.[]'"""
-        )
-
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        a = json.dumps(requests.get(f"https://mempool.space/api/tx/{responseC}/merkle-proof", timeout=30).json(), indent=2)
         clear()
         blogo()
         print("\nTx: " + responseC)
@@ -4230,8 +4391,7 @@ def getrawtx(): # show confirmations from transactions
 
 def runthenumbers():
     try:
-        conn = """curl -s https://blockchain.info/q/totalbc """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        a = requests.get("https://blockchain.info/q/totalbc", timeout=30).text
         clear()
         blogo()
         closed()
@@ -4270,8 +4430,9 @@ def countdownblockConn():
 
 def localHalving():
     try:
-        conn = """curl -s https://www.bitcoinblockhalf.com/ | html2text | grep -E "Blocks until mining reward is halved" | tr -d '*' """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://www.bitcoinblockhalf.com/", timeout=30).text
+        _text = html2text.html2text(_html)
+        a = "\n".join(l.replace("*", "") for l in _text.split("\n") if "Blocks until mining reward is halved" in l)
         clear()
         blogo()
         closed()
@@ -4287,8 +4448,22 @@ def localHalving():
 
 def pdfconvert():
     try:
-        conn = """curl -s https://nakamotoinstitute.org/library/bitcoin | html2text | grep October -A 449"""
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://nakamotoinstitute.org/library/bitcoin", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if "October" in _line and not _capture:
+                _capture = True
+                _count = 0
+            if _capture:
+                _filtered.append(_line)
+                _count += 1
+                if _count > 449:
+                    break
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -4305,8 +4480,7 @@ def pdfconvert():
 def robotNym():
     try:
         if path['bitcoincli']:
-            lncli = " getinfo"
-            lsd = subprocess.run(lndconnectload['ln'] + lncli, shell=True, capture_output=True, text=True).stdout
+            lsd = subprocess.run([lndconnectload['ln'], "getinfo"], capture_output=True, text=True).stdout
             lsd0 = str(lsd)
             alias = json.loads(lsd0)
         else:
@@ -4548,8 +4722,23 @@ def callGitRES():
 #---------------------------------UTXOracle----------------------------------
 def callGitUTXOracle():
     try:
-        conn = """curl -s 'https://utxo.live/oracle/' | html2text | grep -E "Date" -A 77 | grep -v "Date" """
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        _html = requests.get("https://utxo.live/oracle/", timeout=30).text
+        _text = html2text.html2text(_html)
+        _lines = _text.split("\n")
+        _filtered = []
+        _capture = False
+        _count = 0
+        for _line in _lines:
+            if re.search(r"Date", _line) and not _capture:
+                _capture = True
+                _count = 0
+                continue
+            if _capture:
+                _filtered.append(_line)
+                _count += 1
+                if _count >= 77:
+                    break
+        a = "\n".join(_filtered)
         clear()
         blogo()
         closed()
@@ -4994,11 +5183,7 @@ def decodeHex(): # show hex
 
         print(output)
         responseC = input("Block Height: ")
-        cmd = (
-            f"curl -s 'https://bitcoinexplorer.org/api/block/'{responseC}"
-            + """ | jq -C '.[]' | tr -d '{|}|]|,'"""
-        )
-        a = subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+        a = json.dumps(requests.get(f"https://bitcoinexplorer.org/api/block/{responseC}", timeout=30).json(), indent=2)
         clear()
         blogo()
         print("\nBlock: " + responseC)
@@ -6371,8 +6556,7 @@ def testlogoRB():
         logger.debug("spvblock: %s", e)
 
 def testClock():
-    bitcoinclient = path['bitcoincli'] + " getblockcount"
-    block = subprocess.run(str(bitcoinclient), shell=True, capture_output=True, text=True).stdout # 'getblockcount' convert to string
+    block = subprocess.run([path['bitcoincli'], "getblockcount"], capture_output=True, text=True).stdout # 'getblockcount' convert to string
     b = block
     output = render(str(b), colors=[settingsClock['colorA'], settingsClock['colorB']], align='left')
     print(output)
@@ -7741,14 +7925,14 @@ def mainmenuLOCALcontrol(menuS): #Execution of the Main Menu options
         blogo()
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 7Blocks.py", shell=True)
+        subprocess.run(["python3", "7Blocks.py"], cwd="SPV")
         input("\a\nContinue...")
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
         output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 PyBlockMiner.py", shell=True)
+        subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
         input("\a\nContinue...")
     elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
         clear()
@@ -7818,14 +8002,14 @@ def mainmenuLOCALcontrolOnchainONLYCROPPED(menuS): #Execution of the Main Menu o
         blogo()
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 7Blocks.py", shell=True)
+        subprocess.run(["python3", "7Blocks.py"], cwd="SPV")
         input("\a\nContinue...")
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
         output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 PyBlockMiner.py", shell=True)
+        subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
         input("\a\nContinue...")
     elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
         clear()
@@ -7911,7 +8095,7 @@ def bitcoincoremenuLOCALcontrolA(bcore):
         blogo()
         output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 PyVanityGenerator.py", shell=True)
+        subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
         input("\a\nContinue...")
 
 def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
@@ -7981,7 +8165,7 @@ def bitcoincoremenuLOCALcontrolAOnchainONLY(bcore):
         blogo()
         output = render("Vanity Generator", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 PyVanityGenerator.py", shell=True)
+        subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
         input("\a\nContinue...")
 
 def walletmenuLOCALcontrolAOnchainONLY(walletmnu):
@@ -8537,14 +8721,14 @@ def mainmenuREMOTEcontrol(menuS): #Execution of the Main Menu options
         blogo()
         output = render("7 Blocks - The Game", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 7Blocks.py", shell=True)
+        subprocess.run(["python3", "7Blocks.py"], cwd="SPV")
         input("\a\nContinue...")
     elif menuS in ["SOLO", "solo", "SoLo", "sOlO"]:
         clear()
         blogo()
         output = render("Solo Mining", colors=['yellow'], align='left', font='tiny')
         print(output)
-        subprocess.run(f"cd SPV && python3 PyBlockMiner.py", shell=True)
+        subprocess.run(["python3", "PyBlockMiner.py"], cwd="SPV")
         input("\a\nContinue...")
     elif menuS in ["bitaxe", "BITAXE", "BitAxe"]:
         clear()
