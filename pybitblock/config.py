@@ -46,6 +46,8 @@ def _env_bitcoin_config():
 
     if host and user:
         return {
+            # HTTP is acceptable here: Bitcoin Core RPC binds to
+            # localhost by default (-rpcallowip), so traffic stays local.
             "ip_port": f"http://{host}:{port}",
             "rpcuser": user,
             "rpcpass": passwd,
@@ -107,7 +109,9 @@ class Config:
         return "config"
 
     def _load_json(self, filename, defaults=None):
-        filepath = os.path.join(self.config_dir, filename)
+        # Prevent path traversal
+        basename = os.path.basename(filename)
+        filepath = os.path.join(self.config_dir, basename)
         if os.path.isfile(filepath):
             with open(filepath, "r") as f:
                 data = json.load(f)
@@ -141,7 +145,8 @@ class Config:
 
     def _ensure_config(self, filename, data):
         """Write config file if it doesn't exist or env vars are set."""
-        filepath = os.path.join(self.config_dir, filename)
+        basename = os.path.basename(filename)
+        filepath = os.path.join(self.config_dir, basename)
         os.makedirs(self.config_dir, exist_ok=True)
         with open(filepath, "w") as f:
             json.dump(data, f, indent=2)
@@ -160,14 +165,16 @@ class Config:
         self.load()
 
     def save(self, filename, data):
-        filepath = os.path.join(self.config_dir, filename)
+        basename = os.path.basename(filename)
+        filepath = os.path.join(self.config_dir, basename)
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         with open(filepath, "w") as f:
             json.dump(data, f, indent=2)
         self.reload()
 
     def has_config(self, filename):
-        return os.path.isfile(os.path.join(self.config_dir, filename))
+        basename = os.path.basename(filename)
+        return os.path.isfile(os.path.join(self.config_dir, basename))
 
 
 cfg = Config()

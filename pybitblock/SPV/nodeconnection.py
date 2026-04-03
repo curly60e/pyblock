@@ -3,15 +3,16 @@
 #ℙ𝕪𝔹𝕃𝕆ℂ𝕂 𝕚𝕥𝕤 𝕒 𝔹𝕚𝕥𝕔𝕠𝕚𝕟 𝔻𝕒𝕤𝕙𝕓𝕠𝕒𝕣𝕕 𝕨𝕚𝕥𝕙 ℂ𝕪𝕡𝕙𝕖𝕣𝕡𝕦𝕟𝕜 𝕒𝕖𝕤𝕥𝕙𝕖𝕥𝕚𝕔.
 
 
-import base64, codecs, json, requests
+import codecs, json, re, requests
 import subprocess
+import html2text
 import os
 import os.path
 import qrcode
 import sys
 import time as t
 import numpy as np
-from cfonts import render, say
+from cfonts import render
 from pblogo import blogo
 from PIL import Image
 from robohash import Robohash
@@ -41,7 +42,7 @@ def rpc(method, params=None):
         "params": params
     })
     path = cfg.path
-    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload).json()['result']
+    return requests.post(path['ip_port'], auth=(path['rpcuser'], path['rpcpass']), data=payload, timeout=10).json()['result']
 
 def remoteHalving():
     try:
@@ -77,8 +78,10 @@ def remoteconsole(): # get into the console from bitcoin-cli
 
 def runthenumbersConn():
     try:
-        conn = 'curl -s https://get.txoutset.info/ | html2text | grep -v -E "UTC" | jq -C '
-        a = subprocess.run(conn, shell=True, capture_output=True, text=True).stdout
+        response = requests.get("https://get.txoutset.info/", timeout=10)
+        converter = html2text.HTML2Text()
+        text = converter.handle(response.text)
+        a = "\n".join(line for line in text.splitlines() if "UTC" not in line)
         clear()
         blogo()
         closed()
@@ -91,22 +94,47 @@ def runthenumbersConn():
 
 #-------------------------END RPC BITCOIN NODE CONNECTION
 
+def _lncli_decode_messages(lncli_command, grep_pattern, replacement_hex):
+    """Run an lncli command and decode hex-encoded messages from matching lines.
+
+    Replaces the shell pipe chain:
+      lncli <cmd> | grep "PATTERN" | tr -d '"' | tr -d ',' |
+      sed 's/PATTERN/REPLACEMENT/g' | html2text | xxd -r -p | xargs --null
+    """
+    result = subprocess.run(
+        ['lncli', lncli_command],
+        capture_output=True, text=True
+    )
+    converter = html2text.HTML2Text()
+    lines = result.stdout.splitlines()
+    decoded_parts = []
+    for line in lines:
+        if grep_pattern not in line:
+            continue
+        line = line.replace('"', '').replace(',', '')
+        line = line.replace(grep_pattern, replacement_hex)
+        line = converter.handle(line).strip()
+        try:
+            decoded_parts.append(bytes.fromhex(line).decode('utf-8', errors='replace'))
+        except ValueError:
+            decoded_parts.append(line)
+    return "\n".join(decoded_parts)
+
+
 def localFullProtocol():
     lndconnectload = cfg.lndconnectload
 
-    proto1 = """lncli listinvoices | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto2 = """lncli listinvoices | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto3 = """lncli listinvoices | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
-    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
-    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
+    # Invoices received
+    received_hex = "0a0a2d5079424c4f434b204d6573736167652052656365697665643a200a"
+    p1 = _lncli_decode_messages("listinvoices", "34349334", received_hex)
+    p2 = _lncli_decode_messages("listinvoices", "7629171", received_hex)
+    p3 = _lncli_decode_messages("listinvoices", "34343434", received_hex)
 
-    proto1 = """lncli listpayments | grep "34349334" | tr -d '"' | tr -d ',' | sed 's/34349334/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto2 = """lncli listpayments | grep "7629171" | tr -d '"' | tr -d ',' | sed 's/7629171/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    proto3 = """lncli listpayments | grep "34343434" | tr -d '"' | tr -d ',' | sed 's/34343434/0a0a202d5079424c4f434b204d6573736167653a200a/g' | html2text | xxd -r -p | xargs --null"""
-    p1 = subprocess.run(proto1, shell=True, capture_output=True, text=True).stdout
-    p2 = subprocess.run(proto2, shell=True, capture_output=True, text=True).stdout
-    p3 = subprocess.run(proto3, shell=True, capture_output=True, text=True).stdout
+    # Payments sent
+    sent_hex = "0a0a202d5079424c4f434b204d6573736167653a200a"
+    p1 = _lncli_decode_messages("listpayments", "34349334", sent_hex)
+    p2 = _lncli_decode_messages("listpayments", "7629171", sent_hex)
+    p3 = _lncli_decode_messages("listpayments", "34343434", sent_hex)
 
 #--------------------------------- NYMs -----------------------------------
 
@@ -129,7 +157,7 @@ def channels():
     macaroon = codecs.encode(open(lndconnectload["macaroon"], 'rb').read(), 'hex')
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = 'https://{}/v1/channels'.format(lndconnectload["ip_port"])
-    r = requests.get(url, headers=headers, verify=cert_path)
+    r = requests.get(url, headers=headers, verify=cert_path, timeout=10)
     a = r.json()
     n = a['channels']
     while True:

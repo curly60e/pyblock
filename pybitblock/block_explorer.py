@@ -9,11 +9,13 @@ from rich.console import Group
 import subprocess
 import json
 import time
-from threading import Event, Thread
+from threading import Event, Lock, Thread
 from execute_load_config import load_config
 
 # Load configuration
 path, settings, settingsClock = load_config()
+
+_block_tables_lock = Lock()
 
 def fetch_blockchain_info(path):
     raw_info = subprocess.run([path["bitcoincli"], "getblockchaininfo"], capture_output=True, text=True)
@@ -55,7 +57,8 @@ def fetch_and_store_block_data(path, start_height, count, block_tables):
         block_hash = subprocess.run([path["bitcoincli"], "getblockhash", str(block_height)], capture_output=True, text=True).stdout.strip()
         block_data = fetch_block_info(path, block_hash)
         table = create_block_info_table(block_height, block_data)
-        block_tables.append(table)
+        with _block_tables_lock:
+            block_tables.append(table)
 
 def background_block_fetch(path, block_tables, stop_event):
     latest_height = fetch_blockchain_info(path)['blocks']
@@ -63,8 +66,9 @@ def background_block_fetch(path, block_tables, stop_event):
         current_height = fetch_blockchain_info(path)['blocks']
         if current_height > latest_height:
             latest_height = current_height
-            block_tables.clear()
-            fetch_and_store_block_data(path, current_height, 3, block_tables)
+            with _block_tables_lock:
+                block_tables.clear()
+                fetch_and_store_block_data(path, current_height, 3, block_tables)
         time.sleep(10)
 
 async def display_blocks_info():
@@ -102,7 +106,9 @@ async def display_blocks_info():
     with Live(layout, refresh_per_second=1, screen=True):
         input_task = asyncio.create_task(input_handler())
         while not stop_event.is_set():
-            recent_blocks_group = Group(*block_tables)
+            with _block_tables_lock:
+                tables_snapshot = list(block_tables)
+            recent_blocks_group = Group(*tables_snapshot)
             centered_recent_blocks = Align.center(recent_blocks_group)
 
             layout["recent_blocks"].update(Panel(centered_recent_blocks, title="Recent Blocks"))

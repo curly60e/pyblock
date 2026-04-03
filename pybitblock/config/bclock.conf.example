@@ -1,0 +1,6 @@
+{
+  "ip_port": "http://localhost:8332",
+  "rpcuser": "your_rpc_user",
+  "rpcpass": "your_rpc_password",
+  "bitcoincli": "bitcoin-cli"
+}
