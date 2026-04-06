@@ -6,12 +6,15 @@ for fee rates and hashrate.
 """
 
 import json
+import logging
 import shlex
 import subprocess
 import threading
 import time
 
 import requests
+
+logger = logging.getLogger(__name__)
 
 # Halving constants
 BLOCKS_PER_HALVING = 210_000
@@ -24,6 +27,9 @@ MEMPOOL_HASHRATE_URL = "https://mempool.space/api/v1/mining/hashrate/3d"
 MEMPOOL_HEIGHT_URL = "https://mempool.space/api/blocks/tip/height"
 MEMPOOL_BLOCK_URL = "https://mempool.space/api/block/"
 MEMPOOL_BLOCKS_URL = "https://mempool.space/api/v1/blocks"
+
+# Maximum items retained in history lists
+MAX_HISTORY_LEN = 50
 
 
 class ClockData:
@@ -72,6 +78,8 @@ class ClockData:
         # Internal
         self._bg_thread = None
         self._last_api_fetch = 0
+        self._fetch_lock = threading.Lock()
+        self._data_lock = threading.Lock()
 
     # --- RPC / CLI abstraction ---
 
@@ -143,8 +151,8 @@ class ClockData:
             elif self.mode == 'remote':
                 info = self._rpc('getnetworkinfo')
                 self.peer_count = info.get('connections', 0)
-        except Exception:
-            pass
+        except (requests.RequestException, json.JSONDecodeError, ValueError, OSError) as exc:
+            logger.debug("Peer count fetch failed: %s", exc)
 
     def _get_miner_pool_local(self):
         """Extract miner/pool name from coinbase for local/remote mode."""
@@ -193,10 +201,10 @@ class ClockData:
                 if not self.miner_pool and len(ascii_part) > 3:
                     # Use the longest readable substring
                     self.miner_pool = ascii_part.strip()[:20]
-            except Exception:
-                pass
-        except Exception:
-            pass
+            except (ValueError, UnicodeDecodeError) as exc:
+                logger.debug("Coinbase decode failed: %s", exc)
+        except (requests.RequestException, json.JSONDecodeError, ValueError, KeyError, OSError) as exc:
+            logger.debug("Miner pool fetch failed: %s", exc)
 
     def _fetch_block_time_history(self):
         """Fetch recent block timestamps and compute intervals + streaks."""
@@ -229,7 +237,7 @@ class ClockData:
                 diff = abs(timestamps[i] - timestamps[i + 1])
                 intervals.append(diff)
 
-            self.block_time_history = intervals
+            self.block_time_history = intervals[-MAX_HISTORY_LEN:]
 
             # Compute streak
             streak = 0
@@ -253,8 +261,8 @@ class ClockData:
             self.streak_type = stype if streak >= 2 else ""
             self.streak_count = streak if streak >= 2 else 0
 
-        except Exception:
-            pass
+        except (requests.RequestException, json.JSONDecodeError, ValueError, OSError) as exc:
+            logger.debug("Block time history fetch failed: %s", exc)
 
     def _calc_epoch(self):
         """Calculate epoch and halving progress from block height."""
@@ -278,23 +286,25 @@ class ClockData:
         try:
             r = requests.get(MEMPOOL_FEES_URL, timeout=10)
             fees = r.json()
-            self.fee_fastest = fees.get('fastestFee', 0)
-            self.fee_half_hour = fees.get('halfHourFee', 0)
-            self.fee_hour = fees.get('hourFee', 0)
-        except Exception:
-            pass
+            with self._data_lock:
+                self.fee_fastest = fees.get('fastestFee', 0)
+                self.fee_half_hour = fees.get('halfHourFee', 0)
+                self.fee_hour = fees.get('hourFee', 0)
+        except (requests.RequestException, ValueError, KeyError) as exc:
+            logger.debug("Fee fetch failed: %s", exc)
 
         try:
             r = requests.get(MEMPOOL_HASHRATE_URL, timeout=10)
             data = r.json()
-            self.hashrate_current = data.get('currentHashrate', 0)
-            self.difficulty = data.get('currentDifficulty', 0)
-            hashrates = data.get('hashrates', [])
-            self.hashrate_history = [
-                h.get('avgHashrate', 0) for h in hashrates[-20:]
-            ]
-        except Exception:
-            pass
+            with self._data_lock:
+                self.hashrate_current = data.get('currentHashrate', 0)
+                self.difficulty = data.get('currentDifficulty', 0)
+                hashrates = data.get('hashrates', [])
+                self.hashrate_history = [
+                    h.get('avgHashrate', 0) for h in hashrates[-MAX_HISTORY_LEN:]
+                ]
+        except (requests.RequestException, ValueError, KeyError) as exc:
+            logger.debug("Hashrate fetch failed: %s", exc)
 
         self._fetch_block_time_history()
         self._get_peer_count()
@@ -303,12 +313,13 @@ class ClockData:
 
     def _start_bg_fetch(self):
         """Fetch API data in background thread if enough time has passed."""
-        now = time.time()
-        if now - self._last_api_fetch < 30:
-            return
-        self._last_api_fetch = now
-        t = threading.Thread(target=self._fetch_api_data, daemon=True)
-        t.start()
+        with self._fetch_lock:
+            now = time.time()
+            if now - self._last_api_fetch < 30:
+                return
+            self._last_api_fetch = now
+            t = threading.Thread(target=self._fetch_api_data, daemon=True)
+            t.start()
 
     # --- Public API ---
 

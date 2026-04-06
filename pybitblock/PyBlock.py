@@ -6,18 +6,16 @@ import codecs
 import os
 import os.path
 import time as t
-import psutil
 import html2text
 import qrcode
 import random
-import xmltodict
 import shlex
 import sys
+import getpass
 import subprocess
 import requests
 import json
 import lastblockdetail
-import block_visualizer
 import mempool_monitor
 import asyncio
 import peers_monitor
@@ -96,6 +94,17 @@ def pathexec():
 def lndconnectexec():
     global lndconnectload
     lndconnectload = cfg.lndconnectload
+
+def _load_macaroon():
+    """Load and hex-encode the LND macaroon from config."""
+    with open(lndconnectload["macaroon"], 'rb') as _mf:
+        return codecs.encode(_mf.read(), 'hex')
+
+def _load_lnd_config():
+    """Load LND connection config from blndconnect.conf."""
+    with open("config/blndconnect.conf", "r") as f:
+        return json.load(f)
+
 def _run_btc(command):
     """Run bitcoin-cli safely with shlex-parsed args."""
     # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
@@ -449,7 +458,7 @@ def MemShell():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -1162,7 +1171,7 @@ def bip39convert():
         clear()
         blogo()
         print(output)
-        responseC = input("Words to Tiny Seed: ")
+        responseC = getpass.getpass("Words to Tiny Seed: ")
         subprocess.run(["python3", "TinySeed.py", responseC], cwd="TinySeed")
         input("\a\nContinue...")
     except Exception as e:
@@ -1180,7 +1189,7 @@ def robotNym():
             alias = json.loads(lsd0)
         else:
             cert_path = lndconnectload["tls"]
-            with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+            macaroon = _load_macaroon()
             headers = {'Grpc-Metadata-macaroon': macaroon}
             url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
             r = requests.get(url, headers=headers, verify=cert_path)
@@ -1332,7 +1341,7 @@ def callGitNostrLinTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_linux_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1356,7 +1365,7 @@ def callGitNostrLinarmTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_linux_arm64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1379,7 +1388,7 @@ def callGitNostrMacTerminal():
         blogo()
 
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_macos_amd64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1403,7 +1412,7 @@ def callGitNostrMacarmTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_elf64", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1425,7 +1434,7 @@ def callGitNostrWinTerminal():
         clear()
         blogo()
         print(output)
-        responseC = input("Paste your PrivateKey: ")
+        responseC = getpass.getpass("Paste your PrivateKey: ")
         subprocess.run(["./nostr_console_windows_amd64.exe", "-k", responseC, "-l"], cwd="nostr_console_pyblock")
     except Exception as e:
         logger.debug("Menu error: %s", e)
@@ -1641,7 +1650,7 @@ def wallPhoenix():
         output = render(
         "PhoenixD Invoice Maker", colors=['yellow'], align='left', font='tiny'
         )
-        responseC = input("Your PhoenixD Password: ")
+        responseC = getpass.getpass("Your PhoenixD Password: ")
         responseD = input("Your Description: ")
         responseE = input("Amount in Sats: ")
         r = requests.post('http://localhost:9740/createinvoice', auth=('', responseC), data={'description': responseD, 'amountSat': responseE})
@@ -1658,7 +1667,7 @@ def wallPhoenixBOLT12():
         output = render(
         "PhoenixD BOLT12 Maker", colors=['yellow'], align='left', font='tiny'
         )
-        responseC = input("Your PhoenixD Password: ")
+        responseC = getpass.getpass("Your PhoenixD Password: ")
         r = requests.get('http://localhost:9740/getoffer', auth=('', responseC))
         print(r.text)
         input("\a\nContinue...")
@@ -1918,7 +1927,7 @@ def MainMenu(mode): #Unified Main Menu - mode: "local", "onchain_only", or "remo
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2124,7 +2133,7 @@ def OwnNodeMiner(menuMin):
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2256,7 +2265,7 @@ def bitcoincoremenuREMOTE():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+    macaroon = _load_macaroon()
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -2291,7 +2300,7 @@ def bitcoincoremenuREMOTEOPRETURN():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+    macaroon = _load_macaroon()
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -2530,7 +2539,7 @@ def lightningnetworkREMOTE():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+    macaroon = _load_macaroon()
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -2621,7 +2630,7 @@ def APIMenuLOCAL():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2722,7 +2731,7 @@ def APIMenuLOCALOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2883,7 +2892,7 @@ def miscellaneousLOCAL():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2926,7 +2935,7 @@ def miscellaneousLOCALOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -2968,7 +2977,7 @@ def PhoenixConn():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3007,7 +3016,7 @@ def OceanConn():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3042,7 +3051,7 @@ def slushpoolREMOTEOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3077,7 +3086,7 @@ def slushpoolLOCALOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3117,7 +3126,7 @@ def runTheNumbersMenu():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3156,7 +3165,7 @@ def runTheNumbersMenuOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3199,7 +3208,7 @@ def runTheNumbersMenuConn():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3238,7 +3247,7 @@ def weatherMenuOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3277,7 +3286,7 @@ def weatherMenu():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3317,7 +3326,7 @@ def dnt(): # Donation selection menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3352,7 +3361,7 @@ def dntOnchainONLY(): # Donation selection menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3392,7 +3401,7 @@ def dntDev(): # Dev Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3428,7 +3437,7 @@ def dntDevOnchainONLY(): # Dev Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3468,7 +3477,7 @@ def dntTst(): # Tester Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3503,7 +3512,7 @@ def dntTstOnchainONLY(): # Tester Donation Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3543,7 +3552,7 @@ def satnodeMenu(): # Satnode Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3580,7 +3589,7 @@ def satnodeMenuOnchainONLY(): # Satnode Menu
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3621,7 +3630,7 @@ def rateSX():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3656,7 +3665,7 @@ def rateSXOncainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3695,7 +3704,7 @@ def mempoolmenu():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3731,7 +3740,7 @@ def mempoolmenuOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3776,7 +3785,7 @@ def APILnbit():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3823,8 +3832,7 @@ def APILnbitOnchainONLY():
     path = {"ip_port":"", "rpcuser":"", "rpcpass":"", "bitcoincli":""}
     with open("config/bclock.conf", "r") as f: pathv = json.load(f)
     path = pathv # Copy the variable pathv to 'path'
-    with open("config/blndconnect.conf", "r") as f: lndconnectData = json.load(f)
-    lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+    lndconnectload = _load_lnd_config()
     bitLN = {"NN":"","pd":""}
     if os.path.isfile('lnbitSN.conf'): # Check if the file 'bclock.conf' is in the same folder
         with open("lnbitSN.conf", "r") as f: bitData = json.load(f)
@@ -3846,7 +3854,7 @@ def APILnbitOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3915,7 +3923,7 @@ def APILnPay():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -3959,7 +3967,7 @@ def APILnPayOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4007,7 +4015,7 @@ def APIOpenNode():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4051,7 +4059,7 @@ def APIOpenNodeOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4095,7 +4103,7 @@ def APITippinMe():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4131,7 +4139,7 @@ def APITippinMeOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4171,7 +4179,7 @@ def APITallyCo():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4208,7 +4216,7 @@ def APITallyCoOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4295,7 +4303,7 @@ def settings4Remote():
     d = blk
 
     cert_path = lndconnectload["tls"]
-    with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+    macaroon = _load_macaroon()
     headers = {'Grpc-Metadata-macaroon': macaroon}
     url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
     r = requests.get(url, headers=headers, verify=cert_path)
@@ -4338,7 +4346,7 @@ def designQ():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4384,7 +4392,7 @@ def designQOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4434,7 +4442,7 @@ def designC():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4480,7 +4488,7 @@ def designCOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4530,7 +4538,7 @@ def designCRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4580,7 +4588,7 @@ def colors():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4617,7 +4625,7 @@ def colorsOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4658,7 +4666,7 @@ def colorsC():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4693,7 +4701,7 @@ def colorsCOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4733,7 +4741,7 @@ def colorsCRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4773,7 +4781,7 @@ def colorsSelectFront():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4816,7 +4824,7 @@ def colorsSelectFrontOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4863,7 +4871,7 @@ def colorsSelectFrontClock():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4906,7 +4914,7 @@ def colorsSelectFrontClockOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -4953,7 +4961,7 @@ def colorsSelectFrontClockRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5000,7 +5008,7 @@ def colorsSelectBack():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5043,7 +5051,7 @@ def colorsSelectBackOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5094,7 +5102,7 @@ def colorsSelectBackClock():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5137,7 +5145,7 @@ def colorsSelectBackClockOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5184,7 +5192,7 @@ def colorsSelectBackClockRemote():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5231,7 +5239,7 @@ def colorsSelectRainbow():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5267,7 +5275,7 @@ def colorsSelectRainbowOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5307,7 +5315,7 @@ def colorsSelectRainbowStart():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5350,7 +5358,7 @@ def colorsSelectRainbowStartOnchaiONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = f'https://{lndconnectload["ip_port"]}/v1/getinfo'
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5397,7 +5405,7 @@ def colorsSelectRainbowEnd():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -5444,7 +5452,7 @@ def colorsSelectRainbowEndOnchainONLY():
         d = blk
 
         cert_path = lndconnectload["tls"]
-        with open(lndconnectload["macaroon"], 'rb') as _mf: macaroon = codecs.encode(_mf.read(), 'hex')
+        macaroon = _load_macaroon()
         headers = {'Grpc-Metadata-macaroon': macaroon}
         url = 'https://{}/v1/getinfo'.format(lndconnectload["ip_port"])
         r = requests.get(url, headers=headers, verify=cert_path)
@@ -7625,7 +7633,7 @@ def fullbtc():
             return
         path['ip_port'] = f"http://{ip_port_input}"
         path['rpcuser'] = input("RPC User: ")
-        path['rpcpass'] = input("RPC Password: ")
+        path['rpcpass'] = getpass.getpass("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
         with open("config/bclock.conf", "w") as f: json.dump(path, f, indent=2)
@@ -7651,14 +7659,13 @@ def fullbtclnd():
             return
         path['ip_port'] = f"http://{ip_port_input}"
         path['rpcuser'] = input("RPC User: ")
-        path['rpcpass'] = input("RPC Password: ")
+        path['rpcpass'] = getpass.getpass("RPC Password: ")
         print("\n\tLocal Bitcoin Core Node connection.\n")
         path['bitcoincli']= input("Insert the Path to Bitcoin-Cli. Normally you just need to type 𝙗𝙞𝙩𝙘𝙤𝙞𝙣-𝙘𝙡𝙞: ")
         with open("config/bclock.conf", "w") as f: json.dump(path, f, indent=2)
 
     if os.path.isfile('config/blndconnect.conf'):
-        with open("config/blndconnect.conf", "r") as f: lndconnectData = json.load(f)
-        lndconnectload = lndconnectData # Copy the variable pathv to 'path'
+        lndconnectload = _load_lnd_config()
     else:
         clear()
         blogo()

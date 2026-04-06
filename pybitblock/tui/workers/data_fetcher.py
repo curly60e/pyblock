@@ -8,7 +8,7 @@ def fetch_block_height():
     try:
         r = requests.get("https://mempool.space/api/blocks/tip/height", timeout=5)
         return str(r.json())
-    except Exception:
+    except (requests.RequestException, ValueError, KeyError):
         return "---"
 
 
@@ -18,7 +18,7 @@ def fetch_btc_price():
         r = requests.get("https://mempool.space/api/v1/prices", timeout=5)
         price = r.json().get("USD", 0)
         return f"{price:,}"
-    except Exception:
+    except (requests.RequestException, ValueError, KeyError):
         return "---"
 
 
@@ -27,7 +27,7 @@ def fetch_fees():
     try:
         r = requests.get("https://mempool.space/api/v1/fees/recommended", timeout=5)
         return r.json()
-    except Exception:
+    except (requests.RequestException, ValueError, KeyError):
         return {"fastestFee": "?", "halfHourFee": "?", "hourFee": "?"}
 
 
@@ -41,7 +41,7 @@ def fetch_mempool_info():
             "vsize": data.get("vsize", 0),
             "total_fee": data.get("total_fee", 0),
         }
-    except Exception:
+    except (requests.RequestException, ValueError, KeyError):
         return {"count": "?", "vsize": "?", "total_fee": "?"}
 
 
@@ -59,7 +59,7 @@ def fetch_latest_blocks():
             }
             for b in blocks
         ]
-    except Exception:
+    except (requests.RequestException, ValueError, KeyError):
         return []
 
 
@@ -72,5 +72,5 @@ def fetch_hashrate():
         difficulty = data.get("currentDifficulty", 0)
         eh = current / 1e18
         return {"hashrate_eh": f"{eh:.1f}", "difficulty": f"{difficulty:.2e}"}
-    except Exception:
+    except (requests.RequestException, ValueError, KeyError):
         return {"hashrate_eh": "?", "difficulty": "?"}
