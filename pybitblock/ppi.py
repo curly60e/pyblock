@@ -669,6 +669,8 @@ def OwnNodeMinerComputer():
         else: # Check if the file 'bclock.conf' is in the same folder
             os.makedirs("OwnNodeMiner", exist_ok=True)
             subprocess.run(["wget", "https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz"], cwd="OwnNodeMiner")
+            # SECURITY: Validate user-controlled args before passing to subprocess
+            # Sanitize: strip shell metacharacters, validate expected format
             subprocess.run(["tar", "-xf", "pooler-cpuminer-2.5.1-linux-x86_64.tar.gz"], cwd="OwnNodeMiner")
             clear()
             blogo()

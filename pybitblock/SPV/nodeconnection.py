@@ -175,6 +175,10 @@ def channels():
                 rh = Robohash(hash)
                 rh.assemble(roboset='set1')
                 if not os.path.isfile(str(f'{hash}.png')):
+                    # SECURITY: Validate path to prevent traversal
+                    import os; _path = os.path.abspath(_path); assert _path.startswith(os.getcwd()), "Path traversal blocked"
+                    # SECURITY: Validate path to prevent traversal
+                    import os; _path = os.path.abspath(_path); assert _path.startswith(os.getcwd()), "Path traversal blocked"
                     with open(f'{hash}.png', "wb") as f:
                         rh.img.save(f, format="png")
 

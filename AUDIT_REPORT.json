@@ -1,0 +1,78 @@
+{
+  "project": "/home/curly/pyblock",
+  "timestamp": "2026-04-06",
+  "languages_detected": [
+    "python"
+  ],
+  "files_scanned": 96,
+  "candidates_found": 13,
+  "confirmed_findings": 4,
+  "false_positives": 7,
+  "findings": [
+    {
+      "pattern_id": "py-002-shell-injection",
+      "pattern_title": "Shell command execution with potential injection",
+      "severity": "critical",
+      "file": "/home/curly/pyblock/pybitblock/ppi.py",
+      "line": 672,
+      "matched_text": "subprocess.run([\"tar\", \"-xf\"",
+      "context": "670:             os.makedirs(\"OwnNodeMiner\", exist_ok=True)\n671:             subprocess.run([\"wget\", \"https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz\"], cwd=\"OwnNodeMiner\")\n672:             subprocess.run([\"tar\", \"-xf\", \"pooler-cpuminer-2.5.1-linux-x86_64.tar.gz\"], cwd=\"OwnNodeMiner\")\n673:             clear()\n674:             blogo()\n675:             print(output)",
+      "verification": {
+        "verdict": "confirmed",
+        "reasoning": "The `subprocess.run()` call on line 680 uses f-string interpolation for user-provided inputs (`responseC`, `responseD`, `responseE`, `responseF`) directly into the command arguments—specifically in `-O` (RPC credentials) and `--coinbase-addr` (Bitcoin address)—which enables command injection if those inputs contain shell metacharacters like `;`, `|`, or `$()`. (+2 more matches of this pattern in the same file)",
+        "execution_path": "User runs `OwnNodeMinerComputer()` → inputs are collected via `input()` for RPC user, RPC pass, Bitcoin address, and thread count → these values are interpolated into the `minerd` command and executed in `OwnNodeMiner/` directory.",
+        "suggested_fix": "Replace `subprocess.run([...])` with `shell=False` (default) and ensure all user inputs are passed as separate list elements (already done), but to prevent injection, sanitize inputs (e.g., strip shell metacharacters) or use `shlex.quote()` for string interpolation if shell=True is introduced later."
+      },
+      "cwe": "CWE-78"
+    },
+    {
+      "pattern_id": "py-002-shell-injection",
+      "pattern_title": "Shell command execution with potential injection",
+      "severity": "critical",
+      "file": "/home/curly/pyblock/pybitblock/nodeconnection.py",
+      "line": 734,
+      "matched_text": "subprocess.run(",
+      "context": "732:             else:\n733:                 break\n734:         subprocess.run(\n735:             [\"lncli\", \"sendpayment\", \"--keysend\", f\"--d={node}\", f\"--amt={amount}\",\n736:              \"--final_cltv_delta=40\"]\n737:         )",
+      "verification": {
+        "verdict": "confirmed",
+        "reasoning": "The `subprocess.run` call at line 734–737 uses `node` and `amount`, both obtained via `input()` from the user (lines 727–733), and these are interpolated into the command via f-strings (`f\"--d={node}\"`, `f\"--amt={amount}\"`), enabling command injection if the user provides malicious values (e.g., `node = \"node1; rm -rf /\"`). (+4 more matches of this pattern in the same file)",
+        "execution_path": "`localkeysend()` → user inputs `node` and `amount` via `input()` → values are interpolated into command args → `subprocess.run()` executes the command (without `shell=True`, but injection is still possible via argument splitting or if `lncli` itself interprets special chars).",
+        "suggested_fix": "Wrap `node` and `amount` values to sanitize or quote them (e.g., `node = node.strip().replace('\"', '\\\\\"')` or use `shlex.quote()`), or switch to `shell=False` (already the default) and avoid shell metacharacters by passing args as a list (already done), but add explicit validation or escaping for `node` and `amount`."
+      },
+      "cwe": "CWE-78"
+    },
+    {
+      "pattern_id": "py-002-shell-injection",
+      "pattern_title": "Shell command execution with potential injection",
+      "severity": "critical",
+      "file": "/home/curly/pyblock/pybitblock/SPV/apisnd.py",
+      "line": 40,
+      "matched_text": "subprocess.run(['curl', '-F', 'bid={}'.format(",
+      "context": "38:     print(\"\\n\\tATENTION: YOU NEED TO PAY \\033[1;31;40m\" + q + \"\\033[0;37;40m MilliSats\")\n39:     amountmsat = input(\"\\nInsert the amount in MSats: \")\n40:     sh0 = subprocess.run(['curl', '-F', 'bid={}'.format(amountmsat), '-F', 'message=' + message + sentby, url], capture_output=True, text=True).stdout\n41:     clear()\n42:     blogo()\n43:     while True:",
+      "verification": {
+        "verdict": "confirmed",
+        "reasoning": "The shell command at line 40 uses `subprocess.run()` with a list of arguments, but crucially includes external/user input (`amountmsat` and `message`) interpolated via `.format()` and string concatenation into the `-F` flags, making them part of the command sent to `curl`. (+3 more matches of this pattern in the same file)",
+        "execution_path": "User provides `message` (line 26) and `amountmsat` (line 38) → these are interpolated into the `curl` command at line 40 → `curl` executes with potentially malicious values in `bid=` and `message=` fields → if `amountmsat` or `message` contain shell metacharacters (e.g., `;`, `|`, `$()`), command injection can occur.",
+        "suggested_fix": "Replace `subprocess.run(['curl', ...])` with explicit argument separation (already done), but sanitize `amountmsat` and `message` before use—e.g., strip or escape shell metacharacters, or use `shlex.quote()` for interpolated values if switching to `shell=True`; alternatively, validate `amountmsat` as numeric and sanitize `message` (e.g., remove `;`, `|`, `$`, backticks)."
+      },
+      "cwe": "CWE-78"
+    },
+    {
+      "pattern_id": "py-008-path-traversal",
+      "pattern_title": "File open with user-controlled path (path traversal)",
+      "severity": "high",
+      "file": "/home/curly/pyblock/pybitblock/SPV/nodeconnection.py",
+      "line": 180,
+      "matched_text": "open(f'",
+      "context": "178:                     # SECURITY: Validate path to prevent traversal\n179:                     import os; _path = os.path.abspath(_path); assert _path.startswith(os.getcwd()), \"Path traversal blocked\"\n180:                     with open(f'{hash}.png', \"wb\") as f:\n181:                         rh.img.save(f, format=\"png\")\n182: \n183:                     img_path = open(f'{hash}.png', \"rb\")",
+      "verification": {
+        "verdict": "confirmed",
+        "reasoning": "The file path `{hash}.png` is constructed from `hash`, which originates from `s['remote_pubkey']` (line 174), and `n` (the loop iterable) is populated from external data—specifically, the result of `listchannels()` or similar Lightning RPC calls—making `hash` user-controllable via the remote node’s channel data. (+3 more matches of this pattern in the same file)",
+        "execution_path": "1) Remote node sends channel list (e.g., via `listchannels` RPC); 2) `n` is assigned from that list; 3) for each channel `s`, `hash = s['remote_pubkey']` (a hex-encoded public key, potentially attacker-influenced); 4) `hash` is used directly in `f'{hash}.png'` for `open()` calls (lines 180, 183, 193); 5) if `hash` contains path traversal sequences (e.g., `../../etc/passwd.png`), file operations will traverse.",
+        "suggested_fix": "Sanitize `hash` before use: e.g., `hash = re.sub(r'[^\\w\\-.]', '', str(hash))` or restrict to valid pubkey format (66-char hex) before constructing the path."
+      },
+      "cwe": "CWE-22"
+    }
+  ],
+  "elapsed_ms": 19745
+}

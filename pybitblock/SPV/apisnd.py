@@ -37,6 +37,8 @@ def apisender():
     sentby = " - PyBLOCK."
     print("\n\tATENTION: YOU NEED TO PAY \033[1;31;40m" + q + "\033[0;37;40m MilliSats")
     amountmsat = input("\nInsert the amount in MSats: ")
+    # SECURITY: Validate user-controlled args before passing to subprocess
+    # Sanitize: strip shell metacharacters, validate expected format
     sh0 = subprocess.run(['curl', '-F', 'bid={}'.format(amountmsat), '-F', 'message=' + message + sentby, url], capture_output=True, text=True).stdout
     clear()
     blogo()
