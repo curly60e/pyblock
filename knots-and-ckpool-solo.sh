@@ -66,13 +66,13 @@ if $PREVIOUS_INSTALL; then
 fi
 
 # Main installation
-echo -e "\nStarting installation of Bitcoin KNOTS and CKPool-Solo. This requires sudo privileges. \n"
-echo -e "\nWarning: Bitcoin KNOTS will download up to ~700GB of blockchain data (or less if pruned). Ensure sufficient disk space. \n"
-echo -e "\nImportant: You cannot mine with CKPool-Solo until the Bitcoin KNOTS blockchain is fully synchronized, which may take days depending on your hardware and network speed. \n"
+echo -e "\nStarting installation of Bitcoin KNOTS+RDTS and CKPool-Solo. This requires sudo privileges. \n"
+echo -e "\nWarning: Bitcoin KNOTS will download up to ~800GB of blockchain data (or less if pruned). Ensure sufficient disk space. \n"
+echo -e "\nImportant: You cannot mine with CKPool-Solo until the Bitcoin KNOTS+RDTS blockchain is fully synchronized, which may take days depending on your hardware and network speed. \n"
 
 # Prompt for service user (default to current sudo user)
 current_user=${SUDO_USER:-root}
-echo -e "\nOptionally, choose a user to run Bitcoin KNOTS and CKPool as (instead of $current_user). \n"
+echo -e "\nOptionally, choose a user to run Bitcoin KNOTS+RDTS and CKPool as (instead of $current_user). \n"
 echo -e "\nAny existing blockchain data in the user's .bitcoin directory will be used. \n"
 read -p "Enter existing username, or 'create' to make a new 'ckpool' user (leave blank for $current_user): " input_user
 if [ "$input_user" = "create" ]; then
@@ -95,7 +95,7 @@ else
 fi
 
 # Prompt for max disk space
-echo -e "\nBitcoin blockchain full size is approximately ~700GB. \n"
+echo -e "\nBitcoin blockchain full size is approximately ~800GB. \n"
 read -p "Enter maximum disk space for Bitcoin data in GB (0 for full chain, default: 0): " max_gb
 if [ -z "$max_gb" ]; then max_gb=0; fi
 if [ "$max_gb" -eq 0 ]; then
@@ -170,7 +170,7 @@ mkdir -p /var/log/journal
 systemd-tmpfiles --create --prefix /var/log/journal 2>/dev/null || true
 
 # Download and verify Bitcoin KNOTS tarball
-BITCOIN_VERSION="29.2.knots20251010"
+BITCOIN_VERSION="29.3.knots20260508"
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
     BITCOIN_TAR="bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz"
@@ -221,6 +221,7 @@ datacarriersize=0
 permitbaremultisig=0
 uacomment=PyBLOCK Crew
 uaappend=PyBLOCK
+consensusrules=rdts
 rejectparasites=1
 rejecttokens=1
 zmqpubhashblock=tcp://127.0.0.1:28332
@@ -338,7 +339,7 @@ systemctl enable bitcoind ckpool
 systemctl start bitcoind ckpool
 
 echo -e "Installation complete! CKPool-Solo is set to start on port 3333 after blockchain sync. \n"
-echo -e "Important: You cannot mine until the Bitcoin KNOTS blockchain is fully synchronized, which may take days. \n"
+echo -e "Important: You cannot mine until the Bitcoin KNOTS+RDTS blockchain is fully synchronized, which may take days. \n"
 echo "Check sync progress with:"
 echo "  - journalctl -u ckpool -f (block progress until CKPool starts)"
 echo "  - journalctl -u bitcoind -f (detailed sync logs)"
@@ -347,5 +348,5 @@ echo -e "CKPool startup is delayed until sync completes (monitor with: journalct
 echo -e "Connect miners using: stratum+tcp://[machine IP]:3333 with your Bitcoin address as username and 'x' as password. Replace [machine IP] with the IP address of this machine (use ifconfig or ip addr to find it). \n"
 echo "Monitor logs:"
 echo "  - CKPool: tail -f /var/log/ckpool/ckpool.log (full logs) or journalctl -u ckpool -f (block progress, then reduced CKPool logs)"
-echo -e "  - Bitcoin KNOTS: tail -f $DATADIR/debug.log or journalctl -u bitcoind -f \n"
+echo -e "  - Bitcoin KNOTS+RDTS: tail -f $DATADIR/debug.log or journalctl -u bitcoind -f \n"
 echo -e "Edit configs in $DATADIR/bitcoin.conf and /etc/ckpool/ckpool.conf if needed, then restart services with: systemctl restart bitcoind ckpool. \n"
