@@ -4,7 +4,7 @@ import requests
 import hashlib
 import binascii
 import json
-import random
+import secrets
 import socket
 import time
 from threading import Thread
@@ -98,7 +98,7 @@ def BitcoinMiner(restart=False):
                  len(res.strip()) > 0 and 'mining.notify' in res]
     job_id, prevhash, coinb1, coinb2, merkle_branch, version, nbits, ntime, clean_jobs = responses[0]['params']
     target = (nbits[2:] + '00' * (int(nbits[:2], 16) - 3)).zfill(64)
-    extranonce2 = hex(random.randint(0, 2 ** 32 - 1))[2:].zfill(2 * extranonce2_size)  # create random
+    extranonce2 = hex(secrets.randbelow(2 ** 32))[2:].zfill(2 * extranonce2_size)  # create random
 
     coinbase = coinb1 + extranonce1 + extranonce2 + coinb2
     coinbase_hash_bin = hashlib.sha256(hashlib.sha256(binascii.unhexlify(coinbase)).digest()).digest()
@@ -121,7 +121,7 @@ def BitcoinMiner(restart=False):
             BitcoinMiner(restart=True)
             break
 
-        nonce = hex(random.randint(0, 2 ** 32 - 1))[2:].zfill(8)  # nnonve   #hex(int(nonce,16)+1)[2:]
+        nonce = hex(secrets.randbelow(2 ** 32))[2:].zfill(8)  # nnonve   #hex(int(nonce,16)+1)[2:]
         blockheader = version + prevhash + merkle_root + nbits + ntime + nonce + \
                       '000000800000000000000000000000000000000000000000000000000000000000000000000000000000000080020000'
         hash = hashlib.sha256(hashlib.sha256(binascii.unhexlify(blockheader)).digest()).digest()

@@ -1,5 +1,6 @@
 import hashlib
 import random
+import secrets
 import string
 import time
 import curses
@@ -19,7 +20,7 @@ def binario_a_hex(binario):
 
 def generar_cadena_aleatoria(longitud=6):
     letras = string.ascii_lowercase
-    return ''.join(random.choice(letras) for i in range(longitud))
+    return ''.join(secrets.choice(letras) for i in range(longitud))
 
 def mainSHA(stdscr):
     curses.curs_set(0)  # Oculta el cursor

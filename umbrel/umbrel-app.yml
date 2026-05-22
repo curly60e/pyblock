@@ -2,7 +2,7 @@ manifestVersion: 1
 id: pyblock
 category: bitcoin
 name: PyBLOCK
-version: "4.0.0"
+version: "4.0.1"
 tagline: Terminal-based Bitcoin & Lightning node dashboard
 description: >-
   PyBLOCK is a cyberpunk-aesthetic Bitcoin dashboard that runs in your
@@ -40,8 +40,9 @@ defaultUsername: ""
 defaultPassword: ""
 deterministicPassword: false
 releaseNotes: >-
-  Initial Umbrel release. Features Rich terminal UI with categorized
-  menus, interactive block visualizer, and auto-configuration from
-  Umbrel's Bitcoin Core and LND nodes.
+  v4.0.1: Fix permission errors on Umbrel by pinning the container user
+  to UID/GID 1000, matching the user enforced by docker-compose. Adds a
+  startup writability check that fails fast with a clear message when
+  the bind-mounted config directory is not writable.
 submitter: curly60e
 submission: ""

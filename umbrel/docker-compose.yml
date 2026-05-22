@@ -7,7 +7,7 @@ services:
       APP_PORT: 6969
 
   web:
-    image: curly60e/pyblock:v4.0.0
+    image: curly60e/pyblock:v4.0.1
     restart: on-failure
     stop_grace_period: 1m
     user: "1000:1000"

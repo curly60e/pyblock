@@ -2,6 +2,7 @@
 #PyBLOCK its a clock of the Bitcoin blockchain.
 
 
+import logging
 import os
 import os.path
 import subprocess
@@ -19,9 +20,8 @@ def satnode():
         subprocess.run(["python3", "satellite/api/examples/demo-rx.py"])
         t.sleep(5)
         subprocess.run(["python3", "satellite/api/examples/api_data_reader.py", "--demo", "--plaintext"])
-    except Exception:
-        subprocess.run(["pkill", "-9", "-f", "api_data_reader.py"])
-        subprocess.run(["pkill", "-9", "-f", "demo-rx.py"])
+    except (OSError, subprocess.SubprocessError) as e:
+        logging.getLogger(__name__).debug("satnode error: %s", e)
 
 def matrixsc():
     if os.path.isdir('$HOME/pyblock/terminal_matrix'):

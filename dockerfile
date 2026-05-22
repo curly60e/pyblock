@@ -46,7 +46,12 @@ RUN chmod +x /app/entrypoint.sh
 # Create config volume mount point
 RUN mkdir -p /app/pyblock/pybitblock/config
 
-RUN useradd -m -s /bin/bash pyblock \
+# Pin pyblock to UID/GID 1000 so it matches the user Umbrel forces via
+# `user: "1000:1000"` in docker-compose. The base ubuntu:24.04 image ships an
+# `ubuntu` user already at 1000, so remove it first to free the UID.
+RUN userdel -r ubuntu 2>/dev/null || true \
+    && groupadd -g 1000 pyblock \
+    && useradd -m -s /bin/bash -u 1000 -g 1000 pyblock \
     && chown -R pyblock:pyblock /app
 
 USER pyblock

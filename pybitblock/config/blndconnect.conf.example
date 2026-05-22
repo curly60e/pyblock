@@ -1,0 +1,3 @@
+{
+  "lndconnecturl": "lndconnect://your_host:10009?cert=your_tls_cert&macaroon=your_macaroon"
+}

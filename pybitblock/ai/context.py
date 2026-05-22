@@ -2,10 +2,13 @@
 
 import codecs
 import json
+import logging
 import shlex
 import subprocess
 
 import requests
+
+logger = logging.getLogger(__name__)
 
 
 def gather_node_context(path, lndconnectload=None):
@@ -55,23 +58,23 @@ def _bitcoin_cli_context(path):
         ctx["size_on_disk_gb"] = round(
             info.get("size_on_disk", 0) / 1e9, 2
         )
-    except Exception:
-        pass
+    except (subprocess.SubprocessError, OSError, json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.debug("getblockchaininfo failed: %s", e)
 
     try:
         raw = _run_cli(cli, "getmempoolinfo")
         mempool = json.loads(raw)
         ctx["mempool_size"] = mempool.get("size", 0)
         ctx["mempool_bytes"] = mempool.get("bytes", 0)
-    except Exception:
-        pass
+    except (subprocess.SubprocessError, OSError, json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.debug("getmempoolinfo failed: %s", e)
 
     try:
         raw = _run_cli(cli, "getnetworkinfo")
         net = json.loads(raw)
         ctx["peer_count"] = net.get("connections", 0)
-    except Exception:
-        pass
+    except (subprocess.SubprocessError, OSError, json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.debug("getnetworkinfo failed: %s", e)
 
     # Fee rates from mempool.space (fast/medium/slow)
     ctx.update(_fee_rates())
@@ -104,8 +107,8 @@ def _bitcoin_rpc_context(path):
 
         net = rpc("getnetworkinfo")
         ctx["peer_count"] = net.get("connections", 0)
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.debug("Bitcoin RPC context failed: %s", e)
 
     ctx.update(_fee_rates())
     return ctx
@@ -119,8 +122,8 @@ def _bitcoin_api_context():
             "https://mempool.space/api/blocks/tip/height", timeout=10
         )
         ctx["block_height"] = int(r.text.strip())
-    except Exception:
-        pass
+    except (requests.RequestException, ValueError) as e:
+        logger.debug("API block height fetch failed: %s", e)
 
     try:
         r = requests.get(
@@ -128,8 +131,8 @@ def _bitcoin_api_context():
         )
         data = r.json()
         ctx["mempool_size"] = data.get("count", 0)
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+        logger.debug("API mempool fetch failed: %s", e)
 
     ctx.update(_fee_rates())
     return ctx
@@ -149,7 +152,8 @@ def _fee_rates():
                 "slow": fees.get("hourFee", 0),
             }
         }
-    except Exception:
+    except (requests.RequestException, json.JSONDecodeError, KeyError) as e:
+        logger.debug("Fee rate fetch failed: %s", e)
         return {}
 
 
@@ -178,7 +182,7 @@ def _lightning_context(lndconnectload):
         bal = r2.json()
         ctx["local_balance_sats"] = int(bal.get("local_balance", {}).get("sat", 0))
         ctx["remote_balance_sats"] = int(bal.get("remote_balance", {}).get("sat", 0))
-    except Exception:
-        pass
+    except (requests.RequestException, json.JSONDecodeError, KeyError, ValueError, OSError) as e:
+        logger.debug("Lightning context failed: %s", e)
 
     return ctx

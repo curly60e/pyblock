@@ -4,6 +4,18 @@ set -e
 CONFIG_DIR="/app/pyblock/pybitblock/config"
 mkdir -p "$CONFIG_DIR"
 
+# Fail fast with a clear message if the config dir is not writable. This is
+# almost always a UID mismatch between the host bind-mount owner and the
+# container user (Umbrel forces `user: "1000:1000"`).
+if ! touch "$CONFIG_DIR/.writetest" 2>/dev/null; then
+    echo "[PyBLOCK] FATAL: cannot write to $CONFIG_DIR" >&2
+    echo "[PyBLOCK] The bind-mounted host directory must be writable by UID $(id -u):$(id -g)." >&2
+    echo "[PyBLOCK] On Umbrel, ensure \${APP_DATA_DIR}/data/config is owned by 1000:1000." >&2
+    ls -ld "$CONFIG_DIR" >&2 || true
+    exit 1
+fi
+rm -f "$CONFIG_DIR/.writetest"
+
 # Auto-generate Bitcoin config from env vars if set
 if [ -n "$BITCOIN_RPC_HOST" ] && [ -n "$BITCOIN_RPC_USER" ]; then
     BITCOIN_RPC_PORT="${BITCOIN_RPC_PORT:-8332}"
