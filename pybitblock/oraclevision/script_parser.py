@@ -177,8 +177,8 @@ def detect_inscription_in_witness(witness: list[str] | None) -> bool:
 def detect_token_patterns(hex_blob: str) -> set[str]:
     """Heuristic detection of BRC-20, Runes, Ordinals content in hex."""
     found: set[str] = set()
-    lower = hex_blob.lower()
     raw = hex_to_bytes(hex_blob)
+    ascii_text = raw.decode("ascii", errors="ignore").lower()
 
     if b"6272632d3230" in raw or b'"p":"brc-20"' in raw or b'"p": "brc-20"' in raw:
         found.add("brc20")
@@ -188,7 +188,7 @@ def detect_token_patterns(hex_blob: str) -> set[str]:
         found.add("runes")
     if b"6f7264" in raw or b"746578742f706c61696e" in raw:
         found.add("ordinals")
-    if "ord" in lower or "inscription" in lower:
+    if "ord" in ascii_text or "inscription" in ascii_text:
         found.add("ordinals")
 
     for pat in _SPAM_HEX_PATTERNS:

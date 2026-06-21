@@ -8,9 +8,10 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
 import subprocess
 from typing import Any
+
+from oraclevision.security import resolve_bitcoin_cli, validate_rpc_method, validate_safe_path_token
 
 
 class BitcoinCLIError(Exception):
@@ -30,8 +31,15 @@ class BitcoinCLI:
         datadir: str | None = None,
         timeout: float = 60.0,
     ) -> None:
-        self.cli_path = cli_path or os.environ.get("BITCOIN_CLI", "bitcoin-cli")
-        self.datadir = datadir or os.environ.get("BITCOIN_DATADIR") or ""
+        try:
+            self.cli_path = resolve_bitcoin_cli(cli_path or os.environ.get("BITCOIN_CLI", "bitcoin-cli"))
+            self.datadir = validate_safe_path_token(
+                datadir or os.environ.get("BITCOIN_DATADIR") or "",
+                name="datadir",
+                allow_empty=True,
+            )
+        except ValueError as exc:
+            raise BitcoinCLIError(str(exc)) from exc
         self.timeout = timeout
 
     def _base_cmd(self) -> list[str]:
@@ -41,11 +49,10 @@ class BitcoinCLI:
         return cmd
 
     def call(self, method: str, *params: Any) -> Any:
-        if not shutil.which(self.cli_path) and not os.path.isabs(self.cli_path):
-            raise BitcoinCLIError(
-                f"bitcoin-cli not found: {self.cli_path}",
-                hint="Install Bitcoin Knots or set bitcoincli in config/bclock.conf",
-            )
+        try:
+            method = validate_rpc_method(method)
+        except ValueError as exc:
+            raise BitcoinCLIError(str(exc)) from exc
 
         cmd = self._base_cmd() + [method]
         for param in params:
@@ -57,6 +64,7 @@ class BitcoinCLI:
                 cmd.append(str(param))
 
         try:
+            # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
             result = subprocess.run(
                 cmd,
                 capture_output=True,

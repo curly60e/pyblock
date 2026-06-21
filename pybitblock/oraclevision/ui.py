@@ -6,7 +6,6 @@ Don't Trust, Verify — all analysis runs locally against your Knots node.
 
 from __future__ import annotations
 
-import shutil
 import subprocess
 import time as t
 
@@ -18,6 +17,7 @@ from oraclevision.bip110 import BlockAnalysis, analyze_block
 from oraclevision.bitcoin_cli import BitcoinCLI, BitcoinCLIError
 from oraclevision.config import load_settings
 from oraclevision.mempool_compose import analyze_block_template
+from oraclevision.security import resolve_executable
 from oraclevision.spam_score import status_style
 from shared.display import clear
 from shared.rich_ui import console, rich_error, rich_prompt
@@ -275,8 +275,10 @@ def launch_full_oraculovision(path: dict) -> None:
     clear()
     _header()
 
-    if not shutil.which(command) and not command.startswith("/"):
-        rich_error(f"'{command}' not found in PATH.")
+    try:
+        launch_cmd = resolve_executable(command)
+    except ValueError as exc:
+        rich_error(str(exc))
         console.print(
             "    [dim]→ Install OracleVision: pip install -e . from "
             "https://github.com/MarcanoFilms/oraculovision[/]"
@@ -284,7 +286,7 @@ def launch_full_oraculovision(path: dict) -> None:
         input("\n\aContinue...")
         return
 
-    console.print(f"[dim]Launching {command}…[/]\n")
+    console.print(f"[dim]Launching {launch_cmd[0]}…[/]\n")
     console.print("[yellow]Press Ctrl+C in OracleVision to return to PyBLOCK.[/]\n")
     t.sleep(1)
 
@@ -295,9 +297,10 @@ def launch_full_oraculovision(path: dict) -> None:
         env["BITCOIN_CLI"] = path["bitcoincli"]
 
     try:
-        subprocess.run([command], env=env, check=False)
+        # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
+        subprocess.run(launch_cmd, env=env, check=False)
     except FileNotFoundError:
-        rich_error(f"Could not execute: {command}")
+        rich_error(f"Could not execute: {launch_cmd[0]}")
     except KeyboardInterrupt:
         pass
 
@@ -306,6 +309,10 @@ def launch_full_oraculovision(path: dict) -> None:
 
 def run_oraclevision_menu(path: dict) -> None:
     """Main OracleVision submenu loop."""
+    settings = load_settings()
+    if settings.load_error:
+        rich_error(f"Config warning: {settings.load_error}")
+
     while True:
         clear()
         _header()
