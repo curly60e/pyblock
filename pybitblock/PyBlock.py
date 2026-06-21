@@ -2060,6 +2060,8 @@ def bitcoincoremenuLocal(mode): #Unified Bitcoin Core menu for local/onchain_onl
     col2.append("Mempool Monitor\n", style="white")
     col2.append("  K.  ", style="bold cyan")
     col2.append("Peers Monitor\n", style="white")
+    col2.append("  OV. ", style="bold cyan")
+    col2.append("OracleVision\n", style="white")
 
     # Tools section
     col3 = RText()
@@ -6625,6 +6627,14 @@ def bitcoincoremenuLocalControl(bcore, mode=None): #Unified Bitcoin Core local c
         print(output)
         subprocess.run(["python3", "PyVanityGenerator.py"], cwd="SPV")
         input("\a\nContinue...")
+    elif bcore in ["OV", "ov"]:
+        try:
+            pathexec()
+            from oraclevision.ui import run_oraclevision_menu
+            run_oraclevision_menu(path)
+        except Exception as e:
+            show_error(str(e))
+            logger.debug("Suppressed error: %s", e)
     else:
         if bcore.strip():
             from shared.ui import YELLOW, RESET

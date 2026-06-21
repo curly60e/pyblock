@@ -1,0 +1,7 @@
+{
+  "block_scan_count": 10,
+  "spam_score_threshold": 45,
+  "bitcoin_datadir": "",
+  "oraculovision_command": "oraculovision",
+  "cli_timeout_seconds": 60
+}
