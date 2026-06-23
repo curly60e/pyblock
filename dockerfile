@@ -29,6 +29,33 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install bitcoin-cli (Bitcoin Knots, not Core — same RPC protocol, different
+# project) and lncli so PyBLOCK's mode A/B can talk to Umbrel's Bitcoin and
+# LND containers over RPC/gRPC without a degraded Lite Mode fallback. The
+# binaries are wrapped by umbrel/{bitcoin-cli,lncli}-wrapper.sh (installed
+# below) which inject the connection details Umbrel injects via env vars.
+ARG TARGETARCH
+ARG KNOTS_VERSION=28.1.knots20250305
+ARG KNOTS_SERIES=28.x
+ARG LND_VERSION=v0.20.1-beta
+RUN set -eux; \
+    case "${TARGETARCH}" in \
+        amd64) BTC_ARCH=x86_64-linux-gnu; LND_ARCH=amd64 ;; \
+        arm64) BTC_ARCH=aarch64-linux-gnu; LND_ARCH=arm64 ;; \
+        *) echo "Unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac; \
+    cd /tmp; \
+    wget -q "https://bitcoinknots.org/files/${KNOTS_SERIES}/${KNOTS_VERSION}/bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz"; \
+    wget -q "https://bitcoinknots.org/files/${KNOTS_SERIES}/${KNOTS_VERSION}/SHA256SUMS"; \
+    grep "bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz" SHA256SUMS | sha256sum -c -; \
+    tar -xzf "bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz" "bitcoin-${KNOTS_VERSION}/bin/bitcoin-cli"; \
+    install -m 0755 "bitcoin-${KNOTS_VERSION}/bin/bitcoin-cli" /usr/local/bin/bitcoin-cli.bin; \
+    rm -rf "bitcoin-${KNOTS_VERSION}" "bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz" SHA256SUMS; \
+    wget -q "https://github.com/lightningnetwork/lnd/releases/download/${LND_VERSION}/lnd-linux-${LND_ARCH}-${LND_VERSION}.tar.gz"; \
+    tar -xzf "lnd-linux-${LND_ARCH}-${LND_VERSION}.tar.gz" --strip-components=1 "lnd-linux-${LND_ARCH}-${LND_VERSION}/lncli"; \
+    install -m 0755 lncli /usr/local/bin/lncli.bin; \
+    rm -f lncli "lnd-linux-${LND_ARCH}-${LND_VERSION}.tar.gz"
+
 RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 
@@ -38,6 +65,13 @@ RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /app/pyblock/requirements.txt
 
 COPY . /app/pyblock/
+
+# Install the bitcoin-cli / lncli wrappers as the default CLI paths so any
+# subprocess call to bitcoin-cli / lncli (including PyBLOCK's mode A/B menus)
+# is transparently routed through RPC/gRPC against the Umbrel dependency
+# containers. The real binaries live at /usr/local/bin/{bitcoin-cli,lncli}.bin.
+RUN install -m 0755 /app/pyblock/umbrel/bitcoin-cli-wrapper.sh /usr/local/bin/bitcoin-cli \
+    && install -m 0755 /app/pyblock/umbrel/lncli-wrapper.sh /usr/local/bin/lncli
 
 # Entrypoint for auto-configuration
 COPY entrypoint.sh /app/entrypoint.sh

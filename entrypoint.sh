@@ -16,6 +16,17 @@ if ! touch "$CONFIG_DIR/.writetest" 2>/dev/null; then
 fi
 rm -f "$CONFIG_DIR/.writetest"
 
+# Default to the bundled bitcoin-cli / lncli wrappers when the caller hasn't
+# overridden them. The wrappers route every CLI invocation through RPC/gRPC
+# against the Umbrel Bitcoin Core and LND containers, so PyBLOCK's mode A/B
+# work without a real local node binary on disk.
+if [ -n "$BITCOIN_RPC_HOST" ] && [ -x /usr/local/bin/bitcoin-cli ]; then
+    export BITCOIN_CLI_PATH="${BITCOIN_CLI_PATH:-/usr/local/bin/bitcoin-cli}"
+fi
+if [ -n "$LND_HOST" ] && [ -x /usr/local/bin/lncli ]; then
+    export LND_CLI_PATH="${LND_CLI_PATH:-/usr/local/bin/lncli}"
+fi
+
 # Auto-generate Bitcoin config from env vars if set
 if [ -n "$BITCOIN_RPC_HOST" ] && [ -n "$BITCOIN_RPC_USER" ]; then
     BITCOIN_RPC_PORT="${BITCOIN_RPC_PORT:-8332}"
