@@ -38,7 +38,7 @@ Dual-mode inspector accepting a **64-char txid** or **Bitcoin address**:
 - Input/output flow with addresses, values, script types
 - Mempool category (economic / spam / coinjoin / consolidation)
 - BIP-110 compliance label and flag list
-- Spam signals (inscription, brc20, runes, ordinals, op_return)
+- Spam signals (inscription, BRC-20, runes, ordinals, OP_RETURN)
 
 **Address mode** shows:
 - Node validation, script type
