@@ -121,6 +121,41 @@ class BitcoinCLI:
     def decode_raw_transaction(self, hex_data: str) -> dict[str, Any]:
         return self.call("decoderawtransaction", hex_data)
 
+    def get_raw_mempool(self, *, verbose: bool = False) -> Any:
+        return self.call("getrawmempool", verbose)
+
+    def get_raw_transaction(
+        self,
+        txid: str,
+        verbose: bool = True,
+        *,
+        block_hash: str | None = None,
+    ) -> Any:
+        if block_hash:
+            return self.call("getrawtransaction", txid, verbose, block_hash)
+        return self.call("getrawtransaction", txid, verbose)
+
+    def get_blockchain_info(self) -> dict[str, Any]:
+        return self.call("getblockchaininfo")
+
+    def validate_address(self, address: str) -> dict[str, Any]:
+        return self.call("validateaddress", address)
+
+    def scantxoutset_address(
+        self,
+        address: str,
+        *,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
+        """Scan UTXO set for a single address via scantxoutset."""
+        original_timeout = self.timeout
+        if timeout is not None:
+            self.timeout = timeout
+        try:
+            return self.call("scantxoutset", "start", [f"addr({address})"])
+        finally:
+            self.timeout = original_timeout
+
     @classmethod
     def from_path_config(cls, path: dict[str, str], datadir: str = "", timeout: float = 60.0) -> "BitcoinCLI":
         return cls(path.get("bitcoincli", "bitcoin-cli"), datadir=datadir, timeout=timeout)
