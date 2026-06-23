@@ -12,6 +12,16 @@ set -e
 : "${LND_TLS_CERT_PATH:?LND_TLS_CERT_PATH must be set}"
 : "${LND_MACAROON_PATH:?LND_MACAROON_PATH must be set}"
 
+if [ ! -r "${LND_TLS_CERT_PATH}" ]; then
+    echo "Error: LND TLS certificate not found or not readable at path '${LND_TLS_CERT_PATH}'" >&2
+    exit 1
+fi
+
+if [ ! -r "${LND_MACAROON_PATH}" ]; then
+    echo "Error: LND macaroon not found or not readable at path '${LND_MACAROON_PATH}'" >&2
+    exit 1
+fi
+
 exec /usr/local/bin/lncli.bin \
     --rpcserver="${LND_HOST}:${LND_GRPC_PORT:-10009}" \
     --tlscertpath="${LND_TLS_CERT_PATH}" \
