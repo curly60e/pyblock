@@ -40,10 +40,10 @@ defaultUsername: ""
 defaultPassword: ""
 deterministicPassword: false
 releaseNotes: >-
-  v4.0.2: Bundle bitcoin-cli and lncli inside the image, wrapped to inject
-  the RPC/gRPC connection details Umbrel provides via APP_BITCOIN_* and
-  APP_LIGHTNING_* env vars. Modes A (Bitcoin + Lightning) and B (Bitcoin
-  only) now connect to the Umbrel dependency containers directly instead
-  of falling back to Lite Mode at startup.
+  v4.0.2: Bundle bitcoin-cli (from Bitcoin Knots) and lncli inside the
+  image, wrapped to inject the RPC/gRPC connection details Umbrel provides
+  via APP_BITCOIN_* and APP_LIGHTNING_* env vars. Modes A (Bitcoin +
+  Lightning) and B (Bitcoin only) now connect to the Umbrel dependency
+  containers directly instead of falling back to Lite Mode at startup.
 submitter: curly60e
 submission: ""

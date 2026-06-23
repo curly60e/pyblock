@@ -29,13 +29,14 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install bitcoin-cli and lncli so PyBLOCK's mode A/B can talk to Umbrel's
-# Bitcoin Core and LND containers over RPC/gRPC without a degraded Lite Mode
-# fallback. The binaries are wrapped by umbrel/{bitcoin-cli,lncli}-wrapper.sh
-# (installed below) which inject the connection details Umbrel injects via
-# env vars.
+# Install bitcoin-cli (Bitcoin Knots, not Core — same RPC protocol, different
+# project) and lncli so PyBLOCK's mode A/B can talk to Umbrel's Bitcoin and
+# LND containers over RPC/gRPC without a degraded Lite Mode fallback. The
+# binaries are wrapped by umbrel/{bitcoin-cli,lncli}-wrapper.sh (installed
+# below) which inject the connection details Umbrel injects via env vars.
 ARG TARGETARCH
-ARG BITCOIN_VERSION=28.1
+ARG KNOTS_VERSION=28.1.knots20250305
+ARG KNOTS_SERIES=28.x
 ARG LND_VERSION=v0.20.1-beta
 RUN set -eux; \
     case "${TARGETARCH}" in \
@@ -44,12 +45,12 @@ RUN set -eux; \
         *) echo "Unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
     esac; \
     cd /tmp; \
-    wget -q "https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/bitcoin-${BITCOIN_VERSION}-${BTC_ARCH}.tar.gz"; \
-    wget -q "https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/SHA256SUMS"; \
-    grep "bitcoin-${BITCOIN_VERSION}-${BTC_ARCH}.tar.gz" SHA256SUMS | sha256sum -c -; \
-    tar -xzf "bitcoin-${BITCOIN_VERSION}-${BTC_ARCH}.tar.gz" "bitcoin-${BITCOIN_VERSION}/bin/bitcoin-cli"; \
-    install -m 0755 "bitcoin-${BITCOIN_VERSION}/bin/bitcoin-cli" /usr/local/bin/bitcoin-cli.bin; \
-    rm -rf "bitcoin-${BITCOIN_VERSION}" "bitcoin-${BITCOIN_VERSION}-${BTC_ARCH}.tar.gz" SHA256SUMS; \
+    wget -q "https://bitcoinknots.org/files/${KNOTS_SERIES}/${KNOTS_VERSION}/bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz"; \
+    wget -q "https://bitcoinknots.org/files/${KNOTS_SERIES}/${KNOTS_VERSION}/SHA256SUMS"; \
+    grep "bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz" SHA256SUMS | sha256sum -c -; \
+    tar -xzf "bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz" "bitcoin-${KNOTS_VERSION}/bin/bitcoin-cli"; \
+    install -m 0755 "bitcoin-${KNOTS_VERSION}/bin/bitcoin-cli" /usr/local/bin/bitcoin-cli.bin; \
+    rm -rf "bitcoin-${KNOTS_VERSION}" "bitcoin-${KNOTS_VERSION}-${BTC_ARCH}.tar.gz" SHA256SUMS; \
     wget -q "https://github.com/lightningnetwork/lnd/releases/download/${LND_VERSION}/lnd-linux-${LND_ARCH}-${LND_VERSION}.tar.gz"; \
     tar -xzf "lnd-linux-${LND_ARCH}-${LND_VERSION}.tar.gz" --strip-components=1 "lnd-linux-${LND_ARCH}-${LND_VERSION}/lncli"; \
     install -m 0755 lncli /usr/local/bin/lncli.bin; \
