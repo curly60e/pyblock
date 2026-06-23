@@ -299,7 +299,7 @@ cp pybitblock/config/oraclevision.conf.example pybitblock/config/oraclevision.co
 | `spam_score_threshold` | 45 | Score above this marks a block as VIOLATION |
 | `bitcoin_datadir` | `""` | Optional `-datadir` for bitcoin-cli |
 | `oraculovision_command` | `oraculovision` | Command to launch the full TUI |
-| `max_vin_lookups` | 4 | Parent-tx RPC lookups to resolve input prevouts in Transaction Inspector |
+| `max_vin_lookups` | 4 | Parent transaction RPC lookups to resolve input prevouts in Transaction Inspector |
 | `scantxoutset_timeout` | 90 | Seconds allowed for UTXO scan in Address Inspector |
 | `mempool_scan_limit` | 30 | Max mempool txs scanned for address mempool exposure |
 | `detectors_enabled` | `["builtin"]` | Active BIP-110/spam detector plugins |

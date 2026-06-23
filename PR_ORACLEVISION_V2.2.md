@@ -92,7 +92,7 @@ New keys in `oraclevision.conf`:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `max_vin_lookups` | 4 | Parent tx RPC lookups to resolve missing prevouts |
+| `max_vin_lookups` | 4 | Parent transaction RPC lookups to resolve missing prevouts |
 | `scantxoutset_timeout` | 90 | Seconds for UTXO scan (address mode) |
 | `mempool_scan_limit` | 30 | Max mempool txs scanned for address exposure |
 | `detectors_enabled` | `["builtin"]` | Active detector plugins |

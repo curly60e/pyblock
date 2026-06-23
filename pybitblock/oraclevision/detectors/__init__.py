@@ -42,6 +42,11 @@ def enabled_detectors() -> tuple[str, ...]:
 
 
 def run_detectors(tx: dict[str, Any], *, enabled: tuple[str, ...] | None = None) -> DetectorResult:
+    """Run enabled detectors and merge their results.
+
+    ``witness_bytes`` uses max() because each detector must report the full
+    transaction witness size, not a per-input partial measurement.
+    """
     names = enabled or _ACTIVE
     combined = DetectorResult()
     for name in names:
@@ -68,7 +73,10 @@ def configure_detectors(enabled: list[str] | None = None) -> None:
     if enabled:
         for name in enabled:
             if name == "example_dust":
-                from oraclevision.detectors.example_dust import DustDetector
+                try:
+                    from oraclevision.detectors.example_dust import DustDetector
 
-                register(DustDetector())
+                    register(DustDetector())
+                except ImportError:
+                    pass
     set_enabled(enabled)
