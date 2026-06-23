@@ -3,5 +3,9 @@
   "spam_score_threshold": 45,
   "bitcoin_datadir": "",
   "oraculovision_command": "oraculovision",
-  "cli_timeout_seconds": 60
+  "cli_timeout_seconds": 60,
+  "max_vin_lookups": 4,
+  "scantxoutset_timeout": 90,
+  "mempool_scan_limit": 30,
+  "detectors_enabled": ["builtin"]
 }

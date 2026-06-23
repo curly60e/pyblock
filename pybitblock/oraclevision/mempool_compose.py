@@ -37,6 +37,14 @@ class MempoolComposition:
     source: str = "block_template"
     error: str | None = None
 
+    @property
+    def sampled_tx(self) -> int:
+        return self.analyzed_tx
+
+    @property
+    def sampled_weight(self) -> int:
+        return self.analyzed_weight
+
     def pct(self, weight: int) -> float:
         base = self.analyzed_weight or 1
         return (weight / base) * 100

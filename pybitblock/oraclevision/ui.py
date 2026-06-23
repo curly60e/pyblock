@@ -13,12 +13,20 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from oraclevision.bip110 import BlockAnalysis, analyze_block
+from oraclevision.address_service import AddressService, format_address_inspection
+from oraclevision.addresses import AddressQueryError, classify_query
+from oraclevision.bip110 import BlockAnalysis, TxAnalysis, analyze_block
 from oraclevision.bitcoin_cli import BitcoinCLI, BitcoinCLIError
 from oraclevision.config import load_settings
 from oraclevision.mempool_compose import analyze_block_template
 from oraclevision.security import resolve_executable
 from oraclevision.spam_score import status_style
+from oraclevision.tx_service import (
+    TxInspectContext,
+    TxQueryError,
+    TxService,
+    format_inspection,
+)
 from shared.display import clear
 from shared.rich_ui import console, rich_error, rich_prompt
 from shared.ui import show_error
@@ -43,7 +51,8 @@ def _menu_items() -> None:
     console.print("    [bold cyan]A.[/] BIP-110 Block Scanner")
     console.print("    [bold cyan]B.[/] Mempool Glass (getblocktemplate)")
     console.print("    [bold cyan]C.[/] Block Detail View")
-    console.print("    [bold cyan]D.[/] Launch Full OracleVision TUI")
+    console.print("    [bold cyan]D.[/] Transaction & Address Inspector")
+    console.print("    [bold cyan]E.[/] Launch Full OracleVision TUI")
     console.print("    [bold yellow]R.[/] Return")
     console.print()
 
@@ -55,6 +64,24 @@ def _cli_for(path: dict) -> BitcoinCLI:
         datadir=settings.bitcoin_datadir,
         timeout=float(settings.cli_timeout_seconds),
     )
+
+
+def _inspection_border_style(
+    *,
+    partial: bool = False,
+    has_violation: bool = False,
+    is_spam: bool = False,
+    address_mode: bool = False,
+) -> str:
+    if partial:
+        return "yellow"
+    if has_violation:
+        return "red"
+    if is_spam:
+        return "rgb(255,215,0)"
+    if address_mode:
+        return "cyan"
+    return "green"
 
 
 def _format_block_row(analysis: BlockAnalysis) -> tuple:
@@ -114,7 +141,7 @@ def scan_recent_blocks(path: dict, count: int | None = None) -> None:
         rich_error(str(exc))
         if exc.hint:
             console.print(f"    [dim]→ {exc.hint}[/]")
-    except Exception as exc:
+    except (OSError, ValueError, KeyError, TypeError) as exc:
         show_error(str(exc))
 
     input("\n\aContinue...")
@@ -147,6 +174,7 @@ def show_mempool_glass(path: dict) -> None:
         summary.add_row("Analyzed txs", str(composition.analyzed_tx))
         summary.add_row("Template weight", f"{composition.analyzed_weight:,} / {composition.weight_limit:,}")
         summary.add_row("Fill", f"{composition.fill_pct:.1f}%")
+        summary.add_row("Source", composition.source)
 
         cats = Table(title="Transaction Categories", show_lines=True)
         cats.add_column("Category", style="bold")
@@ -172,20 +200,23 @@ def show_mempool_glass(path: dict) -> None:
         console.print()
         console.print(cats)
         console.print(
-            "\n[dim]Spam = BIP-110 violations, inscriptions, tokens, "
-            "oversized witness, or excess witness ratio[/]"
+            "\n[dim]Based on your node's current block template (Knots + BIP-110 policy). "
+            "Spam = BIP-110 violations, inscriptions, tokens, oversized witness.[/]"
+        )
+        console.print(
+            "[dim]Use [bold]D. Transaction Inspector[/] to drill into a specific txid.[/]"
         )
     except BitcoinCLIError as exc:
         rich_error(str(exc))
         if exc.hint:
             console.print(f"    [dim]→ {exc.hint}[/]")
-    except Exception as exc:
+    except (OSError, ValueError, KeyError, TypeError) as exc:
         show_error(str(exc))
 
     input("\n\aContinue...")
 
 
-def _render_block_detail(analysis: BlockAnalysis) -> None:
+def _render_block_detail(analysis: BlockAnalysis) -> BlockAnalysis:
     sig = "YES" if analysis.bip110_signaling else "no"
     title = (
         f"Block #{analysis.height}  ·  Spam {analysis.spam_score}/100  ·  "
@@ -216,22 +247,65 @@ def _render_block_detail(analysis: BlockAnalysis) -> None:
 
     if not bad:
         console.print("[green]No problematic transactions detected.[/]")
-        return
+        return analysis
 
     tx_table = Table(title="Problematic Transactions (top 25)", show_lines=True)
+    tx_table.add_column("#", justify="right", style="dim")
     tx_table.add_column("TXID", style="red")
     tx_table.add_column("Weight", justify="right")
     tx_table.add_column("BIP-110 flags")
     tx_table.add_column("Signals")
 
-    for tx in bad[:25]:
+    for idx, tx in enumerate(bad[:25], start=1):
         flags = ", ".join(sorted(tx.bip110_flags)) or "—"
         signals = ", ".join(sorted(tx.signals)) or "—"
-        tx_table.add_row(tx.txid[:20] + "…", f"{tx.weight:,}", flags, signals)
+        tx_table.add_row(str(idx), tx.txid[:20] + "…", f"{tx.weight:,}", flags, signals)
 
     console.print(tx_table)
     if len(bad) > 25:
         console.print(f"[dim]… and {len(bad) - 25} more[/]")
+    return analysis
+
+
+def _prompt_tx_inspection_from_block(
+    path: dict,
+    analysis: BlockAnalysis,
+    bad_txs: list[TxAnalysis],
+) -> None:
+    if not bad_txs:
+        return
+
+    console.print()
+    choice = input(
+        "\033[1;32;40mInspect tx (# or full txid, Enter to skip): \033[0;37;40m"
+    ).strip()
+    if not choice:
+        return
+
+    tx_analysis: TxAnalysis | None = None
+    if choice.isdigit():
+        idx = int(choice)
+        if 1 <= idx <= min(len(bad_txs), 25):
+            tx_analysis = bad_txs[idx - 1]
+    else:
+        for tx in bad_txs:
+            if tx.txid.startswith(choice.lower()) or tx.txid == choice.lower():
+                tx_analysis = tx
+                break
+
+    if tx_analysis is None:
+        show_error("Transaction not found in this block's flagged list")
+        input("\n\aContinue...")
+        return
+
+    raw_tx = analysis.flagged_raw.get(tx_analysis.txid)
+    context = TxInspectContext(
+        block_hash=analysis.hash,
+        block_height=analysis.height,
+        raw_tx=raw_tx,
+        cached_analysis=tx_analysis,
+    )
+    show_tx_inspector(path, context=context, initial_query=tx_analysis.txid)
 
 
 def show_block_detail(path: dict, target: str | None = None) -> None:
@@ -257,14 +331,114 @@ def show_block_detail(path: dict, target: str | None = None) -> None:
         block = cli.get_block(block_hash, 2)
         analysis = analyze_block(block, spam_threshold=settings.spam_score_threshold)
         _render_block_detail(analysis)
+
+        bad_txs = [
+            tx for tx in analysis.transactions
+            if tx.has_bip110_violation or tx.is_spam_signal
+        ]
+        bad_txs.sort(key=lambda tx: tx.weight, reverse=True)
+        _prompt_tx_inspection_from_block(path, analysis, bad_txs)
     except BitcoinCLIError as exc:
         rich_error(str(exc))
         if exc.hint:
             console.print(f"    [dim]→ {exc.hint}[/]")
-    except Exception as exc:
+    except (OSError, ValueError, KeyError, TypeError) as exc:
         show_error(str(exc))
 
     input("\n\aContinue...")
+
+
+def _render_tx_inspection(ins) -> None:
+    border = _inspection_border_style(
+        partial=ins.partial,
+        has_violation=ins.analysis.has_bip110_violation,
+        is_spam=ins.analysis.is_spam_signal,
+    )
+    console.print(
+        Panel(
+            Text.from_markup(format_inspection(ins)),
+            title="Transaction Inspector",
+            border_style=border,
+        )
+    )
+
+
+def _render_address_inspection(ins) -> None:
+    console.print(
+        Panel(
+            Text.from_markup(format_address_inspection(ins)),
+            title="Address Inspector",
+            border_style=_inspection_border_style(address_mode=True),
+        )
+    )
+
+
+def show_tx_inspector(
+    path: dict,
+    *,
+    context: TxInspectContext | None = None,
+    initial_query: str | None = None,
+) -> None:
+    """Interactive transaction and address inspector."""
+    settings = load_settings()
+    cli = _cli_for(path)
+    tx_service = TxService(cli, config=settings.inspector)
+    addr_service = AddressService(cli, config=settings.inspector)
+
+    while True:
+        clear()
+        _header()
+        console.print(
+            Panel(
+                Text.from_markup(
+                    "[bold]Transaction & Address Inspector[/]\n"
+                    "[dim]Enter a 64-char txid or Bitcoin address (bc1…, 1…, 3…)[/]\n"
+                    "[dim]All data verified locally — no third-party explorer[/]"
+                ),
+                border_style="cyan",
+            )
+        )
+        console.print()
+
+        query = initial_query
+        initial_query = None
+        if not query:
+            query = input(
+                "\033[1;32;40mQuery (txid or address, R to return): \033[0;37;40m"
+            ).strip()
+        if not query or query.upper() == "R":
+            return
+
+        try:
+            kind, value = classify_query(query)
+        except (ValueError, AddressQueryError) as exc:
+            rich_error(str(exc))
+            input("\n\aContinue...")
+            continue
+
+        try:
+            if kind == "txid":
+                ins = tx_service.inspect_txid(value, context=context)
+                _render_tx_inspection(ins)
+            else:
+                ins = addr_service.inspect_address(value)
+                _render_address_inspection(ins)
+        except TxQueryError as exc:
+            rich_error(str(exc))
+        except BitcoinCLIError as exc:
+            rich_error(str(exc))
+            if exc.hint:
+                console.print(f"    [dim]→ {exc.hint}[/]")
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            show_error(str(exc))
+
+        console.print()
+        follow = input(
+            "\033[1;32;40m[N] new query  [R] return to menu: \033[0;37;40m"
+        ).strip().upper()
+        if follow == "R":
+            return
+        context = None
 
 
 def launch_full_oraculovision(path: dict) -> None:
@@ -326,6 +500,8 @@ def run_oraclevision_menu(path: dict) -> None:
         elif choice in ("C",):
             show_block_detail(path)
         elif choice in ("D",):
+            show_tx_inspector(path)
+        elif choice in ("E",):
             launch_full_oraculovision(path)
         elif choice in ("R", ""):
             break
