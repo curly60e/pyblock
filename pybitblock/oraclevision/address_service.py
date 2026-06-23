@@ -6,7 +6,7 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-from oraclevision.addresses import parse_address_query
+from oraclevision.addresses import parse_address_query, script_type_from_validation
 from oraclevision.bitcoin_cli import BitcoinCLI, BitcoinCLIError
 from oraclevision.config import InspectorConfig
 
@@ -81,15 +81,16 @@ class AddressService:
             return result
 
         result.valid = bool(validation.get("isvalid"))
-        spk = validation.get("scriptPubKey")
-        if isinstance(spk, dict):
-            result.script_type = str(spk.get("type", "") or "")
-        elif validation.get("iswitness"):
-            result.script_type = "witness"
-        elif validation.get("isscript"):
-            result.script_type = "script"
-        else:
-            result.script_type = ""
+        result.script_type = script_type_from_validation(validation)
+
+        if result.valid and not result.script_type:
+            try:
+                info = self.cli.get_address_info(address)
+                spk = info.get("scriptPubKey") or {}
+                if isinstance(spk, dict) and spk.get("type"):
+                    result.script_type = str(spk["type"])
+            except BitcoinCLIError:
+                pass
 
         if not result.valid:
             result.error = "Address failed node validation"

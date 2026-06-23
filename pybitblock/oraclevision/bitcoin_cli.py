@@ -139,7 +139,12 @@ class BitcoinCLI:
         return self.call("getblockchaininfo")
 
     def validate_address(self, address: str) -> dict[str, Any]:
-        return self.call("validateaddress", address)
+        result = self.call("validateaddress", address)
+        return result if isinstance(result, dict) else {}
+
+    def get_address_info(self, address: str) -> dict[str, Any]:
+        result = self.call("getaddressinfo", address)
+        return result if isinstance(result, dict) else {}
 
     def scantxoutset_address(
         self,
@@ -152,7 +157,8 @@ class BitcoinCLI:
         if timeout is not None:
             self.timeout = timeout
         try:
-            return self.call("scantxoutset", "start", [f"addr({address})"])
+            result = self.call("scantxoutset", "start", [f"addr({address})"])
+            return result if isinstance(result, dict) else {}
         finally:
             self.timeout = original_timeout
 

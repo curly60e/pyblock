@@ -37,3 +37,30 @@ def classify_query(raw: str) -> tuple[str, str]:
     if is_txid_query(text):
         return "txid", text.lower()
     return "address", parse_address_query(text)
+
+
+def script_type_from_validation(validation: dict) -> str:
+    """Derive a display script type from validateaddress output.
+
+    Core returns ``scriptPubKey`` as a hex string, not a decoded object.
+    Use witness/script flags when the verbose type is unavailable.
+    """
+    spk = validation.get("scriptPubKey")
+    if isinstance(spk, dict):
+        return str(spk.get("type", "") or "")
+
+    if validation.get("iswitness"):
+        witness_version = validation.get("witness_version")
+        if witness_version == 1:
+            return "witness_v1_taproot"
+        if witness_version == 0:
+            return "witness_v0_keyhash"
+        return "witness"
+
+    if validation.get("isscript"):
+        return "scripthash"
+
+    if validation.get("isvalid"):
+        return "pubkeyhash"
+
+    return ""

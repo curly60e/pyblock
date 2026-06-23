@@ -216,6 +216,16 @@ def show_mempool_glass(path: dict) -> None:
     input("\n\aContinue...")
 
 
+def _get_flagged_transactions(analysis: BlockAnalysis) -> list[TxAnalysis]:
+    """Return problematic transactions sorted by weight (heaviest first)."""
+    bad_txs = [
+        tx for tx in analysis.transactions
+        if tx.has_bip110_violation or tx.is_spam_signal
+    ]
+    bad_txs.sort(key=lambda tx: tx.weight, reverse=True)
+    return bad_txs
+
+
 def _render_block_detail(analysis: BlockAnalysis) -> BlockAnalysis:
     sig = "YES" if analysis.bip110_signaling else "no"
     title = (
@@ -242,8 +252,7 @@ def _render_block_detail(analysis: BlockAnalysis) -> BlockAnalysis:
     console.print(info)
     console.print()
 
-    bad = [tx for tx in analysis.transactions if tx.has_bip110_violation or tx.is_spam_signal]
-    bad.sort(key=lambda tx: tx.weight, reverse=True)
+    bad = _get_flagged_transactions(analysis)
 
     if not bad:
         console.print("[green]No problematic transactions detected.[/]")
@@ -331,13 +340,7 @@ def show_block_detail(path: dict, target: str | None = None) -> None:
         block = cli.get_block(block_hash, 2)
         analysis = analyze_block(block, spam_threshold=settings.spam_score_threshold)
         _render_block_detail(analysis)
-
-        bad_txs = [
-            tx for tx in analysis.transactions
-            if tx.has_bip110_violation or tx.is_spam_signal
-        ]
-        bad_txs.sort(key=lambda tx: tx.weight, reverse=True)
-        _prompt_tx_inspection_from_block(path, analysis, bad_txs)
+        _prompt_tx_inspection_from_block(path, analysis, _get_flagged_transactions(analysis))
     except BitcoinCLIError as exc:
         rich_error(str(exc))
         if exc.hint:

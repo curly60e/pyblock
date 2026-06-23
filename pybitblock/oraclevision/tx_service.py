@@ -241,7 +241,6 @@ class TxService:
         if ctx.block_hash:
             attempts.append((ctx.block_hash, "getrawtransaction + blockhash"))
 
-        last_exc: BitcoinCLIError | None = None
         for block_hash, label in attempts:
             try:
                 tx = self.cli.get_raw_transaction(
@@ -254,11 +253,9 @@ class TxService:
                     if block_hash and label.endswith("blockhash"):
                         note += " (pruned-node compatible)"
                     return tx, note
-            except BitcoinCLIError as exc:
-                last_exc = exc
+            except BitcoinCLIError:
+                continue
 
-        if last_exc:
-            _ = last_exc
         return None, None
 
     def _partial_inspection(
