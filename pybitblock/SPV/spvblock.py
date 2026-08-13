@@ -1431,7 +1431,7 @@ def CroppedMinerComputer():
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        subprocess.run(["./minerd", "-a", "sha256d", "-o", "stratum+tcp://pool.pyblock.xyz:4444", "-u", f"{responseC}.PyBLOCK", "-p", responseD, "-t", responseE], cwd="CroppedMiner")
+        subprocess.run(["./minerd", "-a", "sha256d", "-o", "stratum+tcp://pool110.pyblock.xyz:4445", "-u", f"{responseC}.PyBLOCK", "-p", responseD, "-t", responseE], cwd="CroppedMiner")
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
@@ -1455,7 +1455,7 @@ def CroppedMinerRaspberry():
         responseC = input("Your Bitcoin Address: ")
         responseD = input("Your Pass x: ")
         responseE = input("Select your threads 2, 4, 6, 8, 10, ...: ")
-        subprocess.run(["./cpuminer", "-a", "sha256d", "-o", "stratum+tcp://pool.pyblock.xyz:4444", "-u", f"{responseC}.PyBLOCK", "-p", responseD, "-t", responseE], cwd=os.path.join("CroppedMiner", "cpuminer-multi-arm"))
+        subprocess.run(["./cpuminer", "-a", "sha256d", "-o", "stratum+tcp://pool110.pyblock.xyz:4445", "-u", f"{responseC}.PyBLOCK", "-p", responseD, "-t", responseE], cwd=os.path.join("CroppedMiner", "cpuminer-multi-arm"))
         input("\a\nContinue...")
     except Exception as e:
         show_error(str(e))
