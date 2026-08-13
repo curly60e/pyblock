@@ -430,7 +430,7 @@ npub1h0mlskkqsyct98tldn744wa5j783h8du779c7zdjay29uyzwev4qxx9sjn
 
 Are you a Bitcoin Miner? 
 
-stratum+tcp://pool.pyblock.xyz:4444
+stratum+tcp://pool110.pyblock.xyz:4445
 
 Note that if you do not find a Block, you get no reward at all with Solo Mining.
 
