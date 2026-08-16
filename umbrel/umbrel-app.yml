@@ -2,7 +2,7 @@ manifestVersion: 1
 id: pyblock
 category: bitcoin
 name: PyBLOCK
-version: "4.0.2"
+version: "4.0.3"
 tagline: Terminal-based Bitcoin & Lightning node dashboard
 description: >-
   PyBLOCK is a cyberpunk-aesthetic Bitcoin dashboard that runs in your
@@ -40,10 +40,9 @@ defaultUsername: ""
 defaultPassword: ""
 deterministicPassword: false
 releaseNotes: >-
-  v4.0.2: Bundle bitcoin-cli (from Bitcoin Knots) and lncli inside the
-  image, wrapped to inject the RPC/gRPC connection details Umbrel provides
-  via APP_BITCOIN_* and APP_LIGHTNING_* env vars. Modes A (Bitcoin +
-  Lightning) and B (Bitcoin only) now connect to the Umbrel dependency
-  containers directly instead of falling back to Lite Mode at startup.
+  v4.0.3: Fix Lightning menu actions failing with "Permission denied: ''"
+  by resolving the configured lncli path at call time (falling back to
+  lncli on PATH), and fix image rendering crashes on modern Pillow by
+  replacing the removed Image.ANTIALIAS with Image.Resampling.LANCZOS.
 submitter: curly60e
 submission: ""

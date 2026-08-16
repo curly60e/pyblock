@@ -7,7 +7,9 @@ services:
       APP_PORT: 6969
 
   web:
-    image: curly60e/pyblock:v4.0.2
+    image: curly60e/pyblock:v4.0.3
+    # PyBLOCK resolves config paths relative to the process working directory.
+    working_dir: /app/pyblock/pybitblock
     restart: on-failure
     stop_grace_period: 1m
     user: "1000:1000"
@@ -25,7 +27,8 @@ services:
       LND_HOST: ${APP_LIGHTNING_NODE_IP}
       LND_GRPC_PORT: ${APP_LIGHTNING_NODE_GRPC_PORT}
       LND_TLS_CERT_PATH: /lnd/tls.cert
-      LND_MACAROON_PATH: /lnd/data/chain/bitcoin/${APP_BITCOIN_NETWORK}/readonly.macaroon
+      # PyBLOCK exposes LND write actions, so the read-only macaroon is insufficient.
+      LND_MACAROON_PATH: /lnd/data/chain/bitcoin/${APP_BITCOIN_NETWORK}/admin.macaroon
 
       # PyBLOCK auto-config
       PYBLOCK_MODE: "A"
