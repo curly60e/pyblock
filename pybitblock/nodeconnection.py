@@ -29,16 +29,34 @@ settingsClock = {"gradient":"", "design":"", "colorA":"", "colorB":""}
 
 
 def _load_lnd_config():
-    """Load LND connection configuration."""
-    with open("config/blndconnect.conf", "r") as f:
-        return json.load(f)
+    """Load LND connection configuration into the module-level cache."""
+    candidates = [
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "blndconnect.conf"),
+        os.path.join("config", "blndconnect.conf"),
+    ]
+    for filepath in candidates:
+        if os.path.isfile(filepath):
+            with open(filepath, "r") as f:
+                lndconnectload.update(json.load(f))
+            break
+    return lndconnectload
+
+
+def _ln_path():
+    """Resolve the lightning CLI binary, falling back to lncli on PATH."""
+    if not lndconnectload.get('ln'):
+        try:
+            _load_lnd_config()
+        except (OSError, ValueError) as e:
+            logger.debug("Could not load LND config: %s", e)
+    return lndconnectload.get('ln') or "lncli"
 
 
 def _run_ln(*args):
     """Run lightning CLI safely."""
     # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
     return subprocess.run(
-        [lndconnectload['ln']] + list(args),
+        [_ln_path()] + list(args),
         capture_output=True, text=True
     )
 
@@ -214,7 +232,7 @@ def locallistpeersQQ():
                     h = 1
                     w = int((img.width / img.height) * 5)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
@@ -223,7 +241,7 @@ def locallistpeersQQ():
                 h = 1
                 w = int((img.width / img.height) * 5)
 
-                img = img.resize((w,h), Image.ANTIALIAS)
+                img = img.resize((w,h), Image.Resampling.LANCZOS)
                 img_arr = np.asarray(img)
                 h,w,c = img_arr.shape
 
@@ -248,7 +266,7 @@ def locallistpeersQQ():
                     h = 20
                     w = int((img.width / img.height) * 50)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
@@ -440,7 +458,7 @@ def locallistchannels():
                     h = 1
                     w = int((img.width / img.height) * 5)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
@@ -449,7 +467,7 @@ def locallistchannels():
                 h = 1
                 w = int((img.width / img.height) * 5)
 
-                img = img.resize((w,h), Image.ANTIALIAS)
+                img = img.resize((w,h), Image.Resampling.LANCZOS)
                 img_arr = np.asarray(img)
                 h,w,c = img_arr.shape
 
@@ -474,7 +492,7 @@ def locallistchannels():
                     h = 20
                     w = int((img.width / img.height) * 50)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
@@ -525,7 +543,7 @@ def localgetinfo():
         h = 20
         w = int((img.width / img.height) * 50)
 
-        img = img.resize((w,h), Image.ANTIALIAS)
+        img = img.resize((w,h), Image.Resampling.LANCZOS)
         img_arr = np.asarray(img)
         h,w,c = img_arr.shape
 
@@ -534,7 +552,7 @@ def localgetinfo():
     h = 20
     w = int((img.width / img.height) * 50)
 
-    img = img.resize((w,h), Image.ANTIALIAS)
+    img = img.resize((w,h), Image.Resampling.LANCZOS)
     img_arr = np.asarray(img)
     h,w,c = img_arr.shape
 
@@ -678,7 +696,7 @@ def _process_lncli_output(command, grep_pattern, sed_from, sed_to):
         Decoded text produced by the pipeline.
     """
     result = subprocess.run(
-        ["lncli", command], capture_output=True, text=True
+        [_ln_path(), command], capture_output=True, text=True
     )
     lines = result.stdout.splitlines()
     filtered = [line for line in lines if grep_pattern in line]
@@ -732,7 +750,7 @@ def localkeysend():
             else:
                 break
         subprocess.run(
-            ["lncli", "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
+            [_ln_path(), "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
              "--final_cltv_delta=40"]
         )
 
@@ -761,7 +779,7 @@ def localchatsendA():
             else:
                 break
         subprocess.run(
-            ["lncli", "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
+            [_ln_path(), "sendpayment", "--keysend", f"--d={node}", f"--amt={amount}",
              "--data", "34349334=" + hex_encoded_message]
         )
 
@@ -1237,7 +1255,7 @@ def getinfo():
         h = 20
         w = int((img.width / img.height) * 50)
 
-        img = img.resize((w,h), Image.ANTIALIAS)
+        img = img.resize((w,h), Image.Resampling.LANCZOS)
         img_arr = np.asarray(img)
         h,w,c = img_arr.shape
 
@@ -1246,7 +1264,7 @@ def getinfo():
     h = 20
     w = int((img.width / img.height) * 50)
 
-    img = img.resize((w,h), Image.ANTIALIAS)
+    img = img.resize((w,h), Image.Resampling.LANCZOS)
     img_arr = np.asarray(img)
     h,w,c = img_arr.shape
 
@@ -1324,7 +1342,7 @@ def channels():
                     h = 1
                     w = int((img.width / img.height) * 5)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
@@ -1333,7 +1351,7 @@ def channels():
                 h = 1
                 w = int((img.width / img.height) * 5)
 
-                img = img.resize((w,h), Image.ANTIALIAS)
+                img = img.resize((w,h), Image.Resampling.LANCZOS)
                 img_arr = np.asarray(img)
                 h,w,c = img_arr.shape
 
@@ -1358,7 +1376,7 @@ def channels():
                     h = 20
                     w = int((img.width / img.height) * 50)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 

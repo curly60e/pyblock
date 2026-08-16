@@ -188,7 +188,7 @@ def channels():
                     h = 1
                     w = int((img.width / img.height) * 5)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 
@@ -198,7 +198,7 @@ def channels():
                 h = 1
                 w = int((img.width / img.height) * 5)
 
-                img = img.resize((w,h), Image.ANTIALIAS)
+                img = img.resize((w,h), Image.Resampling.LANCZOS)
                 img_arr = np.asarray(img)
                 h,w,c = img_arr.shape
 
@@ -224,7 +224,7 @@ def channels():
                     h = 20
                     w = int((img.width / img.height) * 50)
 
-                    img = img.resize((w,h), Image.ANTIALIAS)
+                    img = img.resize((w,h), Image.Resampling.LANCZOS)
                     img_arr = np.asarray(img)
                     h,w,c = img_arr.shape
 

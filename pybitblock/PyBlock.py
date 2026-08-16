@@ -1207,7 +1207,7 @@ def robotNym():
         h = 40
         w = int((img.width / img.height) * 90)
 
-        img = img.resize((w,h), Image.ANTIALIAS)
+        img = img.resize((w,h), Image.Resampling.LANCZOS)
         img_arr = np.asarray(img)
         h,w,c = img_arr.shape
 
